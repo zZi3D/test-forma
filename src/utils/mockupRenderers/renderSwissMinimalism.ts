@@ -44,11 +44,11 @@ export function renderSwissMinimalism(
   ctx.font = `600 ${Math.round(width * 0.0095)}px "JetBrains Mono", monospace`;
   ctx.fillText(content.eyebrow, padX, topY);
 
-  // Numbered project index badge ("01 — 08") in column 3
+  // Numbered project index badge ("01 — 12") in column 3
   const col3X = padX + (colW + colGap) * 2;
   ctx.fillStyle = palette.text;
   ctx.font = `600 ${Math.round(width * 0.026)}px "JetBrains Mono", monospace`;
-  ctx.fillText('01 — 08', col3X + width * 0.012, topY + height * 0.016);
+  ctx.fillText('01 — 12', col3X + width * 0.012, topY + height * 0.016);
 
   // Large clean sans headline across cols 1-2
   ctx.fillStyle = palette.text;

@@ -67,12 +67,12 @@ export type ProjectItem = ProjectConfig;
 
 /**
  * CENTRAL PORTFOLIO CONFIGURATION (01 – 12)
- * Edit titles, palettes, UI styles, or content metrics below and all
- * 3D wheel tiles, portfolio grid cards, and preview modals update automatically.
+ * Ordered in curated Light / Dark rhythm across the 3D wheel and 4×3 grid.
+ * Edit any text, color, style, or metric below to update all views automatically.
  */
 export const PROJECTS: ProjectConfig[] = [
   // =========================================================================
-  // 01 — KENGO & PARTNERS (Light · Swiss Minimalism)
+  // 01 — KENGO & PARTNERS (Light · Swiss Minimalism · Architecture)
   // =========================================================================
   {
     id: 'kengo-partners',
@@ -99,7 +99,7 @@ export const PROJECTS: ProjectConfig[] = [
     content: {
       masthead: 'KENGO & PARTNERS',
       navItems: ['PROJECTS', 'ELEVATIONS', 'PRACTICE', 'CONTACT'],
-      eyebrow: '01 — 08 / MONOGRAPH ARCHIVE',
+      eyebrow: '01 — 12 / MONOGRAPH ARCHIVE',
       headline: 'Concrete & Quiet Geometry.',
       subheadline: 'Civic pavilions, daylight apertures & structural honesty across Zurich and Kyoto.',
       ctaLabel: 'VIEW SECTION A-A →',
@@ -113,7 +113,7 @@ export const PROJECTS: ProjectConfig[] = [
   },
 
   // =========================================================================
-  // 02 — CHRONOS GENÈVE (Dark · Dark Neumorphism / Tactile Dark)
+  // 02 — CHRONOS GENÈVE (Dark · Dark Neumorphism · Luxury & Fashion)
   // =========================================================================
   {
     id: 'chronos-geneve',
@@ -154,7 +154,7 @@ export const PROJECTS: ProjectConfig[] = [
   },
 
   // =========================================================================
-  // 03 — KUNSTHALLE ZÜRICH (Light/Bold · Maximalism & Neo-Brutalism)
+  // 03 — KUNSTHALLE ZÜRICH (Light / Color · Neo-Brutalism · Cultural & Editorial)
   // =========================================================================
   {
     id: 'kunsthalle-zurich',
@@ -195,11 +195,52 @@ export const PROJECTS: ProjectConfig[] = [
   },
 
   // =========================================================================
-  // 04 — STUDIO SØRENSEN (Warm Aura · New Age / Ethereal Gradient)
+  // 04 — AETHER SPATIAL OS (Dark / Cyan · Cyberpunk Glass · Product & Spatial)
+  // =========================================================================
+  {
+    id: 'aether-spatial-os',
+    index: '04',
+    title: 'Aether Spatial OS',
+    subtitle: 'Volumetric Telemetry & Glassmorphic Spatial Interface',
+    client: 'Aether Labs Zürich',
+    category: 'Product & Spatial',
+    year: '2026',
+    sprintDuration: '24h Sprint',
+    slug: 'aether-os.io',
+    uiStyle: 'cyberpunk-glass',
+    styleLabel: 'Cyberpunk Glass',
+    summary:
+      'Pitch-black spatial operating environment featuring floating smoked-glass HUD panels, specular cyan-and-amber edge reflections, wireframe grids, and volumetric 3D orbs.',
+    deliverables: ['Spatial HUD System', 'Telemetry Widgets', 'Glass Shader Spec'],
+    palette: {
+      bg: '#07080C',
+      surface: '#111622',
+      text: '#F8FAFC',
+      accent: '#22D3EE',
+      secondary: '#F59E0B',
+    },
+    content: {
+      masthead: 'AETHER OS v4.2',
+      navItems: ['VIEWPORT', 'NODES', 'ORBIT', 'TERMINAL'],
+      eyebrow: 'SYS.04 // SPATIAL TELEMETRY',
+      headline: 'VOLUMETRIC FIELD ACTIVE',
+      subheadline: 'Real-time orbital mesh & neural raycast cluster synchronization.',
+      ctaLabel: 'ENGAGE LINK',
+      metrics: [
+        { label: 'COORDINATES', value: 'X:48.2 Y:-12.0' },
+        { label: 'LATENCY', value: '0.84 MS' },
+        { label: 'SYNC NODES', value: '128 / 128' },
+      ],
+      cardLabels: ['CORE ORB', 'FLUX MESH', 'VECTOR HUD'],
+    },
+  },
+
+  // =========================================================================
+  // 05 — STUDIO SØRENSEN (Warm Sand · Ethereal Gradient · Luxury & Fashion)
   // =========================================================================
   {
     id: 'studio-sorensen',
-    index: '04',
+    index: '05',
     title: 'Studio Sørensen',
     subtitle: 'Sculptural Knitwear & Atmospheric Lookbook',
     client: 'Sørensen Copenhagen',
@@ -236,48 +277,7 @@ export const PROJECTS: ProjectConfig[] = [
   },
 
   // =========================================================================
-  // 05 — VANGUARDIA PRIVATE (Light · Claymorphism)
-  // =========================================================================
-  {
-    id: 'vanguardia-private',
-    index: '05',
-    title: 'Vanguardia Private',
-    subtitle: 'Tactile Wealth Management & Portfolio Cockpit',
-    client: 'Vanguardia Wealth Zurich',
-    category: 'Product & Spatial',
-    year: '2026',
-    sprintDuration: '24h Sprint',
-    slug: 'vanguardia.private',
-    uiStyle: 'claymorphism',
-    styleLabel: 'Claymorphism',
-    summary:
-      'Soft, pillowed 3D claymorphic private banking dashboard featuring generous 28px+ rounded modules, dual inner/outer bevel shadows, and crisp tabular wealth analytics.',
-    deliverables: ['Wealth Cockpit', 'Data Visualization', 'Clay UI Kit'],
-    palette: {
-      bg: '#ECEEF2',
-      surface: '#FFFFFF',
-      text: '#1E293B',
-      accent: '#FF4D24',
-      secondary: '#64748B',
-    },
-    content: {
-      masthead: 'VANGUARDIA',
-      navItems: ['OVERVIEW', 'ALLOCATION', 'YIELD', 'VAULT'],
-      eyebrow: 'PRIVATE WEALTH · Q4 REPORT',
-      headline: '$48,420,890',
-      subheadline: 'Net Liquidity & Sovereign Yield Portfolio',
-      ctaLabel: 'REBALANCE',
-      metrics: [
-        { label: 'YTD RETURN', value: '+18.42%' },
-        { label: 'LIQUIDITY', value: '$12.60M' },
-        { label: 'SHARPE', value: '2.14' },
-      ],
-      cardLabels: ['EQUITIES 54%', 'BONDS 28%', 'PRIVATE 18%'],
-    },
-  },
-
-  // =========================================================================
-  // 06 — KLANGWERK BERLIN (Dark · Tactile Skeuomorphism / Dieter Rams)
+  // 06 — KLANGWERK BERLIN (Dark · Skeuomorphism · Product & Spatial)
   // =========================================================================
   {
     id: 'klangwerk-berlin',
@@ -318,90 +318,89 @@ export const PROJECTS: ProjectConfig[] = [
   },
 
   // =========================================================================
-  // 07 — MONOLITH JOURNAL (Light · Modular Bento Grid & Editorial)
+  // 07 — VANGUARDIA PRIVATE (Light · Claymorphism · Product & Spatial)
   // =========================================================================
   {
-    id: 'monolith-journal',
+    id: 'vanguardia-private',
     index: '07',
-    title: 'Monolith Journal',
-    subtitle: 'Architectural Criticism & Spatial Essays',
-    client: 'Monolith Press London',
-    category: 'Cultural & Editorial',
-    year: '2025',
-    sprintDuration: '24h Sprint',
-    slug: 'monolithjournal.co',
-    uiStyle: 'bento-editorial',
-    styleLabel: 'Bento Editorial',
-    summary:
-      'Paper-warm editorial publication marrying long-form magazine columns and a top reading progress rule with modular Bento story cards and sepia-duotone photography.',
-    deliverables: ['Editorial Reader', 'Bento Card System', 'Duotone Treatment'],
-    palette: {
-      bg: '#F7F5F0',
-      surface: '#EAE5DC',
-      text: '#1C1B18',
-      accent: '#6B5B4B',
-      secondary: '#8E8070',
-    },
-    content: {
-      masthead: 'MONOLITH JOURNAL',
-      navItems: ['ISSUES', 'ESSAYS', 'INDEX', 'SUBSCRIBE'],
-      eyebrow: 'ISSUE 14 · LIGHT & LIMESTONE',
-      headline: 'On Quiet Rooms & Daylight',
-      subheadline: 'How Mediterranean courtyards shape acoustic stillness in modern civic spaces.',
-      ctaLabel: 'READ ESSAY · 12 MIN',
-      metrics: [
-        { label: 'READING TIME', value: '12 MIN' },
-        { label: 'CHAPTERS', value: '06 PARTS' },
-        { label: 'PLATES', value: '28 ARCHIVAL' },
-      ],
-      cardLabels: ['ESSAY I', 'DAYLIGHT', 'COURTYARD'],
-      quote: '“Architecture begins when light enters a silent room and defines its weight.”',
-    },
-  },
-
-  // =========================================================================
-  // 08 — AETHER SPATIAL OS (Dark · Cyberpunk & Glassmorphism)
-  // =========================================================================
-  {
-    id: 'aether-spatial-os',
-    index: '08',
-    title: 'Aether Spatial OS',
-    subtitle: 'Volumetric Telemetry & Glassmorphic Spatial Interface',
-    client: 'Aether Labs Zürich',
+    title: 'Vanguardia Private',
+    subtitle: 'Tactile Wealth Management & Portfolio Cockpit',
+    client: 'Vanguardia Wealth Zurich',
     category: 'Product & Spatial',
     year: '2026',
     sprintDuration: '24h Sprint',
-    slug: 'aether-os.io',
-    uiStyle: 'cyberpunk-glass',
-    styleLabel: 'Cyberpunk Glass',
+    slug: 'vanguardia.private',
+    uiStyle: 'claymorphism',
+    styleLabel: 'Claymorphism',
     summary:
-      'Pitch-black spatial operating environment featuring floating smoked-glass HUD panels, specular cyan-and-amber edge reflections, wireframe grids, and volumetric 3D orbs.',
-    deliverables: ['Spatial HUD System', 'Telemetry Widgets', 'Glass Shader Spec'],
+      'Soft, pillowed 3D claymorphic private banking dashboard featuring generous 28px+ rounded modules, dual inner/outer bevel shadows, and crisp tabular wealth analytics.',
+    deliverables: ['Wealth Cockpit', 'Data Visualization', 'Clay UI Kit'],
     palette: {
-      bg: '#07080C',
-      surface: '#111622',
-      text: '#F8FAFC',
-      accent: '#22D3EE',
-      secondary: '#F59E0B',
+      bg: '#ECEEF2',
+      surface: '#FFFFFF',
+      text: '#1E293B',
+      accent: '#FF4D24',
+      secondary: '#64748B',
     },
     content: {
-      masthead: 'AETHER OS v4.2',
-      navItems: ['VIEWPORT', 'NODES', 'ORBIT', 'TERMINAL'],
-      eyebrow: 'SYS.08 // SPATIAL TELEMETRY',
-      headline: 'VOLUMETRIC FIELD ACTIVE',
-      subheadline: 'Real-time orbital mesh & neural raycast cluster synchronization.',
-      ctaLabel: 'ENGAGE LINK',
+      masthead: 'VANGUARDIA',
+      navItems: ['OVERVIEW', 'ALLOCATION', 'YIELD', 'VAULT'],
+      eyebrow: 'PRIVATE WEALTH · Q4 REPORT',
+      headline: '$48,420,890',
+      subheadline: 'Net Liquidity & Sovereign Yield Portfolio',
+      ctaLabel: 'REBALANCE',
       metrics: [
-        { label: 'COORDINATES', value: 'X:48.2 Y:-12.0' },
-        { label: 'LATENCY', value: '0.84 MS' },
-        { label: 'SYNC NODES', value: '128 / 128' },
+        { label: 'YTD RETURN', value: '+18.42%' },
+        { label: 'LIQUIDITY', value: '$12.60M' },
+        { label: 'SHARPE', value: '2.14' },
       ],
-      cardLabels: ['CORE ORB', 'FLUX MESH', 'VECTOR HUD'],
+      cardLabels: ['EQUITIES 54%', 'BONDS 28%', 'PRIVATE 18%'],
     },
   },
 
   // =========================================================================
-  // 09 — BOTANICA ATELIER (Light · Organic & Biophilic Design)
+  // 08 — VELOCE AUTOMOBILI (Dark / Orange · Dark Kinetic · Product & Spatial)
+  // =========================================================================
+  {
+    id: 'veloce-automobili',
+    index: '08',
+    title: 'Veloce Automobili',
+    subtitle: 'Electric Hypercar Telemetry & Aero Configurator',
+    client: 'Veloce Modena S.p.A.',
+    category: 'Product & Spatial',
+    year: '2026',
+    sprintDuration: '24h Sprint',
+    slug: 'veloce-modena.it',
+    uiStyle: 'dark-kinetic',
+    styleLabel: 'Dark Kinetic',
+    summary:
+      'High-velocity carbon-black hypercar cockpit pairing slanted kinetic display type with live CFD aerodynamics airflow curves, chrome silhouette lighting, and tabular telemetry.',
+    deliverables: ['Telemetry Cockpit', 'CFD Aero Visualizer', 'Track Configurator'],
+    palette: {
+      bg: '#09090B',
+      surface: '#141418',
+      text: '#E4E4E7',
+      accent: '#FF4D24',
+      secondary: '#8A8A94',
+    },
+    content: {
+      masthead: 'VELOCE MODENA',
+      navItems: ['MONOPOSTO', 'AERO LAB', 'TELEMETRY', 'ALLOCATION'],
+      eyebrow: 'PROTOTYPE V-08 // TRACK SPEC',
+      headline: 'ELECTRIC HYPER VELOCITY',
+      subheadline: 'Quad-motor torque vectoring with 1,420 kg active ground-effect downforce.',
+      ctaLabel: 'LAUNCH TELEMETRY →',
+      metrics: [
+        { label: '0–100 KM/H', value: '1.88 SEC' },
+        { label: 'DOWNFORCE', value: '1,420 KG' },
+        { label: 'POWER', value: '1,980 HP' },
+      ],
+      cardLabels: ['TRACK', 'CFD AERO', 'CARBON'],
+    },
+  },
+
+  // =========================================================================
+  // 09 — BOTANICA ATELIER (Light · Organic Biophilic · Luxury & Fashion)
   // =========================================================================
   {
     id: 'botanica-atelier',
@@ -442,48 +441,48 @@ export const PROJECTS: ProjectConfig[] = [
   },
 
   // =========================================================================
-  // 10 — VELOCE AUTOMOBILI (Dark · Dark Kinetic & Telemetry UI)
+  // 10 — NOCTURNE LAB (Dark / Lime · Retro-Futurism CRT · Product & Spatial)
   // =========================================================================
   {
-    id: 'veloce-automobili',
+    id: 'nocturne-lab',
     index: '10',
-    title: 'Veloce Automobili',
-    subtitle: 'Electric Hypercar Telemetry & Aero Configurator',
-    client: 'Veloce Modena S.p.A.',
+    title: 'Nocturne Lab',
+    subtitle: 'Phosphor CRT Oscilloscope & Modular Sequencer',
+    client: 'Nocturne Sound Systems',
     category: 'Product & Spatial',
     year: '2026',
     sprintDuration: '24h Sprint',
-    slug: 'veloce-modena.it',
-    uiStyle: 'dark-kinetic',
-    styleLabel: 'Dark Kinetic',
+    slug: 'nocturnelab.io',
+    uiStyle: 'retro-crt',
+    styleLabel: 'Retro-Futurism CRT',
     summary:
-      'High-velocity carbon-black hypercar cockpit pairing slanted kinetic display type with live CFD aerodynamics airflow curves, chrome silhouette lighting, and tabular telemetry.',
-    deliverables: ['Telemetry Cockpit', 'CFD Aero Visualizer', 'Track Configurator'],
+      'Phosphor-lime and amber CRT sound workstation featuring scanline telemetry, pixel-crisp terminal bars, an oscillating central waveform scope, and a 16-step modular sequencer.',
+    deliverables: ['CRT Shader Aesthetic', 'Audio Sequencer UI', 'Oscilloscope Engine'],
     palette: {
-      bg: '#09090B',
-      surface: '#141418',
-      text: '#E4E4E7',
-      accent: '#FF4D24',
-      secondary: '#8A8A94',
+      bg: '#0A0C0B',
+      surface: '#1A1D1B',
+      text: '#BEF264',
+      accent: '#BEF264',
+      secondary: '#F59E0B',
     },
     content: {
-      masthead: 'VELOCE MODENA',
-      navItems: ['MONOPOSTO', 'AERO LAB', 'TELEMETRY', 'ALLOCATION'],
-      eyebrow: 'PROTOTYPE V-10 // TRACK SPEC',
-      headline: 'ELECTRIC HYPER VELOCITY',
-      subheadline: 'Quad-motor torque vectoring with 1,420 kg active ground-effect downforce.',
-      ctaLabel: 'LAUNCH TELEMETRY →',
+      masthead: 'NOCTURNE LAB // OS',
+      navItems: ['SCOPE', 'SEQ-16', 'PATCH', 'EXPORT'],
+      eyebrow: 'TERM.10 // PHOSPHOR AUDIO ENGINE',
+      headline: 'CLOCK 128.0 BPM · SYNC OK',
+      subheadline: '16-channel step matrix with sub-millisecond analog clock modulation.',
+      ctaLabel: 'RUN PATCH',
       metrics: [
-        { label: '0–100 KM/H', value: '1.88 SEC' },
-        { label: 'DOWNFORCE', value: '1,420 KG' },
-        { label: 'POWER', value: '1,980 HP' },
+        { label: 'TEMPO', value: '128.0 BPM' },
+        { label: 'SAMPLE RATE', value: '96.0 KHZ' },
+        { label: 'BUFFER', value: '1.2 MS' },
       ],
-      cardLabels: ['TRACK', 'CFD AERO', 'CARBON'],
+      cardLabels: ['CH 01', 'CH 02', 'CH 03', 'CH 04'],
     },
   },
 
   // =========================================================================
-  // 11 — DESSAU TYPE FOUNDRY (Light · Bauhaus & Constructivist Grid)
+  // 11 — DESSAU TYPE FOUNDRY (Light / Primary · Bauhaus Grid · Cultural & Editorial)
   // =========================================================================
   {
     id: 'dessau-type-foundry',
@@ -524,43 +523,44 @@ export const PROJECTS: ProjectConfig[] = [
   },
 
   // =========================================================================
-  // 12 — NOCTURNE LAB (Dark · Retro-Futurism & CRT Terminal)
+  // 12 — MONOLITH JOURNAL (Light / Warm · Bento Editorial · Cultural & Editorial)
   // =========================================================================
   {
-    id: 'nocturne-lab',
+    id: 'monolith-journal',
     index: '12',
-    title: 'Nocturne Lab',
-    subtitle: 'Phosphor CRT Oscilloscope & Modular Sequencer',
-    client: 'Nocturne Sound Systems',
-    category: 'Product & Spatial',
-    year: '2026',
+    title: 'Monolith Journal',
+    subtitle: 'Architectural Criticism & Spatial Essays',
+    client: 'Monolith Press London',
+    category: 'Cultural & Editorial',
+    year: '2025',
     sprintDuration: '24h Sprint',
-    slug: 'nocturnelab.io',
-    uiStyle: 'retro-crt',
-    styleLabel: 'Retro-Futurism CRT',
+    slug: 'monolithjournal.co',
+    uiStyle: 'bento-editorial',
+    styleLabel: 'Bento Editorial',
     summary:
-      'Phosphor-lime and amber CRT sound workstation featuring scanline telemetry, pixel-crisp terminal bars, an oscillating central waveform scope, and a 16-step modular sequencer.',
-    deliverables: ['CRT Shader Aesthetic', 'Audio Sequencer UI', 'Oscilloscope Engine'],
+      'Paper-warm editorial publication marrying long-form magazine columns and a top reading progress rule with modular Bento story cards and sepia-duotone photography.',
+    deliverables: ['Editorial Reader', 'Bento Card System', 'Duotone Treatment'],
     palette: {
-      bg: '#0A0C0B',
-      surface: '#1A1D1B',
-      text: '#BEF264',
-      accent: '#BEF264',
-      secondary: '#F59E0B',
+      bg: '#F7F5F0',
+      surface: '#EAE5DC',
+      text: '#1C1B18',
+      accent: '#6B5B4B',
+      secondary: '#8E8070',
     },
     content: {
-      masthead: 'NOCTURNE LAB // OS',
-      navItems: ['SCOPE', 'SEQ-16', 'PATCH', 'EXPORT'],
-      eyebrow: 'TERM.12 // PHOSPHOR AUDIO ENGINE',
-      headline: 'CLOCK 128.0 BPM · SYNC OK',
-      subheadline: '16-channel step matrix with sub-millisecond analog clock modulation.',
-      ctaLabel: 'RUN PATCH',
+      masthead: 'MONOLITH JOURNAL',
+      navItems: ['ISSUES', 'ESSAYS', 'INDEX', 'SUBSCRIBE'],
+      eyebrow: 'ISSUE 14 · LIGHT & LIMESTONE',
+      headline: 'On Quiet Rooms & Daylight',
+      subheadline: 'How Mediterranean courtyards shape acoustic stillness in modern civic spaces.',
+      ctaLabel: 'READ ESSAY · 12 MIN',
       metrics: [
-        { label: 'TEMPO', value: '128.0 BPM' },
-        { label: 'SAMPLE RATE', value: '96.0 KHZ' },
-        { label: 'BUFFER', value: '1.2 MS' },
+        { label: 'READING TIME', value: '12 MIN' },
+        { label: 'CHAPTERS', value: '06 PARTS' },
+        { label: 'PLATES', value: '28 ARCHIVAL' },
       ],
-      cardLabels: ['CH 01', 'CH 02', 'CH 03', 'CH 04'],
+      cardLabels: ['ESSAY I', 'DAYLIGHT', 'COURTYARD'],
+      quote: '“Architecture begins when light enters a silent room and defines its weight.”',
     },
   },
 ];
