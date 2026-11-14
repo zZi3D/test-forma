@@ -18,24 +18,11 @@ export function WaveBackground() {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    let width = window.innerWidth;
-    let height = window.innerHeight;
+    let width = 0;
+    let height = 0;
     let dpr = Math.min(window.devicePixelRatio || 1, 2.5);
 
-    const resizeCanvas = () => {
-      width = window.innerWidth;
-      height = window.innerHeight;
-      dpr = Math.min(window.devicePixelRatio || 1, 2.5);
-      canvas.width = Math.floor(width * dpr);
-      canvas.height = Math.floor(height * dpr);
-      canvas.style.width = `${width}px`;
-      canvas.style.height = `${height}px`;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    };
-
-    resizeCanvas();
-
-    // Pre-allocate reusable point buffer to eliminate GC churn inside the 60fps loop
+    // Pre-allocate reusable point buffer to eliminate GC churn inside the rAF loop
     const points: ProjectedPoint[] = Array.from(
       { length: POINTS_PER_LINE },
       () => ({ x: 0, y: 0 }),
@@ -43,6 +30,7 @@ export function WaveBackground() {
 
     let targetScrollY = window.scrollY;
     let scrollFactor = window.scrollY;
+    let smoothVelocity = 0;
 
     let targetMouseX = 0;
     let targetMouseY = 0;
@@ -51,39 +39,22 @@ export function WaveBackground() {
 
     let time = 0;
     let rafId = 0;
+    let lastNow = performance.now();
 
     const prefersReducedMotion = window.matchMedia(
       '(prefers-reduced-motion: reduce)',
     ).matches;
 
-    const handleScroll = () => {
-      targetScrollY = window.scrollY;
-    };
+    const drawWave = () => {
+      if (width <= 0 || height <= 0) return;
 
-    const handleMouseMove = (e: MouseEvent) => {
-      targetMouseX = (e.clientX / Math.max(width, 1)) * 2 - 1;
-      targetMouseY = (e.clientY / Math.max(height, 1)) * 2 - 1;
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    window.addEventListener('mousemove', handleMouseMove, { passive: true });
-    window.addEventListener('resize', resizeCanvas, { passive: true });
-
-    const renderFrame = () => {
-      // Smoothly interpolate scroll & mouse parallax (~0.06 lerp factor)
-      scrollFactor += (targetScrollY - scrollFactor) * 0.06;
-      const scrollVelocity = targetScrollY - scrollFactor;
       const scrollTilt = Math.max(
-        -0.45,
-        Math.min(0.45, scrollVelocity * 0.0014 + Math.sin(scrollFactor * 0.0012) * 0.14),
+        -0.38,
+        Math.min(
+          0.38,
+          smoothVelocity * 0.00075 + Math.sin(scrollFactor * 0.0011) * 0.16,
+        ),
       );
-
-      smoothMouseX += (targetMouseX - smoothMouseX) * 0.06;
-      smoothMouseY += (targetMouseY - smoothMouseY) * 0.06;
-
-      if (!prefersReducedMotion) {
-        time += 0.0065;
-      }
 
       ctx.clearRect(0, 0, width, height);
 
@@ -167,7 +138,61 @@ export function WaveBackground() {
 
         ctx.stroke();
       }
+    };
 
+    const resizeCanvas = () => {
+      const nextWidth = window.innerWidth;
+      const nextHeight = window.innerHeight;
+      const nextDpr = Math.min(window.devicePixelRatio || 1, 2.5);
+      if (nextWidth === width && nextHeight === height && nextDpr === dpr) {
+        return;
+      }
+      width = nextWidth;
+      height = nextHeight;
+      dpr = nextDpr;
+      canvas.width = Math.floor(width * dpr);
+      canvas.height = Math.floor(height * dpr);
+      canvas.style.width = `${width}px`;
+      canvas.style.height = `${height}px`;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      drawWave();
+    };
+
+    resizeCanvas();
+
+    const handleScroll = () => {
+      targetScrollY = window.scrollY;
+    };
+
+    const handleMouseMove = (e: MouseEvent) => {
+      targetMouseX = (e.clientX / Math.max(width, 1)) * 2 - 1;
+      targetMouseY = (e.clientY / Math.max(height, 1)) * 2 - 1;
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
+    window.addEventListener('resize', resizeCanvas, { passive: true });
+
+    const renderFrame = (now: number) => {
+      const dt = Math.min(Math.max((now - lastNow) / 1000, 0.001), 0.05);
+      lastNow = now;
+
+      // Frame-rate independent exponential smoothing (~0.06 per frame at 60Hz)
+      const lerpAlpha = 1 - Math.exp(-3.7 * dt);
+      const velAlpha = 1 - Math.exp(-2.4 * dt);
+
+      scrollFactor += (targetScrollY - scrollFactor) * lerpAlpha;
+      const rawVelocity = targetScrollY - scrollFactor;
+      smoothVelocity += (rawVelocity - smoothVelocity) * velAlpha;
+
+      smoothMouseX += (targetMouseX - smoothMouseX) * lerpAlpha;
+      smoothMouseY += (targetMouseY - smoothMouseY) * lerpAlpha;
+
+      if (!prefersReducedMotion) {
+        time += 0.39 * dt;
+      }
+
+      drawWave();
       rafId = window.requestAnimationFrame(renderFrame);
     };
 
@@ -186,7 +211,7 @@ export function WaveBackground() {
       <canvas
         ref={canvasRef}
         aria-hidden="true"
-        className="pointer-events-none fixed inset-0 z-0"
+        className="pointer-events-none fixed inset-0 z-0 transform-gpu will-change-transform"
       />
       <div
         aria-hidden="true"
