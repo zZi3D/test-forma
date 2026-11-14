@@ -137,7 +137,9 @@ export function ProjectWheel3D({ onSelectProject }: ProjectWheel3DProps) {
       }
 
       if (rigRef.current) {
-        rigRef.current.style.transform = `rotateX(${scrollTiltX.toFixed(2)}deg) rotateZ(4.5deg)`;
+        const w = window.innerWidth;
+        const rigLiftY = w < 640 ? 0 : w < 1024 ? -20 : -30;
+        rigRef.current.style.transform = `translateY(${rigLiftY}px) rotateX(${scrollTiltX.toFixed(2)}deg) rotateZ(4.5deg)`;
       }
 
       // Per-card smooth center zoom-in & gentle zoom-out based on angular distance from front center (0 deg)
@@ -356,8 +358,8 @@ export function ProjectWheel3D({ onSelectProject }: ProjectWheel3DProps) {
         </div>
       </div>
 
-      {/* Wheel Navigation & Turn Controls (Directly Under Wheel Stage) */}
-      <div className="glass-subtle relative z-20 mx-auto mt-7 flex max-w-[680px] items-center justify-between gap-2.5 rounded-full px-3 py-1.5 sm:mt-9 sm:gap-3 sm:px-4 sm:py-2">
+      {/* Wheel Navigation & Turn Controls (Directly Under Wheel Stage — lower on desktop to clear zoomed front card) */}
+      <div className="glass-subtle relative z-20 mx-auto mt-7 flex max-w-[680px] items-center justify-between gap-2.5 rounded-full px-3 py-1.5 sm:mt-16 sm:gap-3 sm:px-4 sm:py-2 md:mt-24 lg:mt-32">
         <div className="flex shrink-0 items-center gap-1 sm:gap-1.5">
           <button
             type="button"

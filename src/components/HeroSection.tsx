@@ -90,7 +90,7 @@ export function HeroSection({
       ref={stickyRef}
       aria-label="FORMA Studio Overview"
       style={{ transformOrigin: 'center bottom' }}
-      className="relative z-10 flex w-full flex-col justify-start overflow-x-clip px-4 pt-22 pb-14 will-change-[opacity,transform] md:sticky md:px-8 md:pt-22 md:pb-[30svh]"
+      className="relative z-10 flex w-full flex-col justify-start overflow-x-clip px-4 pt-22 pb-14 will-change-[opacity,transform] md:sticky md:px-8 md:pt-20 md:pb-[30svh]"
     >
       <div className="mx-auto flex w-full max-w-[1200px] flex-col">
         {/* Centered Editorial Headline */}
