@@ -1,0 +1,86 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --font-sans: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --font-serif: "Cormorant Garamond", Georgia, serif;
+    --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+    --canvas-warm: #f7f5f0;
+    --ink-graphite: #1c1b18;
+    --accent-amber: #c98a3a;
+  }
+
+  html {
+    font-family: var(--font-sans);
+    background-color: #f7f5f0;
+    color: #1c1b18;
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    background-color: #f7f5f0;
+    color: #1c1b18;
+    overflow-x: clip;
+  }
+}
+
+.font-editorial {
+  font-family: var(--font-serif);
+}
+
+.font-mono-tabular {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+.display-tight {
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+
+/* Three-Tier Glassmorphism System */
+.glass-tile {
+  background: rgba(255, 255, 255, 0.16);
+  -webkit-backdrop-filter: blur(11px) saturate(145%);
+  backdrop-filter: blur(11px) saturate(145%);
+  border: 1px solid rgba(255, 255, 255, 0.42);
+  box-shadow: 0 12px 32px -12px rgba(28, 27, 24, 0.09);
+}
+
+.glass-elevated {
+  background: rgba(255, 255, 255, 0.24);
+  -webkit-backdrop-filter: blur(14px) saturate(145%);
+  backdrop-filter: blur(14px) saturate(145%);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  box-shadow:
+    0 24px 56px -14px rgba(28, 27, 24, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.72);
+}
+
+.glass-subtle {
+  background: rgba(255, 255, 255, 0.10);
+  -webkit-backdrop-filter: blur(8px) saturate(145%);
+  backdrop-filter: blur(8px) saturate(145%);
+  border: 1px solid rgba(255, 255, 255, 0.30);
+}
+
+/* Atmospheric Mist Overlay over Canvas */
+.wave-mist-overlay {
+  background-color: rgba(247, 245, 240, 0.30);
+  background-image:
+    radial-gradient(ellipse 68% 46% at 50% 0%, rgba(255, 255, 255, 0.68), transparent 72%),
+    radial-gradient(circle at 12% 90%, rgba(235, 222, 198, 0.56), transparent 54%),
+    radial-gradient(circle at 88% 90%, rgba(232, 214, 184, 0.52), transparent 54%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
