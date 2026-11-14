@@ -1,7 +1,7 @@
 import { FormEvent, useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { Calendar, Check, Clock, X } from 'lucide-react';
-import { ProjectCategory } from '../data/projects';
+import { PROJECT_CATEGORIES, ProjectCategory } from '../data/projects';
 
 interface SprintBookingDrawerProps {
   isOpen: boolean;
@@ -11,11 +11,7 @@ interface SprintBookingDrawerProps {
   onClose: () => void;
 }
 
-const CATEGORIES: ProjectCategory[] = [
-  'Luxury Fashion',
-  'Architecture',
-  'Cultural Publication',
-];
+const CATEGORIES: ProjectCategory[] = PROJECT_CATEGORIES;
 
 const CALL_DAYS = ['Tomorrow', 'In 48 Hours', 'Next Monday'];
 const CALL_SLOTS = ['10:00 EST', '11:30 EST', '14:00 EST', '16:30 EST'];
@@ -29,7 +25,7 @@ export function SprintBookingDrawer({
 }: SprintBookingDrawerProps) {
   const [activeTab, setActiveTab] = useState<'brief' | 'call'>(initialTab);
   const [category, setCategory] = useState<ProjectCategory>(
-    prefilledCategory || 'Luxury Fashion',
+    prefilledCategory || PROJECT_CATEGORIES[0],
   );
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');

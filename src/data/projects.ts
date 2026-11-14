@@ -1,348 +1,566 @@
-export type ProjectCategory = 'Luxury Fashion' | 'Architecture' | 'Cultural Publication';
+export type ProjectCategory =
+  | 'Architecture'
+  | 'Luxury & Fashion'
+  | 'Cultural & Editorial'
+  | 'Product & Spatial';
 
-export type MockupArchetype =
-  | 'atelier-lookbook'
-  | 'brutalist-monograph'
-  | 'biennale-journal'
-  | 'maison-runway'
-  | 'spatial-pavilion'
-  | 'opera-season'
-  | 'horology-editorial'
-  | 'timber-residence'
-  | 'archive-index'
-  | 'silk-capsule'
-  | 'museum-retrospective'
-  | 'alpine-sanctuary';
+export const PROJECT_CATEGORIES: ProjectCategory[] = [
+  'Architecture',
+  'Luxury & Fashion',
+  'Cultural & Editorial',
+  'Product & Spatial',
+];
 
-export interface ProjectItem {
+export type UiStyle =
+  | 'swiss-minimalism'
+  | 'dark-neumorphism'
+  | 'neo-brutalism'
+  | 'new-age-gradient'
+  | 'claymorphism'
+  | 'skeuomorphism'
+  | 'bento-editorial'
+  | 'cyberpunk-glass'
+  | 'organic-biophilic'
+  | 'dark-kinetic'
+  | 'bauhaus-grid'
+  | 'retro-crt';
+
+export interface ProjectPalette {
+  bg: string;
+  surface: string;
+  text: string;
+  accent: string;
+  secondary: string;
+}
+
+export interface ProjectContent {
+  masthead: string;
+  navItems: string[];
+  eyebrow: string;
+  headline: string;
+  subheadline: string;
+  ctaLabel: string;
+  metrics: { label: string; value: string }[];
+  cardLabels: string[];
+  quote?: string;
+}
+
+export interface ProjectConfig {
   id: string;
   index: string;
   title: string;
+  subtitle: string;
   client: string;
   category: ProjectCategory;
   year: string;
   sprintDuration: string;
   slug: string;
+  uiStyle: UiStyle;
+  styleLabel: string;
   summary: string;
   deliverables: string[];
-  archetype: MockupArchetype;
-  palette: {
-    bg: string;
-    surface: string;
-    ink: string;
-    muted: string;
-    accent: string;
-  };
-  masthead: string;
-  subline: string;
-  featuredStat: string;
+  palette: ProjectPalette;
+  content: ProjectContent;
 }
 
-export const PROJECTS: ProjectItem[] = [
+export type ProjectItem = ProjectConfig;
+
+/**
+ * CENTRAL PORTFOLIO CONFIGURATION (01 – 12)
+ * Edit titles, palettes, UI styles, or content metrics below and all
+ * 3D wheel tiles, portfolio grid cards, and preview modals update automatically.
+ */
+export const PROJECTS: ProjectConfig[] = [
+  // =========================================================================
+  // 01 — KENGO & PARTNERS (Light · Swiss Minimalism)
+  // =========================================================================
   {
-    id: 'maison-verrier',
+    id: 'kengo-partners',
     index: '01',
-    title: 'Maison Verrier',
-    client: 'Verrier Paris',
-    category: 'Luxury Fashion',
+    title: 'Kengo & Partners',
+    subtitle: 'Brutalist Concrete Monograph & Structural Archive',
+    client: 'Kengo Architects Tokyo / Zurich',
+    category: 'Architecture',
     year: '2026',
     sprintDuration: '24h Sprint',
-    slug: 'maisonverrier.paris',
+    slug: 'kengo-partners.ch',
+    uiStyle: 'swiss-minimalism',
+    styleLabel: 'Swiss Minimalism',
     summary:
-      'Autumn/Winter couture digital flagship designed around full-bleed editorial lookbook spreads, whisper-quiet typography, and instant private client fitting reservations.',
-    deliverables: ['Art Direction', 'Lookbook System', 'Interactive Motion'],
-    archetype: 'atelier-lookbook',
+      'Ultra-disciplined Swiss 3-column architectural monograph pairing concrete photography with technical CAD elevation dimensions, section coordinates, and generous negative space.',
+    deliverables: ['Swiss Grid System', 'Technical CAD Plates', 'Monograph Index'],
     palette: {
-      bg: '#F4F1EC',
-      surface: '#EAE4DA',
-      ink: '#141311',
-      muted: '#6E685F',
-      accent: '#B34329',
+      bg: '#F5F3EE',
+      surface: '#EAE7DF',
+      text: '#141414',
+      accent: '#141414',
+      secondary: '#73716C',
     },
-    masthead: 'VERRIER — AW26',
-    subline: 'SILHOUETTES IN RAW LINEN & SCULPTED WOOL',
-    featuredStat: '18 Looks · Paris',
+    content: {
+      masthead: 'KENGO & PARTNERS',
+      navItems: ['PROJECTS', 'ELEVATIONS', 'PRACTICE', 'CONTACT'],
+      eyebrow: '01 — 08 / MONOGRAPH ARCHIVE',
+      headline: 'Concrete & Quiet Geometry.',
+      subheadline: 'Civic pavilions, daylight apertures & structural honesty across Zurich and Kyoto.',
+      ctaLabel: 'VIEW SECTION A-A →',
+      metrics: [
+        { label: 'SPAN ELEVATION', value: '+14.80 M' },
+        { label: 'BUILT WORKS', value: '42 SITES' },
+        { label: 'GRID MODULE', value: '3-COL / 12PX' },
+      ],
+      cardLabels: ['KYOTO PAVILION', 'ZURICH ANNEX', 'NAOSHIMA PIER'],
+    },
   },
+
+  // =========================================================================
+  // 02 — CHRONOS GENÈVE (Dark · Dark Neumorphism / Tactile Dark)
+  // =========================================================================
   {
-    id: 'kurokawa-atelier',
+    id: 'chronos-geneve',
     index: '02',
-    title: 'Kurokawa & Partners',
-    client: 'Kurokawa Architecture',
-    category: 'Architecture',
+    title: 'Chronos Genève',
+    subtitle: 'Haute Horlogerie Collector Allocation Portal',
+    client: 'Manufacture Chronos SA',
+    category: 'Luxury & Fashion',
     year: '2026',
     sprintDuration: '24h Sprint',
-    slug: 'kurokawa-arch.jp',
+    slug: 'chronos-geneve.ch',
+    uiStyle: 'dark-neumorphism',
+    styleLabel: 'Dark Neumorphism',
     summary:
-      'Monolithic architectural monograph showcasing concrete civic pavilions, structural elevation drawings, and spatial daylight studies across Kyoto and Zurich.',
-    deliverables: ['Monograph Grid', 'Elevation Archive', 'WebGL Transitions'],
-    archetype: 'brutalist-monograph',
+      'Tactile matte-black horology showcase sculpted with soft recessed and extruded neumorphic controls, centered editorial serif headings, and warm amber dial illumination.',
+    deliverables: ['Macro Watch Direction', 'Tactile Dark UI', 'Private Allocation'],
     palette: {
-      bg: '#EBEBEB',
-      surface: '#DFDFDF',
-      ink: '#0D0D0D',
-      muted: '#5E5E5E',
-      accent: '#FF4D24',
+      bg: '#0C0C0C',
+      surface: '#161616',
+      text: '#F5F2EB',
+      accent: '#D98A2B',
+      secondary: '#8C877E',
     },
-    masthead: 'KUROKAWA ARCHITECTS',
-    subline: 'MONOGRAPH NO. 14 · CONCRETE & LIGHT',
-    featuredStat: '42 Works · Kyoto',
+    content: {
+      masthead: 'CHRONOS GENÈVE',
+      navItems: ['CALIBRES', 'ATELIER', 'HERITAGE', 'SALON'],
+      eyebrow: 'CALIBRE NO. 09 · TOURBILLON',
+      headline: 'Precision Sculpted in Shadow.',
+      subheadline: 'Hand-beveled bridges, 72-hour reserve, limited to 18 numbered pieces.',
+      ctaLabel: 'RESERVE VIEWING',
+      metrics: [
+        { label: 'POWER RESERVE', value: '72 HRS' },
+        { label: 'FREQUENCY', value: '21,600 VPH' },
+        { label: 'EDITION', value: '18 PCS' },
+      ],
+      cardLabels: ['TOURBILLON', 'CHRONOGRAPH', 'PERPETUAL'],
+    },
   },
+
+  // =========================================================================
+  // 03 — KUNSTHALLE ZÜRICH (Light/Bold · Maximalism & Neo-Brutalism)
+  // =========================================================================
   {
-    id: 'fondazione-lumen',
+    id: 'kunsthalle-zurich',
     index: '03',
-    title: 'Fondazione Lumen',
-    client: 'Fondazione Lumen Milan',
-    category: 'Cultural Publication',
+    title: 'Kunsthalle Zürich',
+    subtitle: '2026 Contemporary Art Season & Exhibition Agenda',
+    client: 'Kunsthalle Zürich',
+    category: 'Cultural & Editorial',
     year: '2026',
     sprintDuration: '24h Sprint',
-    slug: 'fondazionelumen.org',
+    slug: 'kunsthallezurich.ch',
+    uiStyle: 'neo-brutalism',
+    styleLabel: 'Neo-Brutalism',
     summary:
-      'Biannual contemporary art and architectural theory journal uniting long-form critical essays, exhibition calendars, and multi-column Swiss typesetting.',
-    deliverables: ['Editorial System', 'Essay Reader', 'Exhibition Index'],
-    archetype: 'biennale-journal',
+      'High-energy neo-brutalist cultural platform defined by heavy 3px ink frames, zero-blur hard drop shadows, rotated exhibition stamps, and stark geometric color blocks.',
+    deliverables: ['Exhibition Agenda', 'Brutalist Poster System', 'Ticketing UI'],
     palette: {
-      bg: '#111110',
-      surface: '#1C1C1A',
-      ink: '#F5F4F0',
-      muted: '#9C9A93',
-      accent: '#FF4D24',
+      bg: '#FAF8F2',
+      surface: '#FACC15',
+      text: '#0A0A0A',
+      accent: '#E05A36',
+      secondary: '#1D4ED8',
     },
-    masthead: 'LUMEN JOURNAL · ISSUE 09',
-    subline: 'ESSAYS ON SPACE, SOUND & MEMORY',
-    featuredStat: 'Milan · Autumn',
+    content: {
+      masthead: 'KUNSTHALLE ZÜRICH',
+      navItems: ['PROGRAM', 'ARCHIVE', 'SHOP', 'TICKETS!'],
+      eyebrow: 'AUTUMN / WINTER 2026 SEASON',
+      headline: 'FORM AGAINST SILENCE',
+      subheadline: 'Twelve kinetic installations across Limmatquai Halls A–D.',
+      ctaLabel: 'GET PASSES ↗',
+      metrics: [
+        { label: 'HALL 01', value: '14 OCT — KINETIC' },
+        { label: 'HALL 02', value: '02 NOV — SOUND' },
+        { label: 'HALL 03', value: '19 NOV — PRINT' },
+      ],
+      cardLabels: ['OPEN DAILY', 'FREE FRIDAYS', 'HALLE 01–04'],
+    },
   },
+
+  // =========================================================================
+  // 04 — STUDIO SØRENSEN (Warm Aura · New Age / Ethereal Gradient)
+  // =========================================================================
   {
-    id: 'atelier-solis',
+    id: 'studio-sorensen',
     index: '04',
-    title: 'Atelier Solis',
-    client: 'Solis Milano',
-    category: 'Luxury Fashion',
+    title: 'Studio Sørensen',
+    subtitle: 'Sculptural Knitwear & Atmospheric Lookbook',
+    client: 'Sørensen Copenhagen',
+    category: 'Luxury & Fashion',
     year: '2026',
     sprintDuration: '24h Sprint',
-    slug: 'ateliersolis.com',
+    slug: 'studiosorensen.dk',
+    uiStyle: 'new-age-gradient',
+    styleLabel: 'Ethereal Gradient',
     summary:
-      'Runway capsule portal for an independent Milanese tailoring house featuring kinetic editorial plates, fabric provenance indices, and showroom appointment booking.',
-    deliverables: ['Runway Showcase', 'Editorial Typography', 'Showroom Flow'],
-    archetype: 'maison-runway',
+      'Weightless editorial lookbook bathed in diffused sand-and-peach aura gradients, oversized serif headlines bleeding cleanly over sculptural silhouette photography.',
+    deliverables: ['Lookbook Narrative', 'Aura Color System', 'Showroom Booking'],
     palette: {
-      bg: '#181615',
-      surface: '#252220',
-      ink: '#F7F4EF',
-      muted: '#A69F95',
-      accent: '#D97B48',
+      bg: '#F3ECE1',
+      surface: '#E8B89A',
+      text: '#1F1A17',
+      accent: '#C97B57',
+      secondary: '#6D5D53',
     },
-    masthead: 'SOLIS MILANO',
-    subline: 'TAILORED ARCHIVE · COLLECTION IV',
-    featuredStat: 'Milan · Runway',
+    content: {
+      masthead: 'STUDIO SØRENSEN',
+      navItems: ['COLLECTION', 'ATELIER', 'JOURNAL'],
+      eyebrow: 'COLLECTION IV · COPENHAGEN',
+      headline: 'Softness in Motion',
+      subheadline: 'Draped organic wool silhouettes against Nordic morning light.',
+      ctaLabel: 'EXPLORE LOOKBOOK',
+      metrics: [
+        { label: 'SILHOUETTES', value: '24 LOOKS' },
+        { label: 'FIBERS', value: 'RAW CASHMERE' },
+        { label: 'SHOWROOM', value: 'BREDGADE 41' },
+      ],
+      cardLabels: ['LOOK 01', 'LOOK 08', 'LOOK 16'],
+    },
   },
+
+  // =========================================================================
+  // 05 — VANGUARDIA PRIVATE (Light · Claymorphism)
+  // =========================================================================
   {
-    id: 'nordic-pavilion',
+    id: 'vanguardia-private',
     index: '05',
-    title: 'Oslo Timber Pavilion',
-    client: 'Nordform Studio',
-    category: 'Architecture',
+    title: 'Vanguardia Private',
+    subtitle: 'Tactile Wealth Management & Portfolio Cockpit',
+    client: 'Vanguardia Wealth Zurich',
+    category: 'Product & Spatial',
     year: '2026',
     sprintDuration: '24h Sprint',
-    slug: 'oslopavilion.no',
+    slug: 'vanguardia.private',
+    uiStyle: 'claymorphism',
+    styleLabel: 'Claymorphism',
     summary:
-      'Interactive architectural competition dossier presenting cross-laminated timber acoustics, site topography contours, and civic promenade studies.',
-    deliverables: ['Competition Microsite', 'Drawing Viewer', 'Press Kit'],
-    archetype: 'spatial-pavilion',
+      'Soft, pillowed 3D claymorphic private banking dashboard featuring generous 28px+ rounded modules, dual inner/outer bevel shadows, and crisp tabular wealth analytics.',
+    deliverables: ['Wealth Cockpit', 'Data Visualization', 'Clay UI Kit'],
     palette: {
-      bg: '#F7F7F5',
-      surface: '#ECECE7',
-      ink: '#121311',
-      muted: '#666861',
-      accent: '#2B5B4E',
+      bg: '#ECEEF2',
+      surface: '#FFFFFF',
+      text: '#1E293B',
+      accent: '#FF4D24',
+      secondary: '#64748B',
     },
-    masthead: 'OSLO PAVILION 2026',
-    subline: 'CIVIC TIMBER STRUCTURE · FJORD PROMENADE',
-    featuredStat: '4,800 m² · Oslo',
+    content: {
+      masthead: 'VANGUARDIA',
+      navItems: ['OVERVIEW', 'ALLOCATION', 'YIELD', 'VAULT'],
+      eyebrow: 'PRIVATE WEALTH · Q4 REPORT',
+      headline: '$48,420,890',
+      subheadline: 'Net Liquidity & Sovereign Yield Portfolio',
+      ctaLabel: 'REBALANCE',
+      metrics: [
+        { label: 'YTD RETURN', value: '+18.42%' },
+        { label: 'LIQUIDITY', value: '$12.60M' },
+        { label: 'SHARPE', value: '2.14' },
+      ],
+      cardLabels: ['EQUITIES 54%', 'BONDS 28%', 'PRIVATE 18%'],
+    },
   },
+
+  // =========================================================================
+  // 06 — KLANGWERK BERLIN (Dark · Tactile Skeuomorphism / Dieter Rams)
+  // =========================================================================
   {
-    id: 'teatro-forma',
+    id: 'klangwerk-berlin',
     index: '06',
-    title: 'Teatro Nuovo',
-    client: 'Teatro Nuovo Venezia',
-    category: 'Cultural Publication',
+    title: 'Klangwerk Berlin',
+    subtitle: 'Precision Analog Synthesizer & Audio Hardware UI',
+    client: 'Klangwerk Audio GmbH',
+    category: 'Product & Spatial',
     year: '2026',
     sprintDuration: '24h Sprint',
-    slug: 'teatronuovo.it',
+    slug: 'klangwerk.audio',
+    uiStyle: 'skeuomorphism',
+    styleLabel: 'Skeuomorphism',
     summary:
-      'Season announcement and cultural calendar for Venice’s avant-garde chamber opera, pairing dramatic chiaroscuro visuals with instant repertoire filtering.',
-    deliverables: ['Season Identity', 'Program Grid', 'Ticket Concierge'],
-    archetype: 'opera-season',
+      'Dieter Rams-inspired industrial hardware interface built around anodized matte-black panels, brushed aluminum dividers, speaker perforation matrices, and rotary encoders.',
+    deliverables: ['Hardware Console UI', 'Rotary Knob System', 'OLED Telemetry'],
     palette: {
-      bg: '#0D0E12',
-      surface: '#171920',
-      ink: '#F2F0EB',
-      muted: '#8E929E',
-      accent: '#E04F33',
+      bg: '#18181B',
+      surface: '#D4D4D8',
+      text: '#FAFAFA',
+      accent: '#FF4D24',
+      secondary: '#71717A',
     },
-    masthead: 'TEATRO NUOVO',
-    subline: 'STAGIONE 2026 · VENEZIA',
-    featuredStat: '12 Premieres',
+    content: {
+      masthead: 'KLANGWERK MK-II',
+      navItems: ['OSC', 'FILTER', 'ENV', 'OUTPUT'],
+      eyebrow: 'MODEL KW-06 · BERLIN',
+      headline: 'ANALOG HARMONIC ENGINE',
+      subheadline: 'Dual voltage-controlled oscillators with stepped aluminum attenuators.',
+      ctaLabel: 'REC // LIVE',
+      metrics: [
+        { label: 'CUTOFF', value: '4.82 KHZ' },
+        { label: 'RESONANCE', value: '68 %' },
+        { label: 'DRIVE', value: '+3.5 DB' },
+      ],
+      cardLabels: ['OSC A', 'SUB', 'LOWPASS', 'REVERB'],
+    },
   },
+
+  // =========================================================================
+  // 07 — MONOLITH JOURNAL (Light · Modular Bento Grid & Editorial)
+  // =========================================================================
   {
-    id: 'calibre-voss',
+    id: 'monolith-journal',
     index: '07',
-    title: 'Voss Genève',
-    client: 'Voss Horlogerie',
-    category: 'Luxury Fashion',
+    title: 'Monolith Journal',
+    subtitle: 'Architectural Criticism & Spatial Essays',
+    client: 'Monolith Press London',
+    category: 'Cultural & Editorial',
     year: '2025',
     sprintDuration: '24h Sprint',
-    slug: 'voss-geneve.ch',
+    slug: 'monolithjournal.co',
+    uiStyle: 'bento-editorial',
+    styleLabel: 'Bento Editorial',
     summary:
-      'High-horology collector monograph spotlighting mechanical tourbillon editions, hand-beveled dial finishes, and private salon allocations.',
-    deliverables: ['Collector Portal', 'Macro Showcase', 'Allocation Form'],
-    archetype: 'horology-editorial',
+      'Paper-warm editorial publication marrying long-form magazine columns and a top reading progress rule with modular Bento story cards and sepia-duotone photography.',
+    deliverables: ['Editorial Reader', 'Bento Card System', 'Duotone Treatment'],
     palette: {
-      bg: '#F2F2F0',
-      surface: '#E4E4E0',
-      ink: '#111111',
-      muted: '#636360',
-      accent: '#FF4D24',
+      bg: '#F7F5F0',
+      surface: '#EAE5DC',
+      text: '#1C1B18',
+      accent: '#6B5B4B',
+      secondary: '#8E8070',
     },
-    masthead: 'VOSS GENÈVE',
-    subline: 'CALIBRE 07 · ULTRA-THIN MONOGRAPH',
-    featuredStat: '25 Pieces · Geneva',
+    content: {
+      masthead: 'MONOLITH JOURNAL',
+      navItems: ['ISSUES', 'ESSAYS', 'INDEX', 'SUBSCRIBE'],
+      eyebrow: 'ISSUE 14 · LIGHT & LIMESTONE',
+      headline: 'On Quiet Rooms & Daylight',
+      subheadline: 'How Mediterranean courtyards shape acoustic stillness in modern civic spaces.',
+      ctaLabel: 'READ ESSAY · 12 MIN',
+      metrics: [
+        { label: 'READING TIME', value: '12 MIN' },
+        { label: 'CHAPTERS', value: '06 PARTS' },
+        { label: 'PLATES', value: '28 ARCHIVAL' },
+      ],
+      cardLabels: ['ESSAY I', 'DAYLIGHT', 'COURTYARD'],
+      quote: '“Architecture begins when light enters a silent room and defines its weight.”',
+    },
   },
+
+  // =========================================================================
+  // 08 — AETHER SPATIAL OS (Dark · Cyberpunk & Glassmorphism)
+  // =========================================================================
   {
-    id: 'casa-terracotta',
+    id: 'aether-spatial-os',
     index: '08',
-    title: 'Casa Alentejo',
-    client: 'Estúdio Barroso',
-    category: 'Architecture',
-    year: '2025',
+    title: 'Aether Spatial OS',
+    subtitle: 'Volumetric Telemetry & Glassmorphic Spatial Interface',
+    client: 'Aether Labs Zürich',
+    category: 'Product & Spatial',
+    year: '2026',
     sprintDuration: '24h Sprint',
-    slug: 'casaalentejo.pt',
+    slug: 'aether-os.io',
+    uiStyle: 'cyberpunk-glass',
+    styleLabel: 'Cyberpunk Glass',
     summary:
-      'Residential architectural case study celebrating rammed-earth courtyards, shadow-line geometry, and Mediterranean passive thermal design.',
-    deliverables: ['Project Monograph', 'Material Index', 'Press Archive'],
-    archetype: 'timber-residence',
+      'Pitch-black spatial operating environment featuring floating smoked-glass HUD panels, specular cyan-and-amber edge reflections, wireframe grids, and volumetric 3D orbs.',
+    deliverables: ['Spatial HUD System', 'Telemetry Widgets', 'Glass Shader Spec'],
     palette: {
-      bg: '#F5EFE8',
-      surface: '#E9DFD3',
-      ink: '#1A1613',
-      muted: '#74685E',
-      accent: '#C4532E',
+      bg: '#07080C',
+      surface: '#111622',
+      text: '#F8FAFC',
+      accent: '#22D3EE',
+      secondary: '#F59E0B',
     },
-    masthead: 'CASA ALENTEJO',
-    subline: 'ESTÚDIO BARROSO · MONOLITHIC COURTYARD',
-    featuredStat: '620 m² · Portugal',
+    content: {
+      masthead: 'AETHER OS v4.2',
+      navItems: ['VIEWPORT', 'NODES', 'ORBIT', 'TERMINAL'],
+      eyebrow: 'SYS.08 // SPATIAL TELEMETRY',
+      headline: 'VOLUMETRIC FIELD ACTIVE',
+      subheadline: 'Real-time orbital mesh & neural raycast cluster synchronization.',
+      ctaLabel: 'ENGAGE LINK',
+      metrics: [
+        { label: 'COORDINATES', value: 'X:48.2 Y:-12.0' },
+        { label: 'LATENCY', value: '0.84 MS' },
+        { label: 'SYNC NODES', value: '128 / 128' },
+      ],
+      cardLabels: ['CORE ORB', 'FLUX MESH', 'VECTOR HUD'],
+    },
   },
+
+  // =========================================================================
+  // 09 — BOTANICA ATELIER (Light · Organic & Biophilic Design)
+  // =========================================================================
   {
-    id: 'kunsthalle-basel',
+    id: 'botanica-atelier',
     index: '09',
-    title: 'Edition 04 Monograph',
-    client: 'Edition Basel Press',
-    category: 'Cultural Publication',
-    year: '2025',
+    title: 'Botanica Atelier',
+    subtitle: 'Botanical Apothecary & Distillate Archive',
+    client: 'Botanica Grasse',
+    category: 'Luxury & Fashion',
+    year: '2026',
     sprintDuration: '24h Sprint',
-    slug: 'editionbasel.ch',
+    slug: 'botanica-atelier.fr',
+    uiStyle: 'organic-biophilic',
+    styleLabel: 'Organic Biophilic',
     summary:
-      'Digital catalogue raisonné and Swiss typographic archive documenting fifty years of constructive graphic art and architectural print.',
-    deliverables: ['Digital Archive', 'Index Search', 'Print Specimen'],
-    archetype: 'archive-index',
+      'Tactile linen-and-sage biophilic apothecary storefront featuring flowing organic rounded cards, subtle paper grain, botanical shadow studies, and serene serif indexing.',
+    deliverables: ['Biophilic Art Direction', 'Formulation Index', 'Packaging Storytelling'],
     palette: {
-      bg: '#FFFFFF',
-      surface: '#F0F0EE',
-      ink: '#0A0A0A',
-      muted: '#646464',
-      accent: '#FF4D24',
+      bg: '#EFECE6',
+      surface: '#F7F5F0',
+      text: '#2F4538',
+      accent: '#C47451',
+      secondary: '#627266',
     },
-    masthead: 'EDITION BASEL',
-    subline: 'CATALOGUE RAISONNÉ · 1974–2025',
-    featuredStat: '340 Plates · Basel',
+    content: {
+      masthead: 'BOTANICA ATELIER',
+      navItems: ['FORMULATIONS', 'DISTILLERY', 'NOTES', 'APOTHECARY'],
+      eyebrow: 'FORMULATION 09 // GRASSE HARVEST',
+      headline: 'Wild Botanicals & Stone.',
+      subheadline: 'Cold-pressed cedar leaf, neroli blossom, and terracotta mineral extracts.',
+      ctaLabel: 'EXPLORE FORMULATION',
+      metrics: [
+        { label: 'EXTRACTION', value: 'STEAM 42°C' },
+        { label: 'ORIGIN', value: 'GRASSE, FR' },
+        { label: 'VOLUME', value: '50 ML GLASS' },
+      ],
+      cardLabels: ['CEDAR LEAF', 'NEROLI', 'VETIVER'],
+    },
   },
+
+  // =========================================================================
+  // 10 — VELOCE AUTOMOBILI (Dark · Dark Kinetic & Telemetry UI)
+  // =========================================================================
   {
-    id: 'maison-celeste',
+    id: 'veloce-automobili',
     index: '10',
-    title: 'Céleste Cashmere',
-    client: 'Céleste Paris',
-    category: 'Luxury Fashion',
-    year: '2025',
+    title: 'Veloce Automobili',
+    subtitle: 'Electric Hypercar Telemetry & Aero Configurator',
+    client: 'Veloce Modena S.p.A.',
+    category: 'Product & Spatial',
+    year: '2026',
     sprintDuration: '24h Sprint',
-    slug: 'celesteparis.fr',
+    slug: 'veloce-modena.it',
+    uiStyle: 'dark-kinetic',
+    styleLabel: 'Dark Kinetic',
     summary:
-      'Minimalist knitwear capsule experience built with generous gallery whitespace, tactile swatch inspection, and editorial campaign sequencing.',
-    deliverables: ['Capsule Flagship', 'Swatch System', 'Editorial Grid'],
-    archetype: 'silk-capsule',
+      'High-velocity carbon-black hypercar cockpit pairing slanted kinetic display type with live CFD aerodynamics airflow curves, chrome silhouette lighting, and tabular telemetry.',
+    deliverables: ['Telemetry Cockpit', 'CFD Aero Visualizer', 'Track Configurator'],
     palette: {
-      bg: '#ECEAE4',
-      surface: '#DFDCD4',
-      ink: '#151412',
-      muted: '#6E6B64',
-      accent: '#23201E',
+      bg: '#09090B',
+      surface: '#141418',
+      text: '#E4E4E7',
+      accent: '#FF4D24',
+      secondary: '#8A8A94',
     },
-    masthead: 'CÉLESTE PARIS',
-    subline: 'ESSENTIALS IN UNDYED MONGOLIAN CASHMERE',
-    featuredStat: 'Paris · Capsule',
+    content: {
+      masthead: 'VELOCE MODENA',
+      navItems: ['MONOPOSTO', 'AERO LAB', 'TELEMETRY', 'ALLOCATION'],
+      eyebrow: 'PROTOTYPE V-10 // TRACK SPEC',
+      headline: 'ELECTRIC HYPER VELOCITY',
+      subheadline: 'Quad-motor torque vectoring with 1,420 kg active ground-effect downforce.',
+      ctaLabel: 'LAUNCH TELEMETRY →',
+      metrics: [
+        { label: '0–100 KM/H', value: '1.88 SEC' },
+        { label: 'DOWNFORCE', value: '1,420 KG' },
+        { label: 'POWER', value: '1,980 HP' },
+      ],
+      cardLabels: ['TRACK', 'CFD AERO', 'CARBON'],
+    },
   },
+
+  // =========================================================================
+  // 11 — DESSAU TYPE FOUNDRY (Light · Bauhaus & Constructivist Grid)
+  // =========================================================================
   {
-    id: 'galerie-nord',
+    id: 'dessau-type-foundry',
     index: '11',
-    title: 'Galerie Nord',
-    client: 'Kunstmuseum Stockholm',
-    category: 'Cultural Publication',
-    year: '2025',
+    title: 'Dessau Type Foundry',
+    subtitle: 'Constructivist Specimen & Interactive Type Tester',
+    client: 'Dessau Press Berlin',
+    category: 'Cultural & Editorial',
+    year: '2026',
     sprintDuration: '24h Sprint',
-    slug: 'galerienord.se',
+    slug: 'dessautype.de',
+    uiStyle: 'bauhaus-grid',
+    styleLabel: 'Bauhaus Grid',
     summary:
-      'Interactive curatorial guide for a Nordic minimalism retrospective featuring spatial room indexes, audio notes, and bilingual essays.',
-    deliverables: ['Exhibition Guide', 'Curatorial Essays', 'Room Map'],
-    archetype: 'museum-retrospective',
+      'Constructivist typographic foundry built on primary red/cobalt/ink geometry, multi-scale glyph specimens (Aa Bb Cc), and a real-time interactive optical tracking tester.',
+    deliverables: ['Type Specimen Engine', 'Variable Axis UI', 'Constructivist Grid'],
     palette: {
-      bg: '#141517',
-      surface: '#1E2024',
-      ink: '#F4F4F2',
-      muted: '#90949C',
-      accent: '#FF4D24',
+      bg: '#F4F1EA',
+      surface: '#EAE5DA',
+      text: '#111111',
+      accent: '#D93829',
+      secondary: '#1D4ED8',
     },
-    masthead: 'GALERIE NORD',
-    subline: 'FORM & SILENCE · RETROSPECTIVE 2025',
-    featuredStat: 'Stockholm · Hall B',
+    content: {
+      masthead: 'DESSAU FOUNDRY',
+      navItems: ['TYPEFACES', 'TESTER', 'SPECIMENS', 'LICENSING'],
+      eyebrow: 'SPECIMEN 11 // DESSAU GROTESK',
+      headline: 'Constructive Form.',
+      subheadline: 'Geometric sans-serif architecture engineered in 9 optical weights.',
+      ctaLabel: 'TRY LICENSE →',
+      metrics: [
+        { label: 'SIZE', value: '112 PT' },
+        { label: 'TRACKING', value: '-0.03 EM' },
+        { label: 'GLYPHS', value: '840 CHARS' },
+      ],
+      cardLabels: ['LIGHT 300', 'BOLD 700', 'BLACK 900'],
+    },
   },
+
+  // =========================================================================
+  // 12 — NOCTURNE LAB (Dark · Retro-Futurism & CRT Terminal)
+  // =========================================================================
   {
-    id: 'therme-vals-digital',
+    id: 'nocturne-lab',
     index: '12',
-    title: 'Atelier Graubünden',
-    client: 'Graubünden Bau',
-    category: 'Architecture',
-    year: '2025',
+    title: 'Nocturne Lab',
+    subtitle: 'Phosphor CRT Oscilloscope & Modular Sequencer',
+    client: 'Nocturne Sound Systems',
+    category: 'Product & Spatial',
+    year: '2026',
     sprintDuration: '24h Sprint',
-    slug: 'graubuenden-bau.ch',
+    slug: 'nocturnelab.io',
+    uiStyle: 'retro-crt',
+    styleLabel: 'Retro-Futurism CRT',
     summary:
-      'Alpine architectural portfolio showcasing quartzite stone bathhouses, timber mountain cabins, and high-altitude structural engineering.',
-    deliverables: ['Portfolio System', 'Material Library', 'Studio Profile'],
-    archetype: 'alpine-sanctuary',
+      'Phosphor-lime and amber CRT sound workstation featuring scanline telemetry, pixel-crisp terminal bars, an oscillating central waveform scope, and a 16-step modular sequencer.',
+    deliverables: ['CRT Shader Aesthetic', 'Audio Sequencer UI', 'Oscilloscope Engine'],
     palette: {
-      bg: '#E8ECEB',
-      surface: '#D8DFDD',
-      ink: '#101413',
-      muted: '#57625F',
-      accent: '#FF4D24',
+      bg: '#0A0C0B',
+      surface: '#1A1D1B',
+      text: '#BEF264',
+      accent: '#BEF264',
+      secondary: '#F59E0B',
     },
-    masthead: 'GRAUBÜNDEN BAU',
-    subline: 'ALPINE STONE & TIMBER ARCHITECTURE',
-    featuredStat: '1,940m · Alps',
+    content: {
+      masthead: 'NOCTURNE LAB // OS',
+      navItems: ['SCOPE', 'SEQ-16', 'PATCH', 'EXPORT'],
+      eyebrow: 'TERM.12 // PHOSPHOR AUDIO ENGINE',
+      headline: 'CLOCK 128.0 BPM · SYNC OK',
+      subheadline: '16-channel step matrix with sub-millisecond analog clock modulation.',
+      ctaLabel: 'RUN PATCH',
+      metrics: [
+        { label: 'TEMPO', value: '128.0 BPM' },
+        { label: 'SAMPLE RATE', value: '96.0 KHZ' },
+        { label: 'BUFFER', value: '1.2 MS' },
+      ],
+      cardLabels: ['CH 01', 'CH 02', 'CH 03', 'CH 04'],
+    },
   },
 ];
-
-export interface SphereTileSpec {
-  id: string;
-  baseProject: ProjectItem;
-  variantSeed: number;
-  label: string;
-}
-
-export const SPHERE_TILES: SphereTileSpec[] = Array.from({ length: 54 }, (_, i) => {
-  const base = PROJECTS[i % PROJECTS.length];
-  const edition = Math.floor(i / PROJECTS.length) + 1;
-  return {
-    id: `sphere-tile-${i}`,
-    baseProject: base,
-    variantSeed: i,
-    label: edition === 1 ? base.title : `${base.title} · Vol. ${edition}`,
-  };
-});

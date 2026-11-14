@@ -19,7 +19,7 @@ const NAV_ITEMS = [
   {
     index: '02',
     label: 'Selected Work',
-    subtitle: '12 Luxury, Architectural & Cultural Works',
+    subtitle: '12 Curated UI/UX Editions & Case Studies',
     target: 'selected-work',
   },
   {

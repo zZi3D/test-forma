@@ -75,6 +75,8 @@ export function ProjectPreviewModal({
                     {project.index}
                   </span>
                   <span aria-hidden="true">·</span>
+                  <span className="font-medium text-[#1C1B18]">{project.styleLabel}</span>
+                  <span aria-hidden="true">·</span>
                   <span>{project.category}</span>
                   <span aria-hidden="true">·</span>
                   <span className="font-mono-tabular">{project.sprintDuration}</span>
@@ -84,6 +86,9 @@ export function ProjectPreviewModal({
                 <h2 className="display-tight mt-2 text-[clamp(1.75rem,3vw,2.75rem)] leading-[1.05] font-semibold">
                   {project.title}
                 </h2>
+                <p className="mt-1 text-[13px] text-[#1C1B18]/65">
+                  {project.subtitle}
+                </p>
               </div>
 
               <button

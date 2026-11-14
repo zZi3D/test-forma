@@ -65,7 +65,7 @@ export function HeroSection({
       id="hero-wave"
       ref={stickyRef}
       aria-label="FORMA Studio Overview"
-      className="sticky top-0 z-10 flex min-h-[100svh] w-full flex-col justify-center overflow-x-clip px-4 pt-24 pb-8 will-change-[opacity,transform] md:px-8 md:pt-24 md:pb-10"
+      className="sticky top-0 z-10 flex min-h-[100svh] w-full flex-col justify-center overflow-x-clip px-4 pt-22 pb-6 will-change-[opacity,transform] md:px-8 md:pt-22 md:pb-8"
     >
       <div className="mx-auto w-full max-w-[1200px]">
         {/* Compact Split Editorial Hero Header */}
@@ -81,8 +81,8 @@ export function HeroSection({
 
           <div className="flex flex-col items-start gap-3.5 lg:max-w-[400px] lg:items-end lg:text-right">
             <p className="text-[14px] leading-[1.55] text-[#1C1B18]/75 md:text-[15px]">
-              Luxury fashion houses, architectural monographs, and cultural
-              publications—drag or spin the 3D wheel below to inspect any edition.
+              Twelve distinct digital design systems—drag or spin the 3D wheel
+              below to inspect each edition.
             </p>
             <div className="flex flex-wrap items-center gap-3">
               <button
@@ -97,7 +97,7 @@ export function HeroSection({
                 onClick={onJumpToWork}
                 className="glass-tile inline-flex h-10 items-center justify-center rounded-full px-4 text-[12px] font-medium text-[#1C1B18] whitespace-nowrap shrink-0 transition-colors duration-200 hover:bg-white/30 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C98A3A]"
               >
-                4×3 Grid ↓
+                Selected Work ↓
               </button>
             </div>
           </div>
@@ -107,7 +107,7 @@ export function HeroSection({
         <ProjectWheel3D onSelectProject={onSelectProject} />
 
         {/* Subtle Glass Metrics Strip */}
-        <div className="glass-subtle mt-7 grid grid-cols-2 gap-4 rounded-2xl p-4 md:mt-8 md:grid-cols-4 md:gap-6 md:px-7 md:py-5">
+        <div className="glass-subtle mt-5 grid grid-cols-2 gap-4 rounded-2xl p-4 md:mt-6 md:grid-cols-4 md:gap-6 md:px-7 md:py-5">
           {HERO_METRICS.map((metric) => (
             <div key={metric.label}>
               <p className="font-mono-tabular text-[19px] font-semibold tracking-[-0.02em] text-[#1C1B18] md:text-[22px]">

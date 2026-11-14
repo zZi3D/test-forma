@@ -57,7 +57,7 @@ export function ProjectWheel3D({ onSelectProject }: ProjectWheel3DProps) {
     return map;
   }, []);
 
-  // Responsive cylinder geometry
+  // Responsive cylinder geometry tuned for 12 3D cards
   useEffect(() => {
     const updateSize = () => {
       const w = window.innerWidth;
@@ -219,7 +219,7 @@ export function ProjectWheel3D({ onSelectProject }: ProjectWheel3DProps) {
         role="region"
         aria-roledescription="3D rotating project wheel"
         aria-label="Interactive 3D showcase wheel — drag horizontally to turn, click any card to inspect"
-        className={`relative mx-auto flex h-[300px] w-full items-center justify-center overflow-visible touch-pan-y sm:h-[340px] md:h-[380px] ${
+        className={`relative mx-auto flex h-[310px] w-full items-center justify-center overflow-visible touch-pan-y sm:h-[360px] md:h-[400px] ${
           isDragging ? 'cursor-grabbing' : 'cursor-grab'
         }`}
         style={{ perspective: '1500px' }}
@@ -275,12 +275,12 @@ export function ProjectWheel3D({ onSelectProject }: ProjectWheel3DProps) {
                   >
                     <div
                       className="relative aspect-[16/10] w-full overflow-hidden rounded-lg border border-[#1C1B18]/10"
-                      style={{ backgroundColor: project.palette.surface }}
+                      style={{ backgroundColor: project.palette.bg }}
                     >
                       {imgSrc && (
                         <img
                           src={imgSrc}
-                          alt={`${project.title} — ${project.category}`}
+                          alt={`${project.title} — ${project.styleLabel}`}
                           draggable={false}
                           referrerPolicy="no-referrer"
                           className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
@@ -312,7 +312,7 @@ export function ProjectWheel3D({ onSelectProject }: ProjectWheel3DProps) {
                       <span>FORMA</span>
                     </div>
                     <div className="border-t border-[#1C1B18]/10 pt-2 text-[11px] font-medium text-[#1C1B18]/35">
-                      {project.category}
+                      {project.styleLabel}
                     </div>
                   </div>
                 </div>
@@ -323,7 +323,7 @@ export function ProjectWheel3D({ onSelectProject }: ProjectWheel3DProps) {
       </div>
 
       {/* Wheel Navigation & Turn Controls */}
-      <div className="mx-auto mt-2 flex max-w-[680px] flex-wrap items-center justify-between gap-3 rounded-full px-4 py-2 glass-subtle">
+      <div className="glass-subtle relative z-20 mx-auto mt-8 flex max-w-[680px] flex-wrap items-center justify-between gap-3 rounded-full px-4 py-2 sm:mt-10 md:mt-12">
         <div className="flex items-center gap-1.5">
           <button
             type="button"
@@ -353,7 +353,7 @@ export function ProjectWheel3D({ onSelectProject }: ProjectWheel3DProps) {
           </span>
           <span className="font-semibold">{activeProject.title}</span>
           <span className="mx-1.5 text-[#1C1B18]/35">·</span>
-          <span className="text-[#1C1B18]/65">{activeProject.category}</span>
+          <span className="text-[#1C1B18]/65">{activeProject.styleLabel}</span>
         </button>
 
         <button
