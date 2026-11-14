@@ -19,6 +19,7 @@ export function ProjectWheel3D({ onSelectProject }: ProjectWheel3DProps) {
   const stageRef = useRef<HTMLDivElement | null>(null);
   const rigRef = useRef<HTMLDivElement | null>(null);
   const ringRef = useRef<HTMLDivElement | null>(null);
+  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   const [isAutoSpin, setIsAutoSpin] = useState<boolean>(() => {
     if (typeof window === 'undefined') return true;
@@ -29,9 +30,11 @@ export function ProjectWheel3D({ onSelectProject }: ProjectWheel3DProps) {
   const [dimensions, setDimensions] = useState<{
     radius: number;
     cardWidth: number;
+    maxZoomScale: number;
   }>({
-    radius: 470,
-    cardWidth: 236,
+    radius: 540,
+    cardWidth: 268,
+    maxZoomScale: 1.19,
   });
 
   // Mutable animation state inside refs for zero-overhead 60fps animation
@@ -46,8 +49,10 @@ export function ProjectWheel3D({ onSelectProject }: ProjectWheel3DProps) {
   const scrollTargetRef = useRef(0);
   const scrollSmoothRef = useRef(0);
   const lastReportedIndexRef = useRef(0);
+  const dimensionsRef = useRef(dimensions);
 
   autoSpinRef.current = isAutoSpin;
+  dimensionsRef.current = dimensions;
 
   const thumbnails = useMemo(() => {
     const map = new Map<string, string>();
@@ -57,16 +62,16 @@ export function ProjectWheel3D({ onSelectProject }: ProjectWheel3DProps) {
     return map;
   }, []);
 
-  // Responsive cylinder geometry tuned for 12 3D cards
+  // Responsive cylinder geometry tuned for 12 3D cards (larger stage + prominent center zoom)
   useEffect(() => {
     const updateSize = () => {
       const w = window.innerWidth;
       if (w < 640) {
-        setDimensions({ radius: 265, cardWidth: 168 });
+        setDimensions({ radius: 260, cardWidth: 196, maxZoomScale: 1.14 });
       } else if (w < 1024) {
-        setDimensions({ radius: 375, cardWidth: 204 });
+        setDimensions({ radius: 410, cardWidth: 224, maxZoomScale: 1.17 });
       } else {
-        setDimensions({ radius: 485, cardWidth: 240 });
+        setDimensions({ radius: 540, cardWidth: 268, maxZoomScale: 1.19 });
       }
     };
     updateSize();
@@ -74,7 +79,7 @@ export function ProjectWheel3D({ onSelectProject }: ProjectWheel3DProps) {
     return () => window.removeEventListener('resize', updateSize);
   }, []);
 
-  // Track vertical scroll to gently turn & tilt the 3D wheel
+  // Track vertical scroll to briskly turn & gently tilt the 3D wheel
   useEffect(() => {
     scrollTargetRef.current = window.scrollY;
     scrollSmoothRef.current = window.scrollY;
@@ -85,7 +90,7 @@ export function ProjectWheel3D({ onSelectProject }: ProjectWheel3DProps) {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  // Main 60fps CSS-3D animation loop
+  // Main 60fps CSS-3D animation loop with smoothstep center card zoom-in / zoom-out
   useEffect(() => {
     let rafId = 0;
     let lastTime = performance.now();
@@ -94,14 +99,15 @@ export function ProjectWheel3D({ onSelectProject }: ProjectWheel3DProps) {
       const dt = Math.min((now - lastTime) / 1000, 0.05);
       lastTime = now;
 
-      // Smooth scroll coupling
+      // Stronger scroll coupling so scrolling down rotates the wheel cards noticeably
+      const isMobile = window.innerWidth < 768;
       scrollSmoothRef.current +=
-        (scrollTargetRef.current - scrollSmoothRef.current) * 0.08;
-      const scrollAngleOffset = scrollSmoothRef.current * 0.065;
-      const scrollTiltX = Math.max(
-        -15,
-        Math.min(-4, -9 - (scrollSmoothRef.current / 900) * 4),
-      );
+        (scrollTargetRef.current - scrollSmoothRef.current) * 0.09;
+      const scrollSensitivity = isMobile ? 0.08 : 0.15;
+      const scrollAngleOffset = scrollSmoothRef.current * scrollSensitivity;
+      const scrollTiltX = isMobile
+        ? -7.5
+        : Math.max(-10, Math.min(-7.5, -7.5 - (scrollSmoothRef.current / 900) * 2.5));
 
       if (targetAngleRef.current !== null) {
         const diff = targetAngleRef.current - angleRef.current;
@@ -131,7 +137,30 @@ export function ProjectWheel3D({ onSelectProject }: ProjectWheel3DProps) {
       }
 
       if (rigRef.current) {
-        rigRef.current.style.transform = `rotateX(${scrollTiltX.toFixed(2)}deg) rotateZ(5.5deg)`;
+        rigRef.current.style.transform = `rotateX(${scrollTiltX.toFixed(2)}deg) rotateZ(4.5deg)`;
+      }
+
+      // Per-card smooth center zoom-in & gentle zoom-out based on angular distance from front center (0 deg)
+      const { radius, maxZoomScale } = dimensionsRef.current;
+      const zoomRangeDeg = 44; // Smooth interpolation across ~1.45 card steps on each side
+      for (let i = 0; i < CARD_COUNT; i += 1) {
+        const cardEl = cardRefs.current[i];
+        if (!cardEl) continue;
+
+        const cardAngle = i * STEP_DEG;
+        const relDeg = ((((cardAngle + displayAngle) % 360) + 540) % 360) - 180;
+        const absDeg = Math.abs(relDeg);
+
+        const linearT = Math.max(0, 1 - absDeg / zoomRangeDeg);
+        const smoothT = linearT * linearT * (3 - 2 * linearT);
+
+        const scale = 1 + smoothT * (maxZoomScale - 1);
+        const extraZ = smoothT * (isMobile ? 22 : 38);
+        const liftY = -smoothT * 5;
+
+        cardEl.style.transform = `rotateY(${cardAngle}deg) translateZ(${(
+          radius + extraZ
+        ).toFixed(2)}px) translateY(${liftY.toFixed(2)}px) scale(${scale.toFixed(4)})`;
       }
 
       const nearest = normalizeIndex(displayAngle);
@@ -150,7 +179,9 @@ export function ProjectWheel3D({ onSelectProject }: ProjectWheel3DProps) {
   const stepWheel = useCallback((direction: -1 | 1) => {
     targetAngleRef.current = null;
     velocityRef.current = 0;
-    const currentScrollOffset = scrollSmoothRef.current * 0.065;
+    const isMobile = window.innerWidth < 768;
+    const currentScrollOffset =
+      scrollSmoothRef.current * (isMobile ? 0.08 : 0.15);
     const currentDisplay = angleRef.current - currentScrollOffset;
     const snappedBase = Math.round(currentDisplay / STEP_DEG) * STEP_DEG;
     targetAngleRef.current =
@@ -201,7 +232,7 @@ export function ProjectWheel3D({ onSelectProject }: ProjectWheel3DProps) {
   const activeProject = PROJECTS[activeIndex];
 
   return (
-    <div className="relative mt-6 w-full select-none md:mt-8">
+    <div className="relative mt-2 w-full select-none sm:mt-3">
       {/* 3D Perspective Stage (pure CSS 3D + rAF, zero WebGL) */}
       <div
         ref={stageRef}
@@ -219,17 +250,17 @@ export function ProjectWheel3D({ onSelectProject }: ProjectWheel3DProps) {
         role="region"
         aria-roledescription="3D rotating project wheel"
         aria-label="Interactive 3D showcase wheel — drag horizontally to turn, click any card to inspect"
-        className={`relative mx-auto flex h-[310px] w-full items-center justify-center overflow-visible touch-pan-y sm:h-[360px] md:h-[400px] ${
+        className={`relative mx-auto flex h-[285px] w-full items-center justify-center overflow-visible touch-pan-y sm:h-[340px] md:h-[380px] lg:h-[395px] ${
           isDragging ? 'cursor-grabbing' : 'cursor-grab'
         }`}
-        style={{ perspective: '1500px' }}
+        style={{ perspective: '1750px' }}
       >
         <div
           ref={rigRef}
           className="relative flex items-center justify-center"
           style={{
             transformStyle: 'preserve-3d',
-            transform: 'rotateX(-9deg) rotateZ(5.5deg)',
+            transform: 'rotateX(-7.5deg) rotateZ(4.5deg)',
           }}
         >
           <div
@@ -248,12 +279,15 @@ export function ProjectWheel3D({ onSelectProject }: ProjectWheel3DProps) {
               return (
                 <div
                   key={project.id}
+                  ref={(el) => {
+                    cardRefs.current[idx] = el;
+                  }}
                   style={{
                     width: `${dimensions.cardWidth}px`,
                     transformStyle: 'preserve-3d',
                     transform: `rotateY(${cardAngle}deg) translateZ(${dimensions.radius}px)`,
                   }}
-                  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+                  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 will-change-transform"
                 >
                   {/* Front Face */}
                   <button
@@ -263,9 +297,9 @@ export function ProjectWheel3D({ onSelectProject }: ProjectWheel3DProps) {
                         onSelectProject(project);
                       }
                     }}
-                    className={`glass-tile group relative block w-full rounded-xl p-2 text-left transition-all duration-300 hover:scale-[1.04] focus-visible:outline-2 focus-visible:outline-[#C98A3A] ${
+                    className={`glass-tile group relative block w-full rounded-xl p-2 text-left transition-shadow duration-300 hover:scale-[1.03] focus-visible:outline-2 focus-visible:outline-[#C98A3A] ${
                       isFocused
-                        ? 'ring-1 ring-[#C98A3A]/55 shadow-[0_24px_48px_-14px_rgba(28,27,24,0.22)]'
+                        ? 'ring-1 ring-[#C98A3A]/60 shadow-[0_28px_56px_-14px_rgba(28,27,24,0.26)]'
                         : 'opacity-95'
                     }`}
                     style={{
@@ -322,9 +356,9 @@ export function ProjectWheel3D({ onSelectProject }: ProjectWheel3DProps) {
         </div>
       </div>
 
-      {/* Wheel Navigation & Turn Controls */}
-      <div className="glass-subtle relative z-20 mx-auto mt-8 flex max-w-[680px] flex-wrap items-center justify-between gap-3 rounded-full px-4 py-2 sm:mt-10 md:mt-12">
-        <div className="flex items-center gap-1.5">
+      {/* Wheel Navigation & Turn Controls (Directly Under Wheel Stage) */}
+      <div className="glass-subtle relative z-20 mx-auto mt-7 flex max-w-[680px] items-center justify-between gap-2.5 rounded-full px-3 py-1.5 sm:mt-9 sm:gap-3 sm:px-4 sm:py-2">
+        <div className="flex shrink-0 items-center gap-1 sm:gap-1.5">
           <button
             type="button"
             onClick={() => stepWheel(1)}
@@ -346,31 +380,35 @@ export function ProjectWheel3D({ onSelectProject }: ProjectWheel3DProps) {
         <button
           type="button"
           onClick={() => onSelectProject(activeProject)}
-          className="min-w-0 flex-1 truncate text-center text-[12px] font-medium text-[#1C1B18] transition-colors hover:text-[#C98A3A]"
+          className="min-w-0 flex-1 truncate text-center text-[11px] font-medium text-[#1C1B18] transition-colors hover:text-[#C98A3A] sm:text-[12px]"
         >
-          <span className="font-mono-tabular mr-2 text-[#C98A3A]">
+          <span className="font-mono-tabular mr-1.5 text-[#C98A3A] sm:mr-2">
             {activeProject.index}
           </span>
           <span className="font-semibold">{activeProject.title}</span>
-          <span className="mx-1.5 text-[#1C1B18]/35">·</span>
-          <span className="text-[#1C1B18]/65">{activeProject.styleLabel}</span>
+          <span className="mx-1.5 hidden text-[#1C1B18]/35 sm:inline">·</span>
+          <span className="hidden text-[#1C1B18]/65 sm:inline">
+            {activeProject.styleLabel}
+          </span>
         </button>
 
         <button
           type="button"
           onClick={() => setIsAutoSpin((prev) => !prev)}
           aria-pressed={isAutoSpin}
-          className="inline-flex h-8 items-center gap-1.5 rounded-full border border-[#1C1B18]/15 px-3 text-[11px] font-medium text-[#1C1B18] whitespace-nowrap shrink-0 transition-colors hover:bg-[#1C1B18] hover:text-[#F7F5F0]"
+          className="inline-flex h-8 shrink-0 items-center gap-1.5 rounded-full border border-[#1C1B18]/15 px-2.5 text-[11px] font-medium whitespace-nowrap text-[#1C1B18] transition-colors hover:bg-[#1C1B18] hover:text-[#F7F5F0] sm:px-3"
         >
           {isAutoSpin ? (
             <>
               <Pause className="h-3 w-3" />
-              <span>Pause Spin</span>
+              <span className="hidden sm:inline">Pause Spin</span>
+              <span className="sm:hidden">Pause</span>
             </>
           ) : (
             <>
               <Play className="h-3 w-3" />
-              <span>Turn Wheel</span>
+              <span className="hidden sm:inline">Turn Wheel</span>
+              <span className="sm:hidden">Turn</span>
             </>
           )}
         </button>

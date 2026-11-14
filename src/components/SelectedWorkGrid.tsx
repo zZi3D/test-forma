@@ -17,6 +17,13 @@ type FilterOption = 'All' | ProjectCategory;
 
 const FILTERS: FilterOption[] = ['All', ...PROJECT_CATEGORIES];
 
+const STUDIO_METRICS = [
+  { value: '24 Hours', label: 'Concept to live launch' },
+  { value: '340+', label: 'Editorial editions shipped' },
+  { value: '52-Layer', label: 'Procedural canvas craft' },
+  { value: 'NYC · ZRH', label: 'Synchronized studio desk' },
+];
+
 export function SelectedWorkGrid({
   onSelectProject,
   onStartProject,
@@ -40,9 +47,23 @@ export function SelectedWorkGrid({
     <section
       id="selected-work"
       aria-label="Selected Work Portfolio Archive"
-      className="relative z-10 w-full px-4 pt-24 pb-16 md:px-8 md:pt-28 md:pb-24"
+      className="relative z-10 w-full px-4 pt-14 pb-16 md:px-8 md:pt-20 md:pb-24"
     >
       <div className="mx-auto max-w-[1200px]">
+        {/* Studio Proof Metrics Strip */}
+        <div className="glass-tile mb-12 grid grid-cols-2 gap-4 rounded-2xl p-4 md:mb-14 md:grid-cols-4 md:gap-6 md:px-7 md:py-5">
+          {STUDIO_METRICS.map((metric) => (
+            <div key={metric.label}>
+              <p className="font-mono-tabular text-[19px] font-semibold tracking-[-0.02em] text-[#1C1B18] md:text-[22px]">
+                {metric.value}
+              </p>
+              <p className="mt-0.5 text-[12px] text-[#1C1B18]/70">
+                {metric.label}
+              </p>
+            </div>
+          ))}
+        </div>
+
         {/* Section Header */}
         <div className="flex flex-col gap-5 border-b border-[#1C1B18]/12 pb-6 sm:flex-row sm:items-end sm:justify-between">
           <div>

@@ -8,13 +8,6 @@ interface HeroSectionProps {
   onJumpToWork: () => void;
 }
 
-const HERO_METRICS = [
-  { value: '24 Hours', label: 'Concept to live launch' },
-  { value: '340+', label: 'Editorial editions shipped' },
-  { value: '52-Layer', label: 'Procedural canvas craft' },
-  { value: 'NYC · ZRH', label: 'Synchronized studio desk' },
-];
-
 export function HeroSection({
   onSelectProject,
   onOpenBooking,
@@ -22,7 +15,7 @@ export function HeroSection({
 }: HeroSectionProps) {
   const stickyRef = useRef<HTMLElement | null>(null);
 
-  // Smoothly recede & fade fixed Hero only after Section 2 rises over it
+  // Scroll until the bottom CTA block is in view, then pin Hero sticky while Section 2 rises over it
   useEffect(() => {
     let rafId = 0;
 
@@ -31,11 +24,33 @@ export function HeroSection({
       const el = stickyRef.current;
       if (!el) return;
 
-      const vh = Math.max(window.innerHeight, 1);
-      const progress = Math.min(Math.max(window.scrollY / vh, 0), 1);
+      if (window.innerWidth < 768) {
+        el.style.top = '';
+        el.style.opacity = '1';
+        el.style.transform = 'none';
+        el.style.pointerEvents = 'auto';
+        return;
+      }
 
-      // Stay crisp while Section 2 starts entering, then smoothly recede
-      const fadeT = Math.min(Math.max((progress - 0.18) / 0.72, 0), 1);
+      const vh = Math.max(window.innerHeight, 1);
+      const heroHeight = el.offsetHeight;
+      const stickyStart = Math.max(0, heroHeight - vh);
+      const stickyTop = Math.min(0, vh - heroHeight);
+
+      el.style.top = `${stickyTop}px`;
+
+      if (window.scrollY <= stickyStart) {
+        el.style.opacity = '1';
+        el.style.transform = 'none';
+        el.style.pointerEvents = 'auto';
+        return;
+      }
+
+      const overlapProgress = Math.min(
+        Math.max((window.scrollY - stickyStart) / vh, 0),
+        1,
+      );
+      const fadeT = Math.min(Math.max((overlapProgress - 0.18) / 0.72, 0), 1);
       const opacity = 1 - fadeT;
       const scale = 1 - fadeT * 0.04;
 
@@ -50,10 +65,19 @@ export function HeroSection({
       }
     };
 
+    const resizeObserver =
+      typeof ResizeObserver !== 'undefined' && stickyRef.current
+        ? new ResizeObserver(onScroll)
+        : null;
+    if (resizeObserver && stickyRef.current) {
+      resizeObserver.observe(stickyRef.current);
+    }
+
     updateDepth();
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', onScroll, { passive: true });
     return () => {
+      resizeObserver?.disconnect();
       window.removeEventListener('scroll', onScroll);
       window.removeEventListener('resize', onScroll);
       if (rafId) window.cancelAnimationFrame(rafId);
@@ -65,59 +89,45 @@ export function HeroSection({
       id="hero-wave"
       ref={stickyRef}
       aria-label="FORMA Studio Overview"
-      className="sticky top-0 z-10 flex min-h-[100svh] w-full flex-col justify-center overflow-x-clip px-4 pt-22 pb-6 will-change-[opacity,transform] md:px-8 md:pt-22 md:pb-8"
+      style={{ transformOrigin: 'center bottom' }}
+      className="relative z-10 flex w-full flex-col justify-start overflow-x-clip px-4 pt-22 pb-14 will-change-[opacity,transform] md:sticky md:px-8 md:pt-22 md:pb-[30svh]"
     >
-      <div className="mx-auto w-full max-w-[1200px]">
-        {/* Compact Split Editorial Hero Header */}
-        <div className="flex flex-col justify-between gap-5 lg:flex-row lg:items-end">
-          <div>
-            <p className="text-[12px] font-medium tracking-[0.04em] text-[#C98A3A]">
-              Editorial Digital Architecture · 24h Sprint Practice
-            </p>
-            <h1 className="display-tight mt-2.5 max-w-2xl text-[clamp(2.25rem,4.3vw,3.75rem)] leading-[1.03] font-semibold text-[#1C1B18]">
-              We design refined web worlds, really fast.
-            </h1>
-          </div>
-
-          <div className="flex flex-col items-start gap-3.5 lg:max-w-[400px] lg:items-end lg:text-right">
-            <p className="text-[14px] leading-[1.55] text-[#1C1B18]/75 md:text-[15px]">
-              Twelve distinct digital design systems—drag or spin the 3D wheel
-              below to inspect each edition.
-            </p>
-            <div className="flex flex-wrap items-center gap-3">
-              <button
-                type="button"
-                onClick={onOpenBooking}
-                className="inline-flex h-10 items-center justify-center rounded-full bg-[#1C1B18] px-5 text-[12px] font-semibold text-[#F7F5F0] whitespace-nowrap shrink-0 transition-colors duration-200 hover:bg-[#C98A3A] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C98A3A]"
-              >
-                Book a 15-min Discovery Call
-              </button>
-              <button
-                type="button"
-                onClick={onJumpToWork}
-                className="glass-tile inline-flex h-10 items-center justify-center rounded-full px-4 text-[12px] font-medium text-[#1C1B18] whitespace-nowrap shrink-0 transition-colors duration-200 hover:bg-white/30 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C98A3A]"
-              >
-                Selected Work ↓
-              </button>
-            </div>
-          </div>
+      <div className="mx-auto flex w-full max-w-[1200px] flex-col">
+        {/* Centered Editorial Headline */}
+        <div className="mx-auto max-w-3xl text-center">
+          <p className="text-[11px] font-medium tracking-[0.04em] text-[#C98A3A] sm:text-[12px]">
+            Editorial Digital Architecture · 24h Sprint Practice
+          </p>
+          <h1 className="display-tight mx-auto mt-2 max-w-2xl text-[clamp(1.85rem,3.5vw,3.15rem)] leading-[1.04] font-semibold text-[#1C1B18]">
+            We design refined web worlds, really fast.
+          </h1>
         </div>
 
-        {/* Pure CSS-3D + rAF Interactive Animation Wheel */}
+        {/* Enlarged 3D Wheel with Smooth Center Zoom + Turn Wheel Bar Directly Underneath */}
         <ProjectWheel3D onSelectProject={onSelectProject} />
 
-        {/* Subtle Glass Metrics Strip */}
-        <div className="glass-subtle mt-5 grid grid-cols-2 gap-4 rounded-2xl p-4 md:mt-6 md:grid-cols-4 md:gap-6 md:px-7 md:py-5">
-          {HERO_METRICS.map((metric) => (
-            <div key={metric.label}>
-              <p className="font-mono-tabular text-[19px] font-semibold tracking-[-0.02em] text-[#1C1B18] md:text-[22px]">
-                {metric.value}
-              </p>
-              <p className="mt-0.5 text-[12px] text-[#1C1B18]/70">
-                {metric.label}
-              </p>
-            </div>
-          ))}
+        {/* CTA Block Below Wheel Controls — triggers Section 2 overlap once positioned just below screen center */}
+        <div className="mx-auto mt-10 flex max-w-xl flex-col items-center text-center md:mt-12">
+          <p className="max-w-md text-[13px] leading-[1.6] text-[#1C1B18]/75 sm:text-[14px]">
+            Twelve distinct digital design systems—drag or spin the 3D wheel
+            above to inspect each edition.
+          </p>
+          <div className="mt-5 flex flex-wrap items-center justify-center gap-4 sm:gap-6">
+            <button
+              type="button"
+              onClick={onOpenBooking}
+              className="inline-flex h-10 shrink-0 items-center justify-center rounded-full bg-[#1C1B18] px-5 text-[12px] font-semibold whitespace-nowrap text-[#F7F5F0] transition-colors duration-200 hover:bg-[#C98A3A] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C98A3A] sm:px-6"
+            >
+              Book a 15-min Discovery Call
+            </button>
+            <button
+              type="button"
+              onClick={onJumpToWork}
+              className="glass-tile inline-flex h-10 shrink-0 items-center justify-center rounded-full px-5 text-[12px] font-medium whitespace-nowrap text-[#1C1B18] transition-colors duration-200 hover:bg-white/30 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C98A3A]"
+            >
+              Selected Work ↓
+            </button>
+          </div>
         </div>
       </div>
     </section>
