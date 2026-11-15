@@ -35,11 +35,12 @@ const STUDIO_METRICS: MetricDef[] = [
 interface CardVariantCustom {
   index: number;
   cols: number;
+  totalItems: number;
   reducedMotion: boolean;
 }
 
 const CARD_VARIANTS: Variants = {
-  hidden: ({ index, cols, reducedMotion }: CardVariantCustom) => {
+  hidden: ({ index, cols, totalItems, reducedMotion }: CardVariantCustom) => {
     if (reducedMotion) {
       return {
         opacity: 1,
@@ -52,36 +53,40 @@ const CARD_VARIANTS: Variants = {
       };
     }
 
-    if (cols <= 1) {
+    const rowIndex = cols > 1 ? Math.floor(index / cols) : index;
+    const rowItems =
+      cols > 1 ? Math.min(cols, Math.max(1, totalItems - rowIndex * cols)) : 1;
+
+    if (cols <= 1 || rowItems <= 1) {
       return {
-        opacity: 0.85,
+        opacity: 0.92,
         x: '0%',
-        y: 24,
-        scale: 0.88,
-        rotateX: -34,
+        y: 28,
+        scale: 0.84,
+        rotateX: -48,
         rotateY: 0,
-        rotateZ: index % 2 === 0 ? -2.5 : 2.5,
+        rotateZ: index % 2 === 0 ? -3 : 3,
       };
     }
 
     const col = index % cols;
-    const center = (cols - 1) / 2;
+    const center = (rowItems - 1) / 2;
     const offsetFromCenter = center - col;
-    const spreadPct = cols === 4 ? 52 : 40;
+    const spreadPct = rowItems >= 4 ? 95 : rowItems === 3 ? 92 : 88;
 
     return {
-      opacity: 0.85,
+      opacity: 0.92,
       x: `${Math.round(offsetFromCenter * spreadPct)}%`,
-      y: Math.round(Math.abs(offsetFromCenter) * 8 + 16),
-      scale: 0.84,
-      rotateX: -26,
+      y: Math.round(Math.abs(offsetFromCenter) * 7 + 20),
+      scale: 0.8,
+      rotateX: -36,
       rotateY: Number((-offsetFromCenter * 18).toFixed(1)),
-      rotateZ: Number((-offsetFromCenter * 4.5).toFixed(1)),
+      rotateZ: Number((-offsetFromCenter * 5.2).toFixed(1)),
     };
   },
   visible: ({ index, cols, reducedMotion }: CardVariantCustom) => {
     const col = cols > 1 ? index % cols : 0;
-    const delay = reducedMotion ? 0 : col * 0.065;
+    const delay = reducedMotion ? 0 : col * 0.07;
 
     return {
       opacity: 1,
@@ -92,7 +97,7 @@ const CARD_VARIANTS: Variants = {
       rotateY: 0,
       rotateZ: 0,
       transition: {
-        duration: reducedMotion ? 0 : 0.72,
+        duration: reducedMotion ? 0 : 0.78,
         delay,
         ease: [0.16, 1, 0.3, 1],
       },
@@ -104,6 +109,7 @@ interface WorkTileCardProps {
   project: ProjectConfig;
   index: number;
   cols: number;
+  totalItems: number;
   imgSrc?: string;
   isDimmed: boolean;
   isSpotlighted: boolean;
@@ -117,6 +123,7 @@ function WorkTileCard({
   project,
   index,
   cols,
+  totalItems,
   imgSrc,
   isDimmed,
   isSpotlighted,
@@ -178,11 +185,15 @@ function WorkTileCard({
 
   return (
     <motion.article
-      custom={{ index, cols, reducedMotion }}
+      custom={{ index, cols, totalItems, reducedMotion }}
       variants={CARD_VARIANTS}
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: true, amount: 0.28 }}
+      viewport={{
+        once: true,
+        amount: cols <= 1 ? 0.4 : 0.55,
+        margin: cols <= 1 ? '0px 0px -70px 0px' : '0px 0px -130px 0px',
+      }}
       style={{
         transformPerspective: 1100,
         zIndex: cols > 1 ? cols - (index % cols) : 1,
@@ -466,6 +477,7 @@ export function SelectedWorkGrid({
               project={project}
               index={idx}
               cols={gridCols}
+              totalItems={visibleProjects.length}
               imgSrc={thumbnails.get(project.id)}
               isDimmed={hoveredId !== null && hoveredId !== project.id}
               isSpotlighted={hoveredId === project.id}
