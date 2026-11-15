@@ -109,8 +109,8 @@ export function HeroSection({
         {/* CTA Block Below Wheel Controls — triggers Section 2 overlap once positioned just below screen center */}
         <div className="mx-auto mt-10 flex max-w-xl flex-col items-center text-center md:mt-12">
           <p className="max-w-md text-[13px] leading-[1.6] text-[#1C1B18]/75 sm:text-[14px]">
-            Twelve distinct digital design systems—drag or spin the 3D wheel
-            above to inspect each edition.
+            Twelve signature website design directions—drag or spin the 3D wheel
+            above to find the style that fits your business.
           </p>
           <div className="mt-5 flex flex-wrap items-center justify-center gap-4 sm:gap-6">
             <button
@@ -125,7 +125,7 @@ export function HeroSection({
               onClick={onJumpToWork}
               className="glass-tile inline-flex h-10 shrink-0 items-center justify-center rounded-full px-5 text-[12px] font-medium whitespace-nowrap text-[#1C1B18] transition-colors duration-200 hover:bg-white/30 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C98A3A]"
             >
-              Selected Work ↓
+              Design Directions ↓
             </button>
           </div>
         </div>

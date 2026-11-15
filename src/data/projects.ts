@@ -1,29 +1,29 @@
 export type ProjectCategory =
-  | 'Architecture'
-  | 'Luxury & Fashion'
-  | 'Cultural & Editorial'
-  | 'Product & Spatial';
+  | 'Corporate & SaaS'
+  | 'Luxury & Lifestyle'
+  | 'Tech & Product'
+  | 'Creative & Editorial';
 
 export const PROJECT_CATEGORIES: ProjectCategory[] = [
-  'Architecture',
-  'Luxury & Fashion',
-  'Cultural & Editorial',
-  'Product & Spatial',
+  'Corporate & SaaS',
+  'Luxury & Lifestyle',
+  'Tech & Product',
+  'Creative & Editorial',
 ];
 
 export type UiStyle =
   | 'swiss-minimalism'
   | 'dark-neumorphism'
-  | 'neo-brutalism'
+  | 'modular-bento'
+  | 'cyberpunk-glass'
   | 'new-age-gradient'
+  | 'dark-kinetic'
   | 'claymorphism'
   | 'skeuomorphism'
-  | 'bento-editorial'
-  | 'cyberpunk-glass'
   | 'organic-biophilic'
-  | 'dark-kinetic'
-  | 'bauhaus-grid'
-  | 'retro-crt';
+  | 'neo-brutalism'
+  | 'bento-editorial'
+  | 'dopamine-commerce';
 
 export interface ProjectPalette {
   bg: string;
@@ -33,7 +33,7 @@ export interface ProjectPalette {
   secondary: string;
 }
 
-export interface ProjectContent {
+export interface MockupPreviewContent {
   masthead: string;
   navItems: string[];
   eyebrow: string;
@@ -45,50 +45,55 @@ export interface ProjectContent {
   quote?: string;
 }
 
-export interface ProjectConfig {
+export interface DesignDirection {
   id: string;
   index: string;
-  title: string;
-  subtitle: string;
-  client: string;
+  styleName: string;
+  tagline: string;
   category: ProjectCategory;
-  year: string;
-  sprintDuration: string;
-  slug: string;
+  shortDescription: string;
+  bestFor: string[];
+  visualCharacteristics: string[];
+  typographyNote: string;
   uiStyle: UiStyle;
-  styleLabel: string;
-  summary: string;
-  deliverables: string[];
   palette: ProjectPalette;
-  content: ProjectContent;
+  previewSample: MockupPreviewContent;
 }
 
-export type ProjectItem = ProjectConfig;
+export type ProjectConfig = DesignDirection;
+export type ProjectItem = DesignDirection;
 
 /**
- * CENTRAL PORTFOLIO CONFIGURATION (01 – 12)
- * Ordered in curated Light / Dark rhythm across the 3D wheel and 4×3 grid.
- * Edit any text, color, style, or metric below to update all views automatically.
+ * CENTRAL DESIGN DIRECTIONS (01 – 12)
+ * Ordered in a rhythmic Light / Dark cadence across the 3D Hero Wheel and 4×3 Grid.
+ * Strictly 3 items per category (Corporate & SaaS, Luxury & Lifestyle, Tech & Product, Creative & Editorial).
  */
-export const PROJECTS: ProjectConfig[] = [
+export const PROJECTS: DesignDirection[] = [
   // =========================================================================
-  // 01 — KENGO & PARTNERS (Light · Swiss Minimalism · Architecture)
+  // 01 — SWISS MINIMALISM (Light #F5F3EE · Corporate & SaaS)
   // =========================================================================
   {
-    id: 'kengo-partners',
+    id: 'swiss-minimalism',
     index: '01',
-    title: 'Kengo & Partners',
-    subtitle: 'Brutalist Concrete Monograph & Structural Archive',
-    client: 'Kengo Architects Tokyo / Zurich',
-    category: 'Architecture',
-    year: '2026',
-    sprintDuration: '24h Sprint',
-    slug: 'kengo-partners.ch',
+    styleName: 'Swiss Minimalism',
+    tagline: 'Clean, precise & architectural.',
+    category: 'Corporate & SaaS',
+    shortDescription:
+      'A calm, authoritative layout built on a razor-sharp grid, generous whitespace, and disciplined typography. Communicates trust, clarity, and craftsmanship without visual clutter.',
+    bestFor: [
+      'Architecture & Design Studios',
+      'Strategy Consultancies',
+      'Law & Advisory Firms',
+      'B2B Service Providers',
+    ],
+    visualCharacteristics: [
+      'Asymmetric 3-column grid with 1px hairlines',
+      'Warm off-white & deep graphite contrast',
+      'Bold neo-grotesque headlines',
+      'Index-driven hierarchy',
+    ],
+    typographyNote: 'Neo-Grotesque Sans + Technical Mono',
     uiStyle: 'swiss-minimalism',
-    styleLabel: 'Swiss Minimalism',
-    summary:
-      'Ultra-disciplined Swiss 3-column architectural monograph pairing concrete photography with technical CAD elevation dimensions, section coordinates, and generous negative space.',
-    deliverables: ['Swiss Grid System', 'Technical CAD Plates', 'Monograph Index'],
     palette: {
       bg: '#F5F3EE',
       surface: '#EAE7DF',
@@ -96,40 +101,48 @@ export const PROJECTS: ProjectConfig[] = [
       accent: '#141414',
       secondary: '#73716C',
     },
-    content: {
-      masthead: 'KENGO & PARTNERS',
-      navItems: ['PROJECTS', 'ELEVATIONS', 'PRACTICE', 'CONTACT'],
-      eyebrow: '01 — 12 / MONOGRAPH ARCHIVE',
-      headline: 'Concrete & Quiet Geometry.',
-      subheadline: 'Civic pavilions, daylight apertures & structural honesty across Zurich and Kyoto.',
-      ctaLabel: 'VIEW SECTION A-A →',
+    previewSample: {
+      masthead: 'STUDIO / PRACTICE',
+      navItems: ['SERVICES', 'APPROACH', 'WORK', 'CONTACT'],
+      eyebrow: '01 — SWISS ARCHITECTURE',
+      headline: 'Clarity Built to Scale.',
+      subheadline:
+        'Disciplined digital presence for advisory, engineering, and B2B leadership teams.',
+      ctaLabel: 'SCHEDULE CONSULTATION →',
       metrics: [
-        { label: 'SPAN ELEVATION', value: '+14.80 M' },
-        { label: 'BUILT WORKS', value: '42 SITES' },
-        { label: 'GRID MODULE', value: '3-COL / 12PX' },
+        { label: 'DELIVERY CADENCE', value: '24 HOURS' },
+        { label: 'GRID PRECISION', value: '3-COL / 1PX' },
+        { label: 'FOCUS', value: 'HIGH TRUST' },
       ],
-      cardLabels: ['KYOTO PAVILION', 'ZURICH ANNEX', 'NAOSHIMA PIER'],
+      cardLabels: ['STRATEGY', 'SYSTEMS', 'EXECUTION'],
     },
   },
 
   // =========================================================================
-  // 02 — CHRONOS GENÈVE (Dark · Dark Neumorphism · Luxury & Fashion)
+  // 02 — NOIR LUXURY (Dark #0C0C0C · Luxury & Lifestyle)
   // =========================================================================
   {
-    id: 'chronos-geneve',
+    id: 'noir-luxury',
     index: '02',
-    title: 'Chronos Genève',
-    subtitle: 'Haute Horlogerie Collector Allocation Portal',
-    client: 'Manufacture Chronos SA',
-    category: 'Luxury & Fashion',
-    year: '2026',
-    sprintDuration: '24h Sprint',
-    slug: 'chronos-geneve.ch',
+    styleName: 'Noir Luxury',
+    tagline: 'Sophisticated, tactile & exclusive.',
+    category: 'Luxury & Lifestyle',
+    shortDescription:
+      'A matte-black, atmospheric presentation with warm amber illumination and subtle sculpted depth in buttons and frames. Feels like stepping into a private luxury showroom.',
+    bestFor: [
+      'Fine Watch & Jewelry Brands',
+      'High-End Real Estate',
+      'Private Members Clubs',
+      'Gastronomy & Luxury Launches',
+    ],
+    visualCharacteristics: [
+      'Matte obsidian palette with warm amber glow',
+      'High-contrast editorial serif typography',
+      'Tactile recessed & raised UI controls',
+      'Dramatic studio spotlighting',
+    ],
+    typographyNote: 'Editorial Serif + Clean Minimal Sans',
     uiStyle: 'dark-neumorphism',
-    styleLabel: 'Dark Neumorphism',
-    summary:
-      'Tactile matte-black horology showcase sculpted with soft recessed and extruded neumorphic controls, centered editorial serif headings, and warm amber dial illumination.',
-    deliverables: ['Macro Watch Direction', 'Tactile Dark UI', 'Private Allocation'],
     palette: {
       bg: '#0C0C0C',
       surface: '#161616',
@@ -137,81 +150,97 @@ export const PROJECTS: ProjectConfig[] = [
       accent: '#D98A2B',
       secondary: '#8C877E',
     },
-    content: {
-      masthead: 'CHRONOS GENÈVE',
-      navItems: ['CALIBRES', 'ATELIER', 'HERITAGE', 'SALON'],
-      eyebrow: 'CALIBRE NO. 09 · TOURBILLON',
-      headline: 'Precision Sculpted in Shadow.',
-      subheadline: 'Hand-beveled bridges, 72-hour reserve, limited to 18 numbered pieces.',
-      ctaLabel: 'RESERVE VIEWING',
+    previewSample: {
+      masthead: 'PRIVATE SHOWROOM',
+      navItems: ['COLLECTION', 'ATELIER', 'HERITAGE', 'SALON'],
+      eyebrow: 'SIGNATURE EDITION · NOIR',
+      headline: 'Presence Sculpted in Shadow.',
+      subheadline:
+        'Atmospheric dark presentation crafted for rare objects and private appointments.',
+      ctaLabel: 'REQUEST ACCESS',
       metrics: [
-        { label: 'POWER RESERVE', value: '72 HRS' },
-        { label: 'FREQUENCY', value: '21,600 VPH' },
-        { label: 'EDITION', value: '18 PCS' },
+        { label: 'EXPERIENCE', value: 'PRIVATE' },
+        { label: 'FINISH', value: 'OBSIDIAN' },
+        { label: 'ACCENT', value: 'WARM AMBER' },
       ],
-      cardLabels: ['TOURBILLON', 'CHRONOGRAPH', 'PERPETUAL'],
+      cardLabels: ['BESPOKE', 'LIMITED', 'CONCIERGE'],
     },
   },
 
   // =========================================================================
-  // 03 — KUNSTHALLE ZÜRICH (Light / Color · Neo-Brutalism · Cultural & Editorial)
+  // 03 — MODULAR BENTO (Light #F4F5F7 · Corporate & SaaS)
   // =========================================================================
   {
-    id: 'kunsthalle-zurich',
+    id: 'modular-bento',
     index: '03',
-    title: 'Kunsthalle Zürich',
-    subtitle: '2026 Contemporary Art Season & Exhibition Agenda',
-    client: 'Kunsthalle Zürich',
-    category: 'Cultural & Editorial',
-    year: '2026',
-    sprintDuration: '24h Sprint',
-    slug: 'kunsthallezurich.ch',
-    uiStyle: 'neo-brutalism',
-    styleLabel: 'Neo-Brutalism',
-    summary:
-      'High-energy neo-brutalist cultural platform defined by heavy 3px ink frames, zero-blur hard drop shadows, rotated exhibition stamps, and stark geometric color blocks.',
-    deliverables: ['Exhibition Agenda', 'Brutalist Poster System', 'Ticketing UI'],
+    styleName: 'Modular Bento',
+    tagline: 'Structured, scannable & feature-rich.',
+    category: 'Corporate & SaaS',
+    shortDescription:
+      'An Apple-inspired modular card system that organizes product features, key metrics, and visual previews into a crisp, easy-to-scan grid. Built for instant comprehension across desktop and mobile.',
+    bestFor: [
+      'Growing Tech Companies',
+      'Digital Products & SaaS',
+      'Mobile Apps',
+      'Modern Service Businesses',
+    ],
+    visualCharacteristics: [
+      'Rounded modular bento cards of varying proportions',
+      'Bright neutral canvas with a single bold focal accent',
+      'Scannable metric & feature blocks',
+      'High conversion clarity',
+    ],
+    typographyNote: 'Clean Geometric Sans + Tabular Figures',
+    uiStyle: 'modular-bento',
     palette: {
-      bg: '#FAF8F2',
-      surface: '#FACC15',
-      text: '#0A0A0A',
-      accent: '#E05A36',
-      secondary: '#1D4ED8',
+      bg: '#F4F5F7',
+      surface: '#FFFFFF',
+      text: '#111827',
+      accent: '#2563EB',
+      secondary: '#64748B',
     },
-    content: {
-      masthead: 'KUNSTHALLE ZÜRICH',
-      navItems: ['PROGRAM', 'ARCHIVE', 'SHOP', 'TICKETS!'],
-      eyebrow: 'AUTUMN / WINTER 2026 SEASON',
-      headline: 'FORM AGAINST SILENCE',
-      subheadline: 'Twelve kinetic installations across Limmatquai Halls A–D.',
-      ctaLabel: 'GET PASSES ↗',
+    previewSample: {
+      masthead: 'PLATFORM SUITE',
+      navItems: ['FEATURES', 'WORKFLOWS', 'PRICING', 'DEMO'],
+      eyebrow: 'MODULAR PRODUCT OVERVIEW',
+      headline: 'Every capability, crystal clear.',
+      subheadline:
+        'Structured bento modules engineered so buyers understand your product in seconds.',
+      ctaLabel: 'START FREE TRIAL →',
       metrics: [
-        { label: 'HALL 01', value: '14 OCT — KINETIC' },
-        { label: 'HALL 02', value: '02 NOV — SOUND' },
-        { label: 'HALL 03', value: '19 NOV — PRINT' },
+        { label: 'SETUP TIME', value: '4 MIN' },
+        { label: 'ADOPTION', value: '98.4%' },
+        { label: 'UPTIME SLA', value: '99.99%' },
       ],
-      cardLabels: ['OPEN DAILY', 'FREE FRIDAYS', 'HALLE 01–04'],
+      cardLabels: ['AUTOMATION', 'LIVE SYNC', 'ANALYTICS'],
     },
   },
 
   // =========================================================================
-  // 04 — AETHER SPATIAL OS (Dark / Cyan · Cyberpunk Glass · Product & Spatial)
+  // 04 — SPATIAL GLASS & AI (Dark #07080C · Tech & Product)
   // =========================================================================
   {
-    id: 'aether-spatial-os',
+    id: 'spatial-glass-ai',
     index: '04',
-    title: 'Aether Spatial OS',
-    subtitle: 'Volumetric Telemetry & Glassmorphic Spatial Interface',
-    client: 'Aether Labs Zürich',
-    category: 'Product & Spatial',
-    year: '2026',
-    sprintDuration: '24h Sprint',
-    slug: 'aether-os.io',
+    styleName: 'Spatial Glass & AI',
+    tagline: 'Futuristic, translucent & intelligent.',
+    category: 'Tech & Product',
+    shortDescription:
+      'Floating frosted-glass panels layered over a deep, luminous 3D visual field. Makes complex software, AI capabilities, and technical data feel tangible and forward-thinking.',
+    bestFor: [
+      'AI & Machine Learning Startups',
+      'Next-Gen SaaS Platforms',
+      'Cybersecurity & Cloud Infra',
+      'Deep-Tech Companies',
+    ],
+    visualCharacteristics: [
+      'Layered frosted glassmorphism with light-catching borders',
+      'Deep midnight canvas with cyan & amber accents',
+      'Crisp technical micro-labels',
+      'Spatial 3D depth',
+    ],
+    typographyNote: 'Precision Sans + Monospace Telemetry',
     uiStyle: 'cyberpunk-glass',
-    styleLabel: 'Cyberpunk Glass',
-    summary:
-      'Pitch-black spatial operating environment featuring floating smoked-glass HUD panels, specular cyan-and-amber edge reflections, wireframe grids, and volumetric 3D orbs.',
-    deliverables: ['Spatial HUD System', 'Telemetry Widgets', 'Glass Shader Spec'],
     palette: {
       bg: '#07080C',
       surface: '#111622',
@@ -219,40 +248,48 @@ export const PROJECTS: ProjectConfig[] = [
       accent: '#22D3EE',
       secondary: '#F59E0B',
     },
-    content: {
-      masthead: 'AETHER OS v4.2',
-      navItems: ['VIEWPORT', 'NODES', 'ORBIT', 'TERMINAL'],
-      eyebrow: 'SYS.04 // SPATIAL TELEMETRY',
-      headline: 'VOLUMETRIC FIELD ACTIVE',
-      subheadline: 'Real-time orbital mesh & neural raycast cluster synchronization.',
-      ctaLabel: 'ENGAGE LINK',
+    previewSample: {
+      masthead: 'NEURAL ENGINE',
+      navItems: ['PLATFORM', 'MODELS', 'SECURITY', 'DOCS'],
+      eyebrow: 'INTELLIGENCE LAYER // LIVE',
+      headline: 'SPATIAL COMPUTE ACTIVE',
+      subheadline:
+        'Translucent glass HUD architecture built for real-time AI and developer products.',
+      ctaLabel: 'LAUNCH CONSOLE',
       metrics: [
-        { label: 'COORDINATES', value: 'X:48.2 Y:-12.0' },
-        { label: 'LATENCY', value: '0.84 MS' },
-        { label: 'SYNC NODES', value: '128 / 128' },
+        { label: 'INFERENCE', value: '12.4 MS' },
+        { label: 'THROUGHPUT', value: '48K / SEC' },
+        { label: 'CLUSTERS', value: 'GLOBAL' },
       ],
-      cardLabels: ['CORE ORB', 'FLUX MESH', 'VECTOR HUD'],
+      cardLabels: ['AI CORE', 'DATA MESH', 'API STREAM'],
     },
   },
 
   // =========================================================================
-  // 05 — STUDIO SØRENSEN (Warm Sand · Ethereal Gradient · Luxury & Fashion)
+  // 05 — SOFT AURA ATELIER (Warm Sand #F3ECE1 · Luxury & Lifestyle)
   // =========================================================================
   {
-    id: 'studio-sorensen',
+    id: 'soft-aura-atelier',
     index: '05',
-    title: 'Studio Sørensen',
-    subtitle: 'Sculptural Knitwear & Atmospheric Lookbook',
-    client: 'Sørensen Copenhagen',
-    category: 'Luxury & Fashion',
-    year: '2026',
-    sprintDuration: '24h Sprint',
-    slug: 'studiosorensen.dk',
+    styleName: 'Soft Aura Atelier',
+    tagline: 'Poetic, editorial & effortless.',
+    category: 'Luxury & Lifestyle',
+    shortDescription:
+      'A soft, luminous experience where warm ambient gradients, fluid spacing, and expressive serif typography merge into a digital lookbook. Elevates brand storytelling over hard selling.',
+    bestFor: [
+      'Fashion & Apparel Houses',
+      'Interior Design Studios',
+      'Skincare & Beauty Brands',
+      'Photography & Art Galleries',
+    ],
+    visualCharacteristics: [
+      'Diffuse sand & warm peach aura gradients',
+      'Oversized editorial serif titles overlapping imagery',
+      'Weightless borderless navigation',
+      'High-contrast silhouette compositions',
+    ],
+    typographyNote: 'High-Contrast Serif + Refined Sans',
     uiStyle: 'new-age-gradient',
-    styleLabel: 'Ethereal Gradient',
-    summary:
-      'Weightless editorial lookbook bathed in diffused sand-and-peach aura gradients, oversized serif headlines bleeding cleanly over sculptural silhouette photography.',
-    deliverables: ['Lookbook Narrative', 'Aura Color System', 'Showroom Booking'],
     palette: {
       bg: '#F3ECE1',
       surface: '#E8B89A',
@@ -260,122 +297,48 @@ export const PROJECTS: ProjectConfig[] = [
       accent: '#C97B57',
       secondary: '#6D5D53',
     },
-    content: {
-      masthead: 'STUDIO SØRENSEN',
-      navItems: ['COLLECTION', 'ATELIER', 'JOURNAL'],
-      eyebrow: 'COLLECTION IV · COPENHAGEN',
+    previewSample: {
+      masthead: 'ATELIER LOOKBOOK',
+      navItems: ['COLLECTION', 'STORY', 'APPOINTMENTS'],
+      eyebrow: 'SEASONAL EDITORIAL',
       headline: 'Softness in Motion',
-      subheadline: 'Draped organic wool silhouettes against Nordic morning light.',
-      ctaLabel: 'EXPLORE LOOKBOOK',
+      subheadline:
+        'Warm ambient gradients and sculptural editorial framing for modern lifestyle brands.',
+      ctaLabel: 'EXPLORE COLLECTION',
       metrics: [
-        { label: 'SILHOUETTES', value: '24 LOOKS' },
-        { label: 'FIBERS', value: 'RAW CASHMERE' },
-        { label: 'SHOWROOM', value: 'BREDGADE 41' },
+        { label: 'MOOD', value: 'LUMINOUS' },
+        { label: 'CRAFT', value: 'EDITORIAL' },
+        { label: 'EXPERIENCE', value: 'BESPOKE' },
       ],
-      cardLabels: ['LOOK 01', 'LOOK 08', 'LOOK 16'],
+      cardLabels: ['CHAPTER I', 'CURATION', 'ATELIER'],
     },
   },
 
   // =========================================================================
-  // 06 — KLANGWERK BERLIN (Dark · Skeuomorphism · Product & Spatial)
+  // 06 — KINETIC PERFORMANCE (Dark #09090B · Tech & Product)
   // =========================================================================
   {
-    id: 'klangwerk-berlin',
+    id: 'kinetic-performance',
     index: '06',
-    title: 'Klangwerk Berlin',
-    subtitle: 'Precision Analog Synthesizer & Audio Hardware UI',
-    client: 'Klangwerk Audio GmbH',
-    category: 'Product & Spatial',
-    year: '2026',
-    sprintDuration: '24h Sprint',
-    slug: 'klangwerk.audio',
-    uiStyle: 'skeuomorphism',
-    styleLabel: 'Skeuomorphism',
-    summary:
-      'Dieter Rams-inspired industrial hardware interface built around anodized matte-black panels, brushed aluminum dividers, speaker perforation matrices, and rotary encoders.',
-    deliverables: ['Hardware Console UI', 'Rotary Knob System', 'OLED Telemetry'],
-    palette: {
-      bg: '#18181B',
-      surface: '#D4D4D8',
-      text: '#FAFAFA',
-      accent: '#FF4D24',
-      secondary: '#71717A',
-    },
-    content: {
-      masthead: 'KLANGWERK MK-II',
-      navItems: ['OSC', 'FILTER', 'ENV', 'OUTPUT'],
-      eyebrow: 'MODEL KW-06 · BERLIN',
-      headline: 'ANALOG HARMONIC ENGINE',
-      subheadline: 'Dual voltage-controlled oscillators with stepped aluminum attenuators.',
-      ctaLabel: 'REC // LIVE',
-      metrics: [
-        { label: 'CUTOFF', value: '4.82 KHZ' },
-        { label: 'RESONANCE', value: '68 %' },
-        { label: 'DRIVE', value: '+3.5 DB' },
-      ],
-      cardLabels: ['OSC A', 'SUB', 'LOWPASS', 'REVERB'],
-    },
-  },
-
-  // =========================================================================
-  // 07 — VANGUARDIA PRIVATE (Light · Claymorphism · Product & Spatial)
-  // =========================================================================
-  {
-    id: 'vanguardia-private',
-    index: '07',
-    title: 'Vanguardia Private',
-    subtitle: 'Tactile Wealth Management & Portfolio Cockpit',
-    client: 'Vanguardia Wealth Zurich',
-    category: 'Product & Spatial',
-    year: '2026',
-    sprintDuration: '24h Sprint',
-    slug: 'vanguardia.private',
-    uiStyle: 'claymorphism',
-    styleLabel: 'Claymorphism',
-    summary:
-      'Soft, pillowed 3D claymorphic private banking dashboard featuring generous 28px+ rounded modules, dual inner/outer bevel shadows, and crisp tabular wealth analytics.',
-    deliverables: ['Wealth Cockpit', 'Data Visualization', 'Clay UI Kit'],
-    palette: {
-      bg: '#ECEEF2',
-      surface: '#FFFFFF',
-      text: '#1E293B',
-      accent: '#FF4D24',
-      secondary: '#64748B',
-    },
-    content: {
-      masthead: 'VANGUARDIA',
-      navItems: ['OVERVIEW', 'ALLOCATION', 'YIELD', 'VAULT'],
-      eyebrow: 'PRIVATE WEALTH · Q4 REPORT',
-      headline: '$48,420,890',
-      subheadline: 'Net Liquidity & Sovereign Yield Portfolio',
-      ctaLabel: 'REBALANCE',
-      metrics: [
-        { label: 'YTD RETURN', value: '+18.42%' },
-        { label: 'LIQUIDITY', value: '$12.60M' },
-        { label: 'SHARPE', value: '2.14' },
-      ],
-      cardLabels: ['EQUITIES 54%', 'BONDS 28%', 'PRIVATE 18%'],
-    },
-  },
-
-  // =========================================================================
-  // 08 — VELOCE AUTOMOBILI (Dark / Orange · Dark Kinetic · Product & Spatial)
-  // =========================================================================
-  {
-    id: 'veloce-automobili',
-    index: '08',
-    title: 'Veloce Automobili',
-    subtitle: 'Electric Hypercar Telemetry & Aero Configurator',
-    client: 'Veloce Modena S.p.A.',
-    category: 'Product & Spatial',
-    year: '2026',
-    sprintDuration: '24h Sprint',
-    slug: 'veloce-modena.it',
+    styleName: 'Kinetic Performance',
+    tagline: 'Fast, dynamic & engineered for impact.',
+    category: 'Tech & Product',
+    shortDescription:
+      'A high-energy dark interface built around forward motion, wide display typography, and precision telemetry. Projects speed, engineering power, and bold ambition.',
+    bestFor: [
+      'Automotive & E-Mobility',
+      'Sports & Performance Brands',
+      'Hardware Product Launches',
+      'Clean Energy Innovators',
+    ],
+    visualCharacteristics: [
+      'Carbon black with chrome silver & signal-orange accents',
+      'Wide angled display headlines',
+      'Integrated performance specs & aerodynamic curves',
+      'Horizontal speed lines',
+    ],
+    typographyNote: 'Wide Display Sans + Technical Mono',
     uiStyle: 'dark-kinetic',
-    styleLabel: 'Dark Kinetic',
-    summary:
-      'High-velocity carbon-black hypercar cockpit pairing slanted kinetic display type with live CFD aerodynamics airflow curves, chrome silhouette lighting, and tabular telemetry.',
-    deliverables: ['Telemetry Cockpit', 'CFD Aero Visualizer', 'Track Configurator'],
     palette: {
       bg: '#09090B',
       surface: '#141418',
@@ -383,40 +346,146 @@ export const PROJECTS: ProjectConfig[] = [
       accent: '#FF4D24',
       secondary: '#8A8A94',
     },
-    content: {
-      masthead: 'VELOCE MODENA',
-      navItems: ['MONOPOSTO', 'AERO LAB', 'TELEMETRY', 'ALLOCATION'],
-      eyebrow: 'PROTOTYPE V-08 // TRACK SPEC',
-      headline: 'ELECTRIC HYPER VELOCITY',
-      subheadline: 'Quad-motor torque vectoring with 1,420 kg active ground-effect downforce.',
-      ctaLabel: 'LAUNCH TELEMETRY →',
+    previewSample: {
+      masthead: 'VELOCITY LAB',
+      navItems: ['ENGINEERING', 'SPECS', 'DESIGN', 'RESERVE'],
+      eyebrow: 'PERFORMANCE SERIES // 06',
+      headline: 'ENGINEERED FOR MOTION',
+      subheadline:
+        'High-velocity dark typography paired with live performance curves and spec readouts.',
+      ctaLabel: 'EXPLORE SPECS →',
       metrics: [
-        { label: '0–100 KM/H', value: '1.88 SEC' },
-        { label: 'DOWNFORCE', value: '1,420 KG' },
-        { label: 'POWER', value: '1,980 HP' },
+        { label: 'RESPONSE', value: 'INSTANT' },
+        { label: 'EFFICIENCY', value: '96.2%' },
+        { label: 'OUTPUT', value: 'PEAK SPEC' },
       ],
-      cardLabels: ['TRACK', 'CFD AERO', 'CARBON'],
+      cardLabels: ['DYNAMICS', 'AERODYNAMICS', 'CARBON'],
     },
   },
 
   // =========================================================================
-  // 09 — BOTANICA ATELIER (Light · Organic Biophilic · Luxury & Fashion)
+  // 07 — DIMENSIONAL SAAS (Light #ECEEF2 · Corporate & SaaS)
   // =========================================================================
   {
-    id: 'botanica-atelier',
+    id: 'dimensional-saas',
+    index: '07',
+    styleName: 'Dimensional SaaS',
+    tagline: 'Approachable, tactile & conversion-focused.',
+    category: 'Corporate & SaaS',
+    shortDescription:
+      'A bright, welcoming interface where cards, charts, and controls carry soft 3D elevation. Turns complex financial or business data into an intuitive, friendly product experience.',
+    bestFor: [
+      'Fintech & Wealth Platforms',
+      'HR & Productivity Software',
+      'Modern Insurance Providers',
+      'B2B Client Portals',
+    ],
+    visualCharacteristics: [
+      'Soft elevated 3D cards with generous 24px corners',
+      'Crisp white surfaces on cool light gray',
+      'Smooth area charts with tabular figures',
+      'High-contrast action buttons',
+    ],
+    typographyNote: 'Friendly Humanist Sans + Tabular Figures',
+    uiStyle: 'claymorphism',
+    palette: {
+      bg: '#ECEEF2',
+      surface: '#FFFFFF',
+      text: '#1E293B',
+      accent: '#FF4D24',
+      secondary: '#64748B',
+    },
+    previewSample: {
+      masthead: 'FINTECH COCKPIT',
+      navItems: ['OVERVIEW', 'ANALYTICS', 'TREASURY', 'PORTAL'],
+      eyebrow: 'BUSINESS INTELLIGENCE',
+      headline: '99.4% Clarity',
+      subheadline:
+        'Tactile soft-elevated cards that transform dense workflows into effortless control.',
+      ctaLabel: 'BOOK A DEMO',
+      metrics: [
+        { label: 'NET GROWTH', value: '+24.8%' },
+        { label: 'TIME SAVED', value: '14 HRS/WK' },
+        { label: 'TEAM SCORE', value: '4.9 / 5' },
+      ],
+      cardLabels: ['REVENUE 54%', 'OPS 28%', 'RESERVE 18%'],
+    },
+  },
+
+  // =========================================================================
+  // 08 — INDUSTRIAL PRECISION (Dark #18181B · Tech & Product)
+  // =========================================================================
+  {
+    id: 'industrial-precision',
+    index: '08',
+    styleName: 'Industrial Precision',
+    tagline: 'Tactile, engineered & functional.',
+    category: 'Tech & Product',
+    shortDescription:
+      'Inspired by Dieter Rams industrial design: a website structured like a precision-crafted physical instrument with tactile dials, grid dividers, and honest functionality.',
+    bestFor: [
+      'Audio & Music Hardware',
+      'Consumer Electronics',
+      'Smart-Home Devices',
+      'Industrial Design & Engineering',
+    ],
+    visualCharacteristics: [
+      'Anodized matte black & brushed aluminum tones',
+      'Tactile rotary controls & LED status indicators',
+      'Structured technical grid compartments',
+      'Signal-orange highlights',
+    ],
+    typographyNote: 'Technical Grotesque + Instrument Mono',
+    uiStyle: 'skeuomorphism',
+    palette: {
+      bg: '#18181B',
+      surface: '#D4D4D8',
+      text: '#FAFAFA',
+      accent: '#FF4D24',
+      secondary: '#8E8E98',
+    },
+    previewSample: {
+      masthead: 'PRECISION HARDWARE',
+      navItems: ['PRODUCTS', 'ARCHITECTURE', 'SPECS', 'ORDER'],
+      eyebrow: 'DESIGNED LIKE AN INSTRUMENT',
+      headline: 'Built with Tactile Honesty.',
+      subheadline:
+        'Anodized surfaces, calibrated micro-controls, and clear engineering storytelling.',
+      ctaLabel: 'CONFIGURE UNIT →',
+      metrics: [
+        { label: 'CHASSIS', value: 'MILLED AL' },
+        { label: 'RESPONSE', value: 'ZERO LAG' },
+        { label: 'WARRANTY', value: '5 YEARS' },
+      ],
+      cardLabels: ['GAIN', 'TONE', 'STAGE', 'POWER'],
+    },
+  },
+
+  // =========================================================================
+  // 09 — ORGANIC BIOPHILIC (Warm Linen #EFECE6 · Luxury & Lifestyle)
+  // =========================================================================
+  {
+    id: 'organic-biophilic',
     index: '09',
-    title: 'Botanica Atelier',
-    subtitle: 'Botanical Apothecary & Distillate Archive',
-    client: 'Botanica Grasse',
-    category: 'Luxury & Fashion',
-    year: '2026',
-    sprintDuration: '24h Sprint',
-    slug: 'botanica-atelier.fr',
+    styleName: 'Organic Biophilic',
+    tagline: 'Natural, calm & grounded.',
+    category: 'Luxury & Lifestyle',
+    shortDescription:
+      'A warm, restorative aesthetic pairing earthy tones, soft organic shapes, and subtle paper textures. Immediately builds authenticity, calm, and human trust.',
+    bestFor: [
+      'Sustainable Lifestyle Brands',
+      'Botanical Skincare & Beauty',
+      'Boutique Hotels & Retreats',
+      'Wellness & Culinary Concepts',
+    ],
+    visualCharacteristics: [
+      'Unbleached linen, deep sage green & terracotta palette',
+      'Soft organic framing with subtle paper grain',
+      'Balanced editorial serif & clean sans typography',
+      'Natural daylight shadows',
+    ],
+    typographyNote: 'Warm Editorial Serif + Organic Sans',
     uiStyle: 'organic-biophilic',
-    styleLabel: 'Organic Biophilic',
-    summary:
-      'Tactile linen-and-sage biophilic apothecary storefront featuring flowing organic rounded cards, subtle paper grain, botanical shadow studies, and serene serif indexing.',
-    deliverables: ['Biophilic Art Direction', 'Formulation Index', 'Packaging Storytelling'],
     palette: {
       bg: '#EFECE6',
       surface: '#F7F5F0',
@@ -424,122 +493,97 @@ export const PROJECTS: ProjectConfig[] = [
       accent: '#C47451',
       secondary: '#627266',
     },
-    content: {
-      masthead: 'BOTANICA ATELIER',
-      navItems: ['FORMULATIONS', 'DISTILLERY', 'NOTES', 'APOTHECARY'],
-      eyebrow: 'FORMULATION 09 // GRASSE HARVEST',
-      headline: 'Wild Botanicals & Stone.',
-      subheadline: 'Cold-pressed cedar leaf, neroli blossom, and terracotta mineral extracts.',
-      ctaLabel: 'EXPLORE FORMULATION',
+    previewSample: {
+      masthead: 'BOTANICAL LIVING',
+      navItems: ['RITUALS', 'ORIGINS', 'JOURNAL', 'VISIT'],
+      eyebrow: 'EARTH-FIRST CRAFT',
+      headline: 'Natural Calm & Craft.',
+      subheadline:
+        'Grounded earthy palettes and soft organic silhouettes designed for human connection.',
+      ctaLabel: 'DISCOVER COLLECTION',
       metrics: [
-        { label: 'EXTRACTION', value: 'STEAM 42°C' },
-        { label: 'ORIGIN', value: 'GRASSE, FR' },
-        { label: 'VOLUME', value: '50 ML GLASS' },
+        { label: 'MATERIALS', value: '100% PURE' },
+        { label: 'SOURCING', value: 'TRACEABLE' },
+        { label: 'PALETTE', value: 'SAGE & CLAY' },
       ],
-      cardLabels: ['CEDAR LEAF', 'NEROLI', 'VETIVER'],
+      cardLabels: ['BOTANICAL', 'MINERAL', 'CRAFTED'],
     },
   },
 
   // =========================================================================
-  // 10 — NOCTURNE LAB (Dark / Lime · Retro-Futurism CRT · Product & Spatial)
+  // 10 — NEO-BRUTALIST POP (High-Contrast #FAF8F2 · Creative & Editorial)
   // =========================================================================
   {
-    id: 'nocturne-lab',
+    id: 'neo-brutalist-pop',
     index: '10',
-    title: 'Nocturne Lab',
-    subtitle: 'Phosphor CRT Oscilloscope & Modular Sequencer',
-    client: 'Nocturne Sound Systems',
-    category: 'Product & Spatial',
-    year: '2026',
-    sprintDuration: '24h Sprint',
-    slug: 'nocturnelab.io',
-    uiStyle: 'retro-crt',
-    styleLabel: 'Retro-Futurism CRT',
-    summary:
-      'Phosphor-lime and amber CRT sound workstation featuring scanline telemetry, pixel-crisp terminal bars, an oscillating central waveform scope, and a 16-step modular sequencer.',
-    deliverables: ['CRT Shader Aesthetic', 'Audio Sequencer UI', 'Oscilloscope Engine'],
+    styleName: 'Neo-Brutalist Pop',
+    tagline: 'Bold, unapologetic & unforgettable.',
+    category: 'Creative & Editorial',
+    shortDescription:
+      'A rebellious, high-energy layout that breaks safe web conventions with thick black borders, hard block shadows, and primary color blocking. Designed to make challenger brands impossible to ignore.',
+    bestFor: [
+      'Creative & Branding Agencies',
+      'Cultural Institutions & Festivals',
+      'Youth & Street Culture Brands',
+      'Independent Media & Podcasts',
+    ],
+    visualCharacteristics: [
+      'Crisp 2px black borders & hard offset shadows',
+      'Bold cobalt blue, butter yellow & rust orange blocks',
+      'Expressive oversized typography & stamp badges',
+      'Asymmetric split layout',
+    ],
+    typographyNote: 'Heavy Display Grotesque + Bold Mono',
+    uiStyle: 'neo-brutalism',
     palette: {
-      bg: '#0A0C0B',
-      surface: '#1A1D1B',
-      text: '#BEF264',
-      accent: '#BEF264',
-      secondary: '#F59E0B',
-    },
-    content: {
-      masthead: 'NOCTURNE LAB // OS',
-      navItems: ['SCOPE', 'SEQ-16', 'PATCH', 'EXPORT'],
-      eyebrow: 'TERM.10 // PHOSPHOR AUDIO ENGINE',
-      headline: 'CLOCK 128.0 BPM · SYNC OK',
-      subheadline: '16-channel step matrix with sub-millisecond analog clock modulation.',
-      ctaLabel: 'RUN PATCH',
-      metrics: [
-        { label: 'TEMPO', value: '128.0 BPM' },
-        { label: 'SAMPLE RATE', value: '96.0 KHZ' },
-        { label: 'BUFFER', value: '1.2 MS' },
-      ],
-      cardLabels: ['CH 01', 'CH 02', 'CH 03', 'CH 04'],
-    },
-  },
-
-  // =========================================================================
-  // 11 — DESSAU TYPE FOUNDRY (Light / Primary · Bauhaus Grid · Cultural & Editorial)
-  // =========================================================================
-  {
-    id: 'dessau-type-foundry',
-    index: '11',
-    title: 'Dessau Type Foundry',
-    subtitle: 'Constructivist Specimen & Interactive Type Tester',
-    client: 'Dessau Press Berlin',
-    category: 'Cultural & Editorial',
-    year: '2026',
-    sprintDuration: '24h Sprint',
-    slug: 'dessautype.de',
-    uiStyle: 'bauhaus-grid',
-    styleLabel: 'Bauhaus Grid',
-    summary:
-      'Constructivist typographic foundry built on primary red/cobalt/ink geometry, multi-scale glyph specimens (Aa Bb Cc), and a real-time interactive optical tracking tester.',
-    deliverables: ['Type Specimen Engine', 'Variable Axis UI', 'Constructivist Grid'],
-    palette: {
-      bg: '#F4F1EA',
-      surface: '#EAE5DA',
-      text: '#111111',
-      accent: '#D93829',
+      bg: '#FAF8F2',
+      surface: '#FACC15',
+      text: '#0A0A0A',
+      accent: '#E05A36',
       secondary: '#1D4ED8',
     },
-    content: {
-      masthead: 'DESSAU FOUNDRY',
-      navItems: ['TYPEFACES', 'TESTER', 'SPECIMENS', 'LICENSING'],
-      eyebrow: 'SPECIMEN 11 // DESSAU GROTESK',
-      headline: 'Constructive Form.',
-      subheadline: 'Geometric sans-serif architecture engineered in 9 optical weights.',
-      ctaLabel: 'TRY LICENSE →',
+    previewSample: {
+      masthead: 'CULTURE & EVENTS',
+      navItems: ['PROGRAM', 'ARCHIVE', 'SHOP', 'TICKETS!'],
+      eyebrow: 'HIGH-IMPACT CREATIVE',
+      headline: 'FORM AGAINST SILENCE',
+      subheadline:
+        'Unapologetic color blocking, hard ink borders, and expressive typographic energy.',
+      ctaLabel: 'CLAIM PASSES ↗',
       metrics: [
-        { label: 'SIZE', value: '112 PT' },
-        { label: 'TRACKING', value: '-0.03 EM' },
-        { label: 'GLYPHS', value: '840 CHARS' },
+        { label: 'STAGE 01', value: 'LIVE EXPERIENCES' },
+        { label: 'STAGE 02', value: 'SOUND & ART' },
+        { label: 'STAGE 03', value: 'LIMITED DROPS' },
       ],
-      cardLabels: ['LIGHT 300', 'BOLD 700', 'BLACK 900'],
+      cardLabels: ['NEW SEASON', 'ALL ACCESS', 'STAND OUT'],
     },
   },
 
   // =========================================================================
-  // 12 — MONOLITH JOURNAL (Light / Warm · Bento Editorial · Cultural & Editorial)
+  // 11 — EDITORIAL MONOGRAPH (Warm Paper #F7F5F0 · Creative & Editorial)
   // =========================================================================
   {
-    id: 'monolith-journal',
-    index: '12',
-    title: 'Monolith Journal',
-    subtitle: 'Architectural Criticism & Spatial Essays',
-    client: 'Monolith Press London',
-    category: 'Cultural & Editorial',
-    year: '2025',
-    sprintDuration: '24h Sprint',
-    slug: 'monolithjournal.co',
+    id: 'editorial-monograph',
+    index: '11',
+    styleName: 'Editorial Monograph',
+    tagline: 'Story-driven, cultured & authoritative.',
+    category: 'Creative & Editorial',
+    shortDescription:
+      'The digital equivalent of a collectible print magazine or coffee-table monograph. Crafted to present deep stories, essays, and photography with literary gravitas.',
+    bestFor: [
+      'Digital Publications & Magazines',
+      'Research & Knowledge Platforms',
+      'Cultural Foundations & Museums',
+      'Think Tanks & Authors',
+    ],
+    visualCharacteristics: [
+      'Multi-column magazine layout with pull quotes',
+      'Warm archival paper & sepia-graphite tones',
+      'Chapter navigation & reading progress bar',
+      'Curated essay & image pairings',
+    ],
+    typographyNote: 'Classic Book Serif + Archival Sans',
     uiStyle: 'bento-editorial',
-    styleLabel: 'Bento Editorial',
-    summary:
-      'Paper-warm editorial publication marrying long-form magazine columns and a top reading progress rule with modular Bento story cards and sepia-duotone photography.',
-    deliverables: ['Editorial Reader', 'Bento Card System', 'Duotone Treatment'],
     palette: {
       bg: '#F7F5F0',
       surface: '#EAE5DC',
@@ -547,20 +591,70 @@ export const PROJECTS: ProjectConfig[] = [
       accent: '#6B5B4B',
       secondary: '#8E8070',
     },
-    content: {
-      masthead: 'MONOLITH JOURNAL',
+    previewSample: {
+      masthead: 'MONOGRAPH PRESS',
       navItems: ['ISSUES', 'ESSAYS', 'INDEX', 'SUBSCRIBE'],
-      eyebrow: 'ISSUE 14 · LIGHT & LIMESTONE',
+      eyebrow: 'FEATURE STORY · LONGFORM',
       headline: 'On Quiet Rooms & Daylight',
-      subheadline: 'How Mediterranean courtyards shape acoustic stillness in modern civic spaces.',
-      ctaLabel: 'READ ESSAY · 12 MIN',
+      subheadline:
+        'Literary typography, modular reading cards, and archival warmth built for deep stories.',
+      ctaLabel: 'READ FEATURE · 8 MIN',
       metrics: [
-        { label: 'READING TIME', value: '12 MIN' },
-        { label: 'CHAPTERS', value: '06 PARTS' },
-        { label: 'PLATES', value: '28 ARCHIVAL' },
+        { label: 'READING FLOW', value: 'LONGFORM' },
+        { label: 'STRUCTURE', value: 'CHAPTERED' },
+        { label: 'TONE', value: 'ARCHIVAL' },
       ],
-      cardLabels: ['ESSAY I', 'DAYLIGHT', 'COURTYARD'],
-      quote: '“Architecture begins when light enters a silent room and defines its weight.”',
+      cardLabels: ['FEATURE', 'PULL QUOTE', 'GALLERY'],
+      quote: '“Great editorial design gives every idea room to breathe and resonate.”',
+    },
+  },
+
+  // =========================================================================
+  // 12 — DOPAMINE COMMERCE (Vibrant Light #FFFDF7 · Creative & Editorial)
+  // =========================================================================
+  {
+    id: 'dopamine-commerce',
+    index: '12',
+    styleName: 'Dopamine Commerce',
+    tagline: 'Vibrant, playful & built to convert.',
+    category: 'Creative & Editorial',
+    shortDescription:
+      'A joyful, high-energy consumer brand experience bursting with rich color contrasts, chunky display type, and playful pill badges. Engineered to spark excitement and drive action.',
+    bestFor: [
+      'Modern D2C E-Commerce',
+      'Food & Beverage Brands',
+      'Consumer Mobile Apps',
+      'Subscription Services & Retail',
+    ],
+    visualCharacteristics: [
+      'Energetic multi-color accents on warm cream',
+      'Heavy friendly display typography',
+      'Playful pill tags & interactive product cards',
+      'High-visibility conversion CTAs',
+    ],
+    typographyNote: 'Chunky Rounded Display + Crisp Sans',
+    uiStyle: 'dopamine-commerce',
+    palette: {
+      bg: '#FFFDF7',
+      surface: '#FFE8D6',
+      text: '#1C1917',
+      accent: '#FF4D24',
+      secondary: '#2563EB',
+    },
+    previewSample: {
+      masthead: 'GOODS & DROPS',
+      navItems: ['SHOP ALL', 'BUNDLES', 'REVIEWS', 'BAG (2)'],
+      eyebrow: 'BESTSELLER · LIMITED BATCH',
+      headline: 'Daily Joy, Delivered.',
+      subheadline:
+        'Playful product cards, high-contrast color pops, and frictionless checkout paths.',
+      ctaLabel: 'ADD TO BAG — $38 →',
+      metrics: [
+        { label: 'RATED', value: '4.9 ★ (2.4K)' },
+        { label: 'DISPATCH', value: 'SAME DAY' },
+        { label: 'BUNDLES', value: 'SAVE 20%' },
+      ],
+      cardLabels: ['CITRUS', 'BERRY', 'MATCHA'],
     },
   },
 ];

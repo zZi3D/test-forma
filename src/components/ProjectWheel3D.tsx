@@ -423,7 +423,7 @@ export function ProjectWheel3D({ onSelectProject }: ProjectWheel3DProps) {
                       {imgSrc && (
                         <img
                           src={imgSrc}
-                          alt={`${project.title} — ${project.styleLabel}`}
+                          alt={`${project.styleName} — ${project.tagline}`}
                           draggable={false}
                           referrerPolicy="no-referrer"
                           className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
@@ -431,9 +431,14 @@ export function ProjectWheel3D({ onSelectProject }: ProjectWheel3DProps) {
                       )}
                     </div>
                     <div className="mt-2.5 flex items-baseline justify-between gap-2 px-1">
-                      <span className="truncate text-[13px] font-semibold tracking-[-0.015em] text-[#1C1B18] sm:text-[15px]">
-                        {project.title}
-                      </span>
+                      <div className="min-w-0">
+                        <span className="block truncate text-[13px] font-semibold tracking-[-0.015em] text-[#1C1B18] sm:text-[15px]">
+                          {project.styleName}
+                        </span>
+                        <span className="block truncate text-[10px] text-[#1C1B18]/60 sm:text-[11px]">
+                          {project.tagline}
+                        </span>
+                      </div>
                       <span className="font-mono-tabular shrink-0 text-[11px] text-[#1C1B18]/65 sm:text-[12px]">
                         {project.index}
                       </span>
@@ -455,7 +460,7 @@ export function ProjectWheel3D({ onSelectProject }: ProjectWheel3DProps) {
                       <span>FORMA</span>
                     </div>
                     <div className="border-t border-[#1C1B18]/10 pt-2.5 text-[13px] font-medium text-[#1C1B18]/35">
-                      {project.styleLabel}
+                      {project.styleName}
                     </div>
                   </div>
                 </div>
@@ -494,10 +499,10 @@ export function ProjectWheel3D({ onSelectProject }: ProjectWheel3DProps) {
           <span className="font-mono-tabular mr-1.5 text-[#C98A3A] sm:mr-2">
             {activeProject.index}
           </span>
-          <span className="font-semibold">{activeProject.title}</span>
+          <span className="font-semibold">{activeProject.styleName}</span>
           <span className="mx-1.5 hidden text-[#1C1B18]/35 sm:inline">·</span>
           <span className="hidden text-[#1C1B18]/65 sm:inline">
-            {activeProject.styleLabel}
+            {activeProject.tagline}
           </span>
         </button>
 

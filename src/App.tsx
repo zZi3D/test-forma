@@ -34,8 +34,12 @@ const SprintBookingDrawer = lazy(() =>
 
 type PageView = 'home' | 'work';
 
+function isDirectionsHash(hash: string): boolean {
+  return hash === '#/directions' || hash === '#/work';
+}
+
 function getInitialPage(): PageView {
-  if (typeof window !== 'undefined' && window.location.hash === '#/work') {
+  if (typeof window !== 'undefined' && isDirectionsHash(window.location.hash)) {
     return 'work';
   }
   return 'home';
@@ -62,8 +66,9 @@ export default function App() {
 
   useEffect(() => {
     const syncFromHash = () => {
-      const nextPage: PageView =
-        window.location.hash === '#/work' ? 'work' : 'home';
+      const nextPage: PageView = isDirectionsHash(window.location.hash)
+        ? 'work'
+        : 'home';
       setCurrentPage(nextPage);
     };
     window.addEventListener('hashchange', syncFromHash);
@@ -77,8 +82,8 @@ export default function App() {
   const navigateTo = useCallback(
     (target: string) => {
       if (target === 'work') {
-        if (window.location.hash !== '#/work') {
-          window.history.pushState(null, '', '#/work');
+        if (window.location.hash !== '#/directions') {
+          window.history.pushState(null, '', '#/directions');
         }
         setCurrentPage('work');
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -97,7 +102,7 @@ export default function App() {
       };
 
       if (currentPage !== 'home') {
-        if (window.location.hash === '#/work') {
+        if (isDirectionsHash(window.location.hash)) {
           window.history.pushState(
             null,
             '',
@@ -216,7 +221,7 @@ export default function App() {
             onSelectProject={handleSelectProject}
             onStartSimilarSprint={(project) => {
               setSelectedProject(null);
-              openBookingDrawer('brief', project.category, project.title);
+              openBookingDrawer('brief', project.category, project.styleName);
             }}
           />
         )}

@@ -7,7 +7,7 @@ export function renderDarkKinetic(
   height: number,
   project: ProjectConfig,
 ) {
-  const { palette, content } = project;
+  const { palette, previewSample } = project;
 
   // Deep carbon black (#09090B)
   ctx.fillStyle = palette.bg;
@@ -50,17 +50,17 @@ export function renderDarkKinetic(
   // Dynamic Slanted Display Typography
   ctx.fillStyle = palette.accent; // #FF4D24
   ctx.font = `700 ${Math.round(width * 0.01)}px "JetBrains Mono", monospace`;
-  ctx.fillText(content.eyebrow, padX, topY + height * 0.02);
+  ctx.fillText(previewSample.eyebrow, padX, topY + height * 0.02);
 
   ctx.save();
   ctx.fillStyle = palette.text; // Chrome silver #E4E4E7
   ctx.font = `italic 800 ${Math.round(width * 0.058)}px "Plus Jakarta Sans", sans-serif`;
-  ctx.fillText(content.headline, padX, topY + height * 0.115);
+  ctx.fillText(previewSample.headline, padX, topY + height * 0.115);
   ctx.restore();
 
   ctx.fillStyle = palette.secondary;
   ctx.font = `400 ${Math.round(width * 0.0125)}px "Plus Jakarta Sans", sans-serif`;
-  ctx.fillText(content.subheadline, padX, topY + height * 0.17);
+  ctx.fillText(previewSample.subheadline, padX, topY + height * 0.17);
 
   // Top-right Live Telemetry Speed Badge
   const badgeW = width * 0.18;
@@ -215,7 +215,7 @@ export function renderDarkKinetic(
   const cellGap = width * 0.018;
   const cellW = (stageW - cellGap * 3) / 4;
 
-  content.metrics.forEach((m, idx) => {
+  previewSample.metrics.forEach((m, idx) => {
     const cx = padX + idx * (cellW + cellGap);
     ctx.fillStyle = '#121216';
     drawRoundedRect(ctx, cx, footY, cellW, footH, 10);
@@ -240,7 +240,7 @@ export function renderDarkKinetic(
   ctx.fill();
   ctx.fillStyle = '#FFFFFF';
   ctx.font = `700 ${Math.round(width * 0.012)}px "JetBrains Mono", monospace`;
-  ctx.fillText(content.ctaLabel, ctaX + 24, footY + footH * 0.48);
+  ctx.fillText(previewSample.ctaLabel, ctaX + 24, footY + footH * 0.48);
   ctx.font = `500 12px "JetBrains Mono", monospace`;
-  ctx.fillText('TRACK // AERO ACTIVE', ctaX + 24, footY + footH * 0.76);
+  ctx.fillText('PERFORMANCE // ACTIVE', ctaX + 24, footY + footH * 0.76);
 }

@@ -34,7 +34,7 @@ export function renderCyberpunkGlass(
   height: number,
   project: ProjectConfig,
 ) {
-  const { palette, content } = project;
+  const { palette, previewSample } = project;
 
   // Pitch-black futuristic canvas (#07080C)
   ctx.fillStyle = palette.bg;
@@ -155,17 +155,17 @@ export function renderCyberpunkGlass(
 
   ctx.fillStyle = palette.accent;
   ctx.font = `600 ${Math.round(width * 0.0095)}px "JetBrains Mono", monospace`;
-  ctx.fillText(content.eyebrow, hudX + 30, hudY + 48);
+  ctx.fillText(previewSample.eyebrow, hudX + 30, hudY + 48);
 
   ctx.fillStyle = palette.text;
   ctx.font = `700 ${Math.round(width * 0.028)}px "Plus Jakarta Sans", sans-serif`;
-  const [w1, ...wRest] = content.headline.split(' ');
+  const [w1, ...wRest] = previewSample.headline.split(' ');
   ctx.fillText(w1, hudX + 30, hudY + 112);
   ctx.fillText(wRest.join(' '), hudX + 30, hudY + 162);
 
   ctx.fillStyle = 'rgba(248, 250, 252, 0.72)';
   ctx.font = `400 ${Math.round(width * 0.0115)}px "Plus Jakarta Sans", sans-serif`;
-  ctx.fillText(content.subheadline.slice(0, 42), hudX + 30, hudY + 216);
+  ctx.fillText(previewSample.subheadline.slice(0, 42), hudX + 30, hudY + 216);
 
   // Engage Link glowing button inside glass HUD
   const btnY = hudY + hudH - 86;
@@ -174,14 +174,14 @@ export function renderCyberpunkGlass(
   ctx.fill();
   ctx.fillStyle = '#07080C';
   ctx.font = `700 ${Math.round(width * 0.01)}px "JetBrains Mono", monospace`;
-  ctx.fillText(content.ctaLabel, hudX + 64, btnY + 26);
+  ctx.fillText(previewSample.ctaLabel, hudX + 64, btnY + 26);
 
   // Floating Frosted Glass Window 2 (Bottom-left Telemetry Matrix)
   const telY = hudY + hudH + height * 0.035;
   const telH = height - telY - height * 0.065;
   drawGlassHudPanel(ctx, hudX, telY, hudW, telH, 16, palette.secondary);
 
-  content.metrics.forEach((m, idx) => {
+  previewSample.metrics.forEach((m, idx) => {
     const mx = hudX + 28 + idx * (hudW * 0.31);
     ctx.fillStyle = 'rgba(248, 250, 252, 0.55)';
     ctx.font = `500 12px "JetBrains Mono", monospace`;
@@ -201,9 +201,9 @@ export function renderCyberpunkGlass(
 
   ctx.fillStyle = palette.secondary;
   ctx.font = `600 13px "JetBrains Mono", monospace`;
-  ctx.fillText('ACTIVE ORBITALS', rightX + 24, rightY + 38);
+  ctx.fillText('ACTIVE MODULES', rightX + 24, rightY + 38);
 
-  content.cardLabels.forEach((lbl, idx) => {
+  previewSample.cardLabels.forEach((lbl, idx) => {
     const ly = rightY + 86 + idx * 64;
     ctx.fillStyle = idx === 0 ? palette.accent : palette.secondary;
     ctx.beginPath();

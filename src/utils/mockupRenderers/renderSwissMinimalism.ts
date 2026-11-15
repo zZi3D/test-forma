@@ -11,9 +11,9 @@ export function renderSwissMinimalism(
   height: number,
   project: ProjectConfig,
 ) {
-  const { palette, content } = project;
+  const { palette, previewSample } = project;
 
-  // Background (#F5F3EE)
+  // Warm Off-White Canvas (#F5F3EE)
   ctx.fillStyle = palette.bg;
   ctx.fillRect(0, 0, width, height);
 
@@ -23,12 +23,12 @@ export function renderSwissMinimalism(
     navItemsColor: palette.secondary,
   });
 
-  // Ultra-crisp Swiss 3-column hairline grid
+  // Asymmetric 3-column Swiss Grid Hairlines
   const contentW = width - padX * 2;
   const colGap = width * 0.022;
   const colW = (contentW - colGap * 2) / 3;
 
-  ctx.strokeStyle = 'rgba(20, 20, 20, 0.12)';
+  ctx.strokeStyle = 'rgba(20, 20, 20, 0.11)';
   ctx.lineWidth = 1.5;
   for (let c = 0; c < 3; c++) {
     const cx = padX + c * (colW + colGap);
@@ -38,28 +38,26 @@ export function renderSwissMinimalism(
     ctx.stroke();
   }
 
-  // Top Header Row across Columns 1–2 & Index in Col 3
+  // Hero Headline Row across Columns 1–2 + Clean Editorial Counter in Col 3
   const topY = headerBottom + height * 0.055;
   ctx.fillStyle = palette.secondary;
   ctx.font = `600 ${Math.round(width * 0.0095)}px "JetBrains Mono", monospace`;
-  ctx.fillText(content.eyebrow, padX, topY);
+  ctx.fillText(previewSample.eyebrow, padX, topY);
 
-  // Numbered project index badge ("01 — 12") in column 3
   const col3X = padX + (colW + colGap) * 2;
   ctx.fillStyle = palette.text;
-  ctx.font = `600 ${Math.round(width * 0.026)}px "JetBrains Mono", monospace`;
-  ctx.fillText('01 — 12', col3X + width * 0.012, topY + height * 0.016);
+  ctx.font = `600 ${Math.round(width * 0.024)}px "JetBrains Mono", monospace`;
+  ctx.fillText('SWISS / 01', col3X + width * 0.012, topY + height * 0.014);
 
-  // Large clean sans headline across cols 1-2
   ctx.fillStyle = palette.text;
-  ctx.font = `700 ${Math.round(width * 0.044)}px "Plus Jakarta Sans", sans-serif`;
-  ctx.fillText(content.headline, padX, topY + height * 0.088);
+  ctx.font = `700 ${Math.round(width * 0.048)}px "Plus Jakarta Sans", sans-serif`;
+  ctx.fillText(previewSample.headline, padX, topY + height * 0.09);
 
   ctx.fillStyle = palette.secondary;
-  ctx.font = `400 ${Math.round(width * 0.0125)}px "Plus Jakarta Sans", sans-serif`;
-  ctx.fillText(content.subheadline, padX, topY + height * 0.155);
+  ctx.font = `400 ${Math.round(width * 0.013)}px "Plus Jakarta Sans", sans-serif`;
+  ctx.fillText(previewSample.subheadline, padX, topY + height * 0.155);
 
-  // Column 1: Metrics & Technical Specs
+  // Horizontal Section Divider
   const bodyY = topY + height * 0.22;
   const bodyH = height - bodyY - height * 0.065;
 
@@ -69,7 +67,8 @@ export function renderSwissMinimalism(
   ctx.lineTo(width - padX, bodyY - height * 0.02);
   ctx.stroke();
 
-  content.metrics.forEach((metric, idx) => {
+  // Column 1: Clean B2B Value Pillars + Primary Action Button
+  previewSample.metrics.forEach((metric, idx) => {
     const my = bodyY + height * (0.04 + idx * 0.145);
     ctx.fillStyle = palette.secondary;
     ctx.font = `500 ${Math.round(width * 0.009)}px "JetBrains Mono", monospace`;
@@ -86,110 +85,73 @@ export function renderSwissMinimalism(
     ctx.stroke();
   });
 
-  // Minimal Swiss CTA Button at bottom of Column 1
+  // High-Contrast Crisp Black Swiss CTA Button
   const btnY = bodyY + bodyH - height * 0.075;
-  ctx.strokeStyle = palette.text;
-  ctx.lineWidth = 2;
-  drawRoundedRect(ctx, padX + width * 0.008, btnY, colW * 0.72, height * 0.064, 4);
-  ctx.stroke();
   ctx.fillStyle = palette.text;
-  ctx.font = `600 ${Math.round(width * 0.0095)}px "JetBrains Mono", monospace`;
-  ctx.fillText(content.ctaLabel, padX + width * 0.024, btnY + height * 0.034);
+  drawRoundedRect(ctx, padX + width * 0.008, btnY, colW * 0.84, height * 0.066, 4);
+  ctx.fill();
+  ctx.fillStyle = palette.bg;
+  ctx.font = `600 ${Math.round(width * 0.0092)}px "JetBrains Mono", monospace`;
+  ctx.fillText(previewSample.ctaLabel, padX + width * 0.024, btnY + height * 0.035);
 
-  // Columns 2 & 3 Combined: B&W Brutalist Concrete Architecture Photo + Technical CAD Lines
+  // Columns 2 & 3 Combined: Clean Editorial Architectural Website Visual + 3 Service Pillars
   const plateX = padX + colW + colGap;
   const plateW = colW * 2 + colGap;
   const plateY = bodyY;
-  const plateH = bodyH * 0.84;
+  const plateH = bodyH * 0.8;
 
   ctx.save();
-  ctx.fillStyle = '#E0DDD5';
-  ctx.fillRect(plateX, plateY, plateW, plateH);
-  ctx.beginPath();
-  ctx.rect(plateX, plateY, plateW, plateH);
+  drawRoundedRect(ctx, plateX, plateY, plateW, plateH, 6);
   ctx.clip();
 
-  // Monochrome sky gradient
+  // Clean sunlit gallery architectural composition
   const sky = ctx.createLinearGradient(plateX, plateY, plateX, plateY + plateH);
-  sky.addColorStop(0, '#DCDAD3');
-  sky.addColorStop(0.65, '#BFBDB5');
-  sky.addColorStop(1, '#9E9C94');
+  sky.addColorStop(0, '#E6E3DC');
+  sky.addColorStop(0.6, '#C8C5BC');
+  sky.addColorStop(1, '#A8A59D');
   ctx.fillStyle = sky;
   ctx.fillRect(plateX, plateY, plateW, plateH);
 
-  // Brutalist concrete cantilever slabs (pure B&W contrast)
-  const baseFloor = plateY + plateH * 0.82;
-  ctx.fillStyle = '#141414';
+  const baseFloor = plateY + plateH * 0.84;
+  ctx.fillStyle = '#181816';
   ctx.beginPath();
   ctx.moveTo(plateX + plateW * 0.08, baseFloor);
-  ctx.lineTo(plateX + plateW * 0.08, plateY + plateH * 0.28);
-  ctx.lineTo(plateX + plateW * 0.56, plateY + plateH * 0.14);
+  ctx.lineTo(plateX + plateW * 0.08, plateY + plateH * 0.25);
+  ctx.lineTo(plateX + plateW * 0.56, plateY + plateH * 0.15);
   ctx.lineTo(plateX + plateW * 0.56, baseFloor);
   ctx.closePath();
   ctx.fill();
 
-  // Concrete shadow fascia & recessed gallery slit
-  ctx.fillStyle = '#333330';
+  ctx.fillStyle = '#363532';
   ctx.beginPath();
-  ctx.moveTo(plateX + plateW * 0.56, plateY + plateH * 0.14);
-  ctx.lineTo(plateX + plateW * 0.88, plateY + plateH * 0.31);
-  ctx.lineTo(plateX + plateW * 0.88, baseFloor);
+  ctx.moveTo(plateX + plateW * 0.56, plateY + plateH * 0.15);
+  ctx.lineTo(plateX + plateW * 0.89, plateY + plateH * 0.3);
+  ctx.lineTo(plateX + plateW * 0.89, baseFloor);
   ctx.lineTo(plateX + plateW * 0.56, baseFloor);
   ctx.closePath();
   ctx.fill();
 
-  // Stark daylight aperture slot in concrete wall
+  // Bright minimalist gallery window opening
   ctx.fillStyle = '#F5F3EE';
-  ctx.fillRect(plateX + plateW * 0.24, plateY + plateH * 0.42, plateW * 0.16, baseFloor - (plateY + plateH * 0.42));
+  ctx.fillRect(
+    plateX + plateW * 0.24,
+    plateY + plateH * 0.38,
+    plateW * 0.17,
+    baseFloor - (plateY + plateH * 0.38),
+  );
 
-  // Concrete horizontal board-form texture lines
-  ctx.strokeStyle = 'rgba(255,255,255,0.08)';
-  ctx.lineWidth = 1;
-  for (let l = 0; l < 12; l++) {
-    const ly = plateY + plateH * (0.24 + l * 0.048);
-    ctx.beginPath();
-    ctx.moveTo(plateX + plateW * 0.08, ly);
-    ctx.lineTo(plateX + plateW * 0.88, ly);
-    ctx.stroke();
-  }
-
-  // Technical architectural floor-plan & elevation CAD overlay lines
-  ctx.strokeStyle = 'rgba(20, 20, 20, 0.55)';
-  ctx.lineWidth = 1;
-  ctx.setLineDash([6, 4]);
-  // Dimension line top
-  const dimY = plateY + plateH * 0.09;
-  ctx.beginPath();
-  ctx.moveTo(plateX + plateW * 0.08, dimY);
-  ctx.lineTo(plateX + plateW * 0.88, dimY);
-  ctx.moveTo(plateX + plateW * 0.08, dimY - 8);
-  ctx.lineTo(plateX + plateW * 0.08, baseFloor);
-  ctx.moveTo(plateX + plateW * 0.56, dimY - 8);
-  ctx.lineTo(plateX + plateW * 0.56, plateY + plateH * 0.14);
-  ctx.moveTo(plateX + plateW * 0.88, dimY - 8);
-  ctx.lineTo(plateX + plateW * 0.88, baseFloor);
-  ctx.stroke();
-  ctx.setLineDash([]);
-
-  // Technical CAD Labels
-  ctx.fillStyle = '#141414';
-  ctx.font = `600 ${Math.round(width * 0.0085)}px "JetBrains Mono", monospace`;
-  ctx.fillText('18,400 MM', plateX + plateW * 0.28, dimY - 12);
-  ctx.fillText('ELEV +14.80', plateX + plateW * 0.62, dimY - 12);
-  ctx.fillText('SECTION A-A // SCALE 1:100', plateX + plateW * 0.08, baseFloor + height * 0.045);
-
-  applyEditorialGrain(ctx, plateX, plateY, plateW, plateH, 101, 0.045);
+  applyEditorialGrain(ctx, plateX, plateY, plateW, plateH, 101, 0.035);
   ctx.restore();
 
-  // Plate captions under photo across cols 2–3
-  const capY = plateY + plateH + height * 0.045;
-  content.cardLabels.forEach((lbl, idx) => {
+  // Clean 3-column Service / Practice Pillars below Hero Image
+  const capY = plateY + plateH + height * 0.05;
+  previewSample.cardLabels.forEach((lbl, idx) => {
     const lx = plateX + idx * (plateW / 3);
     ctx.fillStyle = palette.secondary;
     ctx.font = `500 ${Math.round(width * 0.0085)}px "JetBrains Mono", monospace`;
-    ctx.fillText(`FIG. 0${idx + 1}`, lx, capY);
+    ctx.fillText(`0${idx + 1}`, lx, capY);
     ctx.fillStyle = palette.text;
-    ctx.font = `600 ${Math.round(width * 0.0115)}px "Plus Jakarta Sans", sans-serif`;
-    ctx.fillText(lbl, lx, capY + height * 0.032);
+    ctx.font = `600 ${Math.round(width * 0.013)}px "Plus Jakarta Sans", sans-serif`;
+    ctx.fillText(lbl, lx, capY + height * 0.034);
   });
 }

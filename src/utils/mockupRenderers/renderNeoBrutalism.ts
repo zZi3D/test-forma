@@ -29,7 +29,7 @@ export function renderNeoBrutalism(
   height: number,
   project: ProjectConfig,
 ) {
-  const { palette, content } = project;
+  const { palette, previewSample } = project;
   const ink = palette.text; // #0A0A0A
 
   // Warm off-white (#FAF8F2)
@@ -60,24 +60,24 @@ export function renderNeoBrutalism(
   drawBrutalistBox(ctx, padX, tagY, width * 0.24, height * 0.052, palette.secondary, ink, 5);
   ctx.fillStyle = '#FFFFFF';
   ctx.font = `700 ${Math.round(width * 0.0095)}px "JetBrains Mono", monospace`;
-  ctx.fillText(content.eyebrow, padX + width * 0.014, tagY + height * 0.028);
+  ctx.fillText(previewSample.eyebrow, padX + width * 0.014, tagY + height * 0.028);
 
   // Oversized stacked headline
   ctx.fillStyle = ink;
   ctx.font = `800 ${Math.round(width * 0.068)}px "Plus Jakarta Sans", sans-serif`;
-  const words = content.headline.split(' ');
+  const words = previewSample.headline.split(' ');
   ctx.fillText(words[0] || 'FORM', padX, tagY + height * 0.165);
   ctx.fillStyle = palette.accent; // Terracotta #E05A36
   ctx.fillText(words.slice(1).join(' ') || 'AGAINST SILENCE', padX, tagY + height * 0.265);
 
   ctx.fillStyle = ink;
   ctx.font = `600 ${Math.round(width * 0.013)}px "Plus Jakarta Sans", sans-serif`;
-  ctx.fillText(content.subheadline, padX, tagY + height * 0.34);
+  ctx.fillText(previewSample.subheadline, padX, tagY + height * 0.34);
 
   // Energetic Exhibition Agenda Rows
   const agendaY = tagY + height * 0.395;
   const rowColors = ['#FFFFFF', palette.surface, '#FFFFFF'];
-  content.metrics.forEach((item, idx) => {
+  previewSample.metrics.forEach((item, idx) => {
     const ry = agendaY + idx * height * 0.112;
     drawBrutalistBox(ctx, padX, ry, leftW, height * 0.09, rowColors[idx], ink, 6);
 
@@ -137,7 +137,7 @@ export function renderNeoBrutalism(
   ctx.fillStyle = '#FFFFFF';
   ctx.textAlign = 'center';
   ctx.font = `800 ${Math.round(width * 0.01)}px "JetBrains Mono", monospace`;
-  ctx.fillText(content.cardLabels[0], 0, 2);
+  ctx.fillText(previewSample.cardLabels[0], 0, 2);
   ctx.restore();
   ctx.textAlign = 'left';
 
@@ -146,7 +146,7 @@ export function renderNeoBrutalism(
   drawBrutalistBox(ctx, rightX, btnY, rightW, height * 0.082, palette.surface, ink, 7);
   ctx.fillStyle = ink;
   ctx.font = `800 ${Math.round(width * 0.0135)}px "Plus Jakarta Sans", sans-serif`;
-  ctx.fillText(content.ctaLabel, rightX + width * 0.025, btnY + height * 0.044);
+  ctx.fillText(previewSample.ctaLabel, rightX + width * 0.025, btnY + height * 0.044);
   ctx.font = `700 ${Math.round(width * 0.01)}px "JetBrains Mono", monospace`;
-  ctx.fillText(content.cardLabels[2], rightX + rightW - width * 0.11, btnY + height * 0.044);
+  ctx.fillText(previewSample.cardLabels[2], rightX + rightW - width * 0.11, btnY + height * 0.044);
 }

@@ -9,7 +9,7 @@ interface GlassHeaderProps {
 
 const NAV_LINKS = [
   { label: 'Overview', target: 'hero-wave', page: 'home' as const },
-  { label: 'Work', target: 'work', page: 'work' as const },
+  { label: 'Directions', target: 'work', page: 'work' as const },
   { label: 'Process', target: 'process-studio', page: null },
   { label: 'Contact', target: 'studio-footer', page: null },
 ];

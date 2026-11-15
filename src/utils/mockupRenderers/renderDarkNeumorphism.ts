@@ -52,7 +52,7 @@ export function renderDarkNeumorphism(
   height: number,
   project: ProjectConfig,
 ) {
-  const { palette, content } = project;
+  const { palette, previewSample } = project;
 
   // Deep matte black canvas (#0C0C0C)
   ctx.fillStyle = palette.bg;
@@ -85,15 +85,15 @@ export function renderDarkNeumorphism(
 
   ctx.fillStyle = palette.accent;
   ctx.font = `600 ${Math.round(width * 0.01)}px "JetBrains Mono", monospace`;
-  ctx.fillText(content.eyebrow, centerX, headerBottom + height * 0.068);
+  ctx.fillText(previewSample.eyebrow, centerX, headerBottom + height * 0.068);
 
   ctx.fillStyle = palette.text;
   ctx.font = `500 ${Math.round(width * 0.05)}px "Cormorant Garamond", Georgia, serif`;
-  ctx.fillText(content.headline, centerX, headerBottom + height * 0.145);
+  ctx.fillText(previewSample.headline, centerX, headerBottom + height * 0.145);
 
   ctx.fillStyle = palette.secondary;
   ctx.font = `400 ${Math.round(width * 0.0125)}px "Plus Jakarta Sans", sans-serif`;
-  ctx.fillText(content.subheadline, centerX, headerBottom + height * 0.205);
+  ctx.fillText(previewSample.subheadline, centerX, headerBottom + height * 0.205);
 
   // Tactile Neumorphic Macro Watch Visual in Center
   const dialX = centerX;
@@ -202,7 +202,7 @@ export function renderDarkNeumorphism(
 
   // Left Tactile Neumorphic Spec Cards (recessed + raised)
   ctx.textAlign = 'left';
-  content.metrics.forEach((m, idx) => {
+  previewSample.metrics.forEach((m, idx) => {
     const cardW = width * 0.19;
     const cardH = height * 0.11;
     const cardX = padX;
@@ -219,7 +219,7 @@ export function renderDarkNeumorphism(
   });
 
   // Right Tactile Neumorphic Mode Buttons & CTA
-  content.cardLabels.forEach((lbl, idx) => {
+  previewSample.cardLabels.forEach((lbl, idx) => {
     const btnW = width * 0.19;
     const btnH = height * 0.088;
     const btnX = width - padX - btnW;
@@ -250,7 +250,7 @@ export function renderDarkNeumorphism(
   ctx.textAlign = 'center';
   ctx.fillStyle = palette.accent;
   ctx.font = `600 ${Math.round(width * 0.0105)}px "JetBrains Mono", monospace`;
-  ctx.fillText(content.ctaLabel, ctaX + ctaW * 0.5, ctaY + ctaH * 0.52);
+  ctx.fillText(previewSample.ctaLabel, ctaX + ctaW * 0.5, ctaY + ctaH * 0.52);
   ctx.textAlign = 'left';
 
   applyEditorialGrain(ctx, 0, headerBottom, width, height - headerBottom, 202, 0.035);

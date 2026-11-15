@@ -31,7 +31,7 @@ export function WorkPage({
           onBackToOverview={onBackToOverview}
         />
 
-        {/* Dedicated Work Page Closing CTA & Studio Footer */}
+        {/* Dedicated Directions Page Closing CTA & Studio Footer */}
         <section
           aria-label="Start a 24h Sprint"
           className="w-full px-4 pt-6 md:px-8 md:pt-10"
@@ -40,10 +40,10 @@ export function WorkPage({
             <div className="glass-elevated flex flex-col items-start justify-between gap-6 rounded-2xl p-6 md:flex-row md:items-center md:p-9">
               <div className="max-w-xl">
                 <p className="text-[12px] font-medium tracking-[0.04em] text-[#C98A3A]">
-                  Ready to build Edition 13?
+                  Found a style that fits your brand?
                 </p>
                 <h2 className="display-tight mt-2 text-[clamp(1.6rem,2.8vw,2.35rem)] leading-[1.1] font-semibold text-[#1C1B18]">
-                  Your own bespoke digital world, launched in 24 hours.
+                  A bespoke website in your chosen direction, launched in 24 hours.
                 </h2>
               </div>
 
@@ -69,7 +69,7 @@ export function WorkPage({
               <div className="flex flex-wrap items-center gap-2">
                 <span className="font-semibold text-[#1C1B18]">FORMA Studio</span>
                 <span aria-hidden="true">·</span>
-                <span>12 Selected Editions</span>
+                <span>12 Website Design Directions</span>
                 <span aria-hidden="true">·</span>
                 <span>New York & Zurich</span>
               </div>

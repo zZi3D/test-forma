@@ -11,7 +11,7 @@ export function renderNewAgeGradient(
   height: number,
   project: ProjectConfig,
 ) {
-  const { palette, content } = project;
+  const { palette, previewSample } = project;
 
   // Soft sand canvas (#F3ECE1)
   ctx.fillStyle = palette.bg;
@@ -136,21 +136,21 @@ export function renderNewAgeGradient(
   // Weightless Editorial Magazine Titles bleeding gracefully OVER the left edge of the image
   ctx.fillStyle = palette.accent;
   ctx.font = `500 ${Math.round(width * 0.01)}px "JetBrains Mono", monospace`;
-  ctx.fillText(content.eyebrow, padX, headerBottom + height * 0.14);
+  ctx.fillText(previewSample.eyebrow, padX, headerBottom + height * 0.14);
 
   ctx.fillStyle = palette.text;
   ctx.font = `italic 400 ${Math.round(width * 0.088)}px "Cormorant Garamond", Georgia, serif`;
-  const [line1, ...rest] = content.headline.split(' ');
+  const [line1, ...rest] = previewSample.headline.split(' ');
   ctx.fillText(line1, padX, headerBottom + height * 0.29);
   ctx.fillText(rest.join(' '), padX + width * 0.045, headerBottom + height * 0.415);
 
   ctx.fillStyle = palette.secondary;
   ctx.font = `400 ${Math.round(width * 0.013)}px "Plus Jakarta Sans", sans-serif`;
-  ctx.fillText(content.subheadline.slice(0, 44), padX, headerBottom + height * 0.52);
+  ctx.fillText(previewSample.subheadline.slice(0, 44), padX, headerBottom + height * 0.52);
 
   // Minimal floating lookbook metrics on bottom left
   const footY = height * 0.79;
-  content.metrics.forEach((m, idx) => {
+  previewSample.metrics.forEach((m, idx) => {
     const mx = padX + idx * width * 0.12;
     ctx.fillStyle = palette.secondary;
     ctx.font = `500 ${Math.round(width * 0.0085)}px "JetBrains Mono", monospace`;
@@ -167,5 +167,5 @@ export function renderNewAgeGradient(
   ctx.stroke();
   ctx.fillStyle = palette.text;
   ctx.font = `600 ${Math.round(width * 0.0095)}px "Plus Jakarta Sans", sans-serif`;
-  ctx.fillText(content.ctaLabel, padX + width * 0.025, height * 0.907);
+  ctx.fillText(previewSample.ctaLabel, padX + width * 0.025, height * 0.907);
 }

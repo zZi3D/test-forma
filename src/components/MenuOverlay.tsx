@@ -18,8 +18,8 @@ const NAV_ITEMS = [
   },
   {
     index: '02',
-    label: 'Selected Work',
-    subtitle: '12 Curated UI/UX Editions & Case Studies',
+    label: 'Design Directions',
+    subtitle: '12 Signature Website Styles & Blueprints',
     target: 'work',
   },
   {

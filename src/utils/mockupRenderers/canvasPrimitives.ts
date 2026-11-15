@@ -73,7 +73,7 @@ export function drawBrowserChrome(
     solidDivider?: boolean;
   },
 ): ChromeMetrics {
-  const { palette, content } = project;
+  const { palette, previewSample } = project;
   const padX = width * 0.048;
   const browserH = height * 0.052;
   const navH = height * 0.082;
@@ -97,7 +97,7 @@ export function drawBrowserChrome(
   ctx.font = `500 ${Math.round(width * 0.0098)}px "JetBrains Mono", monospace`;
   ctx.textBaseline = 'middle';
   ctx.textAlign = 'center';
-  ctx.fillText(project.slug, width * 0.5, dotY);
+  ctx.fillText(`direction // ${project.index}-${project.id}`, width * 0.5, dotY);
   ctx.textAlign = 'left';
   ctx.globalAlpha = 1;
 
@@ -117,13 +117,13 @@ export function drawBrowserChrome(
   const navY = browserH + navH * 0.52;
   ctx.fillStyle = palette.text;
   ctx.font = `700 ${Math.round(width * 0.0155)}px "Plus Jakarta Sans", sans-serif`;
-  ctx.fillText(content.masthead, padX, navY);
+  ctx.fillText(previewSample.masthead, padX, navY);
 
   ctx.font = `600 ${Math.round(width * 0.01)}px "Plus Jakarta Sans", sans-serif`;
   ctx.fillStyle = options?.navItemsColor ?? palette.secondary;
   let navX = width - padX;
-  for (let i = content.navItems.length - 1; i >= 0; i--) {
-    const label = content.navItems[i];
+  for (let i = previewSample.navItems.length - 1; i >= 0; i--) {
+    const label = previewSample.navItems[i];
     const tw = ctx.measureText(label).width;
     navX -= tw;
     ctx.fillText(label, navX, navY);

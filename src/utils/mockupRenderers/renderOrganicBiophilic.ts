@@ -11,7 +11,7 @@ export function renderOrganicBiophilic(
   height: number,
   project: ProjectConfig,
 ) {
-  const { palette, content } = project;
+  const { palette, previewSample } = project;
 
   // Warm linen canvas (#EFECE6)
   ctx.fillStyle = palette.bg;
@@ -58,12 +58,12 @@ export function renderOrganicBiophilic(
   // Quiet Botanical Index Tag (FORMULATION 09)
   ctx.fillStyle = palette.accent; // Terracotta #C47451
   ctx.font = `600 ${Math.round(width * 0.0098)}px "JetBrains Mono", monospace`;
-  ctx.fillText(content.eyebrow, padX + innerPad, topY + height * 0.065);
+  ctx.fillText(previewSample.eyebrow, padX + innerPad, topY + height * 0.065);
 
   // Elegant Serif Display Title
   ctx.fillStyle = palette.text; // Deep sage green #2F4538
   ctx.font = `500 ${Math.round(width * 0.048)}px "Cormorant Garamond", Georgia, serif`;
-  const [w1, w2, ...wRest] = content.headline.split(' ');
+  const [w1, w2, ...wRest] = previewSample.headline.split(' ');
   ctx.fillText(`${w1} ${w2}`, padX + innerPad, topY + height * 0.155);
   if (wRest.length > 0) {
     ctx.fillText(wRest.join(' '), padX + innerPad, topY + height * 0.24);
@@ -71,7 +71,7 @@ export function renderOrganicBiophilic(
 
   ctx.fillStyle = palette.secondary;
   ctx.font = `400 ${Math.round(width * 0.0122)}px "Plus Jakarta Sans", sans-serif`;
-  ctx.fillText(content.subheadline.slice(0, 44), padX + innerPad, topY + height * 0.315);
+  ctx.fillText(previewSample.subheadline.slice(0, 44), padX + innerPad, topY + height * 0.315);
 
   // Soft Sage Botanical Pill CTA
   const btnY = topY + topCardH - height * 0.105;
@@ -80,13 +80,13 @@ export function renderOrganicBiophilic(
   ctx.fill();
   ctx.fillStyle = palette.bg;
   ctx.font = `600 ${Math.round(width * 0.01)}px "Plus Jakarta Sans", sans-serif`;
-  ctx.fillText(content.ctaLabel, padX + innerPad + width * 0.024, btnY + height * 0.036);
+  ctx.fillText(previewSample.ctaLabel, padX + innerPad + width * 0.024, btnY + height * 0.036);
 
   // Bottom-left Organic Spec Notes (3 soft botanical cards)
   const specY = topY + topCardH + gap * 0.85;
   const specH = fullH - topCardH - gap * 0.85;
   const specW = (leftW - gap * 1.4) / 3;
-  content.metrics.forEach((m, idx) => {
+  previewSample.metrics.forEach((m, idx) => {
     const sx = padX + idx * (specW + gap * 0.7);
     ctx.fillStyle = idx === 1 ? '#E6E1D8' : '#F7F5F0';
     drawRoundedRect(ctx, sx, specY, specW, specH, 26);
@@ -209,12 +209,12 @@ export function renderOrganicBiophilic(
 
   ctx.fillStyle = palette.text;
   ctx.font = `600 ${Math.round(width * 0.0085)}px "JetBrains Mono", monospace`;
-  ctx.fillText('NO. 09', vesselX + vesselW * 0.24, lblY + 34);
+  ctx.fillText('EDITION 09', vesselX + vesselW * 0.24, lblY + 34);
   ctx.font = `italic 600 ${Math.round(width * 0.015)}px "Cormorant Garamond", Georgia, serif`;
-  ctx.fillText('Botanica', vesselX + vesselW * 0.24, lblY + 66);
+  ctx.fillText('Pure Extract', vesselX + vesselW * 0.24, lblY + 66);
   ctx.fillStyle = palette.accent;
   ctx.font = `500 ${Math.round(width * 0.0075)}px "JetBrains Mono", monospace`;
-  ctx.fillText('50 ML // DISTILLATE', vesselX + vesselW * 0.24, lblY + 96);
+  ctx.fillText('ORGANIC // ESSENCE', vesselX + vesselW * 0.24, lblY + 96);
 
   // Subtle paper-grain overlay across entire composition
   applyEditorialGrain(ctx, rightX, topY, rightW, fullH, 909, 0.055);

@@ -10,8 +10,8 @@ import { renderBentoEditorial } from './mockupRenderers/renderBentoEditorial';
 import { renderCyberpunkGlass } from './mockupRenderers/renderCyberpunkGlass';
 import { renderOrganicBiophilic } from './mockupRenderers/renderOrganicBiophilic';
 import { renderDarkKinetic } from './mockupRenderers/renderDarkKinetic';
-import { renderBauhausGrid } from './mockupRenderers/renderBauhausGrid';
-import { renderRetroCrt } from './mockupRenderers/renderRetroCrt';
+import { renderModularBento } from './mockupRenderers/renderModularBento';
+import { renderDopamineCommerce } from './mockupRenderers/renderDopamineCommerce';
 
 const cardUrlCache = new Map<string, string>();
 const modalUrlCache = new Map<string, string>();
@@ -20,7 +20,7 @@ const subscribers = new Set<() => void>();
 let queueStarted = false;
 
 function getCacheKey(project: ProjectConfig): string {
-  return `${project.id}:${project.uiStyle}:${project.palette.bg}:${project.palette.accent}:${project.content.headline}`;
+  return `${project.id}:${project.uiStyle}:${project.palette.bg}:${project.palette.accent}:${project.styleName}`;
 }
 
 /**
@@ -74,11 +74,11 @@ export function renderMockupToCanvas(
     case 'dark-kinetic':
       renderDarkKinetic(ctx, width, height, project);
       break;
-    case 'bauhaus-grid':
-      renderBauhausGrid(ctx, width, height, project);
+    case 'modular-bento':
+      renderModularBento(ctx, width, height, project);
       break;
-    case 'retro-crt':
-      renderRetroCrt(ctx, width, height, project);
+    case 'dopamine-commerce':
+      renderDopamineCommerce(ctx, width, height, project);
       break;
   }
 

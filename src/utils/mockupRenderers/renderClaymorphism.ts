@@ -51,7 +51,7 @@ export function renderClaymorphism(
   height: number,
   project: ProjectConfig,
 ) {
-  const { palette, content } = project;
+  const { palette, previewSample } = project;
 
   // Soft light lavender-gray canvas (#ECEEF2)
   ctx.fillStyle = palette.bg;
@@ -76,16 +76,16 @@ export function renderClaymorphism(
   const cardPad = width * 0.032;
   ctx.fillStyle = palette.secondary;
   ctx.font = `600 ${Math.round(width * 0.0095)}px "JetBrains Mono", monospace`;
-  ctx.fillText(content.eyebrow, padX + cardPad, topY + height * 0.065);
+  ctx.fillText(previewSample.eyebrow, padX + cardPad, topY + height * 0.065);
 
-  // Tabular Wealth Growth Headline ($48,420,890)
+  // Tabular Clarity Headline
   ctx.fillStyle = palette.text;
   ctx.font = `700 ${Math.round(width * 0.046)}px "Plus Jakarta Sans", sans-serif`;
-  ctx.fillText(content.headline, padX + cardPad, topY + height * 0.145);
+  ctx.fillText(previewSample.headline, padX + cardPad, topY + height * 0.145);
 
   ctx.fillStyle = palette.secondary;
   ctx.font = `500 ${Math.round(width * 0.0125)}px "Plus Jakarta Sans", sans-serif`;
-  ctx.fillText(content.subheadline, padX + cardPad, topY + height * 0.205);
+  ctx.fillText(previewSample.subheadline, padX + cardPad, topY + height * 0.205);
 
   // Coral-orange raised clay pill badge top-right of main card
   const badgeW = width * 0.11;
@@ -96,7 +96,7 @@ export function renderClaymorphism(
   ctx.fillStyle = '#FFFFFF';
   ctx.textAlign = 'center';
   ctx.font = `700 ${Math.round(width * 0.0115)}px "JetBrains Mono", monospace`;
-  ctx.fillText(content.metrics[0].value, badgeX + badgeW * 0.5, badgeY + badgeH * 0.52);
+  ctx.fillText(previewSample.metrics[0].value, badgeX + badgeW * 0.5, badgeY + badgeH * 0.52);
   ctx.textAlign = 'left';
 
   // Smooth 3D-shaded curve chart inside main clay card
@@ -193,7 +193,7 @@ export function renderClaymorphism(
   const cardGap = height * 0.028;
   const cardH = (mainH - cardGap * 2) / 3;
 
-  content.metrics.forEach((metric, idx) => {
+  previewSample.metrics.forEach((metric, idx) => {
     const cy = topY + idx * (cardH + cardGap);
     drawClayCard(ctx, rightX, cy, rightW, cardH, 34, palette.surface);
 

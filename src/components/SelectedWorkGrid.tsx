@@ -238,14 +238,14 @@ function WorkTileCard({
               {imgSrc ? (
                 <img
                   src={imgSrc}
-                  alt={`${project.title} — ${project.styleLabel} UI/UX interface`}
+                  alt={`${project.styleName} — ${project.tagline}`}
                   referrerPolicy="no-referrer"
                   loading="lazy"
                   className="h-full w-full object-cover transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.03]"
                 />
               ) : (
                 <div className="flex h-full w-full items-center justify-center p-4 text-sm font-medium text-[#1C1B18]">
-                  {project.title}
+                  {project.styleName}
                 </div>
               )}
             </div>
@@ -253,10 +253,10 @@ function WorkTileCard({
             <div className="relative z-10 mt-3 flex items-baseline justify-between gap-2 px-0.5">
               <div className="min-w-0">
                 <h3 className="truncate text-[15px] font-semibold tracking-[-0.015em] text-[#1C1B18] transition-colors group-hover:text-[#C98A3A]">
-                  {project.title}
+                  {project.styleName}
                 </h3>
                 <p className="mt-0.5 truncate text-[11px] text-[#1C1B18]/65">
-                  {project.styleLabel} · {project.year}
+                  {project.tagline}
                 </p>
               </div>
               <span className="font-mono-tabular shrink-0 text-[11px] font-medium text-[#1C1B18]/50">
@@ -296,10 +296,10 @@ function WorkTileCard({
           <div className="mt-3 flex items-baseline justify-between gap-2 px-0.5">
             <div className="min-w-0">
               <p className="truncate text-[15px] font-semibold tracking-[-0.015em] text-[#1C1B18]/80">
-                {project.title}
+                {project.styleName}
               </p>
               <p className="mt-0.5 truncate text-[11px] text-[#1C1B18]/50">
-                {project.styleLabel} · {project.year}
+                {project.tagline}
               </p>
             </div>
             <span className="font-mono-tabular shrink-0 text-[11px] font-medium text-[#1C1B18]/45">
@@ -493,7 +493,7 @@ export function SelectedWorkGrid({
   return (
     <section
       id={isStandalonePage ? 'work-archive' : 'selected-work'}
-      aria-label="Selected Work Portfolio Archive"
+      aria-label="Website Design Directions"
       className={`relative z-10 w-full px-4 md:px-8 ${
         isStandalonePage
           ? 'pt-28 pb-12 md:pt-34 md:pb-16'
@@ -514,7 +514,7 @@ export function SelectedWorkGrid({
               </button>
             )}
             <span className="font-mono-tabular text-[11px] font-medium tracking-[0.06em] text-[#1C1B18]/55 uppercase">
-              02 / Complete Index · {PROJECTS.length} Editions
+              02 / Design Directions · {PROJECTS.length} Styles
             </span>
           </div>
         )}
@@ -529,15 +529,15 @@ export function SelectedWorkGrid({
           >
             <div className="max-w-2xl">
               <p className="text-[12px] font-medium tracking-[0.04em] text-[#C98A3A]">
-                Archive · {PROJECTS.length} Curated Editions
+                {PROJECTS.length} Signature Styles — Choose your visual foundation
               </p>
               <h1 className="display-tight mt-2 text-[clamp(2.35rem,4.5vw,3.85rem)] leading-[1.03] font-semibold text-[#1C1B18]">
-                Selected Work
+                Design Directions
               </h1>
               <p className="mt-3 max-w-[56ch] text-[14px] leading-[1.65] text-[#1C1B18]/72 sm:text-[15px]">
-                Twelve distinct digital design systems—spanning architectural monographs,
-                horology portals, cultural seasons, and spatial operating interfaces,
-                each crafted in a dedicated 24-hour sprint.
+                Twelve signature website design directions—built for corporate SaaS,
+                luxury ateliers, technical products, and editorial brands. Select any
+                direction to inspect its blueprint and tailor it to your business in 24 hours.
               </p>
             </div>
 
@@ -592,10 +592,10 @@ export function SelectedWorkGrid({
           >
             <div>
               <p className="text-[12px] font-medium tracking-[0.04em] text-[#C98A3A]">
-                Archive · {PROJECTS.length} Editions
+                {PROJECTS.length} Signature Styles — Choose your visual foundation
               </p>
               <h2 className="display-tight mt-1.5 text-[clamp(2rem,3.4vw,3rem)] leading-[1.06] font-semibold text-[#1C1B18]">
-                Selected Work
+                Design Directions
               </h2>
             </div>
 
@@ -612,7 +612,7 @@ export function SelectedWorkGrid({
         {/* Interactive Filter Tabs with Sliding Active Pill */}
         <div
           role="tablist"
-          aria-label="Filter projects by discipline"
+          aria-label="Filter design directions by sector"
           className="mt-6 flex flex-wrap items-center gap-2"
         >
           {FILTERS.map((filter) => {

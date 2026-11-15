@@ -44,7 +44,9 @@ export function SprintBookingDrawer({
     setActiveTab(initialTab);
     if (prefilledCategory) setCategory(prefilledCategory);
     if (prefilledProjectTitle) {
-      setNotes(`Inspired by ${prefilledProjectTitle} — looking for a 24-hour sprint launch.`);
+      setNotes(
+        `Selected Design Direction: ${prefilledProjectTitle} — tailored to our brand within 24 hours.`,
+      );
     }
     setErrorMsg(null);
   }, [isOpen, initialTab, prefilledCategory, prefilledProjectTitle]);
@@ -203,10 +205,19 @@ export function SprintBookingDrawer({
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="mt-6 flex flex-1 flex-col gap-5">
+                {prefilledProjectTitle && (
+                  <div className="flex items-center justify-between gap-3 rounded-xl border border-[#C98A3A]/35 bg-[#C98A3A]/10 px-4 py-2.5 text-[12px]">
+                    <span className="text-[#1C1B18]/75">Selected Direction</span>
+                    <span className="font-semibold text-[#1C1B18]">
+                      {prefilledProjectTitle}
+                    </span>
+                  </div>
+                )}
+
                 {/* Discipline Selector */}
                 <div>
                   <label className="block text-[12px] font-medium text-[#1C1B18]/70">
-                    Practice Sector
+                    Business Category
                   </label>
                   <div className="mt-2 flex flex-wrap gap-2">
                     {CATEGORIES.map((item) => {
@@ -290,7 +301,7 @@ export function SprintBookingDrawer({
                       type="text"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
-                      placeholder="Clara Lindqvist"
+                      placeholder="Alex Morgan"
                       className="mt-1.5 h-10 w-full rounded-lg border border-[#1C1B18]/15 bg-white px-3 text-[13px] text-[#1C1B18] placeholder:text-[#1C1B18]/35 focus:border-[#1C1B18] focus:outline-none"
                     />
                   </div>
@@ -306,7 +317,7 @@ export function SprintBookingDrawer({
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      placeholder="clara@atelier.paris"
+                      placeholder="alex@company.com"
                       className="mt-1.5 h-10 w-full rounded-lg border border-[#1C1B18]/15 bg-white px-3 text-[13px] text-[#1C1B18] placeholder:text-[#1C1B18]/35 focus:border-[#1C1B18] focus:outline-none"
                     />
                   </div>
@@ -317,14 +328,14 @@ export function SprintBookingDrawer({
                     htmlFor="sprint-brand"
                     className="block text-[12px] font-medium text-[#1C1B18]/70"
                   >
-                    Studio / Maison / Publication
+                    Company / Brand Name
                   </label>
                   <input
                     id="sprint-brand"
                     type="text"
                     value={brandName}
                     onChange={(e) => setBrandName(e.target.value)}
-                    placeholder="Maison Verrier / Kurokawa Architects"
+                    placeholder="Your company or studio name"
                     className="mt-1.5 h-10 w-full rounded-lg border border-[#1C1B18]/15 bg-white px-3 text-[13px] text-[#1C1B18] placeholder:text-[#1C1B18]/35 focus:border-[#1C1B18] focus:outline-none"
                   />
                 </div>
@@ -334,14 +345,14 @@ export function SprintBookingDrawer({
                     htmlFor="sprint-notes"
                     className="block text-[12px] font-medium text-[#1C1B18]/70"
                   >
-                    Sprint Scope & Launch Goal
+                    Project Goals &amp; Brand Notes
                   </label>
                   <textarea
                     id="sprint-notes"
                     rows={3}
                     value={notes}
                     onChange={(e) => setNotes(e.target.value)}
-                    placeholder="Lookbook launch, architectural monograph, or exhibition microsite needed within 24h..."
+                    placeholder="Share your business, preferred design direction, key pages, and target launch date..."
                     className="mt-1.5 w-full resize-none rounded-lg border border-[#1C1B18]/15 bg-white p-3 text-[13px] text-[#1C1B18] placeholder:text-[#1C1B18]/35 focus:border-[#1C1B18] focus:outline-none"
                   />
                 </div>
