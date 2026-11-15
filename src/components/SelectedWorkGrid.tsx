@@ -34,24 +34,65 @@ const STUDIO_METRICS: MetricDef[] = [
 
 interface CardVariantCustom {
   index: number;
+  cols: number;
   reducedMotion: boolean;
 }
 
 const CARD_VARIANTS: Variants = {
-  hidden: ({ reducedMotion }: CardVariantCustom) => ({
-    opacity: reducedMotion ? 1 : 0,
-    y: reducedMotion ? 0 : 28,
-  }),
-  visible: ({ index, reducedMotion }: CardVariantCustom) => {
-    const col = index % 4;
-    const row = Math.floor(index / 4);
-    const delay = reducedMotion ? 0 : Math.min(col * 0.08 + row * 0.05, 0.34);
+  hidden: ({ index, cols, reducedMotion }: CardVariantCustom) => {
+    if (reducedMotion) {
+      return {
+        opacity: 1,
+        x: '0%',
+        y: 0,
+        scale: 1,
+        rotateX: 0,
+        rotateY: 0,
+        rotateZ: 0,
+      };
+    }
+
+    if (cols <= 1) {
+      return {
+        opacity: 0.85,
+        x: '0%',
+        y: 24,
+        scale: 0.88,
+        rotateX: -34,
+        rotateY: 0,
+        rotateZ: index % 2 === 0 ? -2.5 : 2.5,
+      };
+    }
+
+    const col = index % cols;
+    const center = (cols - 1) / 2;
+    const offsetFromCenter = center - col;
+    const spreadPct = cols === 4 ? 52 : 40;
+
+    return {
+      opacity: 0.85,
+      x: `${Math.round(offsetFromCenter * spreadPct)}%`,
+      y: Math.round(Math.abs(offsetFromCenter) * 8 + 16),
+      scale: 0.84,
+      rotateX: -26,
+      rotateY: Number((-offsetFromCenter * 18).toFixed(1)),
+      rotateZ: Number((-offsetFromCenter * 4.5).toFixed(1)),
+    };
+  },
+  visible: ({ index, cols, reducedMotion }: CardVariantCustom) => {
+    const col = cols > 1 ? index % cols : 0;
+    const delay = reducedMotion ? 0 : col * 0.065;
 
     return {
       opacity: 1,
+      x: '0%',
       y: 0,
+      scale: 1,
+      rotateX: 0,
+      rotateY: 0,
+      rotateZ: 0,
       transition: {
-        duration: reducedMotion ? 0 : 0.55,
+        duration: reducedMotion ? 0 : 0.72,
         delay,
         ease: [0.16, 1, 0.3, 1],
       },
@@ -62,6 +103,7 @@ const CARD_VARIANTS: Variants = {
 interface WorkTileCardProps {
   project: ProjectConfig;
   index: number;
+  cols: number;
   imgSrc?: string;
   isDimmed: boolean;
   isSpotlighted: boolean;
@@ -74,6 +116,7 @@ interface WorkTileCardProps {
 function WorkTileCard({
   project,
   index,
+  cols,
   imgSrc,
   isDimmed,
   isSpotlighted,
@@ -135,11 +178,16 @@ function WorkTileCard({
 
   return (
     <motion.article
-      custom={{ index, reducedMotion }}
+      custom={{ index, cols, reducedMotion }}
       variants={CARD_VARIANTS}
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: true, amount: 0.16 }}
+      viewport={{ once: true, amount: 0.28 }}
+      style={{
+        transformPerspective: 1100,
+        zIndex: cols > 1 ? cols - (index % cols) : 1,
+      }}
+      className="relative"
     >
       <div
         className={`transition-opacity duration-300 ${
@@ -214,11 +262,29 @@ export function SelectedWorkGrid({
   const prefersReducedMotion = Boolean(useReducedMotion());
   const [activeFilter, setActiveFilter] = useState<FilterOption>('All');
   const [hoveredId, setHoveredId] = useState<string | null>(null);
+  const [gridCols, setGridCols] = useState<number>(() => {
+    if (typeof window === 'undefined') return 4;
+    if (window.innerWidth < 640) return 1;
+    if (window.innerWidth < 1024) return 2;
+    return 4;
+  });
   const [metricProgress, setMetricProgress] = useState<number>(() =>
     prefersReducedMotion ? 1 : 0,
   );
   const metricsRef = useRef<HTMLDivElement | null>(null);
   const hasAnimatedMetricsRef = useRef(false);
+
+  useEffect(() => {
+    const updateCols = () => {
+      const w = window.innerWidth;
+      if (w < 640) setGridCols(1);
+      else if (w < 1024) setGridCols(2);
+      else setGridCols(4);
+    };
+    updateCols();
+    window.addEventListener('resize', updateCols, { passive: true });
+    return () => window.removeEventListener('resize', updateCols);
+  }, []);
 
   const thumbnails = useMemo(() => {
     const map = new Map<string, string>();
@@ -399,6 +465,7 @@ export function SelectedWorkGrid({
               key={project.id}
               project={project}
               index={idx}
+              cols={gridCols}
               imgSrc={thumbnails.get(project.id)}
               isDimmed={hoveredId !== null && hoveredId !== project.id}
               isSpotlighted={hoveredId === project.id}
