@@ -209,12 +209,12 @@ export function renderOrganicBiophilic(
 
   ctx.fillStyle = palette.text;
   ctx.font = `600 ${Math.round(width * 0.0085)}px "JetBrains Mono", monospace`;
-  ctx.fillText('EDITION 09', vesselX + vesselW * 0.24, lblY + 34);
+  ctx.fillText('ARTISAN 09', vesselX + vesselW * 0.24, lblY + 34);
   ctx.font = `italic 600 ${Math.round(width * 0.015)}px "Cormorant Garamond", Georgia, serif`;
-  ctx.fillText('Pure Extract', vesselX + vesselW * 0.24, lblY + 66);
+  ctx.fillText('Local Craft', vesselX + vesselW * 0.24, lblY + 66);
   ctx.fillStyle = palette.accent;
   ctx.font = `500 ${Math.round(width * 0.0075)}px "JetBrains Mono", monospace`;
-  ctx.fillText('ORGANIC // ESSENCE', vesselX + vesselW * 0.24, lblY + 96);
+  ctx.fillText('NATURAL // WARMTH', vesselX + vesselW * 0.24, lblY + 96);
 
   // Subtle paper-grain overlay across entire composition
   applyEditorialGrain(ctx, rightX, topY, rightW, fullH, 909, 0.055);

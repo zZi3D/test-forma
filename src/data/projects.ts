@@ -1,15 +1,20 @@
-export type ProjectCategory =
-  | 'Corporate & SaaS'
-  | 'Luxury & Lifestyle'
-  | 'Tech & Product'
-  | 'Creative & Editorial';
+export type IndustryFilter =
+  | 'Advisory & B2B'
+  | 'Salons & Local'
+  | 'Retail & Webshops'
+  | 'Tech & Products'
+  | 'Sports & Events';
 
-export const PROJECT_CATEGORIES: ProjectCategory[] = [
-  'Corporate & SaaS',
-  'Luxury & Lifestyle',
-  'Tech & Product',
-  'Creative & Editorial',
+export const INDUSTRY_FILTERS: IndustryFilter[] = [
+  'Advisory & B2B',
+  'Salons & Local',
+  'Retail & Webshops',
+  'Tech & Products',
+  'Sports & Events',
 ];
+
+export type ProjectCategory = IndustryFilter;
+export const PROJECT_CATEGORIES: IndustryFilter[] = INDUSTRY_FILTERS;
 
 export type UiStyle =
   | 'swiss-minimalism'
@@ -48,10 +53,12 @@ export interface MockupPreviewContent {
 export interface DesignDirection {
   id: string;
   index: string;
-  styleName: string;
-  tagline: string;
-  category: ProjectCategory;
-  shortDescription: string;
+  businessTitle: string;
+  styleSubtitle: string;
+  targetBusinesses: string;
+  industries: IndustryFilter[];
+  bestMatchFor: IndustryFilter[];
+  problemSolved: string;
   bestFor: string[];
   visualCharacteristics: string[];
   typographyNote: string;
@@ -64,33 +71,35 @@ export type ProjectConfig = DesignDirection;
 export type ProjectItem = DesignDirection;
 
 /**
- * CENTRAL DESIGN DIRECTIONS (01 – 12)
- * Ordered in a rhythmic Light / Dark cadence across the 3D Hero Wheel and 4×3 Grid.
- * Strictly 3 items per category (Corporate & SaaS, Luxury & Lifestyle, Tech & Product, Creative & Editorial).
+ * CENTRAL WEBSITE DESIGN DIRECTIONS (01 – 12)
+ * Outcome-first titles built for everyday business owners,
+ * ordered in a rhythmic Light / Dark cadence across the 3D Hero Wheel and 4×3 Grid.
  */
 export const PROJECTS: DesignDirection[] = [
   // =========================================================================
-  // 01 — SWISS MINIMALISM (Light #F5F3EE · Corporate & SaaS)
+  // 01 — AUTHORITY & TRUST (Swiss Minimalism · Light #F5F3EE)
   // =========================================================================
   {
     id: 'swiss-minimalism',
     index: '01',
-    styleName: 'Swiss Minimalism',
-    tagline: 'Clean, precise & architectural.',
-    category: 'Corporate & SaaS',
-    shortDescription:
-      'A calm, authoritative layout built on a razor-sharp grid, generous whitespace, and disciplined typography. Communicates trust, clarity, and craftsmanship without visual clutter.',
+    businessTitle: 'Authority & Trust',
+    styleSubtitle: 'Swiss Minimalism',
+    targetBusinesses: 'Law Firms, Consultants & B2B',
+    industries: ['Advisory & B2B'],
+    bestMatchFor: ['Advisory & B2B'],
+    problemSolved:
+      'High-value B2B clients leave dated or cluttered websites before ever reading your credentials. This structured editorial layout signals senior credibility in seconds and guides prospects straight to booking a consultation.',
     bestFor: [
-      'Architecture & Design Studios',
-      'Strategy Consultancies',
-      'Law & Advisory Firms',
-      'B2B Service Providers',
+      'Law & Legal Advisory Firms',
+      'Management & Strategy Consultants',
+      'Accounting & Tax Practices',
+      'Architecture & Engineering Firms',
     ],
     visualCharacteristics: [
       'Asymmetric 3-column grid with 1px hairlines',
       'Warm off-white & deep graphite contrast',
-      'Bold neo-grotesque headlines',
-      'Index-driven hierarchy',
+      'Clear practice-area index & partner credentials',
+      'Direct consultation booking hierarchy',
     ],
     typographyNote: 'Neo-Grotesque Sans + Technical Mono',
     uiStyle: 'swiss-minimalism',
@@ -102,44 +111,46 @@ export const PROJECTS: DesignDirection[] = [
       secondary: '#73716C',
     },
     previewSample: {
-      masthead: 'STUDIO / PRACTICE',
-      navItems: ['SERVICES', 'APPROACH', 'WORK', 'CONTACT'],
-      eyebrow: '01 — SWISS ARCHITECTURE',
-      headline: 'Clarity Built to Scale.',
+      masthead: 'VANDENBERG & PARTNERS',
+      navItems: ['PRACTICE AREAS', 'PARTNERS', 'INSIGHTS', 'CONTACT'],
+      eyebrow: '01 — LEGAL & ADVISORY PRACTICE',
+      headline: 'Trusted Counsel. Proven Clarity.',
       subheadline:
-        'Disciplined digital presence for advisory, engineering, and B2B leadership teams.',
+        'Disciplined digital presence built to win corporate retainers and high-trust client inquiries.',
       ctaLabel: 'SCHEDULE CONSULTATION →',
       metrics: [
-        { label: 'DELIVERY CADENCE', value: '24 HOURS' },
-        { label: 'GRID PRECISION', value: '3-COL / 1PX' },
-        { label: 'FOCUS', value: 'HIGH TRUST' },
+        { label: 'CLIENT RETENTION', value: '96%' },
+        { label: 'PARTNER TENURE', value: '25+ YRS' },
+        { label: 'FIRST RESPONSE', value: '< 2 HRS' },
       ],
-      cardLabels: ['STRATEGY', 'SYSTEMS', 'EXECUTION'],
+      cardLabels: ['CORPORATE LAW', 'M&A ADVISORY', 'COMPLIANCE'],
     },
   },
 
   // =========================================================================
-  // 02 — NOIR LUXURY (Dark #0C0C0C · Luxury & Lifestyle)
+  // 02 — DARK SALON & LOCAL LUXURY (Noir Luxury · Dark #0C0C0C)
   // =========================================================================
   {
     id: 'noir-luxury',
     index: '02',
-    styleName: 'Noir Luxury',
-    tagline: 'Sophisticated, tactile & exclusive.',
-    category: 'Luxury & Lifestyle',
-    shortDescription:
-      'A matte-black, atmospheric presentation with warm amber illumination and subtle sculpted depth in buttons and frames. Feels like stepping into a private luxury showroom.',
+    businessTitle: 'Dark Salon & Local Luxury',
+    styleSubtitle: 'Noir Luxury',
+    targetBusinesses: 'Barbershops, Salons & Clinics',
+    industries: ['Salons & Local'],
+    bestMatchFor: ['Salons & Local'],
+    problemSolved:
+      'Local service businesses often lose bookings to generic template sites that undersell their craft. This moody luxury layout showcases your services, pricing, and 4.9★ reputation upfront to turn visitors into booked chairs.',
     bestFor: [
-      'Fine Watch & Jewelry Brands',
-      'High-End Real Estate',
-      'Private Members Clubs',
-      'Gastronomy & Luxury Launches',
+      'Barbershops & Men’s Grooming Studios',
+      'Hair Salons & Color Specialists',
+      'Aesthetic & Cosmetic Clinics',
+      'Private Spas & Tattoo Ateliers',
     ],
     visualCharacteristics: [
       'Matte obsidian palette with warm amber glow',
-      'High-contrast editorial serif typography',
-      'Tactile recessed & raised UI controls',
-      'Dramatic studio spotlighting',
+      'Prominent Google review score & clear menu pricing',
+      'Tactile raised booking buttons & service cards',
+      'High-contrast editorial serif headlines',
     ],
     typographyNote: 'Editorial Serif + Clean Minimal Sans',
     uiStyle: 'dark-neumorphism',
@@ -151,44 +162,46 @@ export const PROJECTS: DesignDirection[] = [
       secondary: '#8C877E',
     },
     previewSample: {
-      masthead: 'PRIVATE SHOWROOM',
-      navItems: ['COLLECTION', 'ATELIER', 'HERITAGE', 'SALON'],
-      eyebrow: 'SIGNATURE EDITION · NOIR',
-      headline: 'Presence Sculpted in Shadow.',
+      masthead: 'ATELIER NOIR · SALON',
+      navItems: ['SERVICES', 'PRICING', 'REVIEWS', 'BOOK NOW'],
+      eyebrow: '4.9 ★ · 420+ VERIFIED CLIENT REVIEWS',
+      headline: 'Sharp Craft. Effortless Booking.',
       subheadline:
-        'Atmospheric dark presentation crafted for rare objects and private appointments.',
-      ctaLabel: 'REQUEST ACCESS',
+        'Private grooming & hair studio experience engineered to fill your weekly appointment calendar.',
+      ctaLabel: 'BOOK APPOINTMENT →',
       metrics: [
-        { label: 'EXPERIENCE', value: 'PRIVATE' },
-        { label: 'FINISH', value: 'OBSIDIAN' },
-        { label: 'ACCENT', value: 'WARM AMBER' },
+        { label: 'SIGNATURE CUT & STYLE · 45M', value: '$55' },
+        { label: 'BEARD SCULPT & HOT TOWEL · 30M', value: '$40' },
+        { label: 'FULL STUDIO RITUAL · 75M', value: '$85' },
       ],
-      cardLabels: ['BESPOKE', 'LIMITED', 'CONCIERGE'],
+      cardLabels: ['HAIR & STYLING', 'BEARD CARE', 'TREATMENTS'],
     },
   },
 
   // =========================================================================
-  // 03 — MODULAR BENTO (Light #F4F5F7 · Corporate & SaaS)
+  // 03 — CLEAR SERVICE & PRODUCT MAP (Modular Bento · Light #F4F5F7)
   // =========================================================================
   {
     id: 'modular-bento',
     index: '03',
-    styleName: 'Modular Bento',
-    tagline: 'Structured, scannable & feature-rich.',
-    category: 'Corporate & SaaS',
-    shortDescription:
-      'An Apple-inspired modular card system that organizes product features, key metrics, and visual previews into a crisp, easy-to-scan grid. Built for instant comprehension across desktop and mobile.',
+    businessTitle: 'Clear Service & Product Map',
+    styleSubtitle: 'Modular Bento',
+    targetBusinesses: 'SaaS, Apps & Service Companies',
+    industries: ['Tech & Products', 'Advisory & B2B'],
+    bestMatchFor: ['Tech & Products'],
+    problemSolved:
+      'When your software or service does several things at once, long walls of text confuse buyers. This Apple-inspired bento grid breaks every feature, benefit, and proof point into scannable cards anyone grasps in 5 seconds.',
     bestFor: [
-      'Growing Tech Companies',
-      'Digital Products & SaaS',
-      'Mobile Apps',
-      'Modern Service Businesses',
+      'SaaS & Cloud Software Companies',
+      'Mobile Apps & Digital Tools',
+      'Multi-Service Agencies & IT Firms',
+      'Growing B2B Service Businesses',
     ],
     visualCharacteristics: [
-      'Rounded modular bento cards of varying proportions',
-      'Bright neutral canvas with a single bold focal accent',
-      'Scannable metric & feature blocks',
-      'High conversion clarity',
+      'Rounded modular cards of varying proportions',
+      'Bright neutral canvas with a focused cobalt accent',
+      'Scannable metric & workflow feature blocks',
+      'Clear trial and demo conversion triggers',
     ],
     typographyNote: 'Clean Geometric Sans + Tabular Figures',
     uiStyle: 'modular-bento',
@@ -217,27 +230,29 @@ export const PROJECTS: DesignDirection[] = [
   },
 
   // =========================================================================
-  // 04 — SPATIAL GLASS & AI (Dark #07080C · Tech & Product)
+  // 04 — FUTURE TECH & AI (Spatial Glass & AI · Dark #07080C)
   // =========================================================================
   {
     id: 'spatial-glass-ai',
     index: '04',
-    styleName: 'Spatial Glass & AI',
-    tagline: 'Futuristic, translucent & intelligent.',
-    category: 'Tech & Product',
-    shortDescription:
-      'Floating frosted-glass panels layered over a deep, luminous 3D visual field. Makes complex software, AI capabilities, and technical data feel tangible and forward-thinking.',
+    businessTitle: 'Future Tech & AI',
+    styleSubtitle: 'Spatial Glass & AI',
+    targetBusinesses: 'AI Startups, Software & Tech',
+    industries: ['Tech & Products'],
+    bestMatchFor: ['Tech & Products'],
+    problemSolved:
+      'AI tools and technical platforms can feel abstract or intimidating on plain white pages. Translucent floating panels and crisp telemetry make invisible technology look tangible, modern, and investor-ready.',
     bestFor: [
-      'AI & Machine Learning Startups',
-      'Next-Gen SaaS Platforms',
-      'Cybersecurity & Cloud Infra',
-      'Deep-Tech Companies',
+      'AI & Automation Startups',
+      'Developer Tools & API Platforms',
+      'Cybersecurity & Cloud Infrastructure',
+      'Data & Analytics Software',
     ],
     visualCharacteristics: [
-      'Layered frosted glassmorphism with light-catching borders',
+      'Layered frosted glass panels with luminous borders',
       'Deep midnight canvas with cyan & amber accents',
-      'Crisp technical micro-labels',
-      'Spatial 3D depth',
+      'Crisp technical micro-labels & live status tags',
+      'Spatial depth over an interactive grid stage',
     ],
     typographyNote: 'Precision Sans + Monospace Telemetry',
     uiStyle: 'cyberpunk-glass',
@@ -266,27 +281,29 @@ export const PROJECTS: DesignDirection[] = [
   },
 
   // =========================================================================
-  // 05 — SOFT AURA ATELIER (Warm Sand #F3ECE1 · Luxury & Lifestyle)
+  // 05 — BOUTIQUE & FASHION EDITORIAL (Soft Aura Atelier · Warm Sand #F3ECE1)
   // =========================================================================
   {
     id: 'soft-aura-atelier',
     index: '05',
-    styleName: 'Soft Aura Atelier',
-    tagline: 'Poetic, editorial & effortless.',
-    category: 'Luxury & Lifestyle',
-    shortDescription:
-      'A soft, luminous experience where warm ambient gradients, fluid spacing, and expressive serif typography merge into a digital lookbook. Elevates brand storytelling over hard selling.',
+    businessTitle: 'Boutique & Fashion Editorial',
+    styleSubtitle: 'Soft Aura Atelier',
+    targetBusinesses: 'Clothing Stores, Stylists & Salons',
+    industries: ['Salons & Local', 'Retail & Webshops'],
+    bestMatchFor: ['Salons & Local'],
+    problemSolved:
+      'Style-driven boutiques and beauty brands lose their magic on rigid, boxy web templates. Warm ambient gradients and magazine-like framing make visitors feel the atmosphere of your store and buy with emotion.',
     bestFor: [
-      'Fashion & Apparel Houses',
-      'Interior Design Studios',
-      'Skincare & Beauty Brands',
-      'Photography & Art Galleries',
+      'Independent Clothing Boutiques',
+      'Personal Stylists & Bridal Studios',
+      'Boutique Hair & Beauty Salons',
+      'Interior Design & Curated Showrooms',
     ],
     visualCharacteristics: [
-      'Diffuse sand & warm peach aura gradients',
-      'Oversized editorial serif titles overlapping imagery',
-      'Weightless borderless navigation',
-      'High-contrast silhouette compositions',
+      'Warm sand & soft peach ambient gradients',
+      'Oversized editorial serif titles overlapping visuals',
+      'Weightless, uncluttered boutique navigation',
+      'Lookbook-style collection presentation',
     ],
     typographyNote: 'High-Contrast Serif + Refined Sans',
     uiStyle: 'new-age-gradient',
@@ -299,43 +316,45 @@ export const PROJECTS: DesignDirection[] = [
     },
     previewSample: {
       masthead: 'ATELIER LOOKBOOK',
-      navItems: ['COLLECTION', 'STORY', 'APPOINTMENTS'],
+      navItems: ['COLLECTION', 'STYLING', 'APPOINTMENTS'],
       eyebrow: 'SEASONAL EDITORIAL',
       headline: 'Softness in Motion',
       subheadline:
-        'Warm ambient gradients and sculptural editorial framing for modern lifestyle brands.',
+        'Warm ambient gradients and sculptural editorial framing for modern boutiques and salons.',
       ctaLabel: 'EXPLORE COLLECTION',
       metrics: [
-        { label: 'MOOD', value: 'LUMINOUS' },
-        { label: 'CRAFT', value: 'EDITORIAL' },
-        { label: 'EXPERIENCE', value: 'BESPOKE' },
+        { label: 'CURATION', value: 'SEASONAL' },
+        { label: 'FITTING', value: 'PRIVATE' },
+        { label: 'LOOKBOOK', value: 'ATELIER' },
       ],
-      cardLabels: ['CHAPTER I', 'CURATION', 'ATELIER'],
+      cardLabels: ['NEW ARRIVALS', 'STYLING', 'SHOWROOM'],
     },
   },
 
   // =========================================================================
-  // 06 — KINETIC PERFORMANCE (Dark #09090B · Tech & Product)
+  // 06 — HIGH-ENERGY & ACTION (Kinetic Performance · Dark #09090B)
   // =========================================================================
   {
     id: 'kinetic-performance',
     index: '06',
-    styleName: 'Kinetic Performance',
-    tagline: 'Fast, dynamic & engineered for impact.',
-    category: 'Tech & Product',
-    shortDescription:
-      'A high-energy dark interface built around forward motion, wide display typography, and precision telemetry. Projects speed, engineering power, and bold ambition.',
+    businessTitle: 'High-Energy & Action',
+    styleSubtitle: 'Kinetic Performance',
+    targetBusinesses: 'Gyms, Trainers & E-Mobility',
+    industries: ['Sports & Events', 'Tech & Products'],
+    bestMatchFor: ['Sports & Events'],
+    problemSolved:
+      'Fitness studios, coaches, and performance brands fail when their site feels slow or passive. Bold diagonal typography and high-contrast action blocks inject instant momentum and drive trial sign-ups.',
     bestFor: [
-      'Automotive & E-Mobility',
-      'Sports & Performance Brands',
-      'Hardware Product Launches',
-      'Clean Energy Innovators',
+      'Boutique Gyms & Training Studios',
+      'Personal Trainers & Athletic Coaches',
+      'E-Bikes, Automotive & Mobility Brands',
+      'Sports Gear & Endurance Events',
     ],
     visualCharacteristics: [
-      'Carbon black with chrome silver & signal-orange accents',
-      'Wide angled display headlines',
-      'Integrated performance specs & aerodynamic curves',
-      'Horizontal speed lines',
+      'Carbon black with chrome & signal-orange energy',
+      'Wide angled display headlines that command action',
+      'Dynamic speed lines & live performance stats',
+      'High-visibility trial & reservation CTAs',
     ],
     typographyNote: 'Wide Display Sans + Technical Mono',
     uiStyle: 'dark-kinetic',
@@ -347,44 +366,46 @@ export const PROJECTS: DesignDirection[] = [
       secondary: '#8A8A94',
     },
     previewSample: {
-      masthead: 'VELOCITY LAB',
-      navItems: ['ENGINEERING', 'SPECS', 'DESIGN', 'RESERVE'],
-      eyebrow: 'PERFORMANCE SERIES // 06',
-      headline: 'ENGINEERED FOR MOTION',
+      masthead: 'APEX PERFORMANCE',
+      navItems: ['COACHING', 'PROGRAMS', 'SPECS', 'BOOK TRIAL'],
+      eyebrow: 'HIGH-OUTPUT TRAINING & MOBILITY // 06',
+      headline: 'ENGINEERED FOR ACTION',
       subheadline:
-        'High-velocity dark typography paired with live performance curves and spec readouts.',
-      ctaLabel: 'EXPLORE SPECS →',
+        'High-velocity dark typography built to fill coaching rosters, gym trials, and test rides.',
+      ctaLabel: 'BOOK FREE TRIAL →',
       metrics: [
-        { label: 'RESPONSE', value: 'INSTANT' },
-        { label: 'EFFICIENCY', value: '96.2%' },
-        { label: 'OUTPUT', value: 'PEAK SPEC' },
+        { label: 'COACHING', value: '1-ON-1' },
+        { label: 'EFFICIENCY', value: '98.4%' },
+        { label: 'MEMBER SCORE', value: '4.9 ★' },
       ],
-      cardLabels: ['DYNAMICS', 'AERODYNAMICS', 'CARBON'],
+      cardLabels: ['STRENGTH', 'CONDITIONING', 'MOBILITY'],
     },
   },
 
   // =========================================================================
-  // 07 — DIMENSIONAL SAAS (Light #ECEEF2 · Corporate & SaaS)
+  // 07 — APPROACHABLE FINANCE & ADVICE (Dimensional SaaS · Light #ECEEF2)
   // =========================================================================
   {
     id: 'dimensional-saas',
     index: '07',
-    styleName: 'Dimensional SaaS',
-    tagline: 'Approachable, tactile & conversion-focused.',
-    category: 'Corporate & SaaS',
-    shortDescription:
-      'A bright, welcoming interface where cards, charts, and controls carry soft 3D elevation. Turns complex financial or business data into an intuitive, friendly product experience.',
+    businessTitle: 'Approachable Finance & Advice',
+    styleSubtitle: 'Dimensional SaaS',
+    targetBusinesses: 'Advisors, Coaches & Portals',
+    industries: ['Advisory & B2B'],
+    bestMatchFor: ['Advisory & B2B'],
+    problemSolved:
+      'Financial advice, insurance, and business coaching often feel cold or overly complicated online. Friendly 3D-elevated cards and clean visual charts make complex numbers feel approachable and easy to act on.',
     bestFor: [
-      'Fintech & Wealth Platforms',
-      'HR & Productivity Software',
-      'Modern Insurance Providers',
-      'B2B Client Portals',
+      'Financial Advisors & Wealth Planners',
+      'Business Coaches & Masterminds',
+      'Modern Insurance & Mortgage Brokers',
+      'Client Portals & Accounting SaaS',
     ],
     visualCharacteristics: [
       'Soft elevated 3D cards with generous 24px corners',
-      'Crisp white surfaces on cool light gray',
-      'Smooth area charts with tabular figures',
-      'High-contrast action buttons',
+      'Crisp white surfaces on calm light slate',
+      'Clean growth charts with tabular figures',
+      'Warm orange call-to-action buttons',
     ],
     typographyNote: 'Friendly Humanist Sans + Tabular Figures',
     uiStyle: 'claymorphism',
@@ -396,44 +417,46 @@ export const PROJECTS: DesignDirection[] = [
       secondary: '#64748B',
     },
     previewSample: {
-      masthead: 'FINTECH COCKPIT',
-      navItems: ['OVERVIEW', 'ANALYTICS', 'TREASURY', 'PORTAL'],
-      eyebrow: 'BUSINESS INTELLIGENCE',
+      masthead: 'CLARITY ADVISORY',
+      navItems: ['SERVICES', 'RESULTS', 'PORTAL', 'BOOK CALL'],
+      eyebrow: 'WEALTH & COACHING OVERVIEW',
       headline: '99.4% Clarity',
       subheadline:
-        'Tactile soft-elevated cards that transform dense workflows into effortless control.',
+        'Approachable visual cards that turn financial planning and coaching plans into clear next steps.',
       ctaLabel: 'BOOK A DEMO',
       metrics: [
         { label: 'NET GROWTH', value: '+24.8%' },
         { label: 'TIME SAVED', value: '14 HRS/WK' },
-        { label: 'TEAM SCORE', value: '4.9 / 5' },
+        { label: 'CLIENT SCORE', value: '4.9 / 5' },
       ],
-      cardLabels: ['REVENUE 54%', 'OPS 28%', 'RESERVE 18%'],
+      cardLabels: ['PLANNING 54%', 'TAX 28%', 'RESERVE 18%'],
     },
   },
 
   // =========================================================================
-  // 08 — INDUSTRIAL PRECISION (Dark #18181B · Tech & Product)
+  // 08 — CRAFT & PRODUCT PRECISION (Industrial Precision · Dark #18181B)
   // =========================================================================
   {
     id: 'industrial-precision',
     index: '08',
-    styleName: 'Industrial Precision',
-    tagline: 'Tactile, engineered & functional.',
-    category: 'Tech & Product',
-    shortDescription:
-      'Inspired by Dieter Rams industrial design: a website structured like a precision-crafted physical instrument with tactile dials, grid dividers, and honest functionality.',
+    businessTitle: 'Craft & Product Precision',
+    styleSubtitle: 'Industrial Precision',
+    targetBusinesses: 'Physical Products, Audio & Makers',
+    industries: ['Tech & Products', 'Retail & Webshops'],
+    bestMatchFor: ['Tech & Products'],
+    problemSolved:
+      'Generic ecommerce grids flatten the quality of finely engineered products. Inspired by classic Dieter Rams hardware, tactile dials and calibrated grid compartments highlight craftsmanship so buyers happily pay a premium.',
     bestFor: [
-      'Audio & Music Hardware',
-      'Consumer Electronics',
-      'Smart-Home Devices',
-      'Industrial Design & Engineering',
+      'Audio, Hi-Fi & Studio Gear Brands',
+      'Coffee Machines & Kitchen Hardware',
+      'Smart-Home & Consumer Electronics',
+      'Bespoke Makers & Hardware Shops',
     ],
     visualCharacteristics: [
       'Anodized matte black & brushed aluminum tones',
       'Tactile rotary controls & LED status indicators',
-      'Structured technical grid compartments',
-      'Signal-orange highlights',
+      'Structured technical spec compartments',
+      'Crisp signal-orange action highlights',
     ],
     typographyNote: 'Technical Grotesque + Instrument Mono',
     uiStyle: 'skeuomorphism',
@@ -446,7 +469,7 @@ export const PROJECTS: DesignDirection[] = [
     },
     previewSample: {
       masthead: 'PRECISION HARDWARE',
-      navItems: ['PRODUCTS', 'ARCHITECTURE', 'SPECS', 'ORDER'],
+      navItems: ['PRODUCTS', 'CRAFT', 'SPECS', 'ORDER'],
       eyebrow: 'DESIGNED LIKE AN INSTRUMENT',
       headline: 'Built with Tactile Honesty.',
       subheadline:
@@ -462,27 +485,29 @@ export const PROJECTS: DesignDirection[] = [
   },
 
   // =========================================================================
-  // 09 — ORGANIC BIOPHILIC (Warm Linen #EFECE6 · Luxury & Lifestyle)
+  // 09 — WARM, NATURAL & LOCAL (Organic Biophilic · Warm Linen #EFECE6)
   // =========================================================================
   {
     id: 'organic-biophilic',
     index: '09',
-    styleName: 'Organic Biophilic',
-    tagline: 'Natural, calm & grounded.',
-    category: 'Luxury & Lifestyle',
-    shortDescription:
-      'A warm, restorative aesthetic pairing earthy tones, soft organic shapes, and subtle paper textures. Immediately builds authenticity, calm, and human trust.',
+    businessTitle: 'Warm, Natural & Local',
+    styleSubtitle: 'Organic Biophilic',
+    targetBusinesses: 'Wellness, Gift Shops & Bakeries',
+    industries: ['Salons & Local', 'Retail & Webshops'],
+    bestMatchFor: ['Retail & Webshops'],
+    problemSolved:
+      'Neighborhood bakeries, wellness studios, and handmade gift shops lose their personal warmth on cold corporate layouts. Earthy sage, linen, and terracotta tones evoke authenticity and invite local foot traffic and orders.',
     bestFor: [
-      'Sustainable Lifestyle Brands',
-      'Botanical Skincare & Beauty',
-      'Boutique Hotels & Retreats',
-      'Wellness & Culinary Concepts',
+      'Wellness, Yoga & Massage Studios',
+      'Local Treat, Gift & Flower Shops',
+      'Artisan Bakeries & Specialty Cafés',
+      'Organic Skincare & Boutique Hospitality',
     ],
     visualCharacteristics: [
-      'Unbleached linen, deep sage green & terracotta palette',
-      'Soft organic framing with subtle paper grain',
-      'Balanced editorial serif & clean sans typography',
-      'Natural daylight shadows',
+      'Warm linen, deep sage green & terracotta palette',
+      'Soft organic shapes with subtle paper grain',
+      'Warm editorial serif & friendly sans pairing',
+      'Daylight product framing & trust notes',
     ],
     typographyNote: 'Warm Editorial Serif + Organic Sans',
     uiStyle: 'organic-biophilic',
@@ -494,44 +519,46 @@ export const PROJECTS: DesignDirection[] = [
       secondary: '#627266',
     },
     previewSample: {
-      masthead: 'BOTANICAL LIVING',
-      navItems: ['RITUALS', 'ORIGINS', 'JOURNAL', 'VISIT'],
-      eyebrow: 'EARTH-FIRST CRAFT',
-      headline: 'Natural Calm & Craft.',
+      masthead: 'SAGE & LINEN HOUSE',
+      navItems: ['SHOP GOODS', 'WELLNESS', 'STORY', 'VISIT US'],
+      eyebrow: 'WELLNESS, ARTISAN BAKERY & GIFTS',
+      headline: 'Natural Warmth Crafted Daily.',
       subheadline:
-        'Grounded earthy palettes and soft organic silhouettes designed for human connection.',
-      ctaLabel: 'DISCOVER COLLECTION',
+        'Inviting earthy tones and tactile framing built for loyal local customers and online orders.',
+      ctaLabel: 'RESERVE OR ORDER →',
       metrics: [
-        { label: 'MATERIALS', value: '100% PURE' },
-        { label: 'SOURCING', value: 'TRACEABLE' },
-        { label: 'PALETTE', value: 'SAGE & CLAY' },
+        { label: 'CRAFT', value: 'SMALL BATCH' },
+        { label: 'SOURCING', value: '100% LOCAL' },
+        { label: 'REVIEWS', value: '4.9 ★ LOCAL' },
       ],
-      cardLabels: ['BOTANICAL', 'MINERAL', 'CRAFTED'],
+      cardLabels: ['WELLNESS', 'GIFT BOXES', 'ARTISAN'],
     },
   },
 
   // =========================================================================
-  // 10 — NEO-BRUTALIST POP (High-Contrast #FAF8F2 · Creative & Editorial)
+  // 10 — UNFORGETTABLE STANDOUT (Neo-Brutalist Pop · High-Contrast #FAF8F2)
   // =========================================================================
   {
     id: 'neo-brutalist-pop',
     index: '10',
-    styleName: 'Neo-Brutalist Pop',
-    tagline: 'Bold, unapologetic & unforgettable.',
-    category: 'Creative & Editorial',
-    shortDescription:
-      'A rebellious, high-energy layout that breaks safe web conventions with thick black borders, hard block shadows, and primary color blocking. Designed to make challenger brands impossible to ignore.',
+    businessTitle: 'Unforgettable Standout',
+    styleSubtitle: 'Neo-Brutalist Pop',
+    targetBusinesses: 'Festivals, Agencies & Culture',
+    industries: ['Sports & Events'],
+    bestMatchFor: ['Sports & Events'],
+    problemSolved:
+      'Events, festivals, and bold creative studios cannot afford to blend in with lookalike websites. Thick ink borders, primary color blocking, and fearless typography make your brand impossible to scroll past.',
     bestFor: [
+      'Music Festivals, Events & Pop-Ups',
       'Creative & Branding Agencies',
-      'Cultural Institutions & Festivals',
-      'Youth & Street Culture Brands',
-      'Independent Media & Podcasts',
+      'Streetwear & Youth Culture Labels',
+      'Independent Media & Live Podcasts',
     ],
     visualCharacteristics: [
       'Crisp 2px black borders & hard offset shadows',
       'Bold cobalt blue, butter yellow & rust orange blocks',
       'Expressive oversized typography & stamp badges',
-      'Asymmetric split layout',
+      'High-impact ticket & drop callouts',
     ],
     typographyNote: 'Heavy Display Grotesque + Bold Mono',
     uiStyle: 'neo-brutalism',
@@ -544,11 +571,11 @@ export const PROJECTS: DesignDirection[] = [
     },
     previewSample: {
       masthead: 'CULTURE & EVENTS',
-      navItems: ['PROGRAM', 'ARCHIVE', 'SHOP', 'TICKETS!'],
-      eyebrow: 'HIGH-IMPACT CREATIVE',
+      navItems: ['LINEUP', 'SCHEDULE', 'SHOP', 'TICKETS!'],
+      eyebrow: 'HIGH-IMPACT CREATIVE & EVENTS',
       headline: 'FORM AGAINST SILENCE',
       subheadline:
-        'Unapologetic color blocking, hard ink borders, and expressive typographic energy.',
+        'Unapologetic color blocking, hard ink borders, and expressive energy that sells out tickets.',
       ctaLabel: 'CLAIM PASSES ↗',
       metrics: [
         { label: 'STAGE 01', value: 'LIVE EXPERIENCES' },
@@ -560,27 +587,29 @@ export const PROJECTS: DesignDirection[] = [
   },
 
   // =========================================================================
-  // 11 — EDITORIAL MONOGRAPH (Warm Paper #F7F5F0 · Creative & Editorial)
+  // 11 — EXPERTISE & PUBLICATIONS (Editorial Monograph · Warm Paper #F7F5F0)
   // =========================================================================
   {
     id: 'editorial-monograph',
     index: '11',
-    styleName: 'Editorial Monograph',
-    tagline: 'Story-driven, cultured & authoritative.',
-    category: 'Creative & Editorial',
-    shortDescription:
-      'The digital equivalent of a collectible print magazine or coffee-table monograph. Crafted to present deep stories, essays, and photography with literary gravitas.',
+    businessTitle: 'Expertise & Publications',
+    styleSubtitle: 'Editorial Monograph',
+    targetBusinesses: 'Speakers, Authors & Media',
+    industries: ['Advisory & B2B'],
+    bestMatchFor: [],
+    problemSolved:
+      'Thought leaders, keynote speakers, and research platforms need more than a landing page—they need depth. Magazine-grade reading hierarchy turns longform articles, books, and keynotes into undeniable authority.',
     bestFor: [
-      'Digital Publications & Magazines',
-      'Research & Knowledge Platforms',
+      'Keynote Speakers & Authors',
+      'Research Institutes & Think Tanks',
+      'Digital Magazines & Newsletters',
       'Cultural Foundations & Museums',
-      'Think Tanks & Authors',
     ],
     visualCharacteristics: [
       'Multi-column magazine layout with pull quotes',
       'Warm archival paper & sepia-graphite tones',
-      'Chapter navigation & reading progress bar',
-      'Curated essay & image pairings',
+      'Chapter navigation & longform reading flow',
+      'Curated essay & editorial image pairings',
     ],
     typographyNote: 'Classic Book Serif + Archival Sans',
     uiStyle: 'bento-editorial',
@@ -593,11 +622,11 @@ export const PROJECTS: DesignDirection[] = [
     },
     previewSample: {
       masthead: 'MONOGRAPH PRESS',
-      navItems: ['ISSUES', 'ESSAYS', 'INDEX', 'SUBSCRIBE'],
+      navItems: ['ISSUES', 'ESSAYS', 'KEYNOTES', 'SUBSCRIBE'],
       eyebrow: 'FEATURE STORY · LONGFORM',
       headline: 'On Quiet Rooms & Daylight',
       subheadline:
-        'Literary typography, modular reading cards, and archival warmth built for deep stories.',
+        'Literary typography, modular reading cards, and archival warmth built for speakers and authors.',
       ctaLabel: 'READ FEATURE · 8 MIN',
       metrics: [
         { label: 'READING FLOW', value: 'LONGFORM' },
@@ -610,27 +639,29 @@ export const PROJECTS: DesignDirection[] = [
   },
 
   // =========================================================================
-  // 12 — DOPAMINE COMMERCE (Vibrant Light #FFFDF7 · Creative & Editorial)
+  // 12 — HIGH-CONVERTING WEBSHOP (Dopamine Commerce · Vibrant Cream #FFFDF7)
   // =========================================================================
   {
     id: 'dopamine-commerce',
     index: '12',
-    styleName: 'Dopamine Commerce',
-    tagline: 'Vibrant, playful & built to convert.',
-    category: 'Creative & Editorial',
-    shortDescription:
-      'A joyful, high-energy consumer brand experience bursting with rich color contrasts, chunky display type, and playful pill badges. Engineered to spark excitement and drive action.',
+    businessTitle: 'High-Converting Webshop',
+    styleSubtitle: 'Dopamine Commerce',
+    targetBusinesses: 'Treat & Gift Shops, D2C Stores',
+    industries: ['Retail & Webshops'],
+    bestMatchFor: ['Retail & Webshops'],
+    problemSolved:
+      'Boring online stores struggle to justify impulse purchases or bundle upsells. Playful color pops, social-proof review pills, and instant add-to-bag actions spark excitement and lift average order value.',
     bestFor: [
-      'Modern D2C E-Commerce',
-      'Food & Beverage Brands',
-      'Consumer Mobile Apps',
-      'Subscription Services & Retail',
+      'Treat, Confectionery & Snack Shops',
+      'Curated Gift Boxes & Stationery Stores',
+      'Direct-to-Consumer Food & Drink Brands',
+      'Subscription Boxes & Retail Launches',
     ],
     visualCharacteristics: [
       'Energetic multi-color accents on warm cream',
       'Heavy friendly display typography',
-      'Playful pill tags & interactive product cards',
-      'High-visibility conversion CTAs',
+      'Review pills, bundle savings & quick-add cards',
+      'High-visibility checkout call-to-actions',
     ],
     typographyNote: 'Chunky Rounded Display + Crisp Sans',
     uiStyle: 'dopamine-commerce',

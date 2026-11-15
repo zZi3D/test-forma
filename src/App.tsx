@@ -4,7 +4,7 @@
  */
 
 import { Suspense, lazy, useCallback, useEffect, useState } from 'react';
-import { ProjectCategory, ProjectItem } from './data/projects';
+import { IndustryFilter, ProjectItem } from './data/projects';
 import { WaveBackground } from './components/WaveBackground';
 import { GlassHeader } from './components/GlassHeader';
 import { HeroSection } from './components/HeroSection';
@@ -52,7 +52,7 @@ export default function App() {
   const [bookingState, setBookingState] = useState<{
     open: boolean;
     tab: 'brief' | 'call';
-    prefilledCategory?: ProjectCategory;
+    prefilledCategory?: IndustryFilter;
     prefilledProjectTitle?: string;
   }>({
     open: false,
@@ -136,7 +136,7 @@ export default function App() {
   const openBookingDrawer = useCallback(
     (
       tab: 'brief' | 'call',
-      prefilledCategory?: ProjectCategory,
+      prefilledCategory?: IndustryFilter,
       prefilledProjectTitle?: string,
     ) => {
       setLoadedOverlays((prev) =>
@@ -221,7 +221,11 @@ export default function App() {
             onSelectProject={handleSelectProject}
             onStartSimilarSprint={(project) => {
               setSelectedProject(null);
-              openBookingDrawer('brief', project.category, project.styleName);
+              openBookingDrawer(
+                'brief',
+                project.industries[0],
+                `${project.businessTitle} (${project.styleSubtitle})`,
+              );
             }}
           />
         )}

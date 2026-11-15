@@ -7,9 +7,9 @@ import {
   useReducedMotion,
 } from 'motion/react';
 import {
-  PROJECT_CATEGORIES,
+  INDUSTRY_FILTERS,
+  IndustryFilter,
   PROJECTS,
-  ProjectCategory,
   ProjectConfig,
 } from '../data/projects';
 import { useProjectThumbnails } from '../utils/mockupGenerator';
@@ -21,9 +21,9 @@ interface SelectedWorkGridProps {
   onBackToOverview?: () => void;
 }
 
-type FilterOption = 'All' | ProjectCategory;
+type FilterOption = 'All' | IndustryFilter;
 
-const FILTERS: FilterOption[] = ['All', ...PROJECT_CATEGORIES];
+const FILTERS: FilterOption[] = ['All', ...INDUSTRY_FILTERS];
 
 interface MetricDef {
   id: string;
@@ -51,6 +51,7 @@ interface WorkTileCardProps {
   subscribeRowTilt: (rowIdx: number, cb: RowTiltSubscriber) => () => void;
   anchorRef?: (el: HTMLDivElement | null) => void;
   imgSrc?: string;
+  isBestMatch: boolean;
   isDimmed: boolean;
   isSpotlighted: boolean;
   reducedMotion: boolean;
@@ -68,6 +69,7 @@ function WorkTileCard({
   subscribeRowTilt,
   anchorRef,
   imgSrc,
+  isBestMatch,
   isDimmed,
   isSpotlighted,
   reducedMotion,
@@ -284,10 +286,15 @@ function WorkTileCard({
               className="relative aspect-[16/10] w-full overflow-hidden rounded-xl border border-[#1C1B18]/10"
               style={{ backgroundColor: project.palette.bg }}
             >
+              {isBestMatch && (
+                <span className="font-mono-tabular pointer-events-none absolute top-2.5 right-2.5 z-10 rounded-md border border-[#C98A3A]/45 bg-[#FAF8F4]/95 px-2 py-0.5 text-[9.5px] font-semibold tracking-[0.05em] text-[#B47323] shadow-xs uppercase">
+                  Best Match
+                </span>
+              )}
               {imgSrc ? (
                 <img
                   src={imgSrc}
-                  alt={`${project.styleName} — ${project.tagline}`}
+                  alt={`${project.businessTitle} (${project.styleSubtitle}) — ${project.targetBusinesses}`}
                   referrerPolicy="no-referrer"
                   loading="lazy"
                   decoding="async"
@@ -295,18 +302,18 @@ function WorkTileCard({
                 />
               ) : (
                 <div className="flex h-full w-full items-center justify-center p-4 text-sm font-medium text-[#1C1B18]">
-                  {project.styleName}
+                  {project.businessTitle}
                 </div>
               )}
             </div>
 
             <div className="relative z-10 mt-3 flex items-baseline justify-between gap-2 px-0.5">
               <div className="min-w-0">
-                <h3 className="truncate text-[15px] font-semibold tracking-[-0.015em] text-[#1C1B18] transition-colors group-hover:text-[#C98A3A]">
-                  {project.styleName}
+                <h3 className="truncate text-[14.5px] font-semibold tracking-[-0.015em] text-[#1C1B18] transition-colors group-hover:text-[#C98A3A]">
+                  {project.businessTitle}
                 </h3>
                 <p className="mt-0.5 truncate text-[11px] text-[#1C1B18]/65">
-                  {project.tagline}
+                  {project.targetBusinesses}
                 </p>
               </div>
               <span className="font-mono-tabular shrink-0 text-[11px] font-medium text-[#1C1B18]/50">
@@ -346,11 +353,11 @@ function WorkTileCard({
             {/* Matching Editorial Metadata Footer */}
             <div className="mt-3 flex items-baseline justify-between gap-2 px-0.5">
               <div className="min-w-0">
-                <p className="truncate text-[15px] font-semibold tracking-[-0.015em] text-[#1C1B18]/80">
-                  {project.styleName}
+                <p className="truncate text-[14.5px] font-semibold tracking-[-0.015em] text-[#1C1B18]/80">
+                  {project.businessTitle}
                 </p>
                 <p className="mt-0.5 truncate text-[11px] text-[#1C1B18]/50">
-                  {project.tagline}
+                  {project.targetBusinesses}
                 </p>
               </div>
               <span className="font-mono-tabular shrink-0 text-[11px] font-medium text-[#1C1B18]/45">
@@ -423,7 +430,13 @@ export function SelectedWorkGrid({
 
   const visibleProjects = useMemo(() => {
     if (activeFilter === 'All') return PROJECTS;
-    return PROJECTS.filter((p) => p.category === activeFilter);
+    return PROJECTS.filter((p) => p.industries.includes(activeFilter)).sort(
+      (a, b) => {
+        const aBest = a.bestMatchFor.includes(activeFilter) ? 0 : 1;
+        const bBest = b.bestMatchFor.includes(activeFilter) ? 0 : 1;
+        return aBest - bBest;
+      },
+    );
   }, [activeFilter]);
 
   // 3-stage scroll choreography:
@@ -581,15 +594,15 @@ export function SelectedWorkGrid({
           >
             <div className="max-w-2xl">
               <p className="text-[12px] font-medium tracking-[0.04em] text-[#C98A3A]">
-                {PROJECTS.length} Signature Styles — Choose your visual foundation
+                {PROJECTS.length} Website Styles — Built for your industry
               </p>
               <h1 className="display-tight mt-2 text-[clamp(2.35rem,4.5vw,3.85rem)] leading-[1.03] font-semibold text-[#1C1B18]">
                 Design Directions
               </h1>
               <p className="mt-3 max-w-[56ch] text-[14px] leading-[1.65] text-[#1C1B18]/72 sm:text-[15px]">
-                Twelve signature website design directions—built for corporate SaaS,
-                luxury ateliers, technical products, and editorial brands. Select any
-                direction to inspect its blueprint and tailor it to your business in 24 hours.
+                Filter by your business type to see the layouts engineered to win
+                trust, book appointments, and convert customers—customized and
+                launched in 24 hours.
               </p>
             </div>
 
@@ -644,7 +657,7 @@ export function SelectedWorkGrid({
           >
             <div>
               <p className="text-[12px] font-medium tracking-[0.04em] text-[#C98A3A]">
-                {PROJECTS.length} Signature Styles — Choose your visual foundation
+                {PROJECTS.length} Proven Layouts — Pick your business fit
               </p>
               <h2 className="display-tight mt-1.5 text-[clamp(2rem,3.4vw,3rem)] leading-[1.06] font-semibold text-[#1C1B18]">
                 Design Directions
@@ -661,10 +674,10 @@ export function SelectedWorkGrid({
           </motion.div>
         )}
 
-        {/* Interactive Filter Tabs with Sliding Active Pill */}
+        {/* Interactive Business Owner Filter Tabs with Sliding Active Pill */}
         <div
           role="tablist"
-          aria-label="Filter design directions by sector"
+          aria-label="Filter website directions by business type"
           className="mt-6 flex flex-wrap items-center gap-2"
         >
           {FILTERS.map((filter) => {
@@ -672,7 +685,7 @@ export function SelectedWorkGrid({
             const count =
               filter === 'All'
                 ? PROJECTS.length
-                : PROJECTS.filter((p) => p.category === filter).length;
+                : PROJECTS.filter((p) => p.industries.includes(filter)).length;
             return (
               <button
                 key={filter}
@@ -738,6 +751,10 @@ export function SelectedWorkGrid({
                     : undefined
                 }
                 imgSrc={thumbnails.get(project.id)}
+                isBestMatch={
+                  activeFilter !== 'All' &&
+                  project.bestMatchFor.includes(activeFilter)
+                }
                 isDimmed={hoveredId !== null && hoveredId !== project.id}
                 isSpotlighted={hoveredId === project.id}
                 reducedMotion={prefersReducedMotion}

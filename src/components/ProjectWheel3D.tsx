@@ -76,10 +76,10 @@ function WheelCaptionButton({
       <span className="font-mono-tabular mr-1.5 text-[#C98A3A] sm:mr-2">
         {activeProject.index}
       </span>
-      <span className="font-semibold">{activeProject.styleName}</span>
+      <span className="font-semibold">{activeProject.businessTitle}</span>
       <span className="mx-1.5 hidden text-[#1C1B18]/35 sm:inline">·</span>
       <span className="hidden text-[#1C1B18]/65 sm:inline">
-        {activeProject.tagline}
+        {activeProject.targetBusinesses}
       </span>
     </button>
   );
@@ -528,7 +528,7 @@ export function ProjectWheel3D({
                       {imgSrc && (
                         <img
                           src={imgSrc}
-                          alt={`${project.styleName} — ${project.tagline}`}
+                          alt={`${project.businessTitle} (${project.styleSubtitle}) — ${project.targetBusinesses}`}
                           draggable={false}
                           decoding="async"
                           referrerPolicy="no-referrer"
@@ -539,10 +539,10 @@ export function ProjectWheel3D({
                     <div className="mt-2.5 flex items-baseline justify-between gap-2 px-1">
                       <div className="min-w-0">
                         <span className="block truncate text-[13px] font-semibold tracking-[-0.015em] text-[#1C1B18] sm:text-[15px]">
-                          {project.styleName}
+                          {project.businessTitle}
                         </span>
                         <span className="block truncate text-[10px] text-[#1C1B18]/60 sm:text-[11px]">
-                          {project.tagline}
+                          {project.targetBusinesses}
                         </span>
                       </div>
                       <span className="font-mono-tabular shrink-0 text-[11px] text-[#1C1B18]/65 sm:text-[12px]">
@@ -566,7 +566,7 @@ export function ProjectWheel3D({
                       <span>FORMA</span>
                     </div>
                     <div className="border-t border-[#1C1B18]/10 pt-2.5 text-[13px] font-medium text-[#1C1B18]/35">
-                      {project.styleName}
+                      {project.businessTitle}
                     </div>
                   </div>
                 </div>

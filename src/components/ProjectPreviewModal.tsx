@@ -61,7 +61,7 @@ export function ProjectPreviewModal({
           onClick={onClose}
           role="dialog"
           aria-modal="true"
-          aria-label={`${project.styleName} design direction blueprint`}
+          aria-label={`${project.businessTitle} website direction blueprint`}
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4 md:p-8"
         >
           <motion.div
@@ -81,15 +81,17 @@ export function ProjectPreviewModal({
                     {project.index}
                   </span>
                   <span aria-hidden="true">·</span>
-                  <span className="text-[#1C1B18]">{project.category}</span>
+                  <span className="text-[#1C1B18]">
+                    {project.industries.join(' & ')}
+                  </span>
                   <span aria-hidden="true">·</span>
-                  <span>Design Direction</span>
+                  <span>Design Direction: {project.styleSubtitle}</span>
                 </div>
                 <h2 className="display-tight mt-2 text-[clamp(1.75rem,3vw,2.75rem)] leading-[1.05] font-semibold">
-                  {project.styleName}
+                  {project.businessTitle}
                 </h2>
                 <p className="mt-1 text-[14px] text-[#1C1B18]/70">
-                  {project.tagline}
+                  {project.targetBusinesses}
                 </p>
               </div>
 
@@ -110,22 +112,22 @@ export function ProjectPreviewModal({
             >
               <img
                 src={previewUrl}
-                alt={`${project.styleName} website design direction preview`}
+                alt={`${project.businessTitle} (${project.styleSubtitle}) website preview`}
                 referrerPolicy="no-referrer"
                 className="h-full w-full object-cover"
               />
             </div>
 
-            {/* 3-Column Design Direction Blueprint */}
+            {/* 3-Column Business & Design Blueprint */}
             <div className="mt-7 grid grid-cols-1 gap-6 md:grid-cols-3 md:gap-7">
-              {/* Column 1: The Vibe & Impact */}
+              {/* Column 1: The Problem It Solves */}
               <div className="flex flex-col justify-between rounded-xl border border-[#1C1B18]/10 bg-white/65 p-5">
                 <div>
                   <p className="font-mono-tabular text-[11px] font-semibold tracking-[0.06em] text-[#C98A3A] uppercase">
-                    01 · The Vibe &amp; Impact
+                    01 · The Problem It Solves
                   </p>
                   <p className="mt-3 text-[14px] leading-[1.65] text-[#1C1B18]/82">
-                    {project.shortDescription}
+                    {project.problemSolved}
                   </p>
                 </div>
 

@@ -75,10 +75,10 @@ export function renderDarkKinetic(
 
   ctx.fillStyle = palette.secondary;
   ctx.font = `600 12px "JetBrains Mono", monospace`;
-  ctx.fillText('V-MAX TELEMETRY', badgeX + 20, topY + 28);
+  ctx.fillText('PEAK OUTPUT', badgeX + 20, topY + 28);
   ctx.fillStyle = palette.accent;
   ctx.font = `700 ${Math.round(width * 0.028)}px "JetBrains Mono", monospace`;
-  ctx.fillText('348 KM/H', badgeX + 20, topY + 78);
+  ctx.fillText('98.4%', badgeX + 20, topY + 78);
 
   // STUDIO STAGE: Sleek Electric Hypercar Wireframe / Lit Silhouette Profile
   const stageY = topY + height * 0.22;
@@ -242,5 +242,5 @@ export function renderDarkKinetic(
   ctx.font = `700 ${Math.round(width * 0.012)}px "JetBrains Mono", monospace`;
   ctx.fillText(previewSample.ctaLabel, ctaX + 24, footY + footH * 0.48);
   ctx.font = `500 12px "JetBrains Mono", monospace`;
-  ctx.fillText('PERFORMANCE // ACTIVE', ctaX + 24, footY + footH * 0.76);
+  ctx.fillText('TRIAL // BOOKING OPEN', ctaX + 24, footY + footH * 0.76);
 }
