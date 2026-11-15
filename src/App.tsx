@@ -187,10 +187,10 @@ export default function App() {
 
           {/* Rising Sheet (Section 2 & 3 scroll smoothly over fixed Section 1) */}
           <div className="relative z-20 overflow-hidden rounded-t-[28px] border-t border-white/75 shadow-[0_-24px_60px_-18px_rgba(28,27,24,0.12)] md:rounded-t-[40px]">
-            {/* Frosted top lip + warm canvas veil at the leading edge so Hero clears cleanly while keeping WaveBackground visible behind grid tiles */}
+            {/* Frosted top lip + warm canvas veil at the leading edge without full-width GPU blur */}
             <div
               aria-hidden="true"
-              className="pointer-events-none absolute inset-x-0 top-0 h-20 bg-white/30 backdrop-blur-md"
+              className="pointer-events-none absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-white/75 via-white/35 to-transparent"
             />
             <div
               aria-hidden="true"

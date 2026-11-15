@@ -23,6 +23,68 @@ function normalizeIndex(angleDeg: number): number {
   return ((raw % CARD_COUNT) + CARD_COUNT) % CARD_COUNT;
 }
 
+const FOCUSED_CLASSES = [
+  'border-[#C98A3A]/55',
+  'shadow-[0_16px_32px_-12px_rgba(28,27,24,0.18)]',
+];
+const UNFOCUSED_CLASSES = [
+  'border-white/85',
+  'shadow-[0_10px_22px_-10px_rgba(28,27,24,0.12)]',
+  'opacity-95',
+];
+
+function applyButtonFocusState(
+  btn: HTMLButtonElement | null | undefined,
+  focused: boolean,
+) {
+  if (!btn) return;
+  if (focused) {
+    btn.classList.remove(...UNFOCUSED_CLASSES);
+    btn.classList.add(...FOCUSED_CLASSES);
+  } else {
+    btn.classList.remove(...FOCUSED_CLASSES);
+    btn.classList.add(...UNFOCUSED_CLASSES);
+  }
+}
+
+interface WheelCaptionButtonProps {
+  initialIndex: number;
+  registerSetter: (setter: ((index: number) => void) | null) => void;
+  onSelectProject: (project: ProjectItem) => void;
+}
+
+function WheelCaptionButton({
+  initialIndex,
+  registerSetter,
+  onSelectProject,
+}: WheelCaptionButtonProps) {
+  const [activeIndex, setActiveIndex] = useState(initialIndex);
+
+  useEffect(() => {
+    registerSetter(setActiveIndex);
+    return () => registerSetter(null);
+  }, [registerSetter]);
+
+  const activeProject = PROJECTS[activeIndex] ?? PROJECTS[0];
+
+  return (
+    <button
+      type="button"
+      onClick={() => onSelectProject(activeProject)}
+      className="min-w-0 flex-1 truncate text-center text-[11px] font-medium text-[#1C1B18] transition-colors hover:text-[#C98A3A] sm:text-[12px]"
+    >
+      <span className="font-mono-tabular mr-1.5 text-[#C98A3A] sm:mr-2">
+        {activeProject.index}
+      </span>
+      <span className="font-semibold">{activeProject.styleName}</span>
+      <span className="mx-1.5 hidden text-[#1C1B18]/35 sm:inline">·</span>
+      <span className="hidden text-[#1C1B18]/65 sm:inline">
+        {activeProject.tagline}
+      </span>
+    </button>
+  );
+}
+
 export function ProjectWheel3D({
   onSelectProject,
   isPaused = false,
@@ -31,10 +93,11 @@ export function ProjectWheel3D({
   const rigRef = useRef<HTMLDivElement | null>(null);
   const ringRef = useRef<HTMLDivElement | null>(null);
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const cardButtonRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const captionSetterRef = useRef<((index: number) => void) | null>(null);
 
   const [isAutoSpin, setIsAutoSpin] = useState<boolean>(false);
   const [isDragging, setIsDragging] = useState(false);
-  const [activeIndex, setActiveIndex] = useState(0);
   const [dimensions, setDimensions] = useState<{
     radius: number;
     cardWidth: number;
@@ -72,6 +135,16 @@ export function ProjectWheel3D({
   autoSpinRef.current = isAutoSpin;
   dimensionsRef.current = dimensions;
   isPausedRef.current = isPaused;
+
+  const registerCaptionSetter = useCallback(
+    (setter: ((index: number) => void) | null) => {
+      captionSetterRef.current = setter;
+      if (setter) {
+        setter(lastReportedIndexRef.current);
+      }
+    },
+    [],
+  );
 
   // Always start auto-spin automatically after a 2.5s initial pause
   useEffect(() => {
@@ -219,8 +292,13 @@ export function ProjectWheel3D({
 
       const nearest = normalizeIndex(displayAngle);
       if (nearest !== lastReportedIndexRef.current) {
+        applyButtonFocusState(
+          cardButtonRefs.current[lastReportedIndexRef.current],
+          false,
+        );
+        applyButtonFocusState(cardButtonRefs.current[nearest], true);
         lastReportedIndexRef.current = nearest;
-        setActiveIndex(nearest);
+        captionSetterRef.current?.(nearest);
       }
 
       rafId = window.requestAnimationFrame(tick);
@@ -364,8 +442,6 @@ export function ProjectWheel3D({
     );
   };
 
-  const activeProject = PROJECTS[activeIndex];
-
   return (
     <div className="relative mt-2 w-full select-none sm:mt-3">
       {/* 3D Perspective Stage (pure CSS 3D + rAF, zero WebGL) */}
@@ -409,7 +485,7 @@ export function ProjectWheel3D({
             {PROJECTS.map((project, idx) => {
               const cardAngle = idx * STEP_DEG;
               const imgSrc = thumbnails.get(project.id);
-              const isFocused = idx === activeIndex;
+              const isFocused = idx === lastReportedIndexRef.current;
 
               return (
                 <div
@@ -426,16 +502,19 @@ export function ProjectWheel3D({
                 >
                   {/* Front Face — avoids CSS backdrop-filter inside 3D preserve-3d so Chromium keeps full Retina sharpness */}
                   <button
+                    ref={(el) => {
+                      cardButtonRefs.current[idx] = el;
+                    }}
                     type="button"
                     onClick={() => {
                       if (pointerTravelRef.current < 8) {
                         onSelectProject(project);
                       }
                     }}
-                    className={`group relative block w-full rounded-2xl border bg-[#FAF8F4]/92 p-2.5 text-left transition-shadow duration-300 sm:p-3 focus-visible:outline-2 focus-visible:outline-[#C98A3A] ${
+                    className={`group relative block w-full rounded-2xl border bg-[#FAF8F4]/92 p-2.5 text-left transition-colors duration-200 sm:p-3 focus-visible:outline-2 focus-visible:outline-[#C98A3A] ${
                       isFocused
-                        ? 'border-[#C98A3A]/55 shadow-[0_32px_64px_-16px_rgba(28,27,24,0.24)]'
-                        : 'border-white/85 shadow-[0_18px_40px_-16px_rgba(28,27,24,0.14)] opacity-95'
+                        ? 'border-[#C98A3A]/55 shadow-[0_16px_32px_-12px_rgba(28,27,24,0.18)]'
+                        : 'border-white/85 shadow-[0_10px_22px_-10px_rgba(28,27,24,0.12)] opacity-95'
                     }`}
                     style={{
                       backfaceVisibility: 'hidden',
@@ -451,6 +530,7 @@ export function ProjectWheel3D({
                           src={imgSrc}
                           alt={`${project.styleName} — ${project.tagline}`}
                           draggable={false}
+                          decoding="async"
                           referrerPolicy="no-referrer"
                           className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
                         />
@@ -517,20 +597,11 @@ export function ProjectWheel3D({
           </button>
         </div>
 
-        <button
-          type="button"
-          onClick={() => onSelectProject(activeProject)}
-          className="min-w-0 flex-1 truncate text-center text-[11px] font-medium text-[#1C1B18] transition-colors hover:text-[#C98A3A] sm:text-[12px]"
-        >
-          <span className="font-mono-tabular mr-1.5 text-[#C98A3A] sm:mr-2">
-            {activeProject.index}
-          </span>
-          <span className="font-semibold">{activeProject.styleName}</span>
-          <span className="mx-1.5 hidden text-[#1C1B18]/35 sm:inline">·</span>
-          <span className="hidden text-[#1C1B18]/65 sm:inline">
-            {activeProject.tagline}
-          </span>
-        </button>
+        <WheelCaptionButton
+          initialIndex={lastReportedIndexRef.current}
+          registerSetter={registerCaptionSetter}
+          onSelectProject={onSelectProject}
+        />
 
         <button
           type="button"

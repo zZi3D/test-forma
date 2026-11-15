@@ -1,10 +1,12 @@
 import { useEffect, useRef } from 'react';
 
 const LINE_COUNT = 52;
-const POINTS_PER_LINE = 64;
+const POINTS_PER_LINE = 44;
 const FOV = 640;
 const Z_FAR = 860;
 const Z_NEAR = 45;
+const MAX_WAVE_DPR = 1.25;
+const MIN_FRAME_INTERVAL_MS = 1000 / 36;
 
 interface WaveLineDescriptor {
   depthNorm: number;
@@ -54,7 +56,7 @@ export function WaveBackground() {
 
     let width = 0;
     let height = 0;
-    let dpr = Math.min(window.devicePixelRatio || 1, 2);
+    let dpr = Math.min(window.devicePixelRatio || 1, MAX_WAVE_DPR);
 
     // Pre-allocate reusable point buffer to eliminate GC churn inside the rAF loop
     const points: ProjectedPoint[] = Array.from(
@@ -74,6 +76,7 @@ export function WaveBackground() {
     let time = 0;
     let rafId = 0;
     let lastNow = performance.now();
+    let lastDrawNow = 0;
 
     const prefersReducedMotion = window.matchMedia(
       '(prefers-reduced-motion: reduce)',
@@ -129,19 +132,9 @@ export function WaveBackground() {
         ctx.beginPath();
         ctx.moveTo(points[0].x, points[0].y);
 
-        for (let j = 1; j < POINTS_PER_LINE - 2; j++) {
-          const midX = (points[j].x + points[j + 1].x) * 0.5;
-          const midY = (points[j].y + points[j + 1].y) * 0.5;
-          ctx.quadraticCurveTo(points[j].x, points[j].y, midX, midY);
+        for (let j = 1; j < POINTS_PER_LINE; j++) {
+          ctx.lineTo(points[j].x, points[j].y);
         }
-
-        const lastIdx = POINTS_PER_LINE - 1;
-        ctx.quadraticCurveTo(
-          points[lastIdx - 1].x,
-          points[lastIdx - 1].y,
-          points[lastIdx].x,
-          points[lastIdx].y,
-        );
 
         ctx.strokeStyle = strokeStyle;
         ctx.lineWidth = lineWidth;
@@ -152,7 +145,7 @@ export function WaveBackground() {
     const resizeCanvas = () => {
       const nextWidth = window.innerWidth;
       const nextHeight = window.innerHeight;
-      const nextDpr = Math.min(window.devicePixelRatio || 1, 2);
+      const nextDpr = Math.min(window.devicePixelRatio || 1, MAX_WAVE_DPR);
       if (nextWidth === width && nextHeight === height && nextDpr === dpr) {
         return;
       }
@@ -182,8 +175,14 @@ export function WaveBackground() {
       rafId = 0;
       if (document.hidden) return;
 
+      if (lastDrawNow !== 0 && now - lastDrawNow < MIN_FRAME_INTERVAL_MS) {
+        rafId = window.requestAnimationFrame(renderFrame);
+        return;
+      }
+
       const dt = Math.min(Math.max((now - lastNow) / 1000, 0.001), 0.05);
       lastNow = now;
+      lastDrawNow = now;
 
       const lerpAlpha = 1 - Math.exp(-3.7 * dt);
       const velAlpha = 1 - Math.exp(-2.4 * dt);

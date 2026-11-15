@@ -77,6 +77,10 @@ function WorkTileCard({
 }: WorkTileCardProps) {
   const buttonRef = useRef<HTMLButtonElement | null>(null);
   const sheenRef = useRef<HTMLDivElement | null>(null);
+  const rectRef = useRef<DOMRect | null>(null);
+  const moveRafRef = useRef<number>(0);
+  const pendingPointerRef = useRef<{ x: number; y: number } | null>(null);
+  const [isSettled, setIsSettled] = useState(false);
 
   // Stage 1 (Start Punt): -176deg (upright closed alabaster card)
   // Stage 2 (Tijdens Scrollen): -110deg (tilted flat in 3D tabletop perspective)
@@ -88,6 +92,15 @@ function WorkTileCard({
 
   useEffect(() => {
     if (isOpen) {
+      if (reducedMotion) {
+        rotateX.set(0);
+        tiltY.set(0);
+        tiltScale.set(1);
+        floorShadowOpacity.set(0);
+        setIsSettled(true);
+        return;
+      }
+
       const col = cols > 1 ? index % cols : 0;
       const delay = col * 0.085;
       const transition = {
@@ -101,11 +114,17 @@ function WorkTileCard({
         animate(tiltScale, 1, transition),
         animate(floorShadowOpacity, 0, { duration: 0.45, delay }),
       ];
+      const settleTimer = window.setTimeout(() => {
+        setIsSettled(true);
+      }, 920 + Math.round(col * 85));
+
       return () => {
+        window.clearTimeout(settleTimer);
         controls.forEach((ctrl) => ctrl.stop());
       };
     }
 
+    setIsSettled(false);
     return subscribeRowTilt(rowIndex, (p) => {
       // Hold -176deg smoothly at entry, then tilt backward into tabletop pose (-110deg)
       const eased = p * p * (3 - 2 * p);
@@ -119,6 +138,7 @@ function WorkTileCard({
     index,
     cols,
     rowIndex,
+    reducedMotion,
     subscribeRowTilt,
     rotateX,
     tiltY,
@@ -126,9 +146,18 @@ function WorkTileCard({
     floorShadowOpacity,
   ]);
 
+  useEffect(() => {
+    return () => {
+      if (moveRafRef.current) {
+        window.cancelAnimationFrame(moveRafRef.current);
+      }
+    };
+  }, []);
+
   const handlePointerEnter = (e: React.PointerEvent<HTMLButtonElement>) => {
     if (e.pointerType === 'touch' || !isOpen) return;
     onHoverStart(project.id);
+    rectRef.current = e.currentTarget.getBoundingClientRect();
     if (buttonRef.current && !reducedMotion) {
       buttonRef.current.style.transition =
         'transform 120ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 250ms ease, border-color 250ms ease';
@@ -137,30 +166,44 @@ function WorkTileCard({
 
   const handlePointerMove = (e: React.PointerEvent<HTMLButtonElement>) => {
     if (e.pointerType === 'touch' || reducedMotion || !isOpen) return;
-    const el = buttonRef.current;
-    if (!el) return;
+    pendingPointerRef.current = { x: e.clientX, y: e.clientY };
 
-    const rect = el.getBoundingClientRect();
-    if (!rect.width || !rect.height) return;
+    if (moveRafRef.current) return;
+    moveRafRef.current = window.requestAnimationFrame(() => {
+      moveRafRef.current = 0;
+      const pt = pendingPointerRef.current;
+      const el = buttonRef.current;
+      if (!pt || !el) return;
 
-    const nx = ((e.clientX - rect.left) / rect.width - 0.5) * 2; // -1 .. 1
-    const ny = ((e.clientY - rect.top) / rect.height - 0.5) * 2; // -1 .. 1
+      const rect = rectRef.current ?? el.getBoundingClientRect();
+      rectRef.current = rect;
+      if (!rect.width || !rect.height) return;
 
-    const rotX = (-ny * 3.4).toFixed(2);
-    const rotY = (nx * 4.2).toFixed(2);
+      const nx = ((pt.x - rect.left) / rect.width - 0.5) * 2; // -1 .. 1
+      const ny = ((pt.y - rect.top) / rect.height - 0.5) * 2; // -1 .. 1
 
-    el.style.transform = `perspective(920px) rotateX(${rotX}deg) rotateY(${rotY}deg) translate3d(0, -4px, 0) scale(1.012)`;
+      const rotX = (-ny * 3.4).toFixed(2);
+      const rotY = (nx * 4.2).toFixed(2);
 
-    if (sheenRef.current) {
-      const shiftX = (nx * 26).toFixed(1);
-      const shiftY = (ny * 20).toFixed(1);
-      sheenRef.current.style.opacity = '1';
-      sheenRef.current.style.transform = `translate3d(${shiftX}%, ${shiftY}%, 0) rotate(18deg)`;
-    }
+      el.style.transform = `perspective(920px) rotateX(${rotX}deg) rotateY(${rotY}deg) translate3d(0, -4px, 0) scale(1.012)`;
+
+      if (sheenRef.current) {
+        const shiftX = (nx * 26).toFixed(1);
+        const shiftY = (ny * 20).toFixed(1);
+        sheenRef.current.style.opacity = '1';
+        sheenRef.current.style.transform = `translate3d(${shiftX}%, ${shiftY}%, 0) rotate(18deg)`;
+      }
+    });
   };
 
   const handlePointerLeave = () => {
     onHoverEnd();
+    rectRef.current = null;
+    pendingPointerRef.current = null;
+    if (moveRafRef.current) {
+      window.cancelAnimationFrame(moveRafRef.current);
+      moveRafRef.current = 0;
+    }
     if (buttonRef.current) {
       buttonRef.current.style.transition =
         'transform 340ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 280ms ease, border-color 280ms ease';
@@ -180,19 +223,25 @@ function WorkTileCard({
       style={{ perspective: '1050px' }}
       className="relative"
     >
-      {/* Subtle tabletop floor shadow visible during Stage 2 tilt */}
-      <motion.div
-        aria-hidden="true"
-        style={{ opacity: floorShadowOpacity }}
-        className="pointer-events-none absolute inset-x-4 bottom-1 h-8 rounded-full bg-[#1C1B18]/18 blur-xl"
-      />
+      {/* Subtle tabletop floor shadow visible during Stage 2 tilt (pure gradient, zero blur filter) */}
+      {!isSettled && (
+        <motion.div
+          aria-hidden="true"
+          style={{
+            opacity: floorShadowOpacity,
+            background:
+              'radial-gradient(ellipse 68% 60% at 50% 55%, rgba(28,27,24,0.22) 0%, rgba(28,27,24,0.08) 45%, transparent 75%)',
+          }}
+          className="pointer-events-none absolute inset-x-4 bottom-0 h-9"
+        />
+      )}
 
       <motion.article
         style={{
           rotateX,
           y: tiltY,
           scale: tiltScale,
-          transformStyle: 'preserve-3d',
+          transformStyle: isSettled ? 'flat' : 'preserve-3d',
         }}
         className="relative"
       >
@@ -241,6 +290,7 @@ function WorkTileCard({
                   alt={`${project.styleName} — ${project.tagline}`}
                   referrerPolicy="no-referrer"
                   loading="lazy"
+                  decoding="async"
                   className="h-full w-full object-cover transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.03]"
                 />
               ) : (
@@ -266,47 +316,49 @@ function WorkTileCard({
           </button>
         </div>
 
-        {/* Back Face: Warm Alabaster Glass Cover matching FORMA brand palette */}
-        <div
-          aria-hidden="true"
-          style={{
-            backfaceVisibility: 'hidden',
-            WebkitBackfaceVisibility: 'hidden',
-            transform: 'rotateX(180deg) translateZ(1px)',
-            background:
-              'linear-gradient(150deg, rgba(255,255,255,0.82) 0%, rgba(247,245,240,0.72) 55%, rgba(240,236,227,0.8) 100%)',
-          }}
-          className="pointer-events-none absolute inset-0 overflow-hidden rounded-2xl border border-white/65 p-3 shadow-[0_16px_36px_-14px_rgba(28,27,24,0.12)]"
-        >
-          {/* Inner Frosted Preview Frame (mirrors open card proportions) */}
-          <div className="relative flex aspect-[16/10] w-full items-center justify-center overflow-hidden rounded-xl border border-[#1C1B18]/8 bg-[#F4F1EA]/70">
-            <div
-              className="pointer-events-none absolute inset-0"
-              style={{
-                background:
-                  'linear-gradient(135deg, rgba(255,255,255,0.55) 0%, transparent 55%)',
-              }}
-            />
-            <span className="relative text-[10px] font-medium tracking-[0.26em] text-[#1C1B18]/25 uppercase">
-              FORMA
-            </span>
-          </div>
-
-          {/* Matching Editorial Metadata Footer */}
-          <div className="mt-3 flex items-baseline justify-between gap-2 px-0.5">
-            <div className="min-w-0">
-              <p className="truncate text-[15px] font-semibold tracking-[-0.015em] text-[#1C1B18]/80">
-                {project.styleName}
-              </p>
-              <p className="mt-0.5 truncate text-[11px] text-[#1C1B18]/50">
-                {project.tagline}
-              </p>
+        {/* Back Face: Warm Alabaster Glass Cover matching FORMA brand palette (unmounted once settled) */}
+        {!isSettled && (
+          <div
+            aria-hidden="true"
+            style={{
+              backfaceVisibility: 'hidden',
+              WebkitBackfaceVisibility: 'hidden',
+              transform: 'rotateX(180deg) translateZ(1px)',
+              background:
+                'linear-gradient(150deg, rgba(255,255,255,0.82) 0%, rgba(247,245,240,0.72) 55%, rgba(240,236,227,0.8) 100%)',
+            }}
+            className="pointer-events-none absolute inset-0 overflow-hidden rounded-2xl border border-white/65 p-3 shadow-[0_16px_36px_-14px_rgba(28,27,24,0.12)]"
+          >
+            {/* Inner Frosted Preview Frame (mirrors open card proportions) */}
+            <div className="relative flex aspect-[16/10] w-full items-center justify-center overflow-hidden rounded-xl border border-[#1C1B18]/8 bg-[#F4F1EA]/70">
+              <div
+                className="pointer-events-none absolute inset-0"
+                style={{
+                  background:
+                    'linear-gradient(135deg, rgba(255,255,255,0.55) 0%, transparent 55%)',
+                }}
+              />
+              <span className="relative text-[10px] font-medium tracking-[0.26em] text-[#1C1B18]/25 uppercase">
+                FORMA
+              </span>
             </div>
-            <span className="font-mono-tabular shrink-0 text-[11px] font-medium text-[#1C1B18]/45">
-              {project.index}
-            </span>
+
+            {/* Matching Editorial Metadata Footer */}
+            <div className="mt-3 flex items-baseline justify-between gap-2 px-0.5">
+              <div className="min-w-0">
+                <p className="truncate text-[15px] font-semibold tracking-[-0.015em] text-[#1C1B18]/80">
+                  {project.styleName}
+                </p>
+                <p className="mt-0.5 truncate text-[11px] text-[#1C1B18]/50">
+                  {project.tagline}
+                </p>
+              </div>
+              <span className="font-mono-tabular shrink-0 text-[11px] font-medium text-[#1C1B18]/45">
+                {project.index}
+              </span>
+            </div>
           </div>
-        </div>
+        )}
       </motion.article>
     </div>
   );
