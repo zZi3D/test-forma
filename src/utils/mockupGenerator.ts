@@ -20,7 +20,7 @@ const subscribers = new Set<() => void>();
 let queueStarted = false;
 
 function getCacheKey(project: ProjectConfig): string {
-  return `${project.id}:${project.uiStyle}:${project.palette.bg}:${project.palette.accent}:${project.businessTitle}`;
+  return `${project.index}:${project.id}:${project.uiStyle}:${project.palette.bg}:${project.palette.accent}:${project.businessTitle}`;
 }
 
 /**

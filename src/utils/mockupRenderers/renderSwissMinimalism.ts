@@ -53,7 +53,7 @@ export function renderSwissMinimalism(
   const col3X = padX + (colW + colGap) * 2;
   ctx.fillStyle = palette.text;
   ctx.font = `600 ${Math.round(width * 0.022)}px "JetBrains Mono", monospace`;
-  ctx.fillText('COUNSEL / 01', col3X + width * 0.012, topY + height * 0.014);
+  ctx.fillText(`COUNSEL / ${project.index}`, col3X + width * 0.012, topY + height * 0.014);
 
   ctx.fillStyle = palette.text;
   ctx.font = `700 ${Math.round(width * 0.045)}px "Plus Jakarta Sans", sans-serif`;

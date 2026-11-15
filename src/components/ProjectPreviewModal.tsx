@@ -46,7 +46,12 @@ export function ProjectPreviewModal({
         { label: 'Surface', hex: project.palette.surface },
         { label: 'Ink', hex: project.palette.text },
         { label: 'Accent', hex: project.palette.accent },
-      ]
+      ].filter(
+        (swatch, idx, arr) =>
+          arr.findIndex(
+            (s) => s.hex.toLowerCase() === swatch.hex.toLowerCase(),
+          ) === idx,
+      )
     : [];
 
   return (

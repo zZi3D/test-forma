@@ -72,58 +72,57 @@ export type ProjectItem = DesignDirection;
 
 /**
  * CENTRAL WEBSITE DESIGN DIRECTIONS (01 – 12)
- * Outcome-first titles built for everyday business owners,
- * ordered in a rhythmic Light / Dark cadence across the 3D Hero Wheel and 4×3 Grid.
+ * Ordered sequentially for the 3D Hero Wheel, 4×3 Grid, and /directions page.
  */
 export const PROJECTS: DesignDirection[] = [
   // =========================================================================
-  // 01 — AUTHORITY & TRUST (Swiss Minimalism · Light #F5F3EE)
+  // 01 — HIGH-CONVERTING WEBSHOP (Dopamine Commerce · Vibrant Cream #FFFDF7)
   // =========================================================================
   {
-    id: 'swiss-minimalism',
+    id: 'dopamine-commerce',
     index: '01',
-    businessTitle: 'Authority & Trust',
-    styleSubtitle: 'Swiss Minimalism',
-    targetBusinesses: 'Law Firms, Consultants & B2B',
-    industries: ['Advisory & B2B'],
-    bestMatchFor: ['Advisory & B2B'],
+    businessTitle: 'High-Converting Webshop',
+    styleSubtitle: 'Dopamine Commerce',
+    targetBusinesses: 'Treat & Gift Shops, D2C Stores',
+    industries: ['Retail & Webshops'],
+    bestMatchFor: ['Retail & Webshops'],
     problemSolved:
-      'High-value B2B clients leave dated or cluttered websites before ever reading your credentials. This structured editorial layout signals senior credibility in seconds and guides prospects straight to booking a consultation.',
+      'Boring online stores struggle to justify impulse purchases or bundle upsells. Playful color pops, social-proof review pills, and instant add-to-bag actions spark excitement and lift average order value.',
     bestFor: [
-      'Law & Legal Advisory Firms',
-      'Management & Strategy Consultants',
-      'Accounting & Tax Practices',
-      'Architecture & Engineering Firms',
+      'Treat, Confectionery & Snack Shops',
+      'Curated Gift Boxes & Stationery Stores',
+      'Direct-to-Consumer Food & Drink Brands',
+      'Subscription Boxes & Retail Launches',
     ],
     visualCharacteristics: [
-      'Asymmetric 3-column grid with 1px hairlines',
-      'Warm off-white & deep graphite contrast',
-      'Clear practice-area index & partner credentials',
-      'Direct consultation booking hierarchy',
+      'Energetic multi-color accents on warm cream',
+      'Heavy friendly display typography',
+      'Review pills, bundle savings & quick-add cards',
+      'High-visibility checkout call-to-actions',
     ],
-    typographyNote: 'Neo-Grotesque Sans + Technical Mono',
-    uiStyle: 'swiss-minimalism',
+    typographyNote: 'Chunky Rounded Display + Crisp Sans',
+    uiStyle: 'dopamine-commerce',
     palette: {
-      bg: '#F5F3EE',
-      surface: '#EAE7DF',
-      text: '#141414',
-      accent: '#141414',
-      secondary: '#73716C',
+      bg: '#FFFDF7',
+      surface: '#FFE8D6',
+      text: '#1C1917',
+      accent: '#FF4D24',
+      secondary: '#2563EB',
     },
     previewSample: {
-      masthead: 'VANDENBERG & PARTNERS',
-      navItems: ['PRACTICE AREAS', 'PARTNERS', 'INSIGHTS', 'CONTACT'],
-      eyebrow: '01 — LEGAL & ADVISORY PRACTICE',
-      headline: 'Trusted Counsel. Proven Clarity.',
+      masthead: 'GOODS & DROPS',
+      navItems: ['SHOP ALL', 'BUNDLES', 'REVIEWS', 'BAG (2)'],
+      eyebrow: 'BESTSELLER · LIMITED BATCH',
+      headline: 'Daily Joy, Delivered.',
       subheadline:
-        'Disciplined digital presence built to win corporate retainers and high-trust client inquiries.',
-      ctaLabel: 'SCHEDULE CONSULTATION →',
+        'Playful product cards, high-contrast color pops, and frictionless checkout paths.',
+      ctaLabel: 'ADD TO BAG — $38 →',
       metrics: [
-        { label: 'CLIENT RETENTION', value: '96%' },
-        { label: 'PARTNER TENURE', value: '25+ YRS' },
-        { label: 'FIRST RESPONSE', value: '< 2 HRS' },
+        { label: 'RATED', value: '4.9 ★ (2.4K)' },
+        { label: 'DISPATCH', value: 'SAME DAY' },
+        { label: 'BUNDLES', value: 'SAVE 20%' },
       ],
-      cardLabels: ['CORPORATE LAW', 'M&A ADVISORY', 'COMPLIANCE'],
+      cardLabels: ['CITRUS', 'BERRY', 'MATCHA'],
     },
   },
 
@@ -179,53 +178,53 @@ export const PROJECTS: DesignDirection[] = [
   },
 
   // =========================================================================
-  // 03 — CLEAR SERVICE & PRODUCT MAP (Modular Bento · Light #F4F5F7)
+  // 03 — AUTHORITY & TRUST (Swiss Minimalism · Light #F5F3EE)
   // =========================================================================
   {
-    id: 'modular-bento',
+    id: 'swiss-minimalism',
     index: '03',
-    businessTitle: 'Clear Service & Product Map',
-    styleSubtitle: 'Modular Bento',
-    targetBusinesses: 'SaaS, Apps & Service Companies',
-    industries: ['Tech & Products', 'Advisory & B2B'],
-    bestMatchFor: ['Tech & Products'],
+    businessTitle: 'Authority & Trust',
+    styleSubtitle: 'Swiss Minimalism',
+    targetBusinesses: 'Law Firms, Consultants & B2B',
+    industries: ['Advisory & B2B'],
+    bestMatchFor: ['Advisory & B2B'],
     problemSolved:
-      'When your software or service does several things at once, long walls of text confuse buyers. This Apple-inspired bento grid breaks every feature, benefit, and proof point into scannable cards anyone grasps in 5 seconds.',
+      'High-value B2B clients leave dated or cluttered websites before ever reading your credentials. This structured editorial layout signals senior credibility in seconds and guides prospects straight to booking a consultation.',
     bestFor: [
-      'SaaS & Cloud Software Companies',
-      'Mobile Apps & Digital Tools',
-      'Multi-Service Agencies & IT Firms',
-      'Growing B2B Service Businesses',
+      'Law & Legal Advisory Firms',
+      'Management & Strategy Consultants',
+      'Accounting & Tax Practices',
+      'Architecture & Engineering Firms',
     ],
     visualCharacteristics: [
-      'Rounded modular cards of varying proportions',
-      'Bright neutral canvas with a focused cobalt accent',
-      'Scannable metric & workflow feature blocks',
-      'Clear trial and demo conversion triggers',
+      'Asymmetric 3-column grid with 1px hairlines',
+      'Warm off-white & deep graphite contrast',
+      'Clear practice-area index & partner credentials',
+      'Direct consultation booking hierarchy',
     ],
-    typographyNote: 'Clean Geometric Sans + Tabular Figures',
-    uiStyle: 'modular-bento',
+    typographyNote: 'Neo-Grotesque Sans + Technical Mono',
+    uiStyle: 'swiss-minimalism',
     palette: {
-      bg: '#F4F5F7',
-      surface: '#FFFFFF',
-      text: '#111827',
-      accent: '#2563EB',
-      secondary: '#64748B',
+      bg: '#F5F3EE',
+      surface: '#EAE7DF',
+      text: '#141414',
+      accent: '#141414',
+      secondary: '#73716C',
     },
     previewSample: {
-      masthead: 'PLATFORM SUITE',
-      navItems: ['FEATURES', 'WORKFLOWS', 'PRICING', 'DEMO'],
-      eyebrow: 'MODULAR PRODUCT OVERVIEW',
-      headline: 'Every capability, crystal clear.',
+      masthead: 'VANDENBERG & PARTNERS',
+      navItems: ['PRACTICE AREAS', 'PARTNERS', 'INSIGHTS', 'CONTACT'],
+      eyebrow: '03 — LEGAL & ADVISORY PRACTICE',
+      headline: 'Trusted Counsel. Proven Clarity.',
       subheadline:
-        'Structured bento modules engineered so buyers understand your product in seconds.',
-      ctaLabel: 'START FREE TRIAL →',
+        'Disciplined digital presence built to win corporate retainers and high-trust client inquiries.',
+      ctaLabel: 'SCHEDULE CONSULTATION →',
       metrics: [
-        { label: 'SETUP TIME', value: '4 MIN' },
-        { label: 'ADOPTION', value: '98.4%' },
-        { label: 'UPTIME SLA', value: '99.99%' },
+        { label: 'CLIENT RETENTION', value: '96%' },
+        { label: 'PARTNER TENURE', value: '25+ YRS' },
+        { label: 'FIRST RESPONSE', value: '< 2 HRS' },
       ],
-      cardLabels: ['AUTOMATION', 'LIVE SYNC', 'ANALYTICS'],
+      cardLabels: ['CORPORATE LAW', 'M&A ADVISORY', 'COMPLIANCE'],
     },
   },
 
@@ -383,113 +382,11 @@ export const PROJECTS: DesignDirection[] = [
   },
 
   // =========================================================================
-  // 07 — APPROACHABLE FINANCE & ADVICE (Dimensional SaaS · Light #ECEEF2)
-  // =========================================================================
-  {
-    id: 'dimensional-saas',
-    index: '07',
-    businessTitle: 'Approachable Finance & Advice',
-    styleSubtitle: 'Dimensional SaaS',
-    targetBusinesses: 'Advisors, Coaches & Portals',
-    industries: ['Advisory & B2B'],
-    bestMatchFor: ['Advisory & B2B'],
-    problemSolved:
-      'Financial advice, insurance, and business coaching often feel cold or overly complicated online. Friendly 3D-elevated cards and clean visual charts make complex numbers feel approachable and easy to act on.',
-    bestFor: [
-      'Financial Advisors & Wealth Planners',
-      'Business Coaches & Masterminds',
-      'Modern Insurance & Mortgage Brokers',
-      'Client Portals & Accounting SaaS',
-    ],
-    visualCharacteristics: [
-      'Soft elevated 3D cards with generous 24px corners',
-      'Crisp white surfaces on calm light slate',
-      'Clean growth charts with tabular figures',
-      'Warm orange call-to-action buttons',
-    ],
-    typographyNote: 'Friendly Humanist Sans + Tabular Figures',
-    uiStyle: 'claymorphism',
-    palette: {
-      bg: '#ECEEF2',
-      surface: '#FFFFFF',
-      text: '#1E293B',
-      accent: '#FF4D24',
-      secondary: '#64748B',
-    },
-    previewSample: {
-      masthead: 'CLARITY ADVISORY',
-      navItems: ['SERVICES', 'RESULTS', 'PORTAL', 'BOOK CALL'],
-      eyebrow: 'WEALTH & COACHING OVERVIEW',
-      headline: '99.4% Clarity',
-      subheadline:
-        'Approachable visual cards that turn financial planning and coaching plans into clear next steps.',
-      ctaLabel: 'BOOK A DEMO',
-      metrics: [
-        { label: 'NET GROWTH', value: '+24.8%' },
-        { label: 'TIME SAVED', value: '14 HRS/WK' },
-        { label: 'CLIENT SCORE', value: '4.9 / 5' },
-      ],
-      cardLabels: ['PLANNING 54%', 'TAX 28%', 'RESERVE 18%'],
-    },
-  },
-
-  // =========================================================================
-  // 08 — CRAFT & PRODUCT PRECISION (Industrial Precision · Dark #18181B)
-  // =========================================================================
-  {
-    id: 'industrial-precision',
-    index: '08',
-    businessTitle: 'Craft & Product Precision',
-    styleSubtitle: 'Industrial Precision',
-    targetBusinesses: 'Physical Products, Audio & Makers',
-    industries: ['Tech & Products', 'Retail & Webshops'],
-    bestMatchFor: ['Tech & Products'],
-    problemSolved:
-      'Generic ecommerce grids flatten the quality of finely engineered products. Inspired by classic Dieter Rams hardware, tactile dials and calibrated grid compartments highlight craftsmanship so buyers happily pay a premium.',
-    bestFor: [
-      'Audio, Hi-Fi & Studio Gear Brands',
-      'Coffee Machines & Kitchen Hardware',
-      'Smart-Home & Consumer Electronics',
-      'Bespoke Makers & Hardware Shops',
-    ],
-    visualCharacteristics: [
-      'Anodized matte black & brushed aluminum tones',
-      'Tactile rotary controls & LED status indicators',
-      'Structured technical spec compartments',
-      'Crisp signal-orange action highlights',
-    ],
-    typographyNote: 'Technical Grotesque + Instrument Mono',
-    uiStyle: 'skeuomorphism',
-    palette: {
-      bg: '#18181B',
-      surface: '#D4D4D8',
-      text: '#FAFAFA',
-      accent: '#FF4D24',
-      secondary: '#8E8E98',
-    },
-    previewSample: {
-      masthead: 'PRECISION HARDWARE',
-      navItems: ['PRODUCTS', 'CRAFT', 'SPECS', 'ORDER'],
-      eyebrow: 'DESIGNED LIKE AN INSTRUMENT',
-      headline: 'Built with Tactile Honesty.',
-      subheadline:
-        'Anodized surfaces, calibrated micro-controls, and clear engineering storytelling.',
-      ctaLabel: 'CONFIGURE UNIT →',
-      metrics: [
-        { label: 'CHASSIS', value: 'MILLED AL' },
-        { label: 'RESPONSE', value: 'ZERO LAG' },
-        { label: 'WARRANTY', value: '5 YEARS' },
-      ],
-      cardLabels: ['GAIN', 'TONE', 'STAGE', 'POWER'],
-    },
-  },
-
-  // =========================================================================
-  // 09 — WARM, NATURAL & LOCAL (Organic Biophilic · Warm Linen #EFECE6)
+  // 07 — WARM, NATURAL & LOCAL (Organic Biophilic · Warm Linen #EFECE6)
   // =========================================================================
   {
     id: 'organic-biophilic',
-    index: '09',
+    index: '07',
     businessTitle: 'Warm, Natural & Local',
     styleSubtitle: 'Organic Biophilic',
     targetBusinesses: 'Wellness, Gift Shops & Bakeries',
@@ -536,11 +433,11 @@ export const PROJECTS: DesignDirection[] = [
   },
 
   // =========================================================================
-  // 10 — UNFORGETTABLE STANDOUT (Neo-Brutalist Pop · High-Contrast #FAF8F2)
+  // 08 — UNFORGETTABLE STANDOUT (Neo-Brutalist Pop · High-Contrast #FAF8F2)
   // =========================================================================
   {
     id: 'neo-brutalist-pop',
-    index: '10',
+    index: '08',
     businessTitle: 'Unforgettable Standout',
     styleSubtitle: 'Neo-Brutalist Pop',
     targetBusinesses: 'Festivals, Agencies & Culture',
@@ -587,11 +484,11 @@ export const PROJECTS: DesignDirection[] = [
   },
 
   // =========================================================================
-  // 11 — EXPERTISE & PUBLICATIONS (Editorial Monograph · Warm Paper #F7F5F0)
+  // 09 — EXPERTISE & PUBLICATIONS (Editorial Monograph · Warm Paper #F7F5F0)
   // =========================================================================
   {
     id: 'editorial-monograph',
-    index: '11',
+    index: '09',
     businessTitle: 'Expertise & Publications',
     styleSubtitle: 'Editorial Monograph',
     targetBusinesses: 'Speakers, Authors & Media',
@@ -639,53 +536,155 @@ export const PROJECTS: DesignDirection[] = [
   },
 
   // =========================================================================
-  // 12 — HIGH-CONVERTING WEBSHOP (Dopamine Commerce · Vibrant Cream #FFFDF7)
+  // 10 — CRAFT & PRODUCT PRECISION (Industrial Precision · Dark #18181B)
   // =========================================================================
   {
-    id: 'dopamine-commerce',
-    index: '12',
-    businessTitle: 'High-Converting Webshop',
-    styleSubtitle: 'Dopamine Commerce',
-    targetBusinesses: 'Treat & Gift Shops, D2C Stores',
-    industries: ['Retail & Webshops'],
-    bestMatchFor: ['Retail & Webshops'],
+    id: 'industrial-precision',
+    index: '10',
+    businessTitle: 'Craft & Product Precision',
+    styleSubtitle: 'Industrial Precision',
+    targetBusinesses: 'Physical Products, Audio & Makers',
+    industries: ['Tech & Products', 'Retail & Webshops'],
+    bestMatchFor: ['Tech & Products'],
     problemSolved:
-      'Boring online stores struggle to justify impulse purchases or bundle upsells. Playful color pops, social-proof review pills, and instant add-to-bag actions spark excitement and lift average order value.',
+      'Generic ecommerce grids flatten the quality of finely engineered products. Inspired by classic Dieter Rams hardware, tactile dials and calibrated grid compartments highlight craftsmanship so buyers happily pay a premium.',
     bestFor: [
-      'Treat, Confectionery & Snack Shops',
-      'Curated Gift Boxes & Stationery Stores',
-      'Direct-to-Consumer Food & Drink Brands',
-      'Subscription Boxes & Retail Launches',
+      'Audio, Hi-Fi & Studio Gear Brands',
+      'Coffee Machines & Kitchen Hardware',
+      'Smart-Home & Consumer Electronics',
+      'Bespoke Makers & Hardware Shops',
     ],
     visualCharacteristics: [
-      'Energetic multi-color accents on warm cream',
-      'Heavy friendly display typography',
-      'Review pills, bundle savings & quick-add cards',
-      'High-visibility checkout call-to-actions',
+      'Anodized matte black & brushed aluminum tones',
+      'Tactile rotary controls & LED status indicators',
+      'Structured technical spec compartments',
+      'Crisp signal-orange action highlights',
     ],
-    typographyNote: 'Chunky Rounded Display + Crisp Sans',
-    uiStyle: 'dopamine-commerce',
+    typographyNote: 'Technical Grotesque + Instrument Mono',
+    uiStyle: 'skeuomorphism',
     palette: {
-      bg: '#FFFDF7',
-      surface: '#FFE8D6',
-      text: '#1C1917',
+      bg: '#18181B',
+      surface: '#D4D4D8',
+      text: '#FAFAFA',
       accent: '#FF4D24',
-      secondary: '#2563EB',
+      secondary: '#8E8E98',
     },
     previewSample: {
-      masthead: 'GOODS & DROPS',
-      navItems: ['SHOP ALL', 'BUNDLES', 'REVIEWS', 'BAG (2)'],
-      eyebrow: 'BESTSELLER · LIMITED BATCH',
-      headline: 'Daily Joy, Delivered.',
+      masthead: 'PRECISION HARDWARE',
+      navItems: ['PRODUCTS', 'CRAFT', 'SPECS', 'ORDER'],
+      eyebrow: 'DESIGNED LIKE AN INSTRUMENT',
+      headline: 'Built with Tactile Honesty.',
       subheadline:
-        'Playful product cards, high-contrast color pops, and frictionless checkout paths.',
-      ctaLabel: 'ADD TO BAG — $38 →',
+        'Anodized surfaces, calibrated micro-controls, and clear engineering storytelling.',
+      ctaLabel: 'CONFIGURE UNIT →',
       metrics: [
-        { label: 'RATED', value: '4.9 ★ (2.4K)' },
-        { label: 'DISPATCH', value: 'SAME DAY' },
-        { label: 'BUNDLES', value: 'SAVE 20%' },
+        { label: 'CHASSIS', value: 'MILLED AL' },
+        { label: 'RESPONSE', value: 'ZERO LAG' },
+        { label: 'WARRANTY', value: '5 YEARS' },
       ],
-      cardLabels: ['CITRUS', 'BERRY', 'MATCHA'],
+      cardLabels: ['GAIN', 'TONE', 'STAGE', 'POWER'],
+    },
+  },
+
+  // =========================================================================
+  // 11 — APPROACHABLE FINANCE & ADVICE (Dimensional SaaS · Light #ECEEF2)
+  // =========================================================================
+  {
+    id: 'dimensional-saas',
+    index: '11',
+    businessTitle: 'Approachable Finance & Advice',
+    styleSubtitle: 'Dimensional SaaS',
+    targetBusinesses: 'Advisors, Coaches & Portals',
+    industries: ['Advisory & B2B'],
+    bestMatchFor: ['Advisory & B2B'],
+    problemSolved:
+      'Financial advice, insurance, and business coaching often feel cold or overly complicated online. Friendly 3D-elevated cards and clean visual charts make complex numbers feel approachable and easy to act on.',
+    bestFor: [
+      'Financial Advisors & Wealth Planners',
+      'Business Coaches & Masterminds',
+      'Modern Insurance & Mortgage Brokers',
+      'Client Portals & Accounting SaaS',
+    ],
+    visualCharacteristics: [
+      'Soft elevated 3D cards with generous 24px corners',
+      'Crisp white surfaces on calm light slate',
+      'Clean growth charts with tabular figures',
+      'Warm orange call-to-action buttons',
+    ],
+    typographyNote: 'Friendly Humanist Sans + Tabular Figures',
+    uiStyle: 'claymorphism',
+    palette: {
+      bg: '#ECEEF2',
+      surface: '#FFFFFF',
+      text: '#1E293B',
+      accent: '#FF4D24',
+      secondary: '#64748B',
+    },
+    previewSample: {
+      masthead: 'CLARITY ADVISORY',
+      navItems: ['SERVICES', 'RESULTS', 'PORTAL', 'BOOK CALL'],
+      eyebrow: 'WEALTH & COACHING OVERVIEW',
+      headline: '99.4% Clarity',
+      subheadline:
+        'Approachable visual cards that turn financial planning and coaching plans into clear next steps.',
+      ctaLabel: 'BOOK A DEMO',
+      metrics: [
+        { label: 'NET GROWTH', value: '+24.8%' },
+        { label: 'TIME SAVED', value: '14 HRS/WK' },
+        { label: 'CLIENT SCORE', value: '4.9 / 5' },
+      ],
+      cardLabels: ['PLANNING 54%', 'TAX 28%', 'RESERVE 18%'],
+    },
+  },
+
+  // =========================================================================
+  // 12 — CLEAR SERVICE & PRODUCT MAP (Modular Bento · Light #F4F5F7)
+  // =========================================================================
+  {
+    id: 'modular-bento',
+    index: '12',
+    businessTitle: 'Clear Service & Product Map',
+    styleSubtitle: 'Modular Bento',
+    targetBusinesses: 'SaaS, Apps & Service Companies',
+    industries: ['Tech & Products', 'Advisory & B2B'],
+    bestMatchFor: ['Tech & Products'],
+    problemSolved:
+      'When your software or service does several things at once, long walls of text confuse buyers. This Apple-inspired bento grid breaks every feature, benefit, and proof point into scannable cards anyone grasps in 5 seconds.',
+    bestFor: [
+      'SaaS & Cloud Software Companies',
+      'Mobile Apps & Digital Tools',
+      'Multi-Service Agencies & IT Firms',
+      'Growing B2B Service Businesses',
+    ],
+    visualCharacteristics: [
+      'Rounded modular cards of varying proportions',
+      'Bright neutral canvas with a focused cobalt accent',
+      'Scannable metric & workflow feature blocks',
+      'Clear trial and demo conversion triggers',
+    ],
+    typographyNote: 'Clean Geometric Sans + Tabular Figures',
+    uiStyle: 'modular-bento',
+    palette: {
+      bg: '#F4F5F7',
+      surface: '#FFFFFF',
+      text: '#111827',
+      accent: '#2563EB',
+      secondary: '#64748B',
+    },
+    previewSample: {
+      masthead: 'PLATFORM SUITE',
+      navItems: ['FEATURES', 'WORKFLOWS', 'PRICING', 'DEMO'],
+      eyebrow: 'MODULAR PRODUCT OVERVIEW',
+      headline: 'Every capability, crystal clear.',
+      subheadline:
+        'Structured bento modules engineered so buyers understand your product in seconds.',
+      ctaLabel: 'START FREE TRIAL →',
+      metrics: [
+        { label: 'SETUP TIME', value: '4 MIN' },
+        { label: 'ADOPTION', value: '98.4%' },
+        { label: 'UPTIME SLA', value: '99.99%' },
+      ],
+      cardLabels: ['AUTOMATION', 'LIVE SYNC', 'ANALYTICS'],
     },
   },
 ];
