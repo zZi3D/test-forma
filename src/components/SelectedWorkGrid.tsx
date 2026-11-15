@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { motion, useReducedMotion } from 'motion/react';
+import { motion, useReducedMotion, Variants } from 'motion/react';
 import {
   PROJECT_CATEGORIES,
   PROJECTS,
@@ -31,6 +31,33 @@ const STUDIO_METRICS: MetricDef[] = [
   { id: 'layers', target: 52, suffix: '-Layer', label: 'Procedural canvas craft' },
   { id: 'desks', staticValue: 'NYC · ZRH', label: 'Synchronized studio desk' },
 ];
+
+interface CardVariantCustom {
+  index: number;
+  reducedMotion: boolean;
+}
+
+const CARD_VARIANTS: Variants = {
+  hidden: ({ reducedMotion }: CardVariantCustom) => ({
+    opacity: reducedMotion ? 1 : 0,
+    y: reducedMotion ? 0 : 28,
+  }),
+  visible: ({ index, reducedMotion }: CardVariantCustom) => {
+    const col = index % 4;
+    const row = Math.floor(index / 4);
+    const delay = reducedMotion ? 0 : Math.min(col * 0.08 + row * 0.05, 0.34);
+
+    return {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: reducedMotion ? 0 : 0.55,
+        delay,
+        ease: [0.16, 1, 0.3, 1],
+      },
+    };
+  },
+};
 
 interface WorkTileCardProps {
   project: ProjectConfig;
@@ -108,74 +135,74 @@ function WorkTileCard({
 
   return (
     <motion.article
-      initial={reducedMotion ? { opacity: 1 } : { opacity: 0, y: 14 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.05 }}
-      transition={{
-        duration: 0.38,
-        delay: reducedMotion ? 0 : Math.min(index * 0.035, 0.22),
-        ease: [0.16, 1, 0.3, 1],
-      }}
-      className={`transition-opacity duration-300 ${
-        isDimmed ? 'opacity-72' : 'opacity-100'
-      }`}
+      custom={{ index, reducedMotion }}
+      variants={CARD_VARIANTS}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.16 }}
     >
-      <button
-        ref={buttonRef}
-        type="button"
-        onPointerEnter={handlePointerEnter}
-        onPointerMove={handlePointerMove}
-        onPointerLeave={handlePointerLeave}
-        onClick={() => onSelect(project)}
-        className={`glass-tile group relative block w-full overflow-hidden rounded-2xl p-3 text-left focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#C98A3A] ${
-          isSpotlighted
-            ? 'border-white/75 shadow-[0_24px_48px_-14px_rgba(28,27,24,0.16)]'
-            : ''
+      <div
+        className={`transition-opacity duration-300 ${
+          isDimmed ? 'opacity-72' : 'opacity-100'
         }`}
       >
-        {/* Specular Diagonal Glass Sheen Overlay (mouse hover only) */}
-        <div
-          ref={sheenRef}
-          aria-hidden="true"
-          className="pointer-events-none absolute -inset-1/2 z-20 opacity-0 transition-opacity duration-300 bg-gradient-to-tr from-transparent via-white/32 to-transparent"
-          style={{
-            transform: 'translate3d(-10%, -10%, 0) rotate(18deg)',
-          }}
-        />
-
-        <div
-          className="relative aspect-[16/10] w-full overflow-hidden rounded-xl border border-[#1C1B18]/10"
-          style={{ backgroundColor: project.palette.bg }}
+        <button
+          ref={buttonRef}
+          type="button"
+          onPointerEnter={handlePointerEnter}
+          onPointerMove={handlePointerMove}
+          onPointerLeave={handlePointerLeave}
+          onClick={() => onSelect(project)}
+          className={`glass-tile group relative block w-full overflow-hidden rounded-2xl p-3 text-left focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#C98A3A] ${
+            isSpotlighted
+              ? 'border-white/75 shadow-[0_24px_48px_-14px_rgba(28,27,24,0.16)]'
+              : ''
+          }`}
         >
-          {imgSrc ? (
-            <img
-              src={imgSrc}
-              alt={`${project.title} — ${project.styleLabel} UI/UX interface`}
-              referrerPolicy="no-referrer"
-              loading="lazy"
-              className="h-full w-full object-cover transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.03]"
-            />
-          ) : (
-            <div className="flex h-full w-full items-center justify-center p-4 text-sm font-medium text-[#1C1B18]">
-              {project.title}
-            </div>
-          )}
-        </div>
+          {/* Specular Diagonal Glass Sheen Overlay (mouse hover only) */}
+          <div
+            ref={sheenRef}
+            aria-hidden="true"
+            className="pointer-events-none absolute -inset-1/2 z-20 opacity-0 transition-opacity duration-300 bg-gradient-to-tr from-transparent via-white/32 to-transparent"
+            style={{
+              transform: 'translate3d(-10%, -10%, 0) rotate(18deg)',
+            }}
+          />
 
-        <div className="relative z-10 mt-3 flex items-baseline justify-between gap-2 px-0.5">
-          <div className="min-w-0">
-            <h3 className="truncate text-[15px] font-semibold tracking-[-0.015em] text-[#1C1B18] transition-colors group-hover:text-[#C98A3A]">
-              {project.title}
-            </h3>
-            <p className="mt-0.5 truncate text-[11px] text-[#1C1B18]/65">
-              {project.styleLabel} · {project.year}
-            </p>
+          <div
+            className="relative aspect-[16/10] w-full overflow-hidden rounded-xl border border-[#1C1B18]/10"
+            style={{ backgroundColor: project.palette.bg }}
+          >
+            {imgSrc ? (
+              <img
+                src={imgSrc}
+                alt={`${project.title} — ${project.styleLabel} UI/UX interface`}
+                referrerPolicy="no-referrer"
+                loading="lazy"
+                className="h-full w-full object-cover transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.03]"
+              />
+            ) : (
+              <div className="flex h-full w-full items-center justify-center p-4 text-sm font-medium text-[#1C1B18]">
+                {project.title}
+              </div>
+            )}
           </div>
-          <span className="font-mono-tabular shrink-0 text-[11px] font-medium text-[#1C1B18]/50">
-            {project.index}
-          </span>
-        </div>
-      </button>
+
+          <div className="relative z-10 mt-3 flex items-baseline justify-between gap-2 px-0.5">
+            <div className="min-w-0">
+              <h3 className="truncate text-[15px] font-semibold tracking-[-0.015em] text-[#1C1B18] transition-colors group-hover:text-[#C98A3A]">
+                {project.title}
+              </h3>
+              <p className="mt-0.5 truncate text-[11px] text-[#1C1B18]/65">
+                {project.styleLabel} · {project.year}
+              </p>
+            </div>
+            <span className="font-mono-tabular shrink-0 text-[11px] font-medium text-[#1C1B18]/50">
+              {project.index}
+            </span>
+          </div>
+        </button>
+      </div>
     </motion.article>
   );
 }
@@ -362,11 +389,8 @@ export function SelectedWorkGrid({
         </div>
 
         {/* Standard Glassmorphism 4-Column Responsive Portfolio Grid */}
-        <motion.div
+        <div
           key={activeFilter}
-          initial={prefersReducedMotion ? { opacity: 1 } : { opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.24, ease: [0.16, 1, 0.3, 1] }}
           onPointerLeave={() => setHoveredId(null)}
           className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4"
         >
@@ -384,7 +408,7 @@ export function SelectedWorkGrid({
               onSelect={onSelectProject}
             />
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   );
