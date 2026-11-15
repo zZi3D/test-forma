@@ -77,7 +77,7 @@ export function getProjectDataUrl(project: ProjectConfig): string {
   if (cached) return cached;
 
   const canvas = renderMockupToCanvas(project, 1600, 1000);
-  const url = canvas.toDataURL('image/jpeg', 0.92);
+  const url = canvas.toDataURL('image/png');
   dataUrlCache.set(cacheKey, url);
   return url;
 }

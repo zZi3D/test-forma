@@ -30,11 +30,17 @@ export function ProjectWheel3D({ onSelectProject }: ProjectWheel3DProps) {
   const [dimensions, setDimensions] = useState<{
     radius: number;
     cardWidth: number;
-    maxZoomScale: number;
+    perspective: number;
+    outerScale: number;
+    centerScale: number;
+    extraZ: number;
   }>({
-    radius: 540,
-    cardWidth: 268,
-    maxZoomScale: 1.19,
+    radius: 590,
+    cardWidth: 460,
+    perspective: 3200,
+    outerScale: 0.67,
+    centerScale: 0.80,
+    extraZ: 28,
   });
 
   // Mutable animation state inside refs for zero-overhead 60fps animation
@@ -62,16 +68,38 @@ export function ProjectWheel3D({ onSelectProject }: ProjectWheel3DProps) {
     return map;
   }, []);
 
-  // Responsive cylinder geometry tuned for 12 3D cards (larger stage + prominent center zoom)
+  // Responsive cylinder geometry: combined (centerScale * perspectiveMag) stays <= 1.0
+  // so Chromium never upscales a smaller rasterized texture when the center card zooms in.
   useEffect(() => {
     const updateSize = () => {
       const w = window.innerWidth;
       if (w < 640) {
-        setDimensions({ radius: 260, cardWidth: 196, maxZoomScale: 1.14 });
+        setDimensions({
+          radius: 275,
+          cardWidth: 270,
+          perspective: 2200,
+          outerScale: 0.74,
+          centerScale: 0.86,
+          extraZ: 16,
+        });
       } else if (w < 1024) {
-        setDimensions({ radius: 410, cardWidth: 224, maxZoomScale: 1.17 });
+        setDimensions({
+          radius: 450,
+          cardWidth: 370,
+          perspective: 2800,
+          outerScale: 0.70,
+          centerScale: 0.83,
+          extraZ: 22,
+        });
       } else {
-        setDimensions({ radius: 540, cardWidth: 268, maxZoomScale: 1.19 });
+        setDimensions({
+          radius: 590,
+          cardWidth: 460,
+          perspective: 3200,
+          outerScale: 0.67,
+          centerScale: 0.80,
+          extraZ: 28,
+        });
       }
     };
     updateSize();
@@ -142,8 +170,8 @@ export function ProjectWheel3D({ onSelectProject }: ProjectWheel3DProps) {
         rigRef.current.style.transform = `translateY(${rigLiftY}px) rotateX(${scrollTiltX.toFixed(2)}deg) rotateZ(4.5deg)`;
       }
 
-      // Per-card smooth center zoom-in & gentle zoom-out based on angular distance from front center (0 deg)
-      const { radius, maxZoomScale } = dimensionsRef.current;
+      // Per-card smooth center zoom-in & gentle zoom-out (never upscaling past native resolution)
+      const { radius, outerScale, centerScale, extraZ } = dimensionsRef.current;
       const zoomRangeDeg = 44; // Smooth interpolation across ~1.45 card steps on each side
       for (let i = 0; i < CARD_COUNT; i += 1) {
         const cardEl = cardRefs.current[i];
@@ -156,12 +184,12 @@ export function ProjectWheel3D({ onSelectProject }: ProjectWheel3DProps) {
         const linearT = Math.max(0, 1 - absDeg / zoomRangeDeg);
         const smoothT = linearT * linearT * (3 - 2 * linearT);
 
-        const scale = 1 + smoothT * (maxZoomScale - 1);
-        const extraZ = smoothT * (isMobile ? 22 : 38);
+        const scale = outerScale + smoothT * (centerScale - outerScale);
+        const zOffset = smoothT * extraZ;
         const liftY = -smoothT * 5;
 
         cardEl.style.transform = `rotateY(${cardAngle}deg) translateZ(${(
-          radius + extraZ
+          radius + zOffset
         ).toFixed(2)}px) translateY(${liftY.toFixed(2)}px) scale(${scale.toFixed(4)})`;
       }
 
@@ -255,7 +283,7 @@ export function ProjectWheel3D({ onSelectProject }: ProjectWheel3DProps) {
         className={`relative mx-auto flex h-[285px] w-full items-center justify-center overflow-visible touch-pan-y sm:h-[340px] md:h-[380px] lg:h-[395px] ${
           isDragging ? 'cursor-grabbing' : 'cursor-grab'
         }`}
-        style={{ perspective: '1750px' }}
+        style={{ perspective: `${dimensions.perspective}px` }}
       >
         <div
           ref={rigRef}
@@ -287,11 +315,11 @@ export function ProjectWheel3D({ onSelectProject }: ProjectWheel3DProps) {
                   style={{
                     width: `${dimensions.cardWidth}px`,
                     transformStyle: 'preserve-3d',
-                    transform: `rotateY(${cardAngle}deg) translateZ(${dimensions.radius}px)`,
+                    transform: `rotateY(${cardAngle}deg) translateZ(${dimensions.radius}px) scale(${dimensions.outerScale})`,
                   }}
-                  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 will-change-transform"
+                  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
                 >
-                  {/* Front Face */}
+                  {/* Front Face — avoids CSS backdrop-filter inside 3D preserve-3d so Chromium keeps full Retina sharpness */}
                   <button
                     type="button"
                     onClick={() => {
@@ -299,10 +327,10 @@ export function ProjectWheel3D({ onSelectProject }: ProjectWheel3DProps) {
                         onSelectProject(project);
                       }
                     }}
-                    className={`glass-tile group relative block w-full rounded-xl p-2 text-left transition-shadow duration-300 hover:scale-[1.03] focus-visible:outline-2 focus-visible:outline-[#C98A3A] ${
+                    className={`group relative block w-full rounded-2xl border bg-[#FAF8F4]/92 p-2.5 text-left transition-shadow duration-300 sm:p-3 focus-visible:outline-2 focus-visible:outline-[#C98A3A] ${
                       isFocused
-                        ? 'ring-1 ring-[#C98A3A]/60 shadow-[0_28px_56px_-14px_rgba(28,27,24,0.26)]'
-                        : 'opacity-95'
+                        ? 'border-[#C98A3A]/55 shadow-[0_32px_64px_-16px_rgba(28,27,24,0.24)]'
+                        : 'border-white/85 shadow-[0_18px_40px_-16px_rgba(28,27,24,0.14)] opacity-95'
                     }`}
                     style={{
                       backfaceVisibility: 'hidden',
@@ -310,7 +338,7 @@ export function ProjectWheel3D({ onSelectProject }: ProjectWheel3DProps) {
                     }}
                   >
                     <div
-                      className="relative aspect-[16/10] w-full overflow-hidden rounded-lg border border-[#1C1B18]/10"
+                      className="relative aspect-[16/10] w-full overflow-hidden rounded-xl border border-[#1C1B18]/10"
                       style={{ backgroundColor: project.palette.bg }}
                     >
                       {imgSrc && (
@@ -319,35 +347,35 @@ export function ProjectWheel3D({ onSelectProject }: ProjectWheel3DProps) {
                           alt={`${project.title} — ${project.styleLabel}`}
                           draggable={false}
                           referrerPolicy="no-referrer"
-                          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
                         />
                       )}
                     </div>
-                    <div className="mt-2 flex items-baseline justify-between gap-2 px-1">
-                      <span className="truncate text-[12px] font-semibold tracking-[-0.01em] text-[#1C1B18]">
+                    <div className="mt-2.5 flex items-baseline justify-between gap-2 px-1">
+                      <span className="truncate text-[13px] font-semibold tracking-[-0.015em] text-[#1C1B18] sm:text-[15px]">
                         {project.title}
                       </span>
-                      <span className="font-mono-tabular shrink-0 text-[10px] text-[#1C1B18]/60">
+                      <span className="font-mono-tabular shrink-0 text-[11px] text-[#1C1B18]/65 sm:text-[12px]">
                         {project.index}
                       </span>
                     </div>
                   </button>
 
-                  {/* Translucent Frosted Backplate so far-side cards never mirror backwards text */}
+                  {/* Translucent Frosted Backplate without backdrop-filter blur penalty */}
                   <div
                     aria-hidden="true"
-                    className="glass-subtle pointer-events-none absolute inset-0 flex flex-col justify-between rounded-xl p-3"
+                    className="pointer-events-none absolute inset-0 flex flex-col justify-between rounded-2xl border border-white/70 bg-[#F7F5F0]/75 p-4 shadow-[0_12px_32px_-12px_rgba(28,27,24,0.08)]"
                     style={{
                       transform: 'rotateY(180deg)',
                       backfaceVisibility: 'hidden',
                       WebkitBackfaceVisibility: 'hidden',
                     }}
                   >
-                    <div className="flex items-center justify-between text-[10px] text-[#1C1B18]/35">
+                    <div className="flex items-center justify-between text-[12px] text-[#1C1B18]/35">
                       <span className="font-mono-tabular">{project.index}</span>
                       <span>FORMA</span>
                     </div>
-                    <div className="border-t border-[#1C1B18]/10 pt-2 text-[11px] font-medium text-[#1C1B18]/35">
+                    <div className="border-t border-[#1C1B18]/10 pt-2.5 text-[13px] font-medium text-[#1C1B18]/35">
                       {project.styleLabel}
                     </div>
                   </div>
