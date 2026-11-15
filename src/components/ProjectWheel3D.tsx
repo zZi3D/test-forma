@@ -1,7 +1,7 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { ChevronLeft, ChevronRight, Pause, Play } from 'lucide-react';
 import { PROJECTS, ProjectItem } from '../data/projects';
-import { getProjectDataUrl } from '../utils/mockupGenerator';
+import { useProjectThumbnails } from '../utils/mockupGenerator';
 
 interface ProjectWheel3DProps {
   onSelectProject: (project: ProjectItem) => void;
@@ -76,13 +76,7 @@ export function ProjectWheel3D({ onSelectProject }: ProjectWheel3DProps) {
     return () => window.clearTimeout(timerId);
   }, []);
 
-  const thumbnails = useMemo(() => {
-    const map = new Map<string, string>();
-    PROJECTS.forEach((p) => {
-      map.set(p.id, getProjectDataUrl(p));
-    });
-    return map;
-  }, []);
+  const thumbnails = useProjectThumbnails();
 
   // Responsive cylinder geometry:
   // 1) (cardWidth * outerScale) < 2 * radius * tan(15deg) prevents 3D neighbor card intersection
@@ -135,12 +129,16 @@ export function ProjectWheel3D({ onSelectProject }: ProjectWheel3DProps) {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  // Main 60fps CSS-3D animation loop with smoothstep center card zoom-in / zoom-out
+  // Main 60fps CSS-3D animation loop (automatically pauses when scrolled offscreen or tab is hidden)
   useEffect(() => {
     let rafId = 0;
     let lastTime = performance.now();
+    let isStageVisible = true;
 
     const tick = (now: number) => {
+      rafId = 0;
+      if (!isStageVisible || document.hidden) return;
+
       const dt = Math.min((now - lastTime) / 1000, 0.05);
       lastTime = now;
 
@@ -221,8 +219,50 @@ export function ProjectWheel3D({ onSelectProject }: ProjectWheel3DProps) {
       rafId = window.requestAnimationFrame(tick);
     };
 
-    rafId = window.requestAnimationFrame(tick);
-    return () => window.cancelAnimationFrame(rafId);
+    const startLoop = () => {
+      if (!rafId && isStageVisible && !document.hidden) {
+        lastTime = performance.now();
+        rafId = window.requestAnimationFrame(tick);
+      }
+    };
+
+    const stopLoop = () => {
+      if (rafId) {
+        window.cancelAnimationFrame(rafId);
+        rafId = 0;
+      }
+    };
+
+    const observer =
+      typeof IntersectionObserver !== 'undefined' && stageRef.current
+        ? new IntersectionObserver(
+            (entries) => {
+              const visible = entries.some((entry) => entry.isIntersecting);
+              isStageVisible = visible;
+              if (visible) startLoop();
+              else stopLoop();
+            },
+            { threshold: 0.01 },
+          )
+        : null;
+
+    if (observer && stageRef.current) {
+      observer.observe(stageRef.current);
+    }
+
+    const handleVisibilityChange = () => {
+      if (document.hidden) stopLoop();
+      else startLoop();
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    startLoop();
+
+    return () => {
+      stopLoop();
+      observer?.disconnect();
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
   }, []);
 
   const stepWheel = useCallback((direction: -1 | 1) => {

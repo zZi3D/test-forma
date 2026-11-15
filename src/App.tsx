@@ -3,16 +3,29 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useCallback, useState } from 'react';
+import { Suspense, lazy, useCallback, useState } from 'react';
 import { ProjectCategory, ProjectItem } from './data/projects';
 import { WaveBackground } from './components/WaveBackground';
 import { GlassHeader } from './components/GlassHeader';
 import { HeroSection } from './components/HeroSection';
 import { SelectedWorkGrid } from './components/SelectedWorkGrid';
 import { ProcessSection } from './components/ProcessSection';
-import { ProjectPreviewModal } from './components/ProjectPreviewModal';
-import { MenuOverlay } from './components/MenuOverlay';
-import { SprintBookingDrawer } from './components/SprintBookingDrawer';
+
+const ProjectPreviewModal = lazy(() =>
+  import('./components/ProjectPreviewModal').then((m) => ({
+    default: m.ProjectPreviewModal,
+  })),
+);
+const MenuOverlay = lazy(() =>
+  import('./components/MenuOverlay').then((m) => ({
+    default: m.MenuOverlay,
+  })),
+);
+const SprintBookingDrawer = lazy(() =>
+  import('./components/SprintBookingDrawer').then((m) => ({
+    default: m.SprintBookingDrawer,
+  })),
+);
 
 export default function App() {
   const [selectedProject, setSelectedProject] = useState<ProjectItem | null>(null);
@@ -26,6 +39,11 @@ export default function App() {
     open: false,
     tab: 'brief',
   });
+  const [loadedOverlays, setLoadedOverlays] = useState({
+    preview: false,
+    menu: false,
+    booking: false,
+  });
 
   const scrollToSection = useCallback((sectionId: string) => {
     if (sectionId === 'hero-wave') {
@@ -38,12 +56,27 @@ export default function App() {
     }
   }, []);
 
+  const handleSelectProject = useCallback((project: ProjectItem) => {
+    setLoadedOverlays((prev) =>
+      prev.preview ? prev : { ...prev, preview: true },
+    );
+    setSelectedProject(project);
+  }, []);
+
+  const handleOpenMenu = useCallback(() => {
+    setLoadedOverlays((prev) => (prev.menu ? prev : { ...prev, menu: true }));
+    setIsMenuOpen(true);
+  }, []);
+
   const openBookingDrawer = useCallback(
     (
       tab: 'brief' | 'call',
       prefilledCategory?: ProjectCategory,
       prefilledProjectTitle?: string,
     ) => {
+      setLoadedOverlays((prev) =>
+        prev.booking ? prev : { ...prev, booking: true },
+      );
       setBookingState({
         open: true,
         tab,
@@ -63,13 +96,13 @@ export default function App() {
       <GlassHeader
         onNavigateSection={scrollToSection}
         onOpenBooking={() => openBookingDrawer('brief')}
-        onOpenMenu={() => setIsMenuOpen(true)}
+        onOpenMenu={handleOpenMenu}
       />
 
       {/* Main Content: Sticky Section 1 with Section 2+3 scrolling over it */}
       <main className="relative z-10">
         <HeroSection
-          onSelectProject={(project) => setSelectedProject(project)}
+          onSelectProject={handleSelectProject}
           onOpenBooking={() => openBookingDrawer('call')}
           onJumpToWork={() => scrollToSection('selected-work')}
         />
@@ -88,7 +121,7 @@ export default function App() {
 
           <div className="relative z-10">
             <SelectedWorkGrid
-              onSelectProject={(project) => setSelectedProject(project)}
+              onSelectProject={handleSelectProject}
               onStartProject={() => openBookingDrawer('brief')}
             />
 
@@ -100,33 +133,39 @@ export default function App() {
         </div>
       </main>
 
-      {/* Case Study Lightbox Preview Modal */}
-      <ProjectPreviewModal
-        project={selectedProject}
-        onClose={() => setSelectedProject(null)}
-        onSelectProject={(project) => setSelectedProject(project)}
-        onStartSimilarSprint={(project) => {
-          setSelectedProject(null);
-          openBookingDrawer('brief', project.category, project.title);
-        }}
-      />
+      {/* Lazy-loaded Overlays (excluded from initial critical path, retain exit animations once opened) */}
+      <Suspense fallback={null}>
+        {loadedOverlays.preview && (
+          <ProjectPreviewModal
+            project={selectedProject}
+            onClose={() => setSelectedProject(null)}
+            onSelectProject={handleSelectProject}
+            onStartSimilarSprint={(project) => {
+              setSelectedProject(null);
+              openBookingDrawer('brief', project.category, project.title);
+            }}
+          />
+        )}
 
-      {/* Mobile & Quick Jump Menu Overlay */}
-      <MenuOverlay
-        isOpen={isMenuOpen}
-        onClose={() => setIsMenuOpen(false)}
-        onNavigateSection={scrollToSection}
-        onOpenBooking={(tab) => openBookingDrawer(tab)}
-      />
+        {loadedOverlays.menu && (
+          <MenuOverlay
+            isOpen={isMenuOpen}
+            onClose={() => setIsMenuOpen(false)}
+            onNavigateSection={scrollToSection}
+            onOpenBooking={(tab) => openBookingDrawer(tab)}
+          />
+        )}
 
-      {/* Slide-Over 24h Sprint Brief & Discovery Call Scheduler */}
-      <SprintBookingDrawer
-        isOpen={bookingState.open}
-        initialTab={bookingState.tab}
-        prefilledCategory={bookingState.prefilledCategory}
-        prefilledProjectTitle={bookingState.prefilledProjectTitle}
-        onClose={() => setBookingState((prev) => ({ ...prev, open: false }))}
-      />
+        {loadedOverlays.booking && (
+          <SprintBookingDrawer
+            isOpen={bookingState.open}
+            initialTab={bookingState.tab}
+            prefilledCategory={bookingState.prefilledCategory}
+            prefilledProjectTitle={bookingState.prefilledProjectTitle}
+            onClose={() => setBookingState((prev) => ({ ...prev, open: false }))}
+          />
+        )}
+      </Suspense>
     </div>
   );
 }

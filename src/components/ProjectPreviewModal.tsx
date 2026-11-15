@@ -1,8 +1,8 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { ArrowLeft, ArrowRight, X } from 'lucide-react';
 import { PROJECTS, ProjectItem } from '../data/projects';
-import { getProjectDataUrl } from '../utils/mockupGenerator';
+import { useProjectModalPreview } from '../utils/mockupGenerator';
 
 interface ProjectPreviewModalProps {
   project: ProjectItem | null;
@@ -34,10 +34,7 @@ export function ProjectPreviewModal({
     return () => window.removeEventListener('keydown', handleKey);
   }, [project, onClose, onSelectProject]);
 
-  const previewUrl = useMemo(() => {
-    if (!project) return '';
-    return getProjectDataUrl(project);
-  }, [project]);
+  const previewUrl = useProjectModalPreview(project);
 
   const currentIndex = project
     ? PROJECTS.findIndex((p) => p.id === project.id)

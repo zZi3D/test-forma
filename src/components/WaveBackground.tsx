@@ -1,8 +1,42 @@
 import { useEffect, useRef } from 'react';
 
 const LINE_COUNT = 52;
-const POINTS_PER_LINE = 90;
+const POINTS_PER_LINE = 64;
 const FOV = 640;
+const Z_FAR = 860;
+const Z_NEAR = 45;
+
+interface WaveLineDescriptor {
+  depthNorm: number;
+  scale: number;
+  zPhase: number;
+  depthOffset: number;
+  strokeStyle: string;
+  lineWidth: number;
+}
+
+const WAVE_LINES: WaveLineDescriptor[] = Array.from(
+  { length: LINE_COUNT },
+  (_, i) => {
+    const depthNorm = i / (LINE_COUNT - 1);
+    const z = Z_FAR - depthNorm * (Z_FAR - Z_NEAR);
+    const scale = FOV / (z + FOV);
+    const zPhase = depthNorm * 4.4;
+    const isGoldAccent = i % 6 === 5;
+    const alpha = isGoldAccent ? 0.22 + depthNorm * 0.58 : 0.12 + depthNorm * 0.55;
+
+    return {
+      depthNorm,
+      scale,
+      zPhase,
+      depthOffset: depthNorm - 0.5,
+      strokeStyle: isGoldAccent
+        ? `rgba(201, 138, 58, ${alpha.toFixed(3)})`
+        : `rgba(28, 27, 24, ${alpha.toFixed(3)})`,
+      lineWidth: (isGoldAccent ? 0.7 : 0.55) + depthNorm * (isGoldAccent ? 1.1 : 1.0),
+    };
+  },
+);
 
 interface ProjectedPoint {
   x: number;
@@ -20,7 +54,7 @@ export function WaveBackground() {
 
     let width = 0;
     let height = 0;
-    let dpr = Math.min(window.devicePixelRatio || 1, 2.5);
+    let dpr = Math.min(window.devicePixelRatio || 1, 2);
 
     // Pre-allocate reusable point buffer to eliminate GC churn inside the rAF loop
     const points: ProjectedPoint[] = Array.from(
@@ -62,45 +96,31 @@ export function WaveBackground() {
       const camY = smoothMouseY * 24;
       const horizonY = height * 0.56;
       const halfWorldWidth = Math.max(width * 1.18, 980);
-
-      const zFar = 860;
-      const zNear = 45;
       const scrollPhase = scrollFactor * 0.0022;
+      const tiltScale = scrollTilt * 175 + 32;
 
       // Draw 52 curved lines from back (i = 0) to front (i = 51)
       for (let i = 0; i < LINE_COUNT; i++) {
-        const depthNorm = i / (LINE_COUNT - 1); // 0 = far back, 1 = close front
-        const z = zFar - depthNorm * (zFar - zNear);
-        const scale = FOV / (z + FOV);
-        const zPhase = depthNorm * 4.4;
+        const line = WAVE_LINES[i];
+        const { scale, zPhase, depthOffset, strokeStyle, lineWidth } = line;
+        const ridgeWave =
+          Math.sin(zPhase * 0.92 + time * 0.45 + scrollPhase * 0.35) * 48 + 38;
+        const depthBias = depthOffset * tiltScale;
 
         for (let j = 0; j < POINTS_PER_LINE; j++) {
           const u = j / (POINTS_PER_LINE - 1);
-          const nx = u * 2 - 1; // [-1, 1] across width
+          const nx = u * 2 - 1;
           const worldX = nx * halfWorldWidth;
 
-          // 1. Broad swell (elongated sine across width)
           const broadSwell =
             Math.sin(nx * 2.55 + zPhase * 0.68 + time * 0.85 + scrollPhase) * 62;
-
-          // 2. Diagonal counter cross-wave for organic topographic relief
           const diagonalCross =
             Math.sin(nx * 4.1 - zPhase * 1.15 + time * 0.55 - scrollPhase * 0.72) *
             Math.cos(zPhase * 0.45 + nx * 1.35) *
             44;
+          const centralRidge = Math.exp(-nx * nx * 2.35) * ridgeWave;
 
-          // 3. Central Gaussian ridge accentuating 3D elevation crest
-          const centralRidge =
-            Math.exp(-nx * nx * 2.35) *
-            (Math.sin(zPhase * 0.92 + time * 0.45 + scrollPhase * 0.35) * 48 + 38);
-
-          // Combine waves + terrain scrollTilt across depth
-          const worldY =
-            broadSwell +
-            diagonalCross -
-            centralRidge +
-            (depthNorm - 0.5) * scrollTilt * 175 +
-            (depthNorm - 0.5) * 32;
+          const worldY = broadSwell + diagonalCross - centralRidge + depthBias;
 
           points[j].x = width * 0.5 + (worldX - camX) * scale;
           points[j].y = horizonY + (worldY - camY) * scale;
@@ -123,19 +143,8 @@ export function WaveBackground() {
           points[lastIdx].y,
         );
 
-        const isGoldAccent = i % 6 === 5;
-        if (isGoldAccent) {
-          // Every 6th line: warm amber-gold (#C98A3A) with slightly higher depth opacity
-          const accentAlpha = 0.22 + depthNorm * 0.58;
-          ctx.strokeStyle = `rgba(201, 138, 58, ${accentAlpha.toFixed(3)})`;
-          ctx.lineWidth = 0.7 + depthNorm * 1.1;
-        } else {
-          // Main graphite lines (#1C1B18): ~12% in back -> ~67% in front
-          const mainAlpha = 0.12 + depthNorm * 0.55;
-          ctx.strokeStyle = `rgba(28, 27, 24, ${mainAlpha.toFixed(3)})`;
-          ctx.lineWidth = 0.55 + depthNorm * 1.0;
-        }
-
+        ctx.strokeStyle = strokeStyle;
+        ctx.lineWidth = lineWidth;
         ctx.stroke();
       }
     };
@@ -143,7 +152,7 @@ export function WaveBackground() {
     const resizeCanvas = () => {
       const nextWidth = window.innerWidth;
       const nextHeight = window.innerHeight;
-      const nextDpr = Math.min(window.devicePixelRatio || 1, 2.5);
+      const nextDpr = Math.min(window.devicePixelRatio || 1, 2);
       if (nextWidth === width && nextHeight === height && nextDpr === dpr) {
         return;
       }
@@ -169,15 +178,13 @@ export function WaveBackground() {
       targetMouseY = (e.clientY / Math.max(height, 1)) * 2 - 1;
     };
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    window.addEventListener('mousemove', handleMouseMove, { passive: true });
-    window.addEventListener('resize', resizeCanvas, { passive: true });
-
     const renderFrame = (now: number) => {
+      rafId = 0;
+      if (document.hidden) return;
+
       const dt = Math.min(Math.max((now - lastNow) / 1000, 0.001), 0.05);
       lastNow = now;
 
-      // Frame-rate independent exponential smoothing (~0.06 per frame at 60Hz)
       const lerpAlpha = 1 - Math.exp(-3.7 * dt);
       const velAlpha = 1 - Math.exp(-2.4 * dt);
 
@@ -196,13 +203,37 @@ export function WaveBackground() {
       rafId = window.requestAnimationFrame(renderFrame);
     };
 
-    rafId = window.requestAnimationFrame(renderFrame);
+    const startWave = () => {
+      if (!rafId && !document.hidden) {
+        lastNow = performance.now();
+        rafId = window.requestAnimationFrame(renderFrame);
+      }
+    };
+
+    const handleVisibility = () => {
+      if (document.hidden) {
+        if (rafId) {
+          window.cancelAnimationFrame(rafId);
+          rafId = 0;
+        }
+      } else {
+        startWave();
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
+    window.addEventListener('resize', resizeCanvas, { passive: true });
+    document.addEventListener('visibilitychange', handleVisibility);
+
+    startWave();
 
     return () => {
-      window.cancelAnimationFrame(rafId);
+      if (rafId) window.cancelAnimationFrame(rafId);
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('resize', resizeCanvas);
+      document.removeEventListener('visibilitychange', handleVisibility);
     };
   }, []);
 

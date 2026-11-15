@@ -11,7 +11,7 @@ import {
   ProjectCategory,
   ProjectConfig,
 } from '../data/projects';
-import { getProjectDataUrl } from '../utils/mockupGenerator';
+import { useProjectThumbnails } from '../utils/mockupGenerator';
 
 interface SelectedWorkGridProps {
   onSelectProject: (project: ProjectConfig) => void;
@@ -361,13 +361,7 @@ export function SelectedWorkGrid({
     return () => window.removeEventListener('resize', updateCols);
   }, []);
 
-  const thumbnails = useMemo(() => {
-    const map = new Map<string, string>();
-    PROJECTS.forEach((p) => {
-      map.set(p.id, getProjectDataUrl(p));
-    });
-    return map;
-  }, []);
+  const thumbnails = useProjectThumbnails();
 
   const visibleProjects = useMemo(() => {
     if (activeFilter === 'All') return PROJECTS;
