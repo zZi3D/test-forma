@@ -9,6 +9,13 @@ interface ProjectWheel3DProps {
 
 const CARD_COUNT = PROJECTS.length;
 const STEP_DEG = 360 / CARD_COUNT;
+const AUTO_SPIN_DELAY_MS = 2500;
+const MAX_SWIPE_STEP_DEG = 8;
+const MAX_SWIPE_VELOCITY = 110;
+
+function clamp(val: number, min: number, max: number): number {
+  return Math.max(min, Math.min(max, val));
+}
 
 function normalizeIndex(angleDeg: number): number {
   const raw = Math.round(-angleDeg / STEP_DEG);
@@ -21,10 +28,7 @@ export function ProjectWheel3D({ onSelectProject }: ProjectWheel3DProps) {
   const ringRef = useRef<HTMLDivElement | null>(null);
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
 
-  const [isAutoSpin, setIsAutoSpin] = useState<boolean>(() => {
-    if (typeof window === 'undefined') return true;
-    return !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  });
+  const [isAutoSpin, setIsAutoSpin] = useState<boolean>(false);
   const [isDragging, setIsDragging] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
   const [dimensions, setDimensions] = useState<{
@@ -35,12 +39,12 @@ export function ProjectWheel3D({ onSelectProject }: ProjectWheel3DProps) {
     centerScale: number;
     extraZ: number;
   }>({
-    radius: 590,
+    radius: 620,
     cardWidth: 460,
     perspective: 3200,
     outerScale: 0.67,
     centerScale: 0.80,
-    extraZ: 28,
+    extraZ: 34,
   });
 
   // Mutable animation state inside refs for zero-overhead 60fps animation
@@ -48,9 +52,11 @@ export function ProjectWheel3D({ onSelectProject }: ProjectWheel3DProps) {
   const targetAngleRef = useRef<number | null>(null);
   const velocityRef = useRef(0);
   const autoSpinRef = useRef(isAutoSpin);
+  const userToggledAutoSpinRef = useRef(false);
   const isHoveringRef = useRef(false);
   const isDraggingRef = useRef(false);
   const lastPointerXRef = useRef(0);
+  const lastPointerTimeRef = useRef(0);
   const pointerTravelRef = useRef(0);
   const scrollTargetRef = useRef(0);
   const scrollSmoothRef = useRef(0);
@@ -60,6 +66,16 @@ export function ProjectWheel3D({ onSelectProject }: ProjectWheel3DProps) {
   autoSpinRef.current = isAutoSpin;
   dimensionsRef.current = dimensions;
 
+  // Always start auto-spin automatically after a 2.5s initial pause
+  useEffect(() => {
+    const timerId = window.setTimeout(() => {
+      if (!userToggledAutoSpinRef.current) {
+        setIsAutoSpin(true);
+      }
+    }, AUTO_SPIN_DELAY_MS);
+    return () => window.clearTimeout(timerId);
+  }, []);
+
   const thumbnails = useMemo(() => {
     const map = new Map<string, string>();
     PROJECTS.forEach((p) => {
@@ -68,37 +84,38 @@ export function ProjectWheel3D({ onSelectProject }: ProjectWheel3DProps) {
     return map;
   }, []);
 
-  // Responsive cylinder geometry: combined (centerScale * perspectiveMag) stays <= 1.0
-  // so Chromium never upscales a smaller rasterized texture when the center card zooms in.
+  // Responsive cylinder geometry:
+  // 1) (cardWidth * outerScale) < 2 * radius * tan(15deg) prevents 3D neighbor card intersection
+  // 2) (centerScale * perspectiveMag) stays <= ~1.0 to preserve Retina sharpness
   useEffect(() => {
     const updateSize = () => {
       const w = window.innerWidth;
       if (w < 640) {
         setDimensions({
-          radius: 275,
+          radius: 415,
           cardWidth: 270,
-          perspective: 2200,
-          outerScale: 0.74,
-          centerScale: 0.86,
-          extraZ: 16,
+          perspective: 2400,
+          outerScale: 0.72,
+          centerScale: 0.82,
+          extraZ: 36,
         });
       } else if (w < 1024) {
         setDimensions({
-          radius: 450,
+          radius: 500,
           cardWidth: 370,
           perspective: 2800,
-          outerScale: 0.70,
-          centerScale: 0.83,
-          extraZ: 22,
+          outerScale: 0.68,
+          centerScale: 0.81,
+          extraZ: 34,
         });
       } else {
         setDimensions({
-          radius: 590,
+          radius: 620,
           cardWidth: 460,
           perspective: 3200,
           outerScale: 0.67,
           centerScale: 0.80,
-          extraZ: 28,
+          extraZ: 34,
         });
       }
     };
@@ -134,7 +151,7 @@ export function ProjectWheel3D({ onSelectProject }: ProjectWheel3DProps) {
       const scrollSensitivity = isMobile ? 0.08 : 0.15;
       const scrollAngleOffset = scrollSmoothRef.current * scrollSensitivity;
       const scrollTiltX = isMobile
-        ? -7.5
+        ? -5.5
         : Math.max(-10, Math.min(-7.5, -7.5 - (scrollSmoothRef.current / 900) * 2.5));
 
       if (targetAngleRef.current !== null) {
@@ -145,9 +162,9 @@ export function ProjectWheel3D({ onSelectProject }: ProjectWheel3DProps) {
           targetAngleRef.current = null;
         }
       } else if (!isDraggingRef.current) {
-        // Inertia decay
+        // Controlled inertia decay
         angleRef.current += velocityRef.current * dt;
-        velocityRef.current *= Math.pow(0.06, dt);
+        velocityRef.current *= Math.pow(0.035, dt);
         if (Math.abs(velocityRef.current) < 0.25) {
           velocityRef.current = 0;
         }
@@ -166,8 +183,10 @@ export function ProjectWheel3D({ onSelectProject }: ProjectWheel3DProps) {
 
       if (rigRef.current) {
         const w = window.innerWidth;
-        const rigLiftY = w < 640 ? 0 : w < 1024 ? -20 : -30;
-        rigRef.current.style.transform = `translateY(${rigLiftY}px) rotateX(${scrollTiltX.toFixed(2)}deg) rotateZ(4.5deg)`;
+        const rigLiftY = w < 640 ? -12 : w < 1024 ? -20 : -30;
+        rigRef.current.style.transform = `translateY(${rigLiftY}px) rotateX(${scrollTiltX.toFixed(2)}deg) rotateZ(${
+          w < 640 ? 3 : 4.5
+        }deg)`;
       }
 
       // Per-card smooth center zoom-in & gentle zoom-out (never upscaling past native resolution)
@@ -224,6 +243,7 @@ export function ProjectWheel3D({ onSelectProject }: ProjectWheel3DProps) {
     isDraggingRef.current = true;
     setIsDragging(true);
     lastPointerXRef.current = e.clientX;
+    lastPointerTimeRef.current = performance.now();
     pointerTravelRef.current = 0;
     velocityRef.current = 0;
     e.currentTarget.setPointerCapture(e.pointerId);
@@ -231,13 +251,27 @@ export function ProjectWheel3D({ onSelectProject }: ProjectWheel3DProps) {
 
   const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
     if (!isDraggingRef.current) return;
+    const now = performance.now();
+    const dtMove = Math.max((now - lastPointerTimeRef.current) / 1000, 0.008);
+    lastPointerTimeRef.current = now;
+
     const dx = e.clientX - lastPointerXRef.current;
     lastPointerXRef.current = e.clientX;
     pointerTravelRef.current += Math.abs(dx);
 
-    const deltaDeg = dx * 0.28;
+    const deltaDeg = clamp(dx * 0.17, -MAX_SWIPE_STEP_DEG, MAX_SWIPE_STEP_DEG);
     angleRef.current += deltaDeg;
-    velocityRef.current = deltaDeg * 42;
+
+    const instantVelocity = clamp(
+      deltaDeg / dtMove,
+      -MAX_SWIPE_VELOCITY,
+      MAX_SWIPE_VELOCITY,
+    );
+    velocityRef.current = clamp(
+      velocityRef.current * 0.55 + instantVelocity * 0.45,
+      -MAX_SWIPE_VELOCITY,
+      MAX_SWIPE_VELOCITY,
+    );
   };
 
   const handlePointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
@@ -255,8 +289,13 @@ export function ProjectWheel3D({ onSelectProject }: ProjectWheel3DProps) {
     e.preventDefault();
     targetAngleRef.current = null;
     const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
-    angleRef.current -= delta * 0.14;
-    velocityRef.current = -delta * 2.2;
+    const stepDeg = clamp(delta * 0.08, -MAX_SWIPE_STEP_DEG, MAX_SWIPE_STEP_DEG);
+    angleRef.current -= stepDeg;
+    velocityRef.current = clamp(
+      velocityRef.current * 0.5 - stepDeg * 10,
+      -MAX_SWIPE_VELOCITY,
+      MAX_SWIPE_VELOCITY,
+    );
   };
 
   const activeProject = PROJECTS[activeIndex];
@@ -280,7 +319,7 @@ export function ProjectWheel3D({ onSelectProject }: ProjectWheel3DProps) {
         role="region"
         aria-roledescription="3D rotating project wheel"
         aria-label="Interactive 3D showcase wheel — drag horizontally to turn, click any card to inspect"
-        className={`relative mx-auto flex h-[285px] w-full items-center justify-center overflow-visible touch-pan-y sm:h-[340px] md:h-[380px] lg:h-[395px] ${
+        className={`relative mx-auto flex h-[295px] w-full items-center justify-center overflow-visible touch-pan-y sm:h-[340px] md:h-[380px] lg:h-[395px] ${
           isDragging ? 'cursor-grabbing' : 'cursor-grab'
         }`}
         style={{ perspective: `${dimensions.perspective}px` }}
@@ -387,7 +426,7 @@ export function ProjectWheel3D({ onSelectProject }: ProjectWheel3DProps) {
       </div>
 
       {/* Wheel Navigation & Turn Controls (Directly Under Wheel Stage — lower on desktop to clear zoomed front card) */}
-      <div className="glass-subtle relative z-20 mx-auto mt-7 flex max-w-[680px] items-center justify-between gap-2.5 rounded-full px-3 py-1.5 sm:mt-16 sm:gap-3 sm:px-4 sm:py-2 md:mt-24 lg:mt-32">
+      <div className="glass-subtle relative z-20 mx-auto mt-8 flex max-w-[680px] items-center justify-between gap-2.5 rounded-full px-3 py-1.5 sm:mt-16 sm:gap-3 sm:px-4 sm:py-2 md:mt-24 lg:mt-32">
         <div className="flex shrink-0 items-center gap-1 sm:gap-1.5">
           <button
             type="button"
@@ -424,7 +463,10 @@ export function ProjectWheel3D({ onSelectProject }: ProjectWheel3DProps) {
 
         <button
           type="button"
-          onClick={() => setIsAutoSpin((prev) => !prev)}
+          onClick={() => {
+            userToggledAutoSpinRef.current = true;
+            setIsAutoSpin((prev) => !prev);
+          }}
           aria-pressed={isAutoSpin}
           className="inline-flex h-8 shrink-0 items-center gap-1.5 rounded-full border border-[#1C1B18]/15 px-2.5 text-[11px] font-medium whitespace-nowrap text-[#1C1B18] transition-colors hover:bg-[#1C1B18] hover:text-[#F7F5F0] sm:px-3"
         >
