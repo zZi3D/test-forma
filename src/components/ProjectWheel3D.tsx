@@ -5,6 +5,7 @@ import { useProjectThumbnails } from '../utils/mockupGenerator';
 
 interface ProjectWheel3DProps {
   onSelectProject: (project: ProjectItem) => void;
+  isPaused?: boolean;
 }
 
 const CARD_COUNT = PROJECTS.length;
@@ -22,7 +23,10 @@ function normalizeIndex(angleDeg: number): number {
   return ((raw % CARD_COUNT) + CARD_COUNT) % CARD_COUNT;
 }
 
-export function ProjectWheel3D({ onSelectProject }: ProjectWheel3DProps) {
+export function ProjectWheel3D({
+  onSelectProject,
+  isPaused = false,
+}: ProjectWheel3DProps) {
   const stageRef = useRef<HTMLDivElement | null>(null);
   const rigRef = useRef<HTMLDivElement | null>(null);
   const ringRef = useRef<HTMLDivElement | null>(null);
@@ -62,9 +66,12 @@ export function ProjectWheel3D({ onSelectProject }: ProjectWheel3DProps) {
   const scrollSmoothRef = useRef(0);
   const lastReportedIndexRef = useRef(0);
   const dimensionsRef = useRef(dimensions);
+  const isPausedRef = useRef(isPaused);
+  const loopControlsRef = useRef<{ sync: () => void } | null>(null);
 
   autoSpinRef.current = isAutoSpin;
   dimensionsRef.current = dimensions;
+  isPausedRef.current = isPaused;
 
   // Always start auto-spin automatically after a 2.5s initial pause
   useEffect(() => {
@@ -137,7 +144,7 @@ export function ProjectWheel3D({ onSelectProject }: ProjectWheel3DProps) {
 
     const tick = (now: number) => {
       rafId = 0;
-      if (!isStageVisible || document.hidden) return;
+      if (isPausedRef.current || !isStageVisible || document.hidden) return;
 
       const dt = Math.min((now - lastTime) / 1000, 0.05);
       lastTime = now;
@@ -220,7 +227,12 @@ export function ProjectWheel3D({ onSelectProject }: ProjectWheel3DProps) {
     };
 
     const startLoop = () => {
-      if (!rafId && isStageVisible && !document.hidden) {
+      if (
+        !rafId &&
+        !isPausedRef.current &&
+        isStageVisible &&
+        !document.hidden
+      ) {
         lastTime = performance.now();
         rafId = window.requestAnimationFrame(tick);
       }
@@ -233,14 +245,23 @@ export function ProjectWheel3D({ onSelectProject }: ProjectWheel3DProps) {
       }
     };
 
+    const syncLoop = () => {
+      if (!isPausedRef.current && isStageVisible && !document.hidden) {
+        startLoop();
+      } else {
+        stopLoop();
+      }
+    };
+
+    loopControlsRef.current = { sync: syncLoop };
+
     const observer =
       typeof IntersectionObserver !== 'undefined' && stageRef.current
         ? new IntersectionObserver(
             (entries) => {
               const visible = entries.some((entry) => entry.isIntersecting);
               isStageVisible = visible;
-              if (visible) startLoop();
-              else stopLoop();
+              syncLoop();
             },
             { threshold: 0.01 },
           )
@@ -251,19 +272,24 @@ export function ProjectWheel3D({ onSelectProject }: ProjectWheel3DProps) {
     }
 
     const handleVisibilityChange = () => {
-      if (document.hidden) stopLoop();
-      else startLoop();
+      syncLoop();
     };
 
     document.addEventListener('visibilitychange', handleVisibilityChange);
-    startLoop();
+    syncLoop();
 
     return () => {
+      loopControlsRef.current = null;
       stopLoop();
       observer?.disconnect();
       document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
   }, []);
+
+  useEffect(() => {
+    isPausedRef.current = isPaused;
+    loopControlsRef.current?.sync();
+  }, [isPaused]);
 
   const stepWheel = useCallback((direction: -1 | 1) => {
     targetAngleRef.current = null;

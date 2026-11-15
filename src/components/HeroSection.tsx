@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ProjectItem } from '../data/projects';
 import { ProjectWheel3D } from './ProjectWheel3D';
 
@@ -14,6 +14,7 @@ export function HeroSection({
   onJumpToWork,
 }: HeroSectionProps) {
   const stickyRef = useRef<HTMLElement | null>(null);
+  const [isWheelPaused, setIsWheelPaused] = useState(false);
 
   // Scroll until the bottom CTA block is in view, then pin Hero sticky while Section 2 rises over it
   useEffect(() => {
@@ -29,6 +30,8 @@ export function HeroSection({
         el.style.opacity = '1';
         el.style.transform = 'none';
         el.style.pointerEvents = 'auto';
+        el.style.visibility = 'visible';
+        setIsWheelPaused(false);
         return;
       }
 
@@ -43,6 +46,8 @@ export function HeroSection({
         el.style.opacity = '1';
         el.style.transform = 'none';
         el.style.pointerEvents = 'auto';
+        el.style.visibility = 'visible';
+        setIsWheelPaused((prev) => (prev ? false : prev));
         return;
       }
 
@@ -53,10 +58,13 @@ export function HeroSection({
       const fadeT = Math.min(Math.max((overlapProgress - 0.18) / 0.72, 0), 1);
       const opacity = 1 - fadeT;
       const scale = 1 - fadeT * 0.04;
+      const shouldPause = opacity <= 0.08;
 
       el.style.opacity = opacity.toFixed(3);
       el.style.transform = `scale(${scale.toFixed(4)})`;
-      el.style.pointerEvents = opacity < 0.08 ? 'none' : 'auto';
+      el.style.pointerEvents = shouldPause ? 'none' : 'auto';
+      el.style.visibility = opacity <= 0.01 ? 'hidden' : 'visible';
+      setIsWheelPaused((prev) => (prev === shouldPause ? prev : shouldPause));
     };
 
     const onScroll = () => {
@@ -104,7 +112,10 @@ export function HeroSection({
         </div>
 
         {/* Enlarged 3D Wheel with Smooth Center Zoom + Turn Wheel Bar Directly Underneath */}
-        <ProjectWheel3D onSelectProject={onSelectProject} />
+        <ProjectWheel3D
+          onSelectProject={onSelectProject}
+          isPaused={isWheelPaused}
+        />
 
         {/* CTA Block Below Wheel Controls — triggers Section 2 overlap once positioned just below screen center */}
         <div className="mx-auto mt-10 flex max-w-xl flex-col items-center text-center md:mt-12">
