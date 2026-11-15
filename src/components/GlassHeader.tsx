@@ -1,19 +1,21 @@
 import { Menu } from 'lucide-react';
 
 interface GlassHeaderProps {
+  activePage: 'home' | 'work';
   onNavigateSection: (sectionId: string) => void;
   onOpenBooking: () => void;
   onOpenMenu: () => void;
 }
 
 const NAV_LINKS = [
-  { label: 'Overview', target: 'hero-wave' },
-  { label: 'Work', target: 'selected-work' },
-  { label: 'Process', target: 'process-studio' },
-  { label: 'Contact', target: 'studio-footer' },
+  { label: 'Overview', target: 'hero-wave', page: 'home' as const },
+  { label: 'Work', target: 'work', page: 'work' as const },
+  { label: 'Process', target: 'process-studio', page: null },
+  { label: 'Contact', target: 'studio-footer', page: null },
 ];
 
 export function GlassHeader({
+  activePage,
   onNavigateSection,
   onOpenBooking,
   onOpenMenu,
@@ -48,16 +50,30 @@ export function GlassHeader({
           aria-label="Primary navigation"
           className="hidden items-center gap-7 md:flex"
         >
-          {NAV_LINKS.map((link) => (
-            <button
-              key={link.target}
-              type="button"
-              onClick={() => onNavigateSection(link.target)}
-              className="text-[13px] font-medium text-[#1C1B18]/75 whitespace-nowrap shrink-0 underline-offset-4 transition-colors hover:text-[#1C1B18] hover:underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#C98A3A]"
-            >
-              {link.label}
-            </button>
-          ))}
+          {NAV_LINKS.map((link) => {
+            const isActive = link.page !== null && link.page === activePage;
+            return (
+              <button
+                key={link.target}
+                type="button"
+                aria-current={isActive ? 'page' : undefined}
+                onClick={() => onNavigateSection(link.target)}
+                className={`relative inline-flex items-center gap-1.5 text-[13px] whitespace-nowrap shrink-0 underline-offset-4 transition-colors hover:text-[#1C1B18] hover:underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#C98A3A] ${
+                  isActive
+                    ? 'font-semibold text-[#1C1B18]'
+                    : 'font-medium text-[#1C1B18]/70'
+                }`}
+              >
+                {isActive && (
+                  <span
+                    aria-hidden="true"
+                    className="h-1.5 w-1.5 rounded-full bg-[#C98A3A]"
+                  />
+                )}
+                <span>{link.label}</span>
+              </button>
+            );
+          })}
         </nav>
 
         {/* Zone 3: Single Primary Action (+ mobile menu trigger) */}

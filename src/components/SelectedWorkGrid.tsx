@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { ArrowLeft } from 'lucide-react';
 import {
   animate,
   motion,
@@ -16,6 +17,8 @@ import { useProjectThumbnails } from '../utils/mockupGenerator';
 interface SelectedWorkGridProps {
   onSelectProject: (project: ProjectConfig) => void;
   onStartProject: () => void;
+  variant?: 'section' | 'page';
+  onBackToOverview?: () => void;
 }
 
 type FilterOption = 'All' | ProjectCategory;
@@ -312,7 +315,10 @@ function WorkTileCard({
 export function SelectedWorkGrid({
   onSelectProject,
   onStartProject,
+  variant = 'section',
+  onBackToOverview,
 }: SelectedWorkGridProps) {
+  const isStandalonePage = variant === 'page';
   const prefersReducedMotion = Boolean(useReducedMotion());
   const [activeFilter, setActiveFilter] = useState<FilterOption>('All');
   const [hoveredId, setHoveredId] = useState<string | null>(null);
@@ -383,7 +389,12 @@ export function SelectedWorkGrid({
       rafId = 0;
       const vh = Math.max(window.innerHeight, 1);
       const startY = gridCols <= 1 ? vh * 0.84 : vh * 0.72;
-      const triggerY = gridCols <= 1 ? vh * 0.6 : vh * 0.48;
+      const triggerY =
+        gridCols <= 1
+          ? vh * 0.62
+          : isStandalonePage
+            ? vh * 0.58
+            : vh * 0.48;
       const tiltSpan = Math.max(startY - triggerY, 1);
       const atPageBottom =
         window.scrollY + vh >= document.documentElement.scrollHeight - 48;
@@ -421,7 +432,8 @@ export function SelectedWorkGrid({
       }
     };
 
-    const timerId = window.setTimeout(evaluateRows, filterChanged ? 80 : 16);
+    const initialDelay = filterChanged ? 80 : isStandalonePage ? 160 : 16;
+    const timerId = window.setTimeout(evaluateRows, initialDelay);
     window.addEventListener('scroll', onScrollOrResize, { passive: true });
     window.addEventListener('resize', onScrollOrResize, { passive: true });
     return () => {
@@ -430,7 +442,7 @@ export function SelectedWorkGrid({
       window.removeEventListener('resize', onScrollOrResize);
       if (rafId) window.cancelAnimationFrame(rafId);
     };
-  }, [activeFilter, gridCols]);
+  }, [activeFilter, gridCols, isStandalonePage]);
 
   // Animate Studio Metrics count-up cleanly once when scrolled into view
   useEffect(() => {
@@ -480,11 +492,65 @@ export function SelectedWorkGrid({
 
   return (
     <section
-      id="selected-work"
+      id={isStandalonePage ? 'work-archive' : 'selected-work'}
       aria-label="Selected Work Portfolio Archive"
-      className="relative z-10 w-full px-4 pt-14 pb-16 md:px-8 md:pt-20 md:pb-24"
+      className={`relative z-10 w-full px-4 md:px-8 ${
+        isStandalonePage
+          ? 'pt-28 pb-12 md:pt-34 md:pb-16'
+          : 'pt-14 pb-16 md:pt-20 md:pb-24'
+      }`}
     >
       <div className="mx-auto max-w-[1200px]">
+        {isStandalonePage && (
+          <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
+            {onBackToOverview && (
+              <button
+                type="button"
+                onClick={onBackToOverview}
+                className="glass-subtle inline-flex h-9 items-center gap-2 rounded-full px-4 text-[12px] font-medium text-[#1C1B18] transition-colors hover:bg-white/40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C98A3A]"
+              >
+                <ArrowLeft className="h-3.5 w-3.5" />
+                <span>Back to Overview</span>
+              </button>
+            )}
+            <span className="font-mono-tabular text-[11px] font-medium tracking-[0.06em] text-[#1C1B18]/55 uppercase">
+              02 / Complete Index · {PROJECTS.length} Editions
+            </span>
+          </div>
+        )}
+
+        {/* Section / Page Header */}
+        {isStandalonePage ? (
+          <motion.div
+            initial={prefersReducedMotion ? { opacity: 1 } : { opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+            className="mb-10 flex flex-col gap-5 border-b border-[#1C1B18]/12 pb-8 sm:flex-row sm:items-end sm:justify-between"
+          >
+            <div className="max-w-2xl">
+              <p className="text-[12px] font-medium tracking-[0.04em] text-[#C98A3A]">
+                Archive · {PROJECTS.length} Curated Editions
+              </p>
+              <h1 className="display-tight mt-2 text-[clamp(2.35rem,4.5vw,3.85rem)] leading-[1.03] font-semibold text-[#1C1B18]">
+                Selected Work
+              </h1>
+              <p className="mt-3 max-w-[56ch] text-[14px] leading-[1.65] text-[#1C1B18]/72 sm:text-[15px]">
+                Twelve distinct digital design systems—spanning architectural monographs,
+                horology portals, cultural seasons, and spatial operating interfaces,
+                each crafted in a dedicated 24-hour sprint.
+              </p>
+            </div>
+
+            <button
+              type="button"
+              onClick={onStartProject}
+              className="inline-flex h-10 items-center justify-center self-start rounded-full bg-[#1C1B18] px-5 text-[12px] font-semibold text-[#F7F5F0] whitespace-nowrap shrink-0 transition-colors duration-200 hover:bg-[#C98A3A] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C98A3A] sm:self-auto"
+            >
+              + Start a project
+            </button>
+          </motion.div>
+        ) : null}
+
         {/* Studio Proof Metrics Strip (live count-up on first reveal) */}
         <motion.div
           ref={metricsRef}
@@ -492,7 +558,9 @@ export function SelectedWorkGrid({
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.25 }}
           transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-          className="glass-tile mb-12 grid grid-cols-2 gap-4 rounded-2xl p-4 md:mb-14 md:grid-cols-4 md:gap-6 md:px-7 md:py-5"
+          className={`glass-tile grid grid-cols-2 gap-4 rounded-2xl p-4 md:grid-cols-4 md:gap-6 md:px-7 md:py-5 ${
+            isStandalonePage ? 'mb-8 md:mb-10' : 'mb-12 md:mb-14'
+          }`}
         >
           {STUDIO_METRICS.map((metric) => {
             const displayValue =
@@ -513,31 +581,33 @@ export function SelectedWorkGrid({
           })}
         </motion.div>
 
-        {/* Section Header */}
-        <motion.div
-          initial={prefersReducedMotion ? { opacity: 1 } : { opacity: 0, y: 10 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.42, ease: [0.16, 1, 0.3, 1] }}
-          className="flex flex-col gap-5 border-b border-[#1C1B18]/12 pb-6 sm:flex-row sm:items-end sm:justify-between"
-        >
-          <div>
-            <p className="text-[12px] font-medium tracking-[0.04em] text-[#C98A3A]">
-              Archive · {PROJECTS.length} Editions
-            </p>
-            <h2 className="display-tight mt-1.5 text-[clamp(2rem,3.4vw,3rem)] leading-[1.06] font-semibold text-[#1C1B18]">
-              Selected Work
-            </h2>
-          </div>
-
-          <button
-            type="button"
-            onClick={onStartProject}
-            className="inline-flex h-10 items-center justify-center self-start rounded-full bg-[#1C1B18] px-5 text-[12px] font-semibold text-[#F7F5F0] whitespace-nowrap shrink-0 transition-colors duration-200 hover:bg-[#C98A3A] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C98A3A] sm:self-auto"
+        {/* Section Header (home section only; standalone page displays full h1 above) */}
+        {!isStandalonePage && (
+          <motion.div
+            initial={prefersReducedMotion ? { opacity: 1 } : { opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.42, ease: [0.16, 1, 0.3, 1] }}
+            className="flex flex-col gap-5 border-b border-[#1C1B18]/12 pb-6 sm:flex-row sm:items-end sm:justify-between"
           >
-            + Start a project
-          </button>
-        </motion.div>
+            <div>
+              <p className="text-[12px] font-medium tracking-[0.04em] text-[#C98A3A]">
+                Archive · {PROJECTS.length} Editions
+              </p>
+              <h2 className="display-tight mt-1.5 text-[clamp(2rem,3.4vw,3rem)] leading-[1.06] font-semibold text-[#1C1B18]">
+                Selected Work
+              </h2>
+            </div>
+
+            <button
+              type="button"
+              onClick={onStartProject}
+              className="inline-flex h-10 items-center justify-center self-start rounded-full bg-[#1C1B18] px-5 text-[12px] font-semibold text-[#F7F5F0] whitespace-nowrap shrink-0 transition-colors duration-200 hover:bg-[#C98A3A] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C98A3A] sm:self-auto"
+            >
+              + Start a project
+            </button>
+          </motion.div>
+        )}
 
         {/* Interactive Filter Tabs with Sliding Active Pill */}
         <div

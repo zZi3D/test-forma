@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Suspense, lazy, useCallback, useState } from 'react';
+import { Suspense, lazy, useCallback, useEffect, useState } from 'react';
 import { ProjectCategory, ProjectItem } from './data/projects';
 import { WaveBackground } from './components/WaveBackground';
 import { GlassHeader } from './components/GlassHeader';
@@ -11,6 +11,11 @@ import { HeroSection } from './components/HeroSection';
 import { SelectedWorkGrid } from './components/SelectedWorkGrid';
 import { ProcessSection } from './components/ProcessSection';
 
+const WorkPage = lazy(() =>
+  import('./components/WorkPage').then((m) => ({
+    default: m.WorkPage,
+  })),
+);
 const ProjectPreviewModal = lazy(() =>
   import('./components/ProjectPreviewModal').then((m) => ({
     default: m.ProjectPreviewModal,
@@ -27,7 +32,17 @@ const SprintBookingDrawer = lazy(() =>
   })),
 );
 
+type PageView = 'home' | 'work';
+
+function getInitialPage(): PageView {
+  if (typeof window !== 'undefined' && window.location.hash === '#/work') {
+    return 'work';
+  }
+  return 'home';
+}
+
 export default function App() {
+  const [currentPage, setCurrentPage] = useState<PageView>(getInitialPage);
   const [selectedProject, setSelectedProject] = useState<ProjectItem | null>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [bookingState, setBookingState] = useState<{
@@ -45,16 +60,61 @@ export default function App() {
     booking: false,
   });
 
-  const scrollToSection = useCallback((sectionId: string) => {
-    if (sectionId === 'hero-wave') {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-      return;
-    }
-    const el = document.getElementById(sectionId);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
+  useEffect(() => {
+    const syncFromHash = () => {
+      const nextPage: PageView =
+        window.location.hash === '#/work' ? 'work' : 'home';
+      setCurrentPage(nextPage);
+    };
+    window.addEventListener('hashchange', syncFromHash);
+    window.addEventListener('popstate', syncFromHash);
+    return () => {
+      window.removeEventListener('hashchange', syncFromHash);
+      window.removeEventListener('popstate', syncFromHash);
+    };
   }, []);
+
+  const navigateTo = useCallback(
+    (target: string) => {
+      if (target === 'work') {
+        if (window.location.hash !== '#/work') {
+          window.history.pushState(null, '', '#/work');
+        }
+        setCurrentPage('work');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        return;
+      }
+
+      const scrollTargetOnHome = () => {
+        if (target === 'hero-wave') {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+          return;
+        }
+        const el = document.getElementById(target);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      };
+
+      if (currentPage !== 'home') {
+        if (window.location.hash === '#/work') {
+          window.history.pushState(
+            null,
+            '',
+            window.location.pathname + window.location.search,
+          );
+        }
+        setCurrentPage('home');
+        window.requestAnimationFrame(() => {
+          window.requestAnimationFrame(scrollTargetOnHome);
+        });
+        return;
+      }
+
+      scrollTargetOnHome();
+    },
+    [currentPage],
+  );
 
   const handleSelectProject = useCallback((project: ProjectItem) => {
     setLoadedOverlays((prev) =>
@@ -94,44 +154,58 @@ export default function App() {
 
       {/* Sticky Elevated Glass Floating Header */}
       <GlassHeader
-        onNavigateSection={scrollToSection}
+        activePage={currentPage}
+        onNavigateSection={navigateTo}
         onOpenBooking={() => openBookingDrawer('brief')}
         onOpenMenu={handleOpenMenu}
       />
 
-      {/* Main Content: Sticky Section 1 with Section 2+3 scrolling over it */}
-      <main className="relative z-10">
-        <HeroSection
-          onSelectProject={handleSelectProject}
-          onOpenBooking={() => openBookingDrawer('call')}
-          onJumpToWork={() => scrollToSection('selected-work')}
-        />
-
-        {/* Rising Sheet (Section 2 & 3 scroll smoothly over fixed Section 1) */}
-        <div className="relative z-20 overflow-hidden rounded-t-[28px] border-t border-white/75 shadow-[0_-24px_60px_-18px_rgba(28,27,24,0.12)] md:rounded-t-[40px]">
-          {/* Frosted top lip + warm canvas veil at the leading edge so Hero clears cleanly while keeping WaveBackground visible behind grid tiles */}
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-x-0 top-0 h-20 bg-white/30 backdrop-blur-md"
-          />
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#F7F5F0]/90 via-[#F7F5F0]/45 to-[#F7F5F0]/25"
-          />
-
-          <div className="relative z-10">
-            <SelectedWorkGrid
+      {currentPage === 'work' ? (
+        <main className="relative z-10">
+          <Suspense fallback={<div className="min-h-screen" />}>
+            <WorkPage
               onSelectProject={handleSelectProject}
               onStartProject={() => openBookingDrawer('brief')}
+              onBookCall={() => openBookingDrawer('call')}
+              onBackToOverview={() => navigateTo('hero-wave')}
+            />
+          </Suspense>
+        </main>
+      ) : (
+        /* Home Content: Sticky Section 1 with Section 2+3 scrolling over it */
+        <main className="relative z-10">
+          <HeroSection
+            onSelectProject={handleSelectProject}
+            onOpenBooking={() => openBookingDrawer('call')}
+            onJumpToWork={() => navigateTo('selected-work')}
+          />
+
+          {/* Rising Sheet (Section 2 & 3 scroll smoothly over fixed Section 1) */}
+          <div className="relative z-20 overflow-hidden rounded-t-[28px] border-t border-white/75 shadow-[0_-24px_60px_-18px_rgba(28,27,24,0.12)] md:rounded-t-[40px]">
+            {/* Frosted top lip + warm canvas veil at the leading edge so Hero clears cleanly while keeping WaveBackground visible behind grid tiles */}
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-x-0 top-0 h-20 bg-white/30 backdrop-blur-md"
+            />
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#F7F5F0]/90 via-[#F7F5F0]/45 to-[#F7F5F0]/25"
             />
 
-            <ProcessSection
-              onBookCall={() => openBookingDrawer('call')}
-              onOpenBrief={() => openBookingDrawer('brief')}
-            />
+            <div className="relative z-10">
+              <SelectedWorkGrid
+                onSelectProject={handleSelectProject}
+                onStartProject={() => openBookingDrawer('brief')}
+              />
+
+              <ProcessSection
+                onBookCall={() => openBookingDrawer('call')}
+                onOpenBrief={() => openBookingDrawer('brief')}
+              />
+            </div>
           </div>
-        </div>
-      </main>
+        </main>
+      )}
 
       {/* Lazy-loaded Overlays (excluded from initial critical path, retain exit animations once opened) */}
       <Suspense fallback={null}>
@@ -151,7 +225,7 @@ export default function App() {
           <MenuOverlay
             isOpen={isMenuOpen}
             onClose={() => setIsMenuOpen(false)}
-            onNavigateSection={scrollToSection}
+            onNavigateSection={navigateTo}
             onOpenBooking={(tab) => openBookingDrawer(tab)}
           />
         )}

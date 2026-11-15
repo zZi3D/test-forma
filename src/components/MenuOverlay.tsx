@@ -20,7 +20,7 @@ const NAV_ITEMS = [
     index: '02',
     label: 'Selected Work',
     subtitle: '12 Curated UI/UX Editions & Case Studies',
-    target: 'selected-work',
+    target: 'work',
   },
   {
     index: '03',
