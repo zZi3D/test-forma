@@ -104,8 +104,8 @@ function WorkTileCard({
     }
 
     return subscribeRowTilt(rowIndex, (p) => {
-      // Smoothly tilt backward from upright closed cover (-176deg) to tabletop pose (-110deg) while scrolling
-      const eased = p * (2 - p);
+      // Hold -176deg smoothly at entry, then tilt backward into tabletop pose (-110deg)
+      const eased = p * p * (3 - 2 * p);
       rotateX.set(-176 + eased * 66);
       tiltY.set(4 + eased * 14);
       tiltScale.set(0.95 - eased * 0.04);
@@ -388,8 +388,8 @@ export function SelectedWorkGrid({
     const evaluateRows = () => {
       rafId = 0;
       const vh = Math.max(window.innerHeight, 1);
-      const startY = vh * 0.98;
-      const triggerY = gridCols <= 1 ? vh * 0.7 : vh * 0.62;
+      const startY = gridCols <= 1 ? vh * 0.84 : vh * 0.72;
+      const triggerY = gridCols <= 1 ? vh * 0.6 : vh * 0.48;
       const tiltSpan = Math.max(startY - triggerY, 1);
       const atPageBottom =
         window.scrollY + vh >= document.documentElement.scrollHeight - 48;
