@@ -563,7 +563,7 @@ export function ProjectWheel3D({
                   >
                     <div className="flex items-center justify-between text-[12px] text-[#1C1B18]/35">
                       <span className="font-mono-tabular">{project.index}</span>
-                      <span>FORMA</span>
+                      <span>EDITION ONE</span>
                     </div>
                     <div className="border-t border-[#1C1B18]/10 pt-2.5 text-[13px] font-medium text-[#1C1B18]/35">
                       {project.businessTitle}

@@ -14,7 +14,7 @@ interface SprintBookingDrawerProps {
 const CATEGORIES: IndustryFilter[] = INDUSTRY_FILTERS;
 
 const CALL_DAYS = ['Tomorrow', 'In 48 Hours', 'Next Monday'];
-const CALL_SLOTS = ['10:00 EST', '11:30 EST', '14:00 EST', '16:30 EST'];
+const CALL_SLOTS = ['10:00 CET', '11:30 CET', '14:00 CET', '16:30 CET'];
 
 export function SprintBookingDrawer({
   isOpen,
@@ -67,7 +67,7 @@ export function SprintBookingDrawer({
       return;
     }
     setErrorMsg(null);
-    const randomCode = `FRM-${Math.floor(1000 + Math.random() * 9000)}`;
+    const randomCode = `ED1-${Math.floor(1000 + Math.random() * 9000)}`;
     setSubmittedRef({ code: randomCode, mode: activeTab });
   };
 
@@ -89,7 +89,7 @@ export function SprintBookingDrawer({
           className="fixed inset-0 z-50 flex justify-end bg-black/65"
           role="dialog"
           aria-modal="true"
-          aria-label="FORMA 24h Sprint Brief & Discovery Call Scheduler"
+          aria-label="Edition One 24h Sprint Brief & Discovery Call Scheduler"
         >
           <motion.div
             initial={{ x: '100%' }}
@@ -103,7 +103,7 @@ export function SprintBookingDrawer({
             <div className="flex items-start justify-between gap-4 border-b border-[#1C1B18]/10 pb-5">
               <div>
                 <p className="text-[11px] font-medium tracking-[0.06em] text-[#C98A3A]">
-                  FORMA · 24H SPRINT DESK
+                  EDITION ONE · 24H SPRINT DESK
                 </p>
                 <h2 className="display-tight mt-1.5 text-[28px] leading-[1.08] font-semibold">
                   {activeTab === 'brief'
@@ -180,7 +180,7 @@ export function SprintBookingDrawer({
                     : 'Your 24h sprint brief is locked'}
                 </h3>
                 <p className="mt-3 text-[14px] leading-[1.6] text-[#1C1B18]/75">
-                  Thank you, {name}. Our New York editorial lead has received your{' '}
+                  Thank you, {name}. Our Netherlands studio lead has received your{' '}
                   {category} specification{brandName ? ` for ${brandName}` : ''} and
                   sent calendar & sprint onboarding details to{' '}
                   <span className="font-medium text-[#1C1B18]">{email}</span>.
@@ -266,7 +266,7 @@ export function SprintBookingDrawer({
 
                     <div className="mt-4 flex items-center gap-2 text-[12px] font-semibold text-[#1C1B18]">
                       <Clock className="h-3.5 w-3.5 text-[#C98A3A]" />
-                      <span>15-Min Slot (New York Time)</span>
+                      <span>15-Min Slot (Amsterdam · CET)</span>
                     </div>
                     <div className="mt-2.5 grid grid-cols-2 gap-2">
                       {CALL_SLOTS.map((slot) => (

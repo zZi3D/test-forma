@@ -8,31 +8,31 @@ interface ProcessSectionProps {
 const SPRINT_PHASES = [
   {
     index: '01.',
-    window: '09:00 – 13:00 EST',
+    window: '09:00 – 13:00 CET',
     title: 'Architecture & Typographic Grid',
     detail:
       'Editorial hierarchy, spatial layout cadence, and interactive structure locked within the first four hours.',
   },
   {
     index: '02.',
-    window: '13:00 – 19:00 EST',
+    window: '13:00 – 19:00 CET',
     title: 'Visual Direction & Motion',
     detail:
       'Custom surface textures, fluid scroll-linked transitions, and responsive breakpoints engineered directly in code.',
   },
   {
     index: '03.',
-    window: '19:00 – 09:00 EST',
+    window: '19:00 – 09:00 CET',
     title: 'Refinement & Live Launch',
     detail:
       'Accessibility contrast verification, performance tuning, and production handover ready for global traffic.',
   },
 ];
 
-function formatNYCTime(date: Date): string {
+function formatAmsterdamTime(date: Date): string {
   try {
-    return new Intl.DateTimeFormat('en-US', {
-      timeZone: 'America/New_York',
+    return new Intl.DateTimeFormat('en-GB', {
+      timeZone: 'Europe/Amsterdam',
       hour12: false,
       hour: '2-digit',
       minute: '2-digit',
@@ -44,11 +44,13 @@ function formatNYCTime(date: Date): string {
 }
 
 export function ProcessSection({ onBookCall, onOpenBrief }: ProcessSectionProps) {
-  const [nycTime, setNycTime] = useState<string>(() => formatNYCTime(new Date()));
+  const [amsterdamTime, setAmsterdamTime] = useState<string>(() =>
+    formatAmsterdamTime(new Date()),
+  );
 
   useEffect(() => {
     const timer = window.setInterval(() => {
-      setNycTime(formatNYCTime(new Date()));
+      setAmsterdamTime(formatAmsterdamTime(new Date()));
     }, 1000);
     return () => window.clearInterval(timer);
   }, []);
@@ -129,17 +131,17 @@ export function ProcessSection({ onBookCall, onOpenBrief }: ProcessSectionProps)
           className="glass-subtle mt-12 flex flex-col items-start justify-between gap-4 rounded-2xl px-6 py-5 text-[12px] text-[#1C1B18]/70 sm:flex-row sm:items-center"
         >
           <div className="flex flex-wrap items-center gap-2">
-            <span className="font-semibold text-[#1C1B18]">FORMA Studio</span>
+            <span className="font-semibold text-[#1C1B18]">Edition One</span>
             <span aria-hidden="true">·</span>
-            <span>New York & Zurich</span>
+            <span>Netherlands</span>
             <span aria-hidden="true">·</span>
-            <span>Available for 24h Sprints</span>
+            <span>Crafted for Modern Business</span>
           </div>
 
           <div className="font-mono-tabular flex items-center gap-2 text-[#1C1B18]/75">
-            <span>NYC</span>
+            <span>NL · CET</span>
             <span aria-hidden="true">·</span>
-            <span>{nycTime}</span>
+            <span>{amsterdamTime}</span>
             <span aria-hidden="true">·</span>
             <span>© 2026</span>
           </div>

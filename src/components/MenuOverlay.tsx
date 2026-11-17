@@ -64,7 +64,7 @@ export function MenuOverlay({
           className="fixed inset-0 z-50 flex justify-end bg-[#1C1B18]/45 backdrop-blur-[2px]"
           role="dialog"
           aria-modal="true"
-          aria-label="FORMA Studio Navigation"
+          aria-label="Edition One Navigation"
         >
           <motion.nav
             initial={{ x: '100%' }}
@@ -77,7 +77,7 @@ export function MenuOverlay({
             {/* Header */}
             <div className="flex items-center justify-between border-b border-white/15 pb-5">
               <span className="text-[12px] font-semibold tracking-[0.14em] text-white/80">
-                FORMA INDEX
+                EDITION ONE INDEX
               </span>
               <button
                 type="button"
@@ -142,7 +142,7 @@ export function MenuOverlay({
                 </button>
               </div>
               <p className="mt-5 text-[11px] text-white/50">
-                New York · Zurich · hello@forma-studio.design
+                Edition One · Netherlands · hello@editionone.nl
               </p>
             </div>
           </motion.nav>

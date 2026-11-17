@@ -67,11 +67,11 @@ export function WorkPage({
 
             <footer className="glass-subtle mt-8 flex flex-col items-start justify-between gap-4 rounded-2xl px-6 py-5 text-[12px] text-[#1C1B18]/70 sm:flex-row sm:items-center">
               <div className="flex flex-wrap items-center gap-2">
-                <span className="font-semibold text-[#1C1B18]">FORMA Studio</span>
+                <span className="font-semibold text-[#1C1B18]">Edition One</span>
                 <span aria-hidden="true">·</span>
-                <span>12 Website Design Directions</span>
+                <span>Netherlands</span>
                 <span aria-hidden="true">·</span>
-                <span>New York & Zurich</span>
+                <span>Crafted for Modern Business</span>
               </div>
 
               <button

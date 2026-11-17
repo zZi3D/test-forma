@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, ChevronDown, ChevronUp } from 'lucide-react';
 import {
   animate,
   motion,
@@ -37,7 +37,7 @@ const STUDIO_METRICS: MetricDef[] = [
   { id: 'hours', target: 24, suffix: ' Hours', label: 'Concept to live launch' },
   { id: 'editions', target: 340, suffix: '+', label: 'Editorial editions shipped' },
   { id: 'layers', target: 52, suffix: '-Layer', label: 'Procedural canvas craft' },
-  { id: 'desks', staticValue: 'NYC · ZRH', label: 'Synchronized studio desk' },
+  { id: 'desks', staticValue: 'NL · CET', label: 'Netherlands · Live Studio Time' },
 ];
 
 type RowTiltSubscriber = (progress: number) => void;
@@ -266,7 +266,7 @@ function WorkTileCard({
             onPointerMove={handlePointerMove}
             onPointerLeave={handlePointerLeave}
             onClick={() => onSelect(project)}
-            className={`glass-tile group relative block w-full overflow-hidden rounded-2xl p-3 text-left focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#C98A3A] ${
+            className={`glass-tile group relative block w-full overflow-hidden rounded-2xl p-2 sm:p-3 text-left focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#C98A3A] ${
               isSpotlighted
                 ? 'border-white/75 shadow-[0_24px_48px_-14px_rgba(28,27,24,0.16)]'
                 : ''
@@ -287,7 +287,7 @@ function WorkTileCard({
               style={{ backgroundColor: project.palette.bg }}
             >
               {isBestMatch && (
-                <span className="font-mono-tabular pointer-events-none absolute top-2.5 right-2.5 z-10 rounded-md border border-[#C98A3A]/45 bg-[#FAF8F4]/95 px-2 py-0.5 text-[9.5px] font-semibold tracking-[0.05em] text-[#B47323] shadow-xs uppercase">
+                <span className="font-mono-tabular pointer-events-none absolute top-1.5 right-1.5 z-10 rounded-md border border-[#C98A3A]/45 bg-[#FAF8F4]/95 px-1.5 py-0.5 text-[8.5px] font-semibold tracking-[0.05em] text-[#B47323] uppercase shadow-xs sm:top-2.5 sm:right-2.5 sm:px-2 sm:text-[9.5px]">
                   Best Match
                 </span>
               )}
@@ -301,29 +301,29 @@ function WorkTileCard({
                   className="h-full w-full object-cover transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.03]"
                 />
               ) : (
-                <div className="flex h-full w-full items-center justify-center p-4 text-sm font-medium text-[#1C1B18]">
+                <div className="flex h-full w-full items-center justify-center p-3 text-xs font-medium text-[#1C1B18] sm:p-4 sm:text-sm">
                   {project.businessTitle}
                 </div>
               )}
             </div>
 
-            <div className="relative z-10 mt-3 flex items-baseline justify-between gap-2 px-0.5">
+            <div className="relative z-10 mt-2 flex items-baseline justify-between gap-1.5 px-0.5 sm:mt-3 sm:gap-2">
               <div className="min-w-0">
-                <h3 className="truncate text-[14.5px] font-semibold tracking-[-0.015em] text-[#1C1B18] transition-colors group-hover:text-[#C98A3A]">
+                <h3 className="truncate text-[12.5px] font-semibold tracking-[-0.015em] text-[#1C1B18] transition-colors group-hover:text-[#C98A3A] sm:text-[14.5px]">
                   {project.businessTitle}
                 </h3>
-                <p className="mt-0.5 truncate text-[11px] text-[#1C1B18]/65">
+                <p className="mt-0.5 truncate text-[10px] text-[#1C1B18]/65 sm:text-[11px]">
                   {project.targetBusinesses}
                 </p>
               </div>
-              <span className="font-mono-tabular shrink-0 text-[11px] font-medium text-[#1C1B18]/50">
+              <span className="font-mono-tabular shrink-0 text-[10px] font-medium text-[#1C1B18]/50 sm:text-[11px]">
                 {project.index}
               </span>
             </div>
           </button>
         </div>
 
-        {/* Back Face: Warm Alabaster Glass Cover matching FORMA brand palette (unmounted once settled) */}
+        {/* Back Face: Warm Alabaster Glass Cover matching Edition One brand palette (unmounted once settled) */}
         {!isSettled && (
           <div
             aria-hidden="true"
@@ -334,7 +334,7 @@ function WorkTileCard({
               background:
                 'linear-gradient(150deg, rgba(255,255,255,0.82) 0%, rgba(247,245,240,0.72) 55%, rgba(240,236,227,0.8) 100%)',
             }}
-            className="pointer-events-none absolute inset-0 overflow-hidden rounded-2xl border border-white/65 p-3 shadow-[0_16px_36px_-14px_rgba(28,27,24,0.12)]"
+            className="pointer-events-none absolute inset-0 overflow-hidden rounded-2xl border border-white/65 p-2 shadow-[0_16px_36px_-14px_rgba(28,27,24,0.12)] sm:p-3"
           >
             {/* Inner Frosted Preview Frame (mirrors open card proportions) */}
             <div className="relative flex aspect-[16/10] w-full items-center justify-center overflow-hidden rounded-xl border border-[#1C1B18]/8 bg-[#F4F1EA]/70">
@@ -345,22 +345,22 @@ function WorkTileCard({
                     'linear-gradient(135deg, rgba(255,255,255,0.55) 0%, transparent 55%)',
                 }}
               />
-              <span className="relative text-[10px] font-medium tracking-[0.26em] text-[#1C1B18]/25 uppercase">
-                FORMA
+              <span className="relative text-[9px] font-medium tracking-[0.2em] text-[#1C1B18]/25 uppercase sm:text-[10px] sm:tracking-[0.22em]">
+                Edition One
               </span>
             </div>
 
             {/* Matching Editorial Metadata Footer */}
-            <div className="mt-3 flex items-baseline justify-between gap-2 px-0.5">
+            <div className="mt-2 flex items-baseline justify-between gap-1.5 px-0.5 sm:mt-3 sm:gap-2">
               <div className="min-w-0">
-                <p className="truncate text-[14.5px] font-semibold tracking-[-0.015em] text-[#1C1B18]/80">
+                <p className="truncate text-[12.5px] font-semibold tracking-[-0.015em] text-[#1C1B18]/80 sm:text-[14.5px]">
                   {project.businessTitle}
                 </p>
-                <p className="mt-0.5 truncate text-[11px] text-[#1C1B18]/50">
+                <p className="mt-0.5 truncate text-[10px] text-[#1C1B18]/50 sm:text-[11px]">
                   {project.targetBusinesses}
                 </p>
               </div>
-              <span className="font-mono-tabular shrink-0 text-[11px] font-medium text-[#1C1B18]/45">
+              <span className="font-mono-tabular shrink-0 text-[10px] font-medium text-[#1C1B18]/45 sm:text-[11px]">
                 {project.index}
               </span>
             </div>
@@ -381,9 +381,12 @@ export function SelectedWorkGrid({
   const prefersReducedMotion = Boolean(useReducedMotion());
   const [activeFilter, setActiveFilter] = useState<FilterOption>('All');
   const [hoveredId, setHoveredId] = useState<string | null>(null);
+  const [isMobile, setIsMobile] = useState<boolean>(() =>
+    typeof window !== 'undefined' ? window.innerWidth < 640 : false,
+  );
+  const [showAllMobile, setShowAllMobile] = useState<boolean>(false);
   const [gridCols, setGridCols] = useState<number>(() => {
     if (typeof window === 'undefined') return 4;
-    if (window.innerWidth < 640) return 1;
     if (window.innerWidth < 1024) return 2;
     return 4;
   });
@@ -415,15 +418,14 @@ export function SelectedWorkGrid({
   );
 
   useEffect(() => {
-    const updateCols = () => {
+    const updateLayout = () => {
       const w = window.innerWidth;
-      if (w < 640) setGridCols(1);
-      else if (w < 1024) setGridCols(2);
-      else setGridCols(4);
+      setIsMobile(w < 640);
+      setGridCols(w < 1024 ? 2 : 4);
     };
-    updateCols();
-    window.addEventListener('resize', updateCols, { passive: true });
-    return () => window.removeEventListener('resize', updateCols);
+    updateLayout();
+    window.addEventListener('resize', updateLayout, { passive: true });
+    return () => window.removeEventListener('resize', updateLayout);
   }, []);
 
   const thumbnails = useProjectThumbnails();
@@ -439,6 +441,12 @@ export function SelectedWorkGrid({
     );
   }, [activeFilter]);
 
+  const shouldClampMobile =
+    !isStandalonePage && isMobile && !showAllMobile && visibleProjects.length > 4;
+  const displayedProjects = shouldClampMobile
+    ? visibleProjects.slice(0, 4)
+    : visibleProjects;
+
   // 3-stage scroll choreography:
   // 1) Start Punt (upright closed alabaster cover) -> 2) Tijdens Scrollen (tilts backward in 3D) -> 3) Eind Punt (flips open and stays open)
   useEffect(() => {
@@ -453,13 +461,12 @@ export function SelectedWorkGrid({
     const evaluateRows = () => {
       rafId = 0;
       const vh = Math.max(window.innerHeight, 1);
-      const startY = gridCols <= 1 ? vh * 0.84 : vh * 0.72;
-      const triggerY =
-        gridCols <= 1
-          ? vh * 0.62
-          : isStandalonePage
-            ? vh * 0.58
-            : vh * 0.48;
+      const startY = isMobile ? vh * 0.84 : vh * 0.72;
+      const triggerY = isMobile
+        ? vh * 0.62
+        : isStandalonePage
+          ? vh * 0.58
+          : vh * 0.48;
       const tiltSpan = Math.max(startY - triggerY, 1);
       const atPageBottom =
         window.scrollY + vh >= document.documentElement.scrollHeight - 48;
@@ -497,7 +504,7 @@ export function SelectedWorkGrid({
       }
     };
 
-    const initialDelay = filterChanged ? 80 : isStandalonePage ? 160 : 16;
+    const initialDelay = filterChanged ? 80 : isStandalonePage ? 160 : 24;
     const timerId = window.setTimeout(evaluateRows, initialDelay);
     window.addEventListener('scroll', onScrollOrResize, { passive: true });
     window.addEventListener('resize', onScrollOrResize, { passive: true });
@@ -507,7 +514,7 @@ export function SelectedWorkGrid({
       window.removeEventListener('resize', onScrollOrResize);
       if (rafId) window.cancelAnimationFrame(rafId);
     };
-  }, [activeFilter, gridCols, isStandalonePage]);
+  }, [activeFilter, gridCols, isMobile, isStandalonePage, showAllMobile]);
 
   // Animate Studio Metrics count-up cleanly once when scrolled into view
   useEffect(() => {
@@ -674,11 +681,11 @@ export function SelectedWorkGrid({
           </motion.div>
         )}
 
-        {/* Interactive Business Owner Filter Tabs with Sliding Active Pill */}
+        {/* Interactive Business Owner Filter Tabs (horizontal swipe strip with peek on mobile, wrapped row on md+) */}
         <div
           role="tablist"
           aria-label="Filter website directions by business type"
-          className="mt-6 flex flex-wrap items-center gap-2"
+          className="no-scrollbar -mx-4 mt-5 flex flex-nowrap items-center gap-2 overflow-x-auto px-4 py-1 md:mx-0 md:mt-6 md:flex-wrap md:overflow-visible md:px-0 md:py-0"
         >
           {FILTERS.map((filter) => {
             const isSelected = activeFilter === filter;
@@ -692,11 +699,17 @@ export function SelectedWorkGrid({
                 type="button"
                 role="tab"
                 aria-selected={isSelected}
-                onClick={() => {
+                onClick={(e) => {
                   setHoveredId(null);
+                  setShowAllMobile(false);
                   setActiveFilter(filter);
+                  e.currentTarget.scrollIntoView({
+                    behavior: prefersReducedMotion ? 'auto' : 'smooth',
+                    block: 'nearest',
+                    inline: 'center',
+                  });
                 }}
-                className={`relative rounded-full px-4 py-1.5 text-[12px] font-medium whitespace-nowrap shrink-0 transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-[#C98A3A] ${
+                className={`relative rounded-full px-3.5 py-1.5 text-[12px] font-medium whitespace-nowrap shrink-0 transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-[#C98A3A] sm:px-4 ${
                   isSelected
                     ? 'text-[#F7F5F0]'
                     : 'glass-subtle text-[#1C1B18]/75 hover:bg-white/30 hover:text-[#1C1B18]'
@@ -722,13 +735,13 @@ export function SelectedWorkGrid({
           })}
         </div>
 
-        {/* Standard Glassmorphism 4-Column Responsive Portfolio Grid */}
+        {/* Glassmorphism Responsive Portfolio Grid (2-column on mobile/tablet, 4-column on desktop) */}
         <div
           key={activeFilter}
           onPointerLeave={() => setHoveredId(null)}
-          className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4"
+          className="mt-8 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-4"
         >
-          {visibleProjects.map((project, idx) => {
+          {displayedProjects.map((project, idx) => {
             const rowIndex = gridCols > 1 ? Math.floor(idx / gridCols) : idx;
             const isRowLeader = gridCols <= 1 || idx % gridCols === 0;
             const isRowOpen = openedRows.includes(rowIndex);
@@ -765,6 +778,29 @@ export function SelectedWorkGrid({
             );
           })}
         </div>
+
+        {/* Mobile "See more / Show less" toggle when clamped to 4 tiles */}
+        {!isStandalonePage && isMobile && visibleProjects.length > 4 && (
+          <div className="mt-6 flex justify-center">
+            <button
+              type="button"
+              onClick={() => setShowAllMobile((prev) => !prev)}
+              className="glass-subtle inline-flex h-10 items-center justify-center gap-2 rounded-full px-5 text-[12px] font-semibold text-[#1C1B18] transition-colors duration-200 hover:bg-white/75 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C98A3A]"
+            >
+              {showAllMobile ? (
+                <>
+                  <span>Show fewer</span>
+                  <ChevronUp className="h-3.5 w-3.5" />
+                </>
+              ) : (
+                <>
+                  <span>See more ({visibleProjects.length - 4} more)</span>
+                  <ChevronDown className="h-3.5 w-3.5" />
+                </>
+              )}
+            </button>
+          </div>
+        )}
       </div>
     </section>
   );

@@ -1,22 +1,23 @@
-# Prijsmodel & Modulaire Opties – Webdesign & Webapplicaties
+# EDITION ONE — Prijsmodel & Modulaire Opties (Webdesign & Webapplicaties)
 
-*Alle genoemde prijzen zijn in euro's, exclusief 21% btw, en gebaseerd op een minimale contractduur van 12 maanden.*
+> **Merknaam:** **Edition One** (`editionone.nl`) — afgestemd op de roadmap in `beoordeling-en-roadmap.md`.  
+> *Alle genoemde prijzen zijn in euro's, exclusief 21% btw, en gebaseerd op een minimale contractduur van 12 maanden.*
 
 ---
 
 ## 1. Basisabonnementen (3-Tier Model)
 
-Klanten kiezen een van de drie vaste basispakketten als fundament voor hun online aanwezigheid.
+Klanten kiezen een van de drie vaste basispakketten als fundament voor hun online aanwezigheid. *(Geoptimaliseerd conform de aanbevelingen uit Hoofdstuk 5 tegen het "Ryanair-effect" en voor één eenduidige 24-uurs belofte.)*
 
-| Kenmerk | Tier 1: **The One-Pager** | Tier 2: **Velocity** | Tier 3: **Scale** |
+| Kenmerk | Tier 1: **The One-Pager** | Tier 2: **Velocity** *(Most Popular)* | Tier 3: **Scale** |
 | :--- | :--- | :--- | :--- |
 | **Maandtarief** | **€ 35,00 / maand** | **€ 55,00 / maand** | **€ 95,00 / maand** |
 | **Aantal pagina's** | **1 pagina** (lange conversiegerichte scroll-page) | **Tot 5 pagina's** (bijv. Home, Over ons, 2x Diensten, Contact) | **Onbeperkt aantal pagina's\*** |
-| **Doorlooptijd** | Snel live (2 tot 3 werkdagen) | Snel live (3 tot 5 werkdagen) | Prioriteitsontwikkeling & doorlopend uitbreidbaar |
-| **Standaard inbegrepen** | • High-speed hosting & SSL-beveiliging<br>• Volledig mobiel responsive design<br>• Basis contactformulier | • High-speed hosting & SSL-beveiliging<br>• Volledig mobiel responsive design<br>• Contactformulier + offerte-aanvraag | • High-speed hosting & SSL-beveiliging<br>• Volledig mobiel responsive design<br>• Geavanceerde formulieren & layouts |
+| **Doorlooptijd** | Websiteplan & eerste live-concept binnen **24 uur**<br>*(volledige oplevering binnen 2–3 werkdagen)* | Websiteplan & eerste live-concept binnen **24 uur**<br>*(volledige oplevering binnen 3–5 werkdagen)* | Websiteplan & eerste live-concept binnen **24 uur**<br>*(prioriteitsontwikkeling & doorlopend uitbreidbaar)* |
+| **Standaard inbegrepen** | • High-speed hosting & SSL-beveiliging<br>• Volledig mobiel responsive design<br>• Basis contactformulier<br>• *Strikte 3-uurs Sprint-checkpoint regel (margebescherming)* | • Alles uit *The One-Pager*<br>• Contactformulier + offerte-aanvraag<br>• **WhatsApp Direct Chat Widget** *(standaard)*<br>• **AVG / Cookiebanner Compleet** *(standaard)*<br>• **Basis-SEO (Zoekwoord Gereed)** *(standaard)* | • Alles uit *Velocity*<br>• Geavanceerde formulieren & maatwerk layouts<br>• **Google Reviews Koppeling** *(standaard)* |
 | **Ideale klant** | Startende zzp'ers, coaches en freelancers met 1 duidelijke dienst. | Lokale MKB'ers met meerdere diensten (schilders, installateurs, praktijken). | Groeiende bedrijven en bureaus die continu nieuwe diensten/cases toevoegen. |
 
-*\*Fair Use Policy van toepassing: maximaal 2 actieve pagina-aanvragen tegelijk in ontwikkeling om overbelasting te voorkomen.*
+*\*Fair Use Policy bij **Scale**: maximaal 2 actieve pagina-aanvragen tegelijk in ontwikkeling om overbelasting te voorkomen. Voor alle trajecten geldt de **3-uurs feedbackregel** op Sprint-checkpoints (`beoordeling-en-roadmap.md`, `nr. 10b`).*
 
 ---
 
@@ -27,9 +28,9 @@ Klanten kunnen hun gekozen tier modulair uitbreiden. Je kunt per optie kiezen vo
 ### SEO & Vindbaarheid
 | Optie / Module | Model A: Puur Maandelijks | Model B: Setup + Laag Maandelijks | Wat levert het de klant concreet op? |
 | :--- | :--- | :--- | :--- |
-| **SEO Zoekwoord Gereed** | **€ 5,00 / mnd** | Direct maandelijks | On-page optimalisatie op 1 primair zoekwoord (meta-titles, alt-tags, H1/H2-structuur). |
+| **SEO Zoekwoord Gereed** *(standaard in Velocity/Scale)* | **€ 5,00 / mnd** *(bij One-Pager)* | Direct maandelijks | On-page optimalisatie op 1 primair zoekwoord (meta-titles, alt-tags, H1/H2-structuur). |
 | **SEO Geo (Lokaal)** | **€ 5,00 / mnd** | Direct maandelijks | Lokale vindbaarheid op plaats/regio (Google Bedrijfsprofiel koppeling & Local Business Schema). |
-| **SEO Compleet** | **€ 10,00 / mnd** | Direct maandelijks | Combinatie van zoekwoord- en regio-SEO + XML-sitemap en Search Console monitoring. |
+| **SEO Compleet** *(+ AI-SEO)* | **€ 10,00 / mnd** *(+€ 5 upgrade vanaf Velocity)* | Direct maandelijks | 20-punten SEO checklist + regio-SEO + XML-sitemap, `Schema.org` JSON-LD, `/llms.txt` & Search Console. |
 
 ### Systeem, API & Koppelingen
 | Optie / Module | Model A: Puur Maandelijks | Model B: Setup + Laag Maandelijks | Wat levert het de klant concreet op? |
@@ -48,13 +49,13 @@ Klanten kunnen hun gekozen tier modulair uitbreiden. Je kunt per optie kiezen vo
 ### Conversie, Leads & Betalingen
 | Optie / Module | Model A: Puur Maandelijks | Model B: Setup + Laag Maandelijks | Wat levert het de klant concreet op? |
 | :--- | :--- | :--- | :--- |
-| **WhatsApp Direct Chat Widget** | **€ 3,50 / mnd** | € 25 setup + € 1,50 / mnd | Zwevende chatknop rechtsonder voor direct contact via WhatsApp (verhoogt conversie). |
-| **Google Reviews Koppeling** | **€ 4,50 / mnd** | € 35 setup + € 2,00 / mnd | Live widget/slider die automatisch actuele 5-sterrenrecensies van Google toont. |
+| **WhatsApp Direct Chat Widget** *(standaard in Velocity/Scale)* | **€ 3,50 / mnd** *(bij One-Pager)* | € 25 setup + € 1,50 / mnd | Zwevende chatknop of Smart-Fill widget voor direct contact via WhatsApp (verhoogt conversie). |
+| **Google Reviews Koppeling** *(standaard in Scale)* | **€ 4,50 / mnd** | € 35 setup + € 2,00 / mnd | Live widget/slider die automatisch actuele 5-sterrenrecensies van Google toont (24u server-cache). |
 | **Lead Magnet / Pop-up** | **€ 5,00 / mnd** | € 45 setup + € 2,50 / mnd | Getimede of exit-intent pop-up voor kortingsacties, whitepapers of leadverzameling. |
 | **iDEAL / Betaallink Integratie** | **€ 7,50 / mnd** | € 65 setup + € 2,50 / mnd | Online betalingen ontvangen via iDEAL/Bancontact (Mollie/Stripe) voor enkele producten of voorschotten. |
-| **Online Reserveringssysteem** | **€ 9,50 / mnd** | € 85 setup + € 3,50 / mnd | Bezoekers kiezen zelf direct een datum en tijdslot in de agenda van de ondernemer. |
+| **Online Reserveringssysteem** | **€ 9,50 / mnd** | € 85 setup + € 3,50 / mnd | Bezoekers kiezen zelf direct een datum en tijdslot in de agenda van de ondernemer (bijv. Cal.com). |
 | **Interactieve Prijs-/Offertecalculator** | **€ 12,50 / mnd** | € 125 setup + € 4,50 / mnd | Rekentool op de site waarmee bezoekers zelf een richtprijs berekenen voor een offerte-aanvraag. |
-| **24/7 AI Klantenservice Bot** | **€ 14,50 / mnd** | € 120 setup + € 6,50 / mnd | Slimme chatassistent getraind op de eigen websiteteksten die vragen beantwoordt en leads verzamelt. |
+| **24/7 AI Klantenservice Bot** | **€ 14,50 / mnd** *(Fair Use: max. 500 berichten/mnd)* | € 120 setup + € 6,50 / mnd | Beveiligde chatassistent zonder live scraping (gesloten `knowledge.md` + 5 branche-templates, zie `nr. 32`). |
 
 ### Design, Taal & Social Media
 | Optie / Module | Model A: Puur Maandelijks | Model B: Setup + Laag Maandelijks | Wat levert het de klant concreet op? |
@@ -66,25 +67,24 @@ Klanten kunnen hun gekozen tier modulair uitbreiden. Je kunt per optie kiezen vo
 ### Juridisch, Data & Service Level (SLA)
 | Optie / Module | Model A: Puur Maandelijks | Model B: Setup + Laag Maandelijks | Wat levert het de klant concreet op? |
 | :--- | :--- | :--- | :--- |
-| **AVG / Cookiebanner Compleet** | **€ 5,00 / mnd** | € 35 setup + € 2,50 / mnd | AVG/GDPR-proof banner met automatische scan, cookieblokkering en privacyverklaring-pagina. |
+| **AVG / Cookiebanner Compleet** *(standaard in Velocity/Scale)* | **€ 5,00 / mnd** *(bij One-Pager)* | € 35 setup + € 2,50 / mnd | AVG/GDPR-proof banner met automatische scan, cookieblokkering en privacyverklaring-pagina. |
 | **Toegankelijkheid / WCAG Widget** | **€ 5,00 / mnd** | € 35 setup + € 2,50 / mnd | Knop voor bezoekers om tekst te vergroten, contrast aan te passen of voor te laten lezen. |
 | **Privacy Analytics Dashboard** | **€ 4,00 / mnd** | Direct maandelijks | Eenvoudig, cookieloos statistiekendashboard (zonder ingewikkeld Google Analytics). |
 | **Priority Support (Spoedservice)** | **€ 15,00 / mnd** | Direct maandelijks | Gegarandeerde oplevering van wijzigingen binnen 12–24 uur (i.p.v. 48–72 uur) bij spoedvragen. |
 
 ---
 
-## 3. Rekenvoorbeeld (Offerte-opbouw)
+## 3. Rekenvoorbeeld (Offerte-opbouw na Optimalisatie)
 
 Stel dat een lokale dienstverlener zijn pakket samenstelt op basis van **Model A (puur maandelijks)**:
 
-* **Basis:** Tier 2 – *Velocity* (tot 5 pagina's) = **€ 55,00 / mnd**
-* **Add-on 1:** SEO Compleet = **€ 10,00 / mnd**
+* **Basis:** Tier 2 – *Velocity* (tot 5 pagina's — incl. WhatsApp Widget, AVG Cookiebanner & Basis-SEO) = **€ 55,00 / mnd**
+* **Add-on 1:** Upgrade naar *SEO Compleet + AI-SEO* (`llms.txt` & Schema) = **€ 5,00 / mnd** *(meerprijs bovenop Basis-SEO)*
 * **Add-on 2:** API Koppeling Basis (Agenda/Nieuwsbrief) = **€ 5,00 / mnd**
-* **Add-on 3:** WhatsApp Direct Chat Widget = **€ 3,50 / mnd**
-* **Add-on 4:** Google Reviews Koppeling = **€ 4,50 / mnd**
-* **Add-on 5:** AVG Cookiebanner = **€ 5,00 / mnd**
+* **Add-on 3:** Google Reviews Koppeling = **€ 4,50 / mnd** *(of neem **Scale** voor € 95/mnd incl. onbeperkte pagina's)*
 * ------------------------------------------------------------------
-* **Totaalbedrag:** **€ 83,00 per maand** *(excl. btw, 12 maanden contract)*
+* **Totaalbedrag:** **€ 69,50 per maand** *(voorheen € 83,00/mnd met losse basis-add-ons — excl. btw, 12 maanden contract)*
+* *(Optioneel met **24/7 AI Klantenservice Bot** tot 500 berichten/mnd: **€ 84,00 per maand** totaal)*
 
 ---
 
