@@ -13,6 +13,7 @@ import {
   ProjectConfig,
 } from '../data/projects';
 import { useProjectThumbnails } from '../utils/mockupGenerator';
+import { ShowcaseMosaic } from './ShowcaseMosaic';
 
 interface SelectedWorkGridProps {
   onSelectProject: (project: ProjectConfig) => void;
@@ -447,9 +448,10 @@ export function SelectedWorkGrid({
     ? visibleProjects.slice(0, 4)
     : visibleProjects;
 
-  // 3-stage scroll choreography:
-  // 1) Start Punt (upright closed alabaster cover) -> 2) Tijdens Scrollen (tilts backward in 3D) -> 3) Eind Punt (flips open and stays open)
+  // 3-stage scroll choreography for standalone WorkPage archive
   useEffect(() => {
+    if (!isStandalonePage) return;
+
     const filterChanged = prevFilterRef.current !== activeFilter;
     prevFilterRef.current = activeFilter;
     if (filterChanged) {
@@ -566,13 +568,17 @@ export function SelectedWorkGrid({
     <section
       id={isStandalonePage ? 'work-archive' : 'selected-work'}
       aria-label="Website Design Directions"
-      className={`relative z-10 w-full px-4 md:px-8 ${
+      className={`relative z-10 w-full ${
         isStandalonePage
-          ? 'pt-28 pb-12 md:pt-34 md:pb-16'
-          : 'pt-14 pb-16 md:pt-20 md:pb-24'
+          ? 'px-4 pt-28 pb-12 md:px-8 md:pt-34 md:pb-16'
+          : 'pt-14 pb-12 md:pt-20 md:pb-16'
       }`}
     >
-      <div className="mx-auto max-w-[1200px]">
+      <div
+        className={`mx-auto max-w-[1200px] ${
+          isStandalonePage ? '' : 'px-4 md:px-8'
+        }`}
+      >
         {isStandalonePage && (
           <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
             {onBackToOverview && (
@@ -681,127 +687,139 @@ export function SelectedWorkGrid({
           </motion.div>
         )}
 
-        {/* Interactive Business Owner Filter Tabs (horizontal swipe strip with peek on mobile, wrapped row on md+) */}
-        <div
-          role="tablist"
-          aria-label="Filter website directions by business type"
-          className="no-scrollbar -mx-4 mt-5 flex flex-nowrap items-center gap-2 overflow-x-auto px-4 py-1 md:mx-0 md:mt-6 md:flex-wrap md:overflow-visible md:px-0 md:py-0"
-        >
-          {FILTERS.map((filter) => {
-            const isSelected = activeFilter === filter;
-            const count =
-              filter === 'All'
-                ? PROJECTS.length
-                : PROJECTS.filter((p) => p.industries.includes(filter)).length;
-            return (
-              <button
-                key={filter}
-                type="button"
-                role="tab"
-                aria-selected={isSelected}
-                onClick={(e) => {
-                  setHoveredId(null);
-                  setShowAllMobile(false);
-                  setActiveFilter(filter);
-                  e.currentTarget.scrollIntoView({
-                    behavior: prefersReducedMotion ? 'auto' : 'smooth',
-                    block: 'nearest',
-                    inline: 'center',
-                  });
-                }}
-                className={`relative rounded-full px-3.5 py-1.5 text-[12px] font-medium whitespace-nowrap shrink-0 transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-[#C98A3A] sm:px-4 ${
-                  isSelected
-                    ? 'text-[#F7F5F0]'
-                    : 'glass-subtle text-[#1C1B18]/75 hover:bg-white/30 hover:text-[#1C1B18]'
-                }`}
-              >
-                {isSelected && (
-                  <motion.span
-                    layoutId="selected-work-filter-pill"
-                    transition={
-                      prefersReducedMotion
-                        ? { duration: 0 }
-                        : { type: 'spring', stiffness: 460, damping: 36 }
-                    }
-                    className="absolute inset-0 rounded-full bg-[#1C1B18]"
-                  />
-                )}
-                <span className="relative z-10">
-                  {filter}{' '}
-                  <span className="font-mono-tabular opacity-65">({count})</span>
-                </span>
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Glassmorphism Responsive Portfolio Grid (2-column on mobile/tablet, 4-column on desktop) */}
-        <div
-          key={activeFilter}
-          onPointerLeave={() => setHoveredId(null)}
-          className="mt-8 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-4"
-        >
-          {displayedProjects.map((project, idx) => {
-            const rowIndex = gridCols > 1 ? Math.floor(idx / gridCols) : idx;
-            const isRowLeader = gridCols <= 1 || idx % gridCols === 0;
-            const isRowOpen = openedRows.includes(rowIndex);
-
-            return (
-              <WorkTileCard
-                key={project.id}
-                project={project}
-                index={idx}
-                cols={gridCols}
-                rowIndex={rowIndex}
-                isOpen={isRowOpen}
-                subscribeRowTilt={subscribeRowTilt}
-                anchorRef={
-                  isRowLeader
-                    ? (el) => {
-                        if (el) rowAnchorRefs.current.set(rowIndex, el);
-                        else rowAnchorRefs.current.delete(rowIndex);
-                      }
-                    : undefined
-                }
-                imgSrc={thumbnails.get(project.id)}
-                isBestMatch={
-                  activeFilter !== 'All' &&
-                  project.bestMatchFor.includes(activeFilter)
-                }
-                isDimmed={hoveredId !== null && hoveredId !== project.id}
-                isSpotlighted={hoveredId === project.id}
-                reducedMotion={prefersReducedMotion}
-                onHoverStart={(id) => setHoveredId(id)}
-                onHoverEnd={() => setHoveredId(null)}
-                onSelect={onSelectProject}
-              />
-            );
-          })}
-        </div>
-
-        {/* Mobile "See more / Show less" toggle when clamped to 4 tiles */}
-        {!isStandalonePage && isMobile && visibleProjects.length > 4 && (
-          <div className="mt-6 flex justify-center">
-            <button
-              type="button"
-              onClick={() => setShowAllMobile((prev) => !prev)}
-              className="glass-subtle inline-flex h-10 items-center justify-center gap-2 rounded-full px-5 text-[12px] font-semibold text-[#1C1B18] transition-colors duration-200 hover:bg-white/75 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C98A3A]"
+        {/* Homepage Section: Scroll-Zoom-Out 4×3 / 3×2 Mosaic + Post-Flip Filter Tabs */}
+        {!isStandalonePage ? null : (
+          <>
+            {/* Interactive Business Owner Filter Tabs (horizontal swipe strip with peek on mobile, wrapped row on md+) */}
+            <div
+              role="tablist"
+              aria-label="Filter website directions by business type"
+              className="no-scrollbar -mx-4 mt-5 flex flex-nowrap items-center gap-2 overflow-x-auto px-4 py-1 md:mx-0 md:mt-6 md:flex-wrap md:overflow-visible md:px-0 md:py-0"
             >
-              {showAllMobile ? (
-                <>
-                  <span>Show fewer</span>
-                  <ChevronUp className="h-3.5 w-3.5" />
-                </>
-              ) : (
-                <>
-                  <span>See more ({visibleProjects.length - 4} more)</span>
-                  <ChevronDown className="h-3.5 w-3.5" />
-                </>
-              )}
-            </button>
-          </div>
+              {FILTERS.map((filter) => {
+                const isSelected = activeFilter === filter;
+                const count =
+                  filter === 'All'
+                    ? PROJECTS.length
+                    : PROJECTS.filter((p) => p.industries.includes(filter))
+                        .length;
+                return (
+                  <button
+                    key={filter}
+                    type="button"
+                    role="tab"
+                    aria-selected={isSelected}
+                    onClick={(e) => {
+                      setHoveredId(null);
+                      setShowAllMobile(false);
+                      setActiveFilter(filter);
+                      e.currentTarget.scrollIntoView({
+                        behavior: prefersReducedMotion ? 'auto' : 'smooth',
+                        block: 'nearest',
+                        inline: 'center',
+                      });
+                    }}
+                    className={`relative rounded-full px-3.5 py-1.5 text-[12px] font-medium whitespace-nowrap shrink-0 transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-[#C98A3A] sm:px-4 ${
+                      isSelected
+                        ? 'text-[#F7F5F0]'
+                        : 'glass-subtle text-[#1C1B18]/75 hover:bg-white/30 hover:text-[#1C1B18]'
+                    }`}
+                  >
+                    {isSelected && (
+                      <motion.span
+                        layoutId="selected-work-filter-pill"
+                        transition={
+                          prefersReducedMotion
+                            ? { duration: 0 }
+                            : { type: 'spring', stiffness: 460, damping: 36 }
+                        }
+                        className="absolute inset-0 rounded-full bg-[#1C1B18]"
+                      />
+                    )}
+                    <span className="relative z-10">
+                      {filter}{' '}
+                      <span className="font-mono-tabular opacity-65">
+                        ({count})
+                      </span>
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Glassmorphism Responsive Portfolio Grid (2-column on mobile/tablet, 4-column on desktop) */}
+            <div
+              key={activeFilter}
+              onPointerLeave={() => setHoveredId(null)}
+              className="mt-8 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-4"
+            >
+              {displayedProjects.map((project, idx) => {
+                const rowIndex = gridCols > 1 ? Math.floor(idx / gridCols) : idx;
+                const isRowLeader = gridCols <= 1 || idx % gridCols === 0;
+                const isRowOpen = openedRows.includes(rowIndex);
+
+                return (
+                  <WorkTileCard
+                    key={project.id}
+                    project={project}
+                    index={idx}
+                    cols={gridCols}
+                    rowIndex={rowIndex}
+                    isOpen={isRowOpen}
+                    subscribeRowTilt={subscribeRowTilt}
+                    anchorRef={
+                      isRowLeader
+                        ? (el) => {
+                            if (el) rowAnchorRefs.current.set(rowIndex, el);
+                            else rowAnchorRefs.current.delete(rowIndex);
+                          }
+                        : undefined
+                    }
+                    imgSrc={thumbnails.get(project.id)}
+                    isBestMatch={
+                      activeFilter !== 'All' &&
+                      project.bestMatchFor.includes(activeFilter)
+                    }
+                    isDimmed={hoveredId !== null && hoveredId !== project.id}
+                    isSpotlighted={hoveredId === project.id}
+                    reducedMotion={prefersReducedMotion}
+                    onHoverStart={(id) => setHoveredId(id)}
+                    onHoverEnd={() => setHoveredId(null)}
+                    onSelect={onSelectProject}
+                  />
+                );
+              })}
+            </div>
+
+            {/* Mobile "See more / Show less" toggle when clamped to 4 tiles */}
+            {!isStandalonePage && isMobile && visibleProjects.length > 4 && (
+              <div className="mt-6 flex justify-center">
+                <button
+                  type="button"
+                  onClick={() => setShowAllMobile((prev) => !prev)}
+                  className="glass-subtle inline-flex h-10 items-center justify-center gap-2 rounded-full px-5 text-[12px] font-semibold text-[#1C1B18] transition-colors duration-200 hover:bg-white/75 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C98A3A]"
+                >
+                  {showAllMobile ? (
+                    <>
+                      <span>Show fewer</span>
+                      <ChevronUp className="h-3.5 w-3.5" />
+                    </>
+                  ) : (
+                    <>
+                      <span>See more ({visibleProjects.length - 4} more)</span>
+                      <ChevronDown className="h-3.5 w-3.5" />
+                    </>
+                  )}
+                </button>
+              </div>
+            )}
+          </>
         )}
       </div>
+
+      {!isStandalonePage && (
+        <ShowcaseMosaic onSelectProject={onSelectProject} />
+      )}
     </section>
   );
 }
