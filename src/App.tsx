@@ -17,6 +17,11 @@ const WorkPage = lazy(() =>
     default: m.WorkPage,
   })),
 );
+const ExamplesPage = lazy(() =>
+  import('./components/ExamplesPage').then((m) => ({
+    default: m.ExamplesPage,
+  })),
+);
 const ProjectPreviewModal = lazy(() =>
   import('./components/ProjectPreviewModal').then((m) => ({
     default: m.ProjectPreviewModal,
@@ -33,15 +38,25 @@ const SprintBookingDrawer = lazy(() =>
   })),
 );
 
-type PageView = 'home' | 'work';
+type PageView = 'home' | 'work' | 'examples';
 
 function isDirectionsHash(hash: string): boolean {
   return hash === '#/directions' || hash === '#/work';
 }
 
+function isExamplesHash(hash: string): boolean {
+  return hash === '#/examples';
+}
+
+function getPageFromHash(hash: string): PageView {
+  if (isDirectionsHash(hash)) return 'work';
+  if (isExamplesHash(hash)) return 'examples';
+  return 'home';
+}
+
 function getInitialPage(): PageView {
-  if (typeof window !== 'undefined' && isDirectionsHash(window.location.hash)) {
-    return 'work';
+  if (typeof window !== 'undefined') {
+    return getPageFromHash(window.location.hash);
   }
   return 'home';
 }
@@ -67,10 +82,7 @@ export default function App() {
 
   useEffect(() => {
     const syncFromHash = () => {
-      const nextPage: PageView = isDirectionsHash(window.location.hash)
-        ? 'work'
-        : 'home';
-      setCurrentPage(nextPage);
+      setCurrentPage(getPageFromHash(window.location.hash));
     };
     window.addEventListener('hashchange', syncFromHash);
     window.addEventListener('popstate', syncFromHash);
@@ -91,6 +103,15 @@ export default function App() {
         return;
       }
 
+      if (target === 'examples') {
+        if (window.location.hash !== '#/examples') {
+          window.history.pushState(null, '', '#/examples');
+        }
+        setCurrentPage('examples');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        return;
+      }
+
       const scrollTargetOnHome = () => {
         if (target === 'hero-wave') {
           window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -103,7 +124,10 @@ export default function App() {
       };
 
       if (currentPage !== 'home') {
-        if (isDirectionsHash(window.location.hash)) {
+        if (
+          isDirectionsHash(window.location.hash) ||
+          isExamplesHash(window.location.hash)
+        ) {
           window.history.pushState(
             null,
             '',
@@ -170,6 +194,17 @@ export default function App() {
         <main className="relative z-10">
           <Suspense fallback={<div className="min-h-screen" />}>
             <WorkPage
+              onSelectProject={handleSelectProject}
+              onStartProject={() => openBookingDrawer('brief')}
+              onBookCall={() => openBookingDrawer('call')}
+              onBackToOverview={() => navigateTo('hero-wave')}
+            />
+          </Suspense>
+        </main>
+      ) : currentPage === 'examples' ? (
+        <main className="relative z-10">
+          <Suspense fallback={<div className="min-h-screen" />}>
+            <ExamplesPage
               onSelectProject={handleSelectProject}
               onStartProject={() => openBookingDrawer('brief')}
               onBookCall={() => openBookingDrawer('call')}

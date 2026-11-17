@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { Menu } from 'lucide-react';
 
 interface GlassHeaderProps {
-  activePage: 'home' | 'work';
+  activePage: 'home' | 'work' | 'examples';
   onNavigateSection: (sectionId: string) => void;
   onOpenBooking: () => void;
   onOpenMenu: () => void;
@@ -11,13 +11,13 @@ interface GlassHeaderProps {
 interface NavLinkItem {
   label: string;
   target: string;
-  page: 'home' | 'work' | null;
+  page: 'home' | 'work' | 'examples' | null;
 }
 
 const LEFT_LINKS: NavLinkItem[] = [
   { label: 'Overview', target: 'hero-wave', page: 'home' },
   { label: 'Directions', target: 'work', page: 'work' },
-  { label: 'Playground', target: 'style-playground', page: null },
+  { label: 'Examples', target: 'examples', page: 'examples' },
 ];
 
 const RIGHT_LINKS: NavLinkItem[] = [

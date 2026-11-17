@@ -24,9 +24,9 @@ const NAV_ITEMS = [
   },
   {
     index: '03',
-    label: 'Style Playground',
-    subtitle: 'Interactive Skins & Live Micro-Animations',
-    target: 'style-playground',
+    label: 'Examples',
+    subtitle: 'Scroll-to-Mosaic · Website Styles & Formats',
+    target: 'examples',
   },
   {
     index: '04',
