@@ -60,11 +60,12 @@ export function renderModularBento(
 
   const cardPad = width * 0.026;
   // Eyebrow Pill
+  ctx.font = `700 ${Math.round(width * 0.0085)}px "JetBrains Mono", monospace`;
+  const pillW = ctx.measureText(previewSample.eyebrow).width + 32;
   ctx.fillStyle = 'rgba(37, 99, 235, 0.1)';
-  drawRoundedRect(ctx, padX + cardPad, topY + cardPad * 0.85, width * 0.17, 32, 16);
+  drawRoundedRect(ctx, padX + cardPad, topY + cardPad * 0.85, pillW, 32, 16);
   ctx.fill();
   ctx.fillStyle = palette.accent;
-  ctx.font = `700 ${Math.round(width * 0.0085)}px "JetBrains Mono", monospace`;
   ctx.fillText(previewSample.eyebrow, padX + cardPad + 16, topY + cardPad * 0.85 + 17);
 
   // Clean Bold Product Headline
@@ -76,8 +77,8 @@ export function renderModularBento(
   ctx.fillText(words.slice(midSplit).join(' '), padX + cardPad, topY + height * 0.225);
 
   ctx.fillStyle = palette.secondary;
-  ctx.font = `400 ${Math.round(width * 0.012)}px "Plus Jakarta Sans", sans-serif`;
-  ctx.fillText(previewSample.subheadline.slice(0, 48), padX + cardPad, topY + height * 0.29);
+  ctx.font = `400 ${Math.round(width * 0.0118)}px "Plus Jakarta Sans", sans-serif`;
+  ctx.fillText('Structured portal & product modules built for clarity.', padX + cardPad, topY + height * 0.29);
 
   // Focal Action Button inside Hero Card
   const btnY = topY + heroH - height * 0.105;
@@ -111,17 +112,17 @@ export function renderModularBento(
   const midTopH = totalH * 0.44;
   drawBentoCard(ctx, midX, topY, colMidW, midTopH, 24, palette.accent, palette.accent);
 
-  ctx.fillStyle = 'rgba(255,255,255,0.75)';
+  ctx.fillStyle = 'rgba(255,255,255,0.78)';
   ctx.font = `600 ${Math.round(width * 0.009)}px "JetBrains Mono", monospace`;
-  ctx.fillText('CONVERSION METRIC', midX + 26, topY + 38);
+  ctx.fillText('PORTAL UPTIME SLA', midX + 26, topY + 38);
 
   ctx.fillStyle = '#FFFFFF';
-  ctx.font = `700 ${Math.round(width * 0.042)}px "Plus Jakarta Sans", sans-serif`;
+  ctx.font = `700 ${Math.round(width * 0.041)}px "Plus Jakarta Sans", sans-serif`;
   ctx.fillText(previewSample.metrics[2]?.value || '99.99%', midX + 26, topY + midTopH * 0.56);
 
-  ctx.fillStyle = 'rgba(255,255,255,0.85)';
-  ctx.font = `500 ${Math.round(width * 0.0115)}px "Plus Jakarta Sans", sans-serif`;
-  ctx.fillText(previewSample.cardLabels[1] || 'LIVE SYNC', midX + 26, topY + midTopH * 0.8);
+  ctx.fillStyle = 'rgba(255,255,255,0.9)';
+  ctx.font = `600 ${Math.round(width * 0.0115)}px "Plus Jakarta Sans", sans-serif`;
+  ctx.fillText('LIVE WORKFLOWS', midX + 26, topY + midTopH * 0.8);
 
   // Center Bottom Card: Clean Activity Bar Preview
   const midBotY = topY + midTopH + gap;
@@ -129,8 +130,8 @@ export function renderModularBento(
   drawBentoCard(ctx, midX, midBotY, colMidW, midBotH, 24, palette.surface);
 
   ctx.fillStyle = palette.text;
-  ctx.font = `700 ${Math.round(width * 0.014)}px "Plus Jakarta Sans", sans-serif`;
-  ctx.fillText(previewSample.cardLabels[2] || 'ANALYTICS', midX + 26, midBotY + 38);
+  ctx.font = `700 ${Math.round(width * 0.0135)}px "Plus Jakarta Sans", sans-serif`;
+  ctx.fillText('LIVE ANALYTICS', midX + 26, midBotY + 38);
 
   const barHeights = [0.38, 0.56, 0.48, 0.76, 0.64, 0.92, 0.8];
   const barZoneW = colMidW - 52;
@@ -145,16 +146,16 @@ export function renderModularBento(
     ctx.fill();
   });
 
-  // 4. RIGHT COLUMN: STACKED WORKFLOW CARDS + INTEGRATIONS
+  // 4. RIGHT COLUMN: CLIENT PORTAL WORKFLOWS + MOBILE & WEB APP
   const rightX = midX + colMidW + gap;
   const rightTopH = totalH * 0.54;
   drawBentoCard(ctx, rightX, topY, colRightW, rightTopH, 24, palette.surface);
 
   ctx.fillStyle = palette.text;
-  ctx.font = `700 ${Math.round(width * 0.014)}px "Plus Jakarta Sans", sans-serif`;
-  ctx.fillText(previewSample.cardLabels[0] || 'AUTOMATION', rightX + 24, topY + 38);
+  ctx.font = `700 ${Math.round(width * 0.0135)}px "Plus Jakarta Sans", sans-serif`;
+  ctx.fillText('CLIENT PORTAL', rightX + 24, topY + 38);
 
-  const stepItems = ['01  Instant Onboarding', '02  Unified Workspace', '03  Smart Alerts', '04  Global Export'];
+  const stepItems = ['01  Client Onboarding', '02  Shared Documents', '03  Project Status', '04  Billing & Invoices'];
   stepItems.forEach((step, idx) => {
     const sy = topY + 72 + idx * 54;
     ctx.fillStyle = idx === 0 ? 'rgba(37, 99, 235, 0.09)' : '#F8FAFC';
@@ -162,24 +163,24 @@ export function renderModularBento(
     ctx.fill();
 
     ctx.fillStyle = idx === 0 ? palette.accent : palette.text;
-    ctx.font = `600 ${Math.round(width * 0.0105)}px "Plus Jakarta Sans", sans-serif`;
-    ctx.fillText(step, rightX + 38, sy + 22);
+    ctx.font = `600 ${Math.round(width * 0.0102)}px "Plus Jakarta Sans", sans-serif`;
+    ctx.fillText(step, rightX + 36, sy + 22);
   });
 
-  // Bottom Right Dark Contrast Module
+  // Bottom Right Dark Contrast Module: MOBILE + WEB APP
   const rBotY = topY + rightTopH + gap;
   const rBotH = totalH - rightTopH - gap;
   drawBentoCard(ctx, rightX, rBotY, colRightW, rBotH, 24, '#111827', '#111827');
 
   ctx.fillStyle = '#94A3B8';
   ctx.font = `600 ${Math.round(width * 0.0085)}px "JetBrains Mono", monospace`;
-  ctx.fillText('RESPONSIVE SYSTEM', rightX + 24, rBotY + 38);
+  ctx.fillText('CROSS-PLATFORM', rightX + 24, rBotY + 38);
 
   ctx.fillStyle = '#FFFFFF';
-  ctx.font = `700 ${Math.round(width * 0.0175)}px "Plus Jakarta Sans", sans-serif`;
-  ctx.fillText('Desktop + Mobile', rightX + 24, rBotY + rBotH * 0.56);
+  ctx.font = `700 ${Math.round(width * 0.017)}px "Plus Jakarta Sans", sans-serif`;
+  ctx.fillText('MOBILE + WEB APP', rightX + 24, rBotY + rBotH * 0.56);
 
   ctx.fillStyle = '#60A5FA';
-  ctx.font = `600 ${Math.round(width * 0.01)}px "JetBrains Mono", monospace`;
-  ctx.fillText('BENTO GRID READY ↗', rightX + 24, rBotY + rBotH * 0.8);
+  ctx.font = `600 ${Math.round(width * 0.0095)}px "JetBrains Mono", monospace`;
+  ctx.fillText('SYNCED IN REAL TIME ↗', rightX + 24, rBotY + rBotH * 0.8);
 }

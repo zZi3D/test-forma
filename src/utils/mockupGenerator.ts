@@ -182,16 +182,16 @@ export function useProjectThumbnails(): Map<string, string> {
  * Returns cached card preview instantly while upgrading to full 1600x1000
  * high-DPI resolution asynchronously when a user opens the modal.
  */
-export function useProjectModalPreview(project: ProjectConfig | null): string {
-  const [url, setUrl] = useState<string>(() => {
-    if (!project) return '';
+export function useProjectModalPreview(project: ProjectConfig | null): string | null {
+  const [url, setUrl] = useState<string | null>(() => {
+    if (!project) return null;
     const key = getCacheKey(project);
-    return modalUrlCache.get(key) ?? cardUrlCache.get(key) ?? '';
+    return modalUrlCache.get(key) ?? cardUrlCache.get(key) ?? null;
   });
 
   useEffect(() => {
     if (!project) {
-      setUrl('');
+      setUrl(null);
       return;
     }
 

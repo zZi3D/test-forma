@@ -30,6 +30,51 @@ export function drawRoundedRect(
   ctx.closePath();
 }
 
+export function drawWrappedText(
+  ctx: CanvasRenderingContext2D,
+  text: string,
+  x: number,
+  y: number,
+  maxWidth: number,
+  lineHeight: number,
+  maxLines = 2,
+): number {
+  const words = text.trim().split(/\s+/);
+  const lines: string[] = [];
+  let current = '';
+
+  for (let i = 0; i < words.length; i++) {
+    const word = words[i];
+    const candidate = current ? `${current} ${word}` : word;
+    if (ctx.measureText(candidate).width <= maxWidth) {
+      current = candidate;
+    } else {
+      if (current) {
+        if (lines.length === maxLines - 1) {
+          lines.push(current);
+          current = '';
+          break;
+        }
+        lines.push(current);
+        current = word;
+      } else {
+        lines.push(word);
+        if (lines.length >= maxLines) break;
+      }
+    }
+  }
+
+  if (current && lines.length < maxLines) {
+    lines.push(current);
+  }
+
+  lines.forEach((line, idx) => {
+    ctx.fillText(line, x, y + idx * lineHeight);
+  });
+
+  return lines.length;
+}
+
 export function applyEditorialGrain(
   ctx: CanvasRenderingContext2D,
   x: number,
@@ -71,6 +116,7 @@ export function drawBrowserChrome(
     borderAlpha?: number;
     navItemsColor?: string;
     solidDivider?: boolean;
+    highlightLastNav?: boolean;
   },
 ): ChromeMetrics {
   const { palette, previewSample } = project;
@@ -120,14 +166,31 @@ export function drawBrowserChrome(
   ctx.fillText(previewSample.masthead, padX, navY);
 
   ctx.font = `600 ${Math.round(width * 0.01)}px "Plus Jakarta Sans", sans-serif`;
-  ctx.fillStyle = options?.navItemsColor ?? palette.secondary;
   let navX = width - padX;
   for (let i = previewSample.navItems.length - 1; i >= 0; i--) {
     const label = previewSample.navItems[i];
+    const isHighlighted =
+      options?.highlightLastNav && i === previewSample.navItems.length - 1;
     const tw = ctx.measureText(label).width;
-    navX -= tw;
-    ctx.fillText(label, navX, navY);
-    navX -= width * 0.025;
+    if (isHighlighted) {
+      const pillW = tw + 28;
+      const pillH = 32;
+      navX -= pillW;
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
+      drawRoundedRect(ctx, navX, navY - pillH * 0.5, pillW, pillH, 16);
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.22)';
+      ctx.lineWidth = 1.25;
+      ctx.stroke();
+      ctx.fillStyle = palette.text;
+      ctx.fillText(label, navX + 14, navY);
+      navX -= width * 0.025;
+    } else {
+      ctx.fillStyle = options?.navItemsColor ?? palette.secondary;
+      navX -= tw;
+      ctx.fillText(label, navX, navY);
+      navX -= width * 0.025;
+    }
   }
 
   return { padX, browserH, navH, headerBottom };

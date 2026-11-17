@@ -87,7 +87,7 @@ export function ProjectPreviewModal({
                   </span>
                   <span aria-hidden="true">·</span>
                   <span className="text-[#1C1B18]">
-                    {project.industries.join(' & ')}
+                    {project.industries.join(' · ')}
                   </span>
                   <span aria-hidden="true">·</span>
                   <span>Design Direction: {project.styleSubtitle}</span>
@@ -115,12 +115,21 @@ export function ProjectPreviewModal({
               className="mt-6 aspect-[16/10] w-full overflow-hidden rounded-xl border border-[#1C1B18]/10"
               style={{ backgroundColor: project.palette.bg }}
             >
-              <img
-                src={previewUrl}
-                alt={`${project.businessTitle} (${project.styleSubtitle}) website preview`}
-                referrerPolicy="no-referrer"
-                className="h-full w-full object-cover"
-              />
+              {previewUrl ? (
+                <img
+                  src={previewUrl}
+                  alt={`${project.businessTitle} (${project.styleSubtitle}) website preview`}
+                  referrerPolicy="no-referrer"
+                  className="h-full w-full object-cover"
+                />
+              ) : (
+                <div
+                  className="flex h-full w-full items-center justify-center p-6 text-sm font-medium"
+                  style={{ color: project.palette.text }}
+                >
+                  {project.businessTitle}
+                </div>
+              )}
             </div>
 
             {/* 3-Column Business & Design Blueprint */}
@@ -193,16 +202,16 @@ export function ProjectPreviewModal({
                   <span className="block text-[11px] font-medium text-[#1C1B18]/50">
                     Reference Palette
                   </span>
-                  <div className="mt-2 flex items-center gap-3">
+                  <div className="mt-2.5 flex flex-wrap items-center gap-x-3.5 gap-y-2">
                     {paletteSwatches.map((swatch) => (
                       <div key={swatch.label} className="flex items-center gap-1.5">
                         <span
                           aria-label={`${swatch.label}: ${swatch.hex}`}
                           title={`${swatch.label} (${swatch.hex})`}
-                          className="h-5 w-5 rounded-full border border-[#1C1B18]/20 shadow-xs"
+                          className="h-4 w-4 shrink-0 rounded-full border border-[#1C1B18]/20 shadow-xs"
                           style={{ backgroundColor: swatch.hex }}
                         />
-                        <span className="font-mono-tabular hidden text-[10px] text-[#1C1B18]/55 sm:inline">
+                        <span className="font-mono-tabular text-[10.5px] text-[#1C1B18]/65">
                           {swatch.hex}
                         </span>
                       </div>

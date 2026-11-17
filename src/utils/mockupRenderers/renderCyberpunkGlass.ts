@@ -1,28 +1,29 @@
 import { ProjectConfig } from '../../data/projects';
 import { drawBrowserChrome, drawRoundedRect } from './canvasPrimitives';
 
-function drawGlassHudPanel(
+function drawModernGlassCard(
   ctx: CanvasRenderingContext2D,
   x: number,
   y: number,
   w: number,
   h: number,
   r: number,
-  edgeAccent: string,
+  topTint = 'rgba(255, 255, 255, 0.065)',
 ) {
   ctx.save();
-  // Translucent smoked glass fill
-  ctx.fillStyle = 'rgba(255, 255, 255, 0.08)';
+  const fillGrad = ctx.createLinearGradient(x, y, x, y + h);
+  fillGrad.addColorStop(0, topTint);
+  fillGrad.addColorStop(1, 'rgba(17, 19, 28, 0.72)');
+  ctx.fillStyle = fillGrad;
   drawRoundedRect(ctx, x, y, w, h, r);
   ctx.fill();
 
-  // Light-catching gradient specular border
   const borderGrad = ctx.createLinearGradient(x, y, x + w, y + h);
-  borderGrad.addColorStop(0, 'rgba(255, 255, 255, 0.45)');
-  borderGrad.addColorStop(0.5, edgeAccent + '66');
-  borderGrad.addColorStop(1, 'rgba(255, 255, 255, 0.12)');
+  borderGrad.addColorStop(0, 'rgba(255, 255, 255, 0.24)');
+  borderGrad.addColorStop(0.5, 'rgba(99, 102, 241, 0.25)');
+  borderGrad.addColorStop(1, 'rgba(255, 255, 255, 0.08)');
   ctx.strokeStyle = borderGrad;
-  ctx.lineWidth = 1.75;
+  ctx.lineWidth = 1.5;
   drawRoundedRect(ctx, x, y, w, h, r);
   ctx.stroke();
   ctx.restore();
@@ -35,183 +36,293 @@ export function renderCyberpunkGlass(
   project: ProjectConfig,
 ) {
   const { palette, previewSample } = project;
+  const indigo = '#6366F1';
+  const violet = '#8B5CF6';
+  const cyan = '#22D3EE';
+  const mint = '#34D399';
 
-  // Pitch-black futuristic canvas (#07080C)
+  // Deep midnight carbon background (#08090D)
   ctx.fillStyle = palette.bg;
   ctx.fillRect(0, 0, width, height);
 
-  // Subtle background wireframe perspective grid
-  ctx.strokeStyle = 'rgba(34, 211, 238, 0.12)';
-  ctx.lineWidth = 1;
-  const horizonY = height * 0.56;
-  for (let gx = -8; gx <= 8; gx++) {
-    ctx.beginPath();
-    ctx.moveTo(width * 0.5 + gx * width * 0.04, horizonY);
-    ctx.lineTo(width * 0.5 + gx * width * 0.18, height);
-    ctx.stroke();
-  }
-  for (let gy = 0; gy < 9; gy++) {
-    const t = gy / 8;
-    const yLine = horizonY + t * t * (height - horizonY);
-    ctx.beginPath();
-    ctx.moveTo(0, yLine);
-    ctx.lineTo(width, yLine);
-    ctx.stroke();
-  }
+  // Diffuse Linear / Apple Intelligence inspired indigo-violet & soft cyan aurora behind hero
+  const indigoAurora = ctx.createRadialGradient(
+    width * 0.46,
+    height * 0.42,
+    20,
+    width * 0.46,
+    height * 0.42,
+    width * 0.44,
+  );
+  indigoAurora.addColorStop(0, 'rgba(99, 102, 241, 0.30)');
+  indigoAurora.addColorStop(0.45, 'rgba(139, 92, 246, 0.14)');
+  indigoAurora.addColorStop(1, 'transparent');
+  ctx.fillStyle = indigoAurora;
+  ctx.fillRect(0, 0, width, height);
 
-  // Cyan & amber ambient energy bloom behind center orb
-  const cyanGlow = ctx.createRadialGradient(
-    width * 0.56,
-    height * 0.53,
+  const cyanAurora = ctx.createRadialGradient(
+    width * 0.64,
+    height * 0.48,
     10,
-    width * 0.56,
-    height * 0.53,
-    width * 0.34,
+    width * 0.64,
+    height * 0.48,
+    width * 0.36,
   );
-  cyanGlow.addColorStop(0, 'rgba(34, 211, 238, 0.34)');
-  cyanGlow.addColorStop(0.55, 'rgba(34, 211, 238, 0.08)');
-  cyanGlow.addColorStop(1, 'transparent');
-  ctx.fillStyle = cyanGlow;
+  cyanAurora.addColorStop(0, 'rgba(34, 211, 238, 0.22)');
+  cyanAurora.addColorStop(0.55, 'rgba(34, 211, 238, 0.06)');
+  cyanAurora.addColorStop(1, 'transparent');
+  ctx.fillStyle = cyanAurora;
   ctx.fillRect(0, 0, width, height);
 
-  const amberGlow = ctx.createRadialGradient(
-    width * 0.64,
-    height * 0.45,
-    8,
-    width * 0.64,
-    height * 0.45,
-    width * 0.25,
-  );
-  amberGlow.addColorStop(0, 'rgba(245, 158, 11, 0.28)');
-  amberGlow.addColorStop(1, 'transparent');
-  ctx.fillStyle = amberGlow;
-  ctx.fillRect(0, 0, width, height);
+  // Subtle ambient dot matrix texture across top canvas (subtle precision SaaS backdrop)
+  ctx.fillStyle = 'rgba(248, 250, 252, 0.055)';
+  for (let gx = width * 0.08; gx < width * 0.92; gx += 34) {
+    for (let gy = height * 0.18; gy < height * 0.64; gy += 34) {
+      ctx.fillRect(gx, gy, 1.5, 1.5);
+    }
+  }
 
   const { padX, headerBottom } = drawBrowserChrome(ctx, width, height, project, {
-    chromeBg: '#0D1017',
-    borderAlpha: 0.16,
-    navItemsColor: 'rgba(248, 250, 252, 0.72)',
+    chromeBg: '#0E1018',
+    borderAlpha: 0.12,
+    navItemsColor: 'rgba(248, 250, 252, 0.7)',
+    highlightLastNav: true,
   });
 
-  // Center Glowing 3D Orb with Cyan & Amber Orbital Light Ribbons
-  const orbX = width * 0.57;
-  const orbY = height * 0.54;
-  const orbR = height * 0.24;
+  // CENTERED HERO: Eyebrow Pill + Precision Headline + Subheadline
+  const centerX = width * 0.5;
+  ctx.textAlign = 'center';
 
-  // Inner plasma core
-  const orbGrad = ctx.createRadialGradient(
-    orbX - orbR * 0.28,
-    orbY - orbR * 0.28,
-    orbR * 0.05,
-    orbX,
-    orbY,
-    orbR,
-  );
-  orbGrad.addColorStop(0, '#FFFFFF');
-  orbGrad.addColorStop(0.28, palette.accent); // #22D3EE
-  orbGrad.addColorStop(0.72, '#0E7490');
-  orbGrad.addColorStop(1, 'rgba(7, 8, 12, 0.92)');
-  ctx.fillStyle = orbGrad;
+  // Subtle intelligence pill badge
+  const pillW = width * 0.19;
+  const pillH = 34;
+  const pillY = headerBottom + height * 0.048;
+  drawModernGlassCard(ctx, centerX - pillW * 0.5, pillY, pillW, pillH, 17);
+
+  ctx.fillStyle = cyan;
   ctx.beginPath();
-  ctx.arc(orbX, orbY, orbR, 0, Math.PI * 2);
+  ctx.arc(centerX - pillW * 0.5 + 22, pillY + pillH * 0.5, 4, 0, Math.PI * 2);
   ctx.fill();
 
-  // Fine spherical wireframe meridians & parallels
-  ctx.strokeStyle = 'rgba(255, 255, 255, 0.22)';
-  ctx.lineWidth = 1.25;
-  for (let m = 1; m <= 3; m++) {
-    ctx.beginPath();
-    ctx.ellipse(orbX, orbY, orbR * (m / 3.5), orbR, 0, 0, Math.PI * 2);
-    ctx.stroke();
-  }
-  ctx.beginPath();
-  ctx.ellipse(orbX, orbY, orbR, orbR * 0.38, 0, 0, Math.PI * 2);
-  ctx.stroke();
+  ctx.fillStyle = '#CBD5E1';
+  ctx.font = `600 ${Math.round(width * 0.0086)}px "JetBrains Mono", monospace`;
+  ctx.fillText(previewSample.eyebrow, centerX + 8, pillY + pillH * 0.52);
 
-  // Glowing Cyan & Amber Orbital Light Trails
-  ctx.save();
-  ctx.shadowColor = palette.accent;
-  ctx.shadowBlur = 18;
-  ctx.strokeStyle = palette.accent;
-  ctx.lineWidth = 3.5;
-  ctx.beginPath();
-  ctx.ellipse(orbX, orbY, orbR * 1.48, orbR * 0.42, -0.32, 0, Math.PI * 2);
-  ctx.stroke();
-
-  ctx.shadowColor = palette.secondary;
-  ctx.strokeStyle = palette.secondary; // #F59E0B warm amber
-  ctx.lineWidth = 3;
-  ctx.beginPath();
-  ctx.ellipse(orbX, orbY, orbR * 1.38, orbR * 0.36, 0.46, 0, Math.PI * 2);
-  ctx.stroke();
-  ctx.restore();
-
-  // Floating Frosted Glass Window 1 (Left Primary Spatial HUD)
-  const hudX = padX;
-  const hudY = headerBottom + height * 0.06;
-  const hudW = width * 0.36;
-  const hudH = height * 0.48;
-  drawGlassHudPanel(ctx, hudX, hudY, hudW, hudH, 20, palette.accent);
-
-  ctx.fillStyle = palette.accent;
-  ctx.font = `600 ${Math.round(width * 0.0095)}px "JetBrains Mono", monospace`;
-  ctx.fillText(previewSample.eyebrow, hudX + 30, hudY + 48);
+  // Crisp Headline: "Intelligence Built Into Every Workflow."
+  const words = previewSample.headline.split(' ');
+  const splitPoint = Math.ceil(words.length / 2);
+  const line1 = words.slice(0, splitPoint).join(' ');
+  const line2 = words.slice(splitPoint).join(' ');
 
   ctx.fillStyle = palette.text;
-  ctx.font = `700 ${Math.round(width * 0.028)}px "Plus Jakarta Sans", sans-serif`;
-  const [w1, ...wRest] = previewSample.headline.split(' ');
-  ctx.fillText(w1, hudX + 30, hudY + 112);
-  ctx.fillText(wRest.join(' '), hudX + 30, hudY + 162);
+  ctx.font = `700 ${Math.round(width * 0.045)}px "Plus Jakarta Sans", sans-serif`;
+  ctx.fillText(line1, centerX, pillY + height * 0.105);
 
-  ctx.fillStyle = 'rgba(248, 250, 252, 0.72)';
-  ctx.font = `400 ${Math.round(width * 0.0115)}px "Plus Jakarta Sans", sans-serif`;
-  ctx.fillText(previewSample.subheadline.slice(0, 42), hudX + 30, hudY + 216);
+  const headGrad = ctx.createLinearGradient(
+    centerX - width * 0.25,
+    0,
+    centerX + width * 0.25,
+    0,
+  );
+  headGrad.addColorStop(0, '#F8FAFC');
+  headGrad.addColorStop(0.55, '#C7D2FE');
+  headGrad.addColorStop(1, '#67E8F9');
+  ctx.fillStyle = headGrad;
+  ctx.fillText(line2, centerX, pillY + height * 0.175);
 
-  // Engage Link glowing button inside glass HUD
-  const btnY = hudY + hudH - 86;
-  ctx.fillStyle = palette.accent;
-  drawRoundedRect(ctx, hudX + 30, btnY, hudW * 0.56, 48, 24);
+  ctx.fillStyle = 'rgba(203, 213, 225, 0.72)';
+  ctx.font = `400 ${Math.round(width * 0.0128)}px "Plus Jakarta Sans", sans-serif`;
+  ctx.fillText(previewSample.subheadline, centerX, pillY + height * 0.232);
+
+  // CENTRAL GLASSMORPHIC AI PROMPT INPUT BAR
+  const barW = width * 0.66;
+  const barH = 74;
+  const barX = centerX - barW * 0.5;
+  const barY = pillY + height * 0.285;
+
+  // Soft aurora outer bloom around prompt bar
+  ctx.save();
+  ctx.shadowColor = 'rgba(99, 102, 241, 0.36)';
+  ctx.shadowBlur = 36;
+  ctx.shadowOffsetY = 12;
+  drawModernGlassCard(ctx, barX, barY, barW, barH, 22, 'rgba(255, 255, 255, 0.09)');
+  ctx.restore();
+
+  // Left Sparkle Glyph inside prompt bar
+  ctx.textAlign = 'left';
+  ctx.fillStyle = cyan;
+  ctx.font = `700 ${Math.round(width * 0.014)}px "Plus Jakarta Sans", sans-serif`;
+  ctx.fillText('✦', barX + 26, barY + barH * 0.51);
+
+  // Prompt Placeholder Text + subtle cursor
+  ctx.fillStyle = 'rgba(248, 250, 252, 0.78)';
+  ctx.font = `400 ${Math.round(width * 0.0128)}px "Plus Jakarta Sans", sans-serif`;
+  const promptText = 'Ask AI to automate reports, leads & support...';
+  ctx.fillText(promptText, barX + 58, barY + barH * 0.51);
+  const cursorX = barX + 58 + ctx.measureText(promptText).width + 6;
+  ctx.fillStyle = cyan;
+  ctx.fillRect(cursorX, barY + barH * 0.5 - 12, 2, 24);
+
+  // Right Glowing "Generate ✦" Pill Button inside prompt bar
+  const genW = 162;
+  const genH = 48;
+  const genX = barX + barW - genW - 13;
+  const genY = barY + (barH - genH) * 0.5;
+
+  ctx.save();
+  const genGrad = ctx.createLinearGradient(genX, genY, genX + genW, genY + genH);
+  genGrad.addColorStop(0, indigo);
+  genGrad.addColorStop(0.55, violet);
+  genGrad.addColorStop(1, '#0891B2');
+  ctx.shadowColor = 'rgba(99, 102, 241, 0.55)';
+  ctx.shadowBlur = 18;
+  ctx.fillStyle = genGrad;
+  drawRoundedRect(ctx, genX, genY, genW, genH, 14);
   ctx.fill();
-  ctx.fillStyle = '#07080C';
-  ctx.font = `700 ${Math.round(width * 0.01)}px "JetBrains Mono", monospace`;
-  ctx.fillText(previewSample.ctaLabel, hudX + 64, btnY + 26);
+  ctx.restore();
 
-  // Floating Frosted Glass Window 2 (Bottom-left Telemetry Matrix)
-  const telY = hudY + hudH + height * 0.035;
-  const telH = height - telY - height * 0.065;
-  drawGlassHudPanel(ctx, hudX, telY, hudW, telH, 16, palette.secondary);
+  ctx.textAlign = 'center';
+  ctx.fillStyle = '#FFFFFF';
+  ctx.font = `700 ${Math.round(width * 0.011)}px "Plus Jakarta Sans", sans-serif`;
+  ctx.fillText(previewSample.ctaLabel, genX + genW * 0.5, genY + genH * 0.52);
+  ctx.textAlign = 'left';
 
-  previewSample.metrics.forEach((m, idx) => {
-    const mx = hudX + 28 + idx * (hudW * 0.31);
-    ctx.fillStyle = 'rgba(248, 250, 252, 0.55)';
-    ctx.font = `500 12px "JetBrains Mono", monospace`;
-    ctx.fillText(m.label, mx, telY + telH * 0.36);
+  // BOTTOM FEATURE ROW: 3 Sleek Translucent Dark Glass Cards
+  const cardsY = barY + barH + height * 0.055;
+  const cardsH = height - cardsY - height * 0.062;
+  const contentW = width - padX * 2;
+  const cardGap = width * 0.02;
+  const cardW = (contentW - cardGap * 2) / 3;
 
-    ctx.fillStyle = idx === 1 ? palette.accent : idx === 2 ? palette.secondary : palette.text;
-    ctx.font = `700 18px "JetBrains Mono", monospace`;
-    ctx.fillText(m.value, mx, telY + telH * 0.68);
+  // --- CARD 1: 01 · Instant Insights (with Mini Sparkline) ---
+  const c1X = padX;
+  drawModernGlassCard(ctx, c1X, cardsY, cardW, cardsH, 20);
+  ctx.fillStyle = cyan;
+  ctx.font = `600 ${Math.round(width * 0.0095)}px "JetBrains Mono", monospace`;
+  ctx.fillText(previewSample.metrics[0].label, c1X + 26, cardsY + 38);
+
+  ctx.fillStyle = palette.text;
+  ctx.font = `700 ${Math.round(width * 0.019)}px "Plus Jakarta Sans", sans-serif`;
+  ctx.fillText(previewSample.metrics[0].value, c1X + 26, cardsY + 78);
+
+  // Clean Glowing Mini Area Sparkline
+  const spX = c1X + 26;
+  const spW = cardW - 52;
+  const spTop = cardsY + cardsH * 0.52;
+  const spBot = cardsY + cardsH - 26;
+  const pts = [
+    { x: spX, y: spBot - 8 },
+    { x: spX + spW * 0.2, y: spBot - 22 },
+    { x: spX + spW * 0.38, y: spBot - 16 },
+    { x: spX + spW * 0.58, y: spBot - 44 },
+    { x: spX + spW * 0.78, y: spBot - 38 },
+    { x: spX + spW, y: spTop + 6 },
+  ];
+
+  const areaGrad = ctx.createLinearGradient(0, spTop, 0, spBot);
+  areaGrad.addColorStop(0, 'rgba(34, 211, 238, 0.28)');
+  areaGrad.addColorStop(1, 'rgba(34, 211, 238, 0.0)');
+  ctx.fillStyle = areaGrad;
+  ctx.beginPath();
+  ctx.moveTo(pts[0].x, spBot);
+  pts.forEach((p) => ctx.lineTo(p.x, p.y));
+  ctx.lineTo(pts[pts.length - 1].x, spBot);
+  ctx.closePath();
+  ctx.fill();
+
+  ctx.strokeStyle = cyan;
+  ctx.lineWidth = 2.5;
+  ctx.beginPath();
+  pts.forEach((p, idx) => {
+    if (idx === 0) ctx.moveTo(p.x, p.y);
+    else ctx.lineTo(p.x, p.y);
   });
+  ctx.stroke();
 
-  // Floating Frosted Glass Window 3 (Right Node Status Overlay)
-  const rightW = width * 0.21;
-  const rightX = width - padX - rightW;
-  const rightY = headerBottom + height * 0.08;
-  const rightH = height * 0.36;
-  drawGlassHudPanel(ctx, rightX, rightY, rightW, rightH, 18, palette.accent);
+  // Glowing end-point dot
+  const lastPt = pts[pts.length - 1];
+  ctx.fillStyle = '#FFFFFF';
+  ctx.beginPath();
+  ctx.arc(lastPt.x, lastPt.y, 4.5, 0, Math.PI * 2);
+  ctx.fill();
 
-  ctx.fillStyle = palette.secondary;
-  ctx.font = `600 13px "JetBrains Mono", monospace`;
-  ctx.fillText('ACTIVE MODULES', rightX + 24, rightY + 38);
+  // --- CARD 2: 02 · Smart Workflows (Connected Node Pills) ---
+  const c2X = padX + cardW + cardGap;
+  drawModernGlassCard(ctx, c2X, cardsY, cardW, cardsH, 20);
+  ctx.fillStyle = '#A5B4FC';
+  ctx.font = `600 ${Math.round(width * 0.0095)}px "JetBrains Mono", monospace`;
+  ctx.fillText(previewSample.metrics[1].label, c2X + 26, cardsY + 38);
 
-  previewSample.cardLabels.forEach((lbl, idx) => {
-    const ly = rightY + 86 + idx * 64;
-    ctx.fillStyle = idx === 0 ? palette.accent : palette.secondary;
-    ctx.beginPath();
-    ctx.arc(rightX + 32, ly, 5, 0, Math.PI * 2);
+  ctx.fillStyle = palette.text;
+  ctx.font = `700 ${Math.round(width * 0.019)}px "Plus Jakarta Sans", sans-serif`;
+  ctx.fillText(previewSample.metrics[1].value, c2X + 26, cardsY + 78);
+
+  // 3 Connected Workflow Node Pills
+  const nodes = ['Trigger', 'Enrich', 'Sync'];
+  const nodeW = (cardW - 52 - 36) / 3;
+  const nodeH = 42;
+  const nodeY = cardsY + cardsH - 72;
+
+  ctx.strokeStyle = 'rgba(165, 180, 252, 0.45)';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(c2X + 26 + nodeW * 0.5, nodeY + nodeH * 0.5);
+  ctx.lineTo(c2X + cardW - 26 - nodeW * 0.5, nodeY + nodeH * 0.5);
+  ctx.stroke();
+
+  nodes.forEach((nodeLabel, idx) => {
+    const nx = c2X + 26 + idx * (nodeW + 18);
+    ctx.fillStyle = idx === 1 ? 'rgba(99, 102, 241, 0.34)' : '#161926';
+    drawRoundedRect(ctx, nx, nodeY, nodeW, nodeH, 12);
+    ctx.fill();
+    ctx.strokeStyle = idx === 1 ? indigo : 'rgba(255, 255, 255, 0.16)';
+    ctx.lineWidth = 1.4;
+    ctx.stroke();
+
+    ctx.textAlign = 'center';
+    ctx.fillStyle = palette.text;
+    ctx.font = `600 ${Math.round(width * 0.0086)}px "JetBrains Mono", monospace`;
+    ctx.fillText(nodeLabel, nx + nodeW * 0.5, nodeY + nodeH * 0.52);
+  });
+  ctx.textAlign = 'left';
+
+  // --- CARD 3: 03 · 24/7 AI Agent (Live Status Indicator) ---
+  const c3X = padX + (cardW + cardGap) * 2;
+  drawModernGlassCard(ctx, c3X, cardsY, cardW, cardsH, 20);
+  ctx.fillStyle = mint;
+  ctx.font = `600 ${Math.round(width * 0.0095)}px "JetBrains Mono", monospace`;
+  ctx.fillText(previewSample.metrics[2].label, c3X + 26, cardsY + 38);
+
+  // Glowing live green status indicator beside value
+  ctx.save();
+  ctx.shadowColor = mint;
+  ctx.shadowBlur = 12;
+  ctx.fillStyle = mint;
+  ctx.beginPath();
+  ctx.arc(c3X + 34, cardsY + 76, 6, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.restore();
+
+  ctx.fillStyle = palette.text;
+  ctx.font = `700 ${Math.round(width * 0.019)}px "Plus Jakarta Sans", sans-serif`;
+  ctx.fillText(previewSample.metrics[2].value, c3X + 52, cardsY + 78);
+
+  // Two compact live activity lines inside Card 3
+  const actY = cardsY + cardsH - 76;
+  const activities = ['24 leads qualified today', 'Avg response: 1.4 sec'];
+  activities.forEach((act, idx) => {
+    const ay = actY + idx * 32;
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.05)';
+    drawRoundedRect(ctx, c3X + 26, ay, cardW - 52, 24, 8);
     ctx.fill();
 
-    ctx.fillStyle = palette.text;
-    ctx.font = `600 16px "Plus Jakarta Sans", sans-serif`;
-    ctx.fillText(lbl, rightX + 52, ly + 2);
+    ctx.fillStyle = idx === 0 ? mint : cyan;
+    ctx.beginPath();
+    ctx.arc(c3X + 39, ay + 12, 3, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.fillStyle = 'rgba(248, 250, 252, 0.8)';
+    ctx.font = `500 ${Math.round(width * 0.0085)}px "Plus Jakarta Sans", sans-serif`;
+    ctx.fillText(act, c3X + 50, ay + 13);
   });
 }

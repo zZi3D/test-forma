@@ -3,6 +3,7 @@ import {
   applyEditorialGrain,
   drawBrowserChrome,
   drawRoundedRect,
+  drawWrappedText,
 } from './canvasPrimitives';
 
 export function renderOrganicBiophilic(
@@ -70,8 +71,16 @@ export function renderOrganicBiophilic(
   }
 
   ctx.fillStyle = palette.secondary;
-  ctx.font = `400 ${Math.round(width * 0.0122)}px "Plus Jakarta Sans", sans-serif`;
-  ctx.fillText(previewSample.subheadline.slice(0, 44), padX + innerPad, topY + height * 0.315);
+  ctx.font = `400 ${Math.round(width * 0.0118)}px "Plus Jakarta Sans", sans-serif`;
+  drawWrappedText(
+    ctx,
+    previewSample.subheadline,
+    padX + innerPad,
+    topY + height * 0.305,
+    leftW - innerPad * 2,
+    height * 0.027,
+    2,
+  );
 
   // Soft Sage Botanical Pill CTA
   const btnY = topY + topCardH - height * 0.105;

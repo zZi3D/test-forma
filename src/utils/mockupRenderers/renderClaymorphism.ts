@@ -1,7 +1,11 @@
 import { ProjectConfig } from '../../data/projects';
-import { drawBrowserChrome, drawRoundedRect } from './canvasPrimitives';
+import {
+  drawBrowserChrome,
+  drawRoundedRect,
+  drawWrappedText,
+} from './canvasPrimitives';
 
-function drawClayCard(
+function drawElevatedCard(
   ctx: CanvasRenderingContext2D,
   x: number,
   y: number,
@@ -11,38 +15,21 @@ function drawClayCard(
   fill: string,
 ) {
   ctx.save();
-  // Soft outer clay drop shadow
-  ctx.shadowColor = 'rgba(148, 163, 184, 0.34)';
-  ctx.shadowBlur = 32;
-  ctx.shadowOffsetX = 12;
-  ctx.shadowOffsetY = 16;
+  // Warm, gentle ambient shadow instead of harsh cool grey
+  ctx.shadowColor = 'rgba(120, 105, 92, 0.14)';
+  ctx.shadowBlur = 34;
+  ctx.shadowOffsetX = 0;
+  ctx.shadowOffsetY = 14;
   ctx.fillStyle = fill;
   drawRoundedRect(ctx, x, y, w, h, r);
   ctx.fill();
-
-  // Secondary top-left outer bounce highlight
-  ctx.shadowColor = 'rgba(255, 255, 255, 0.92)';
-  ctx.shadowBlur = 22;
-  ctx.shadowOffsetX = -8;
-  ctx.shadowOffsetY = -8;
-  drawRoundedRect(ctx, x, y, w, h, r);
-  ctx.fill();
   ctx.restore();
 
-  // Inner pillowed rim bevel (top-left bright highlight + bottom-right soft slate shade)
-  ctx.save();
+  // Crisp subtle warm border
+  ctx.strokeStyle = 'rgba(224, 109, 75, 0.10)';
+  ctx.lineWidth = 1.5;
   drawRoundedRect(ctx, x, y, w, h, r);
-  ctx.clip();
-
-  const innerShade = ctx.createLinearGradient(x, y, x + w, y + h);
-  innerShade.addColorStop(0, 'rgba(255, 255, 255, 0.85)');
-  innerShade.addColorStop(0.45, 'rgba(255, 255, 255, 0.0)');
-  innerShade.addColorStop(1, 'rgba(203, 213, 225, 0.42)');
-  ctx.strokeStyle = innerShade;
-  ctx.lineWidth = 8;
-  drawRoundedRect(ctx, x + 2, y + 2, w - 4, h - 4, Math.max(4, r - 2));
   ctx.stroke();
-  ctx.restore();
 }
 
 export function renderClaymorphism(
@@ -53,174 +40,192 @@ export function renderClaymorphism(
 ) {
   const { palette, previewSample } = project;
 
-  // Soft light lavender-gray canvas (#ECEEF2)
+  // Warm alabaster off-white canvas (#F8F7F4)
   ctx.fillStyle = palette.bg;
   ctx.fillRect(0, 0, width, height);
 
   const { padX, headerBottom } = drawBrowserChrome(ctx, width, height, project, {
-    chromeBg: '#F6F7FA',
+    chromeBg: '#FFFFFF',
     borderAlpha: 0.08,
     navItemsColor: palette.secondary,
   });
 
-  const topY = headerBottom + height * 0.045;
+  const topY = headerBottom + height * 0.048;
   const contentW = width - padX * 2;
   const gap = width * 0.025;
-  const radius = 44; // Generous ~28px scaled to 1600px width
+  const radius = 36;
 
-  // LEFT LARGE CLAY HERO CHART CARD (64% width)
-  const mainW = contentW * 0.64;
-  const mainH = height - topY - height * 0.07;
-  drawClayCard(ctx, padX, topY, mainW, mainH, radius, palette.surface);
+  // =========================================================================
+  // LEFT LARGE ELEVATED HERO CARD (58% width): Human Coaching & Advisory
+  // =========================================================================
+  const mainW = contentW * 0.58;
+  const mainH = height - topY - height * 0.068;
+  drawElevatedCard(ctx, padX, topY, mainW, mainH, radius, palette.surface);
 
-  const cardPad = width * 0.032;
-  ctx.fillStyle = palette.secondary;
-  ctx.font = `600 ${Math.round(width * 0.0095)}px "JetBrains Mono", monospace`;
-  ctx.fillText(previewSample.eyebrow, padX + cardPad, topY + height * 0.065);
+  const cardPad = width * 0.034;
 
-  // Tabular Clarity Headline
-  ctx.fillStyle = palette.text;
-  ctx.font = `700 ${Math.round(width * 0.046)}px "Plus Jakarta Sans", sans-serif`;
-  ctx.fillText(previewSample.headline, padX + cardPad, topY + height * 0.145);
-
-  ctx.fillStyle = palette.secondary;
-  ctx.font = `500 ${Math.round(width * 0.0125)}px "Plus Jakarta Sans", sans-serif`;
-  ctx.fillText(previewSample.subheadline, padX + cardPad, topY + height * 0.205);
-
-  // Coral-orange raised clay pill badge top-right of main card
-  const badgeW = width * 0.11;
-  const badgeH = height * 0.06;
-  const badgeX = padX + mainW - cardPad - badgeW;
-  const badgeY = topY + height * 0.055;
-  drawClayCard(ctx, badgeX, badgeY, badgeW, badgeH, 28, palette.accent);
-  ctx.fillStyle = '#FFFFFF';
-  ctx.textAlign = 'center';
-  ctx.font = `700 ${Math.round(width * 0.0115)}px "JetBrains Mono", monospace`;
-  ctx.fillText(previewSample.metrics[0].value, badgeX + badgeW * 0.5, badgeY + badgeH * 0.52);
-  ctx.textAlign = 'left';
-
-  // Smooth 3D-shaded curve chart inside main clay card
-  const chartX = padX + cardPad;
-  const chartY = topY + height * 0.27;
-  const chartW = mainW - cardPad * 2;
-  const chartH = mainH - height * 0.36;
-
-  // Soft recessed inner well for chart
-  ctx.save();
-  ctx.fillStyle = '#F4F6FA';
-  drawRoundedRect(ctx, chartX, chartY, chartW, chartH, 28);
+  // Warm terracotta eyebrow pill
+  ctx.fillStyle = 'rgba(224, 109, 75, 0.11)';
+  drawRoundedRect(ctx, padX + cardPad, topY + height * 0.052, width * 0.195, 34, 17);
   ctx.fill();
-
-  // Horizontal subtle guide rules
-  ctx.strokeStyle = 'rgba(30, 41, 59, 0.07)';
-  ctx.lineWidth = 1.5;
-  for (let g = 1; g <= 3; g++) {
-    const gy = chartY + (chartH / 4) * g;
-    ctx.beginPath();
-    ctx.moveTo(chartX + 24, gy);
-    ctx.lineTo(chartX + chartW - 24, gy);
-    ctx.stroke();
-  }
-
-  // Smooth curve coordinates with peak near 78% X
-  const pts = [
-    { x: chartX + chartW * 0.06, y: chartY + chartH * 0.78 },
-    { x: chartX + chartW * 0.24, y: chartY + chartH * 0.65 },
-    { x: chartX + chartW * 0.44, y: chartY + chartH * 0.7 },
-    { x: chartX + chartW * 0.62, y: chartY + chartH * 0.36 },
-    { x: chartX + chartW * 0.78, y: chartY + chartH * 0.22 }, // Peak!
-    { x: chartX + chartW * 0.94, y: chartY + chartH * 0.3 },
-  ];
-
-  // Area fill under curve
-  const areaGrad = ctx.createLinearGradient(0, chartY, 0, chartY + chartH);
-  areaGrad.addColorStop(0, 'rgba(255, 77, 36, 0.22)');
-  areaGrad.addColorStop(1, 'rgba(255, 77, 36, 0.0)');
-  ctx.fillStyle = areaGrad;
-  ctx.beginPath();
-  ctx.moveTo(pts[0].x, chartY + chartH - 16);
-  ctx.lineTo(pts[0].x, pts[0].y);
-  for (let i = 0; i < pts.length - 1; i++) {
-    const xc = (pts[i].x + pts[i + 1].x) * 0.5;
-    const yc = (pts[i].y + pts[i + 1].y) * 0.5;
-    ctx.quadraticCurveTo(pts[i].x, pts[i].y, xc, yc);
-  }
-  ctx.lineTo(pts[pts.length - 1].x, pts[pts.length - 1].y);
-  ctx.lineTo(pts[pts.length - 1].x, chartY + chartH - 16);
-  ctx.closePath();
-  ctx.fill();
-
-  // Thick 3D-shaded line stroke
-  ctx.save();
-  ctx.shadowColor = 'rgba(30, 41, 59, 0.28)';
-  ctx.shadowBlur = 14;
-  ctx.shadowOffsetY = 10;
-  ctx.strokeStyle = palette.text;
-  ctx.lineWidth = 6;
-  ctx.lineCap = 'round';
-  ctx.beginPath();
-  ctx.moveTo(pts[0].x, pts[0].y);
-  for (let i = 0; i < pts.length - 1; i++) {
-    const xc = (pts[i].x + pts[i + 1].x) * 0.5;
-    const yc = (pts[i].y + pts[i + 1].y) * 0.5;
-    ctx.quadraticCurveTo(pts[i].x, pts[i].y, xc, yc);
-  }
-  ctx.lineTo(pts[pts.length - 1].x, pts[pts.length - 1].y);
-  ctx.stroke();
-  ctx.restore();
-
-  // Single glossy coral-orange accent beacon dot at data peak
-  const peak = pts[4];
-  ctx.save();
-  ctx.shadowColor = 'rgba(255, 77, 36, 0.55)';
-  ctx.shadowBlur = 22;
   ctx.fillStyle = palette.accent;
+  ctx.font = `700 ${Math.round(width * 0.0085)}px "JetBrains Mono", monospace`;
+  ctx.fillText(previewSample.eyebrow, padX + cardPad + 16, topY + height * 0.052 + 18);
+
+  // Calm, inviting headline: "Clarity for Your Next Chapter."
+  ctx.fillStyle = palette.text;
+  ctx.font = `700 ${Math.round(width * 0.039)}px "Plus Jakarta Sans", sans-serif`;
+  ctx.fillText('Clarity for Your', padX + cardPad, topY + height * 0.165);
+  ctx.fillText('Next Chapter.', padX + cardPad, topY + height * 0.235);
+
+  ctx.fillStyle = palette.secondary;
+  ctx.font = `400 ${Math.round(width * 0.0128)}px "Plus Jakarta Sans", sans-serif`;
+  ctx.fillText('Calm, personal 1-on-1 guidance built around', padX + cardPad, topY + height * 0.298);
+  ctx.fillText('your goals, pace, and key life decisions.', padX + cardPad, topY + height * 0.328);
+
+  // Warm Advisor Portrait Badge ("1-on-1 Guidance")
+  const bioY = topY + height * 0.382;
+  const bioW = mainW - cardPad * 2;
+  const bioH = height * 0.145;
+  ctx.fillStyle = '#FDF9F6';
+  drawRoundedRect(ctx, padX + cardPad, bioY, bioW, bioH, 24);
+  ctx.fill();
+  ctx.strokeStyle = 'rgba(224, 109, 75, 0.18)';
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+
+  // Stylized warm advisor portrait avatar inside rounded badge
+  const avR = bioH * 0.34;
+  const avX = padX + cardPad + 24 + avR;
+  const avY = bioY + bioH * 0.5;
+
+  const avBgGrad = ctx.createLinearGradient(avX - avR, avY - avR, avX + avR, avY + avR);
+  avBgGrad.addColorStop(0, '#F6DFD3');
+  avBgGrad.addColorStop(1, '#E9B9A2');
+  ctx.fillStyle = avBgGrad;
   ctx.beginPath();
-  ctx.arc(peak.x, peak.y, 15, 0, Math.PI * 2);
+  ctx.arc(avX, avY, avR, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Stylized warm portrait silhouette (head + shoulders) clipped inside circle
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(avX, avY, avR, 0, Math.PI * 2);
+  ctx.clip();
+  ctx.fillStyle = '#2F3A4B';
+  // Shoulders arc
+  ctx.beginPath();
+  ctx.arc(avX, avY + avR * 1.05, avR * 0.78, Math.PI, 0);
+  ctx.fill();
+  // Head
+  ctx.fillStyle = '#43332B';
+  ctx.beginPath();
+  ctx.arc(avX, avY - avR * 0.16, avR * 0.32, 0, Math.PI * 2);
   ctx.fill();
   ctx.restore();
 
-  // Gloss specular crescent inside orange dot
+  // Online calm presence dot
+  ctx.fillStyle = '#22C55E';
+  ctx.beginPath();
+  ctx.arc(avX + avR * 0.72, avY + avR * 0.68, 6.5, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.strokeStyle = '#FDF9F6';
+  ctx.lineWidth = 2.5;
+  ctx.stroke();
+
+  // Advisor badge text
+  const bioTextX = avX + avR + 22;
+  ctx.fillStyle = palette.text;
+  ctx.font = `700 ${Math.round(width * 0.014)}px "Plus Jakarta Sans", sans-serif`;
+  ctx.fillText('1-on-1 Guidance · Vera Lindeman', bioTextX, bioY + bioH * 0.38);
+
+  ctx.fillStyle = palette.secondary;
+  ctx.font = `500 ${Math.round(width * 0.0108)}px "Plus Jakarta Sans", sans-serif`;
+  ctx.fillText('Certified Executive & Personal Advisor · Online & Studio', bioTextX, bioY + bioH * 0.68);
+
+  // Prominent Warm Terracotta Discovery Call CTA Button
+  const ctaY = topY + mainH - height * 0.115;
+  const ctaW = width * 0.21;
+  ctx.save();
+  ctx.shadowColor = 'rgba(224, 109, 75, 0.32)';
+  ctx.shadowBlur = 22;
+  ctx.shadowOffsetY = 8;
+  ctx.fillStyle = palette.accent;
+  drawRoundedRect(ctx, padX + cardPad, ctaY, ctaW, 56, 28);
+  ctx.fill();
+  ctx.restore();
+
   ctx.fillStyle = '#FFFFFF';
-  ctx.beginPath();
-  ctx.arc(peak.x - 4, peak.y - 4, 4.5, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.restore();
+  ctx.font = `700 ${Math.round(width * 0.0102)}px "Plus Jakarta Sans", sans-serif`;
+  ctx.fillText(previewSample.ctaLabel, padX + cardPad + 26, ctaY + 29);
 
-  // RIGHT STACKED CLAY METRIC & ALLOCATION CARDS (33.5% width)
+  // Subtle calm reassurance text beside CTA
+  ctx.fillStyle = palette.secondary;
+  ctx.font = `500 ${Math.round(width * 0.0102)}px "Plus Jakarta Sans", sans-serif`;
+  ctx.fillText('No obligation · 30 min', padX + cardPad + ctaW + 20, ctaY + 29);
+
+  // =========================================================================
+  // RIGHT COLUMN (39.5% width): 3-Step Client Roadmap Cards (No Charts!)
+  // =========================================================================
   const rightX = padX + mainW + gap;
   const rightW = contentW - mainW - gap;
   const cardGap = height * 0.028;
   const cardH = (mainH - cardGap * 2) / 3;
 
-  previewSample.metrics.forEach((metric, idx) => {
+  const roadmapSteps = [
+    {
+      num: '01',
+      title: 'Discovery Call',
+      desc: '30-minute conversation to map your goals and questions.',
+      active: true,
+    },
+    {
+      num: '02',
+      title: 'Personal Roadmap',
+      desc: 'A clear, practical plan tailored to your pace and priorities.',
+      active: false,
+    },
+    {
+      num: '03',
+      title: 'Guided Growth',
+      desc: 'Ongoing 1-on-1 check-ins and calm, steady accountability.',
+      active: false,
+    },
+  ];
+
+  roadmapSteps.forEach((step, idx) => {
     const cy = topY + idx * (cardH + cardGap);
-    drawClayCard(ctx, rightX, cy, rightW, cardH, 34, palette.surface);
+    drawElevatedCard(ctx, rightX, cy, rightW, cardH, 28, palette.surface);
 
+    // Step Number Pill
+    const pillX = rightX + width * 0.022;
+    const pillY = cy + cardH * 0.24;
+    ctx.fillStyle = step.active ? palette.accent : '#F5ECE6';
+    drawRoundedRect(ctx, pillX, pillY, 48, 30, 15);
+    ctx.fill();
+
+    ctx.fillStyle = step.active ? '#FFFFFF' : palette.accent;
+    ctx.textAlign = 'center';
+    ctx.font = `700 ${Math.round(width * 0.0095)}px "JetBrains Mono", monospace`;
+    ctx.fillText(step.num, pillX + 24, pillY + 16);
+    ctx.textAlign = 'left';
+
+    // Step Title
+    ctx.fillStyle = palette.text;
+    ctx.font = `700 ${Math.round(width * 0.0175)}px "Plus Jakarta Sans", sans-serif`;
+    ctx.fillText(step.title, pillX + 64, pillY + 16);
+
+    // Concise human description
     ctx.fillStyle = palette.secondary;
-    ctx.font = `600 ${Math.round(width * 0.009)}px "JetBrains Mono", monospace`;
-    ctx.fillText(metric.label, rightX + width * 0.024, cy + cardH * 0.34);
-
-    ctx.fillStyle = idx === 0 ? palette.accent : palette.text;
-    ctx.font = `700 ${Math.round(width * 0.025)}px "Plus Jakarta Sans", sans-serif`;
-    ctx.fillText(metric.value, rightX + width * 0.024, cy + cardH * 0.68);
-
-    // Mini puffed clay allocation bar pill
-    const barW = rightW - width * 0.048;
-    const barY = cy + cardH * 0.8;
-    ctx.fillStyle = '#E5E8EF';
-    drawRoundedRect(ctx, rightX + width * 0.024, barY, barW, 10, 5);
-    ctx.fill();
-
-    ctx.fillStyle = idx === 0 ? palette.accent : palette.text;
-    drawRoundedRect(
+    ctx.font = `400 ${Math.round(width * 0.0112)}px "Plus Jakarta Sans", sans-serif`;
+    drawWrappedText(
       ctx,
-      rightX + width * 0.024,
-      barY,
-      barW * (0.78 - idx * 0.16),
-      10,
-      5,
+      step.desc,
+      pillX,
+      cy + cardH * 0.65,
+      rightW - width * 0.044,
+      cardH * 0.17,
+      2,
     );
-    ctx.fill();
   });
 }

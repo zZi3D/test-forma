@@ -9,6 +9,7 @@ import { WaveBackground } from './components/WaveBackground';
 import { GlassHeader } from './components/GlassHeader';
 import { HeroSection } from './components/HeroSection';
 import { SelectedWorkGrid } from './components/SelectedWorkGrid';
+import { StylePlayground } from './components/StylePlayground';
 import { ProcessSection } from './components/ProcessSection';
 
 const WorkPage = lazy(() =>
@@ -201,6 +202,12 @@ export default function App() {
               <SelectedWorkGrid
                 onSelectProject={handleSelectProject}
                 onStartProject={() => openBookingDrawer('brief')}
+              />
+
+              <StylePlayground
+                onBuildInStyle={(industry, description) =>
+                  openBookingDrawer('brief', industry, description)
+                }
               />
 
               <ProcessSection

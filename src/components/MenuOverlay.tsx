@@ -24,6 +24,12 @@ const NAV_ITEMS = [
   },
   {
     index: '03',
+    label: 'Style Playground',
+    subtitle: 'Interactive Skins & Live Micro-Animations',
+    target: 'style-playground',
+  },
+  {
+    index: '04',
     label: '24h Process',
     subtitle: 'Methodology, Speed & Discovery Call',
     target: 'process-studio',

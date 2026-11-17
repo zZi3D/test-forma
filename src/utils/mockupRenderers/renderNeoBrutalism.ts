@@ -1,5 +1,5 @@
 import { ProjectConfig } from '../../data/projects';
-import { drawBrowserChrome } from './canvasPrimitives';
+import { drawBrowserChrome, drawWrappedText } from './canvasPrimitives';
 
 function drawBrutalistBox(
   ctx: CanvasRenderingContext2D,
@@ -64,18 +64,26 @@ export function renderNeoBrutalism(
 
   // Oversized stacked headline
   ctx.fillStyle = ink;
-  ctx.font = `800 ${Math.round(width * 0.068)}px "Plus Jakarta Sans", sans-serif`;
+  ctx.font = `800 ${Math.round(width * 0.058)}px "Plus Jakarta Sans", sans-serif`;
   const words = previewSample.headline.split(' ');
-  ctx.fillText(words[0] || 'FORM', padX, tagY + height * 0.165);
+  ctx.fillText(words[0] || 'FORM', padX, tagY + height * 0.155);
   ctx.fillStyle = palette.accent; // Terracotta #E05A36
-  ctx.fillText(words.slice(1).join(' ') || 'AGAINST SILENCE', padX, tagY + height * 0.265);
+  ctx.fillText(words.slice(1).join(' ') || 'AGAINST SILENCE', padX, tagY + height * 0.245);
 
   ctx.fillStyle = ink;
-  ctx.font = `600 ${Math.round(width * 0.013)}px "Plus Jakarta Sans", sans-serif`;
-  ctx.fillText(previewSample.subheadline, padX, tagY + height * 0.34);
+  ctx.font = `600 ${Math.round(width * 0.0122)}px "Plus Jakarta Sans", sans-serif`;
+  drawWrappedText(
+    ctx,
+    previewSample.subheadline,
+    padX,
+    tagY + height * 0.315,
+    leftW - 10,
+    height * 0.026,
+    2,
+  );
 
   // Energetic Exhibition Agenda Rows
-  const agendaY = tagY + height * 0.395;
+  const agendaY = tagY + height * 0.398;
   const rowColors = ['#FFFFFF', palette.surface, '#FFFFFF'];
   previewSample.metrics.forEach((item, idx) => {
     const ry = agendaY + idx * height * 0.112;
