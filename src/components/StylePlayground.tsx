@@ -68,6 +68,9 @@ export function StylePlayground({ onBuildInStyle }: StylePlaygroundProps) {
   const [interactionFeedback, setInteractionFeedback] = useState<string | null>(
     null,
   );
+  const [mobileDockTab, setMobileDockTab] = useState<
+    'industry' | 'skin' | 'motion'
+  >('skin');
 
   const cardRef = useRef<HTMLDivElement | null>(null);
   const industryTablistRef = useRef<HTMLDivElement | null>(null);
@@ -188,7 +191,7 @@ export function StylePlayground({ onBuildInStyle }: StylePlaygroundProps) {
       tabEl: HTMLButtonElement | null,
       behavior: ScrollBehavior,
     ) => {
-      if (!container || !tabEl) return;
+      if (!container || !tabEl || container.clientWidth === 0) return;
       if (container.scrollWidth <= container.clientWidth + 2) return;
       const targetLeft =
         tabEl.offsetLeft - (container.clientWidth - tabEl.offsetWidth) / 2;
@@ -326,7 +329,7 @@ export function StylePlayground({ onBuildInStyle }: StylePlaygroundProps) {
     <section
       id="style-playground"
       aria-label="Live Style Playground"
-      className="relative z-10 w-full px-4 pt-12 pb-16 md:px-8 md:pt-16 md:pb-24"
+      className="relative z-10 w-full px-4 pt-9 pb-14 md:px-8 md:pt-16 md:pb-24"
     >
       <div className="mx-auto max-w-[1200px]">
         {/* STEP 1 OF WORKBENCH ENTRANCE: Section Header */}
@@ -341,7 +344,7 @@ export function StylePlayground({ onBuildInStyle }: StylePlaygroundProps) {
           transition={{ duration: 0.55, ease: WORKBENCH_EASE }}
         >
           {/* Section Header */}
-          <div className="mb-5 flex flex-col gap-3.5 border-t border-[#1C1B18]/12 pt-10 md:mb-7 md:flex-row md:items-end md:justify-between md:gap-4 md:pt-14">
+          <div className="mb-4 flex flex-col gap-3 border-t border-[#1C1B18]/12 pt-8 md:mb-7 md:flex-row md:items-end md:justify-between md:gap-4 md:pt-14">
             <div className="min-w-0 flex-1">
               <span className="font-mono-tabular inline-flex items-center gap-2 rounded-full border border-[#1C1B18]/12 bg-white/75 px-3 py-1 text-[10.5px] font-semibold tracking-[0.06em] text-[#C98A3A] uppercase shadow-2xs">
                 <span
@@ -351,10 +354,10 @@ export function StylePlayground({ onBuildInStyle }: StylePlaygroundProps) {
                 />
                 03 · Interactive Lab
               </span>
-              <h2 className="display-tight mt-2.5 text-[clamp(1.85rem,3.6vw,3.15rem)] leading-[1.06] font-semibold text-[#1C1B18] md:mt-3">
+              <h2 className="display-tight mt-2 text-[clamp(1.75rem,3.6vw,3.15rem)] leading-[1.06] font-semibold text-[#1C1B18] md:mt-3">
                 Live Style Playground
               </h2>
-              <p className="mt-2.5 max-w-[60ch] text-[13.5px] leading-[1.55] text-[#1C1B18]/75 sm:text-[15px] md:mt-3 md:leading-[1.6]">
+              <p className="mt-2 max-w-[60ch] text-[13px] leading-[1.5] text-[#1C1B18]/75 sm:text-[15px] md:mt-3 md:leading-[1.6]">
                 Pick your industry, switch visual skins, and toggle live
                 micro-animations to feel how different design languages work for
                 your business.
@@ -378,10 +381,10 @@ export function StylePlayground({ onBuildInStyle }: StylePlaygroundProps) {
           </div>
         </motion.div>
 
-        {/* INTEGRATED STUDIO WORKBENCH FRAME (Controls + Live Stage + Motion Dock) */}
-        <div className="rounded-[24px] border border-[#1C1B18]/10 bg-white/58 p-2.5 shadow-[0_28px_64px_-24px_rgba(28,27,24,0.16),inset_0_1px_0_rgba(255,255,255,0.92)] md:rounded-[32px] md:p-5">
-          {/* Unified Top Control Console (Step 1 Industry + Step 2 Visual Skin — horizontal swipe strips on mobile) */}
-          <div className="rounded-xl border border-[#1C1B18]/8 bg-[#FAF8F4]/92 p-3 md:rounded-2xl md:p-4">
+        {/* INTEGRATED STUDIO WORKBENCH FRAME (Frameless on mobile; elevated studio frame on desktop) */}
+        <div className="flex flex-col md:block md:rounded-[32px] md:border md:border-[#1C1B18]/10 md:bg-white/58 md:p-5 md:shadow-[0_28px_64px_-24px_rgba(28,27,24,0.16),inset_0_1px_0_rgba(255,255,255,0.92)]">
+          {/* Desktop Top Control Console (Step 1 Industry + Step 2 Visual Skin) */}
+          <div className="hidden rounded-xl border border-[#1C1B18]/8 bg-[#FAF8F4]/92 p-3 md:block md:rounded-2xl md:p-4">
             {/* 2A. Industry Context Selector Row + Shuffle Combo (Optie A) */}
             <div className="flex flex-col gap-1.5 md:flex-row md:flex-wrap md:items-center md:justify-between md:gap-2.5">
               <div className="flex items-center justify-between gap-2 md:contents">
@@ -480,7 +483,7 @@ export function StylePlayground({ onBuildInStyle }: StylePlaygroundProps) {
           {/* STEP 2 OF WORKBENCH ENTRANCE: Scroll-scrubbed 3D Workbench tilt → locks flat at center viewport */}
           <div
             ref={stageWrapperRef}
-            className="mt-2.5 md:mt-4"
+            className="order-1 mt-0 md:order-none md:mt-4"
             style={stageSettled ? undefined : { perspective: 1200 }}
           >
           <motion.div
@@ -555,12 +558,12 @@ export function StylePlayground({ onBuildInStyle }: StylePlaygroundProps) {
                 delay: skinWipeKey > 0 ? 0.035 : 0,
                 ease: WORKBENCH_EASE,
               }}
-              className={`relative z-10 flex flex-wrap items-center justify-between gap-x-3 gap-y-2 rounded-t-[22px] px-4 py-2.5 transition-all duration-300 md:px-8 md:py-3.5 ${activeTheme.navClass}`}
+              className={`relative z-10 flex flex-nowrap items-center justify-between gap-x-3 gap-y-2 rounded-t-[22px] px-3.5 py-2.5 transition-all duration-300 md:flex-wrap md:px-8 md:py-3.5 ${activeTheme.navClass}`}
             >
               <div className="order-1 flex items-center gap-2 md:gap-2.5">
                 <span
                   aria-hidden="true"
-                  className="flex h-6 w-6 items-center justify-center rounded-md text-[10px] font-bold"
+                  className="flex h-5 w-5 items-center justify-center rounded-md text-[9.5px] font-bold md:h-6 md:w-6 md:text-[10px]"
                   style={{
                     backgroundColor: activeTheme.accentHex,
                     color:
@@ -569,12 +572,12 @@ export function StylePlayground({ onBuildInStyle }: StylePlaygroundProps) {
                 >
                   {industryCopy.brandName.charAt(0)}
                 </span>
-                <span className="text-[11.5px] font-bold tracking-[0.06em] md:text-[12.5px]">
+                <span className="text-[11px] font-bold tracking-[0.06em] md:text-[12.5px]">
                   {industryCopy.brandName}
                 </span>
               </div>
 
-              <div className="order-3 flex basis-full items-center gap-4 border-t border-current/8 pt-2 text-[11.5px] md:order-2 md:basis-auto md:gap-5 md:border-t-0 md:pt-0 md:text-[12.5px]">
+              <div className="hidden items-center gap-5 text-[12.5px] md:order-2 md:flex">
                 {industryCopy.navItems.map((item, idx) => {
                   const isNavActive = activeNavIdx === idx;
                   return (
@@ -595,7 +598,7 @@ export function StylePlayground({ onBuildInStyle }: StylePlaygroundProps) {
               </div>
 
               <span
-                className={`order-2 inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[9.5px] tracking-[0.04em] transition-all duration-300 md:order-3 md:px-3 md:py-1 md:text-[10.5px] ${activeTheme.statusPillClass}`}
+                className={`order-2 inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-[9px] tracking-[0.04em] transition-all duration-300 md:order-3 md:px-3 md:py-1 md:text-[10.5px] ${activeTheme.statusPillClass}`}
               >
                 <span
                   aria-hidden="true"
@@ -607,7 +610,7 @@ export function StylePlayground({ onBuildInStyle }: StylePlaygroundProps) {
             </motion.div>
 
             {/* Stage Split Body: Left (Copy + Button Style 1 & 2) | Right (Product Showcase) */}
-            <div className="relative z-10 grid grid-cols-1 items-center gap-5 px-4 py-5 md:gap-10 md:px-10 md:py-12 lg:grid-cols-12">
+            <div className="relative z-10 grid grid-cols-1 items-center gap-3.5 px-3.5 py-4 md:gap-10 md:px-10 md:py-12 lg:grid-cols-12">
               {/* Left Column: Tight Stagger Wave at 35ms */}
               <motion.div
                 key={`left-${skinWipeKey}`}
@@ -625,25 +628,25 @@ export function StylePlayground({ onBuildInStyle }: StylePlaygroundProps) {
                 className="lg:col-span-6"
               >
                 <span
-                  className={`inline-block text-[10px] font-semibold tracking-[0.06em] uppercase transition-all duration-300 md:text-[11px] ${activeTheme.eyebrowClass}`}
+                  className={`inline-block text-[9.5px] font-semibold tracking-[0.06em] uppercase transition-all duration-300 md:text-[11px] ${activeTheme.eyebrowClass}`}
                 >
                   {industryCopy.eyebrowTag} · {activeTheme.shortTag}
                 </span>
 
                 <h3
-                  className={`mt-2.5 text-[clamp(1.45rem,3.4vw,2.75rem)] leading-[1.08] transition-all duration-300 md:mt-4 ${activeTheme.headlineClass}`}
+                  className={`mt-2 text-[1.35rem] leading-[1.1] transition-all duration-300 sm:text-[1.6rem] md:mt-4 md:text-[clamp(1.45rem,3.4vw,2.75rem)] md:leading-[1.08] ${activeTheme.headlineClass}`}
                 >
                   {industryCopy.headline}
                 </h3>
 
                 <p
-                  className={`mt-2.5 max-w-[46ch] text-[13px] leading-[1.55] transition-colors duration-300 sm:text-[15.5px] md:mt-4 md:leading-[1.65] ${activeTheme.descClass}`}
+                  className={`mt-1.5 line-clamp-2 max-w-[46ch] text-[12.5px] leading-[1.45] transition-colors duration-300 sm:text-[14.5px] md:mt-4 md:line-clamp-none md:text-[15.5px] md:leading-[1.65] ${activeTheme.descClass}`}
                 >
                   {industryCopy.description}
                 </p>
 
                 {/* Button Style 1 & Button Style 2 */}
-                <div className="mt-4 flex flex-wrap items-center gap-2.5 md:mt-7 md:gap-3.5">
+                <div className="mt-3 flex flex-wrap items-center gap-2 md:mt-7 md:gap-3.5">
                   <motion.button
                     key={`btn1-${kineticBurst}`}
                     type="button"
@@ -712,10 +715,16 @@ export function StylePlayground({ onBuildInStyle }: StylePlaygroundProps) {
                 </div>
 
                 {/* Subtle Micro-Feedback Line */}
-                <div className="mt-2 min-h-[16px] md:mt-4 md:h-5">
+                <div
+                  className={
+                    interactionFeedback
+                      ? 'mt-2 min-h-[16px] md:mt-4 md:h-5'
+                      : 'hidden md:mt-4 md:block md:h-5'
+                  }
+                >
                   {interactionFeedback && (
                     <span
-                      className={`inline-flex items-center gap-1.5 text-[11.5px] font-medium ${
+                      className={`inline-flex items-center gap-1.5 text-[11px] font-medium md:text-[11.5px] ${
                         activeTheme.isDark ? 'text-white/75' : 'text-black/65'
                       }`}
                     >
@@ -789,17 +798,17 @@ export function StylePlayground({ onBuildInStyle }: StylePlaygroundProps) {
                             }
                           : { duration: 0.25 },
                     }}
-                    className={`relative mx-auto max-w-[440px] p-4 transition-colors duration-300 md:p-6 ${activeTheme.cardClass}`}
+                    className={`relative mx-auto max-w-[440px] p-3 transition-colors duration-300 md:p-6 ${activeTheme.cardClass}`}
                   >
                     {/* Card Top Badge & Short Tag */}
-                    <div className="flex items-center justify-between gap-2">
+                    <div className="mb-2 flex items-center justify-between gap-2 md:mb-0">
                       <span
-                        className={`inline-block shrink-0 px-2.5 py-0.5 text-[10px] font-bold tracking-[0.05em] whitespace-nowrap md:px-3 md:py-1 md:text-[10.5px] ${activeTheme.badgeClass}`}
+                        className={`inline-block shrink-0 px-2 py-0.5 text-[9.5px] font-bold tracking-[0.05em] whitespace-nowrap md:px-3 md:py-1 md:text-[10.5px] ${activeTheme.badgeClass}`}
                       >
                         {industryCopy.productBadge}
                       </span>
                       <span
-                        className={`font-mono-tabular min-w-0 truncate text-[10.5px] whitespace-nowrap md:text-[11px] ${
+                        className={`font-mono-tabular min-w-0 truncate text-[10px] whitespace-nowrap md:text-[11px] ${
                           activeTheme.isDark
                             ? 'text-white/55'
                             : 'text-black/45'
@@ -809,52 +818,55 @@ export function StylePlayground({ onBuildInStyle }: StylePlaygroundProps) {
                       </span>
                     </div>
 
-                    {/* Product Visual Stage + Motion 1 Ambient Glow Pulse */}
-                    <div className="relative my-3 flex items-center justify-center rounded-2xl py-1 md:my-5 md:py-3">
-                      {levitateOn && !prefersReducedMotion && (
-                        <motion.div
-                          aria-hidden="true"
-                          animate={{
-                            scale: [0.92, 1.1, 0.92],
-                            opacity: [0.4, 0.8, 0.4],
-                          }}
-                          transition={{
-                            duration: 2.8,
-                            repeat: Infinity,
-                            ease: 'easeInOut',
-                          }}
-                          className="pointer-events-none absolute h-20 w-36 rounded-full md:h-28 md:w-44"
-                          style={{
-                            background: `radial-gradient(circle, ${activeTheme.pulseGlowColor} 0%, transparent 72%)`,
-                          }}
-                        />
-                      )}
-                      <div className="relative z-10 w-full [&>svg]:h-24 md:[&>svg]:h-32">
-                        <PlaygroundProductVisual styleId={activeTheme.id} />
+                    {/* Mobile Horizontal Strip / Desktop Stacked Visual & Metadata */}
+                    <div className="flex items-center gap-3 md:block">
+                      {/* Product Visual Stage + Motion 1 Ambient Glow Pulse */}
+                      <div className="relative flex h-16 w-[84px] shrink-0 items-center justify-center rounded-xl py-1 md:my-5 md:h-auto md:w-full md:rounded-2xl md:py-3">
+                        {levitateOn && !prefersReducedMotion && (
+                          <motion.div
+                            aria-hidden="true"
+                            animate={{
+                              scale: [0.92, 1.1, 0.92],
+                              opacity: [0.4, 0.8, 0.4],
+                            }}
+                            transition={{
+                              duration: 2.8,
+                              repeat: Infinity,
+                              ease: 'easeInOut',
+                            }}
+                            className="pointer-events-none absolute h-14 w-16 rounded-full md:h-28 md:w-44"
+                            style={{
+                              background: `radial-gradient(circle, ${activeTheme.pulseGlowColor} 0%, transparent 72%)`,
+                            }}
+                          />
+                        )}
+                        <div className="relative z-10 w-full [&>svg]:h-14 [&>svg]:w-full md:[&>svg]:h-32">
+                          <PlaygroundProductVisual styleId={activeTheme.id} />
+                        </div>
                       </div>
-                    </div>
 
-                    {/* Product Metadata & Price Footer */}
-                    <div className="flex items-end justify-between gap-3 border-t border-current/10 pt-3 md:gap-4 md:pt-4">
-                      <div>
-                        <h4 className="text-[15px] font-bold tracking-[-0.015em] md:text-[17px]">
-                          {industryCopy.productTitle}
-                        </h4>
-                        <p
-                          className={`mt-0.5 text-[11.5px] md:text-[12px] ${
-                            activeTheme.isDark
-                              ? 'text-white/60'
-                              : 'text-black/55'
-                          }`}
+                      {/* Product Metadata & Price Footer */}
+                      <div className="min-w-0 flex-1 md:flex md:items-end md:justify-between md:gap-4 md:border-t md:border-current/10 md:pt-4">
+                        <div className="min-w-0">
+                          <h4 className="truncate text-[14px] font-bold tracking-[-0.015em] md:whitespace-normal md:text-[17px]">
+                            {industryCopy.productTitle}
+                          </h4>
+                          <p
+                            className={`mt-0.5 truncate text-[11px] md:whitespace-normal md:text-[12px] ${
+                              activeTheme.isDark
+                                ? 'text-white/60'
+                                : 'text-black/55'
+                            }`}
+                          >
+                            {industryCopy.productSubtitle}
+                          </p>
+                        </div>
+                        <span
+                          className={`mt-0.5 inline-block text-[16px] font-bold tracking-[-0.02em] whitespace-nowrap md:mt-0 md:text-[22px] ${activeTheme.priceClass}`}
                         >
-                          {industryCopy.productSubtitle}
-                        </p>
+                          {industryCopy.productPrice}
+                        </span>
                       </div>
-                      <span
-                        className={`text-[19px] font-bold tracking-[-0.02em] whitespace-nowrap md:text-[22px] ${activeTheme.priceClass}`}
-                      >
-                        {industryCopy.productPrice}
-                      </span>
                     </div>
                   </motion.div>
                 </motion.div>
@@ -864,7 +876,204 @@ export function StylePlayground({ onBuildInStyle }: StylePlaygroundProps) {
           </motion.div>
         </div>
 
-        {/* STEP 3 OF WORKBENCH ENTRANCE: Bottom Controls Dock inside Workbench Frame */}
+        {/* MOBILE UNIFIED THUMB-DOCK (Single compact cockpit directly beneath the stage, zero clipped pills) */}
+        <motion.div
+          initial={prefersReducedMotion ? false : { opacity: 0, y: 18 }}
+          animate={
+            stageEntered ? { opacity: 1, y: 0 } : { opacity: 0, y: 18 }
+          }
+          transition={{
+            duration: 0.45,
+            delay: stageEntered && !prefersReducedMotion ? 0.2 : 0,
+            ease: WORKBENCH_EASE,
+          }}
+          className="order-2 mt-2.5 rounded-2xl border border-[#1C1B18]/10 bg-[#FAF8F4]/96 p-2.5 shadow-[0_14px_34px_-16px_rgba(28,27,24,0.14)] md:hidden"
+        >
+          {/* Segmented Dock Tabs + Shuffle */}
+          <div className="flex items-center gap-1.5">
+            <div
+              role="tablist"
+              aria-label="Playground controls"
+              className="grid flex-1 grid-cols-3 gap-0.5 rounded-xl bg-[#1C1B18]/[0.06] p-0.5"
+            >
+              <button
+                type="button"
+                role="tab"
+                aria-selected={mobileDockTab === 'industry'}
+                onClick={() => setMobileDockTab('industry')}
+                className={`inline-flex h-8 items-center justify-center rounded-[10px] px-2 text-[11px] font-semibold transition-all duration-200 ${
+                  mobileDockTab === 'industry'
+                    ? 'bg-white text-[#1C1B18] shadow-xs'
+                    : 'text-[#1C1B18]/60 hover:text-[#1C1B18]'
+                }`}
+              >
+                Industry
+              </button>
+              <button
+                type="button"
+                role="tab"
+                aria-selected={mobileDockTab === 'skin'}
+                onClick={() => setMobileDockTab('skin')}
+                className={`inline-flex h-8 items-center justify-center gap-1.5 rounded-[10px] px-2 text-[11px] font-semibold transition-all duration-200 ${
+                  mobileDockTab === 'skin'
+                    ? 'bg-white text-[#1C1B18] shadow-xs'
+                    : 'text-[#1C1B18]/60 hover:text-[#1C1B18]'
+                }`}
+              >
+                <span
+                  aria-hidden="true"
+                  className="h-1.5 w-1.5 shrink-0 rounded-full"
+                  style={{ backgroundColor: activeTheme.accentHex }}
+                />
+                <span>Skin</span>
+              </button>
+              <button
+                type="button"
+                role="tab"
+                aria-selected={mobileDockTab === 'motion'}
+                onClick={() => setMobileDockTab('motion')}
+                className={`inline-flex h-8 items-center justify-center gap-1.5 rounded-[10px] px-2 text-[11px] font-semibold transition-all duration-200 ${
+                  mobileDockTab === 'motion'
+                    ? 'bg-white text-[#1C1B18] shadow-xs'
+                    : 'text-[#1C1B18]/60 hover:text-[#1C1B18]'
+                }`}
+              >
+                <span
+                  aria-hidden="true"
+                  className={`h-1.5 w-1.5 shrink-0 rounded-full ${
+                    levitateOn || kineticOn
+                      ? 'bg-emerald-500'
+                      : 'bg-[#1C1B18]/25'
+                  }`}
+                />
+                <span>Motion</span>
+              </button>
+            </div>
+
+            <button
+              type="button"
+              onClick={handleShuffleCombo}
+              aria-label="Shuffle style and industry"
+              title="Shuffle Combo"
+              className="inline-flex h-9 shrink-0 items-center gap-1 rounded-xl border border-[#C98A3A]/45 bg-[#FFFBF4] px-2.5 text-[11px] font-semibold text-[#1C1B18] shadow-2xs transition-colors duration-200 active:scale-95"
+            >
+              <Shuffle className="h-3.5 w-3.5 text-[#C98A3A]" />
+              <span>Mix</span>
+            </button>
+          </div>
+
+          {/* Active Control Options (Fixed 3-row max height with vertical scroll on overflow) */}
+          <div className="mt-2.5 h-[114px] overflow-y-auto overscroll-contain pr-1 [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-[#1C1B18]/18">
+            {mobileDockTab === 'industry' && (
+              <div className="flex flex-wrap gap-1.5 pb-1">
+                {INDUSTRY_FILTERS.map((industry) => {
+                  const isSelected = industry === activeIndustry;
+                  return (
+                    <button
+                      key={industry}
+                      type="button"
+                      onClick={() => handleSelectIndustry(industry)}
+                      className={`inline-flex h-8 items-center rounded-full px-3 text-[11px] font-medium whitespace-nowrap transition-all duration-200 ${
+                        isSelected
+                          ? 'bg-[#C98A3A] font-semibold text-white shadow-xs'
+                          : 'border border-[#1C1B18]/10 bg-white text-[#1C1B18]/78'
+                      }`}
+                    >
+                      {industry}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+
+            {mobileDockTab === 'skin' && (
+              <div className="flex flex-wrap gap-1.5 pb-1">
+                {PLAYGROUND_THEMES.map((theme) => {
+                  const isSelected = theme.id === activeTheme.id;
+                  return (
+                    <button
+                      key={theme.id}
+                      type="button"
+                      onClick={() => handleSelectTheme(theme.id)}
+                      className={`inline-flex h-8 items-center gap-1.5 rounded-full px-3 text-[11px] font-medium whitespace-nowrap transition-all duration-200 ${
+                        isSelected
+                          ? 'bg-[#1C1B18] font-semibold text-[#F7F5F0] shadow-xs'
+                          : 'border border-[#1C1B18]/10 bg-white text-[#1C1B18]/78'
+                      }`}
+                    >
+                      <span
+                        aria-hidden="true"
+                        className="h-2 w-2 shrink-0 rounded-full"
+                        style={{ backgroundColor: theme.accentHex }}
+                      />
+                      <span>{theme.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+
+            {mobileDockTab === 'motion' && (
+              <div className="flex h-full flex-col justify-center gap-2">
+                <div className="grid grid-cols-2 gap-1.5">
+                  <button
+                    type="button"
+                    aria-pressed={levitateOn}
+                    onClick={() => setLevitateOn((prev) => !prev)}
+                    className={`inline-flex h-9 items-center justify-center gap-1.5 rounded-full px-2.5 text-[11px] font-medium whitespace-nowrap transition-all duration-200 ${
+                      levitateOn
+                        ? 'border border-[#1C1B18] bg-[#1C1B18] text-[#F7F5F0]'
+                        : 'border border-[#1C1B18]/15 bg-white text-[#1C1B18]/75'
+                    }`}
+                  >
+                    <Activity className="h-3.5 w-3.5 shrink-0 text-[#C98A3A]" />
+                    <span className="truncate">Levitate &amp; Pulse</span>
+                    <span
+                      aria-hidden="true"
+                      className={`h-1.5 w-1.5 shrink-0 rounded-full ${
+                        levitateOn ? 'bg-emerald-400' : 'bg-[#1C1B18]/25'
+                      }`}
+                    />
+                  </button>
+
+                  <button
+                    type="button"
+                    aria-pressed={kineticOn}
+                    onClick={handleToggleKinetic}
+                    className={`inline-flex h-9 items-center justify-center gap-1.5 rounded-full px-2.5 text-[11px] font-medium whitespace-nowrap transition-all duration-200 ${
+                      kineticOn
+                        ? 'border border-[#1C1B18] bg-[#1C1B18] text-[#F7F5F0]'
+                        : 'border border-[#1C1B18]/15 bg-white text-[#1C1B18]/75'
+                    }`}
+                  >
+                    <Zap className="h-3.5 w-3.5 shrink-0 text-[#C98A3A]" />
+                    <span className="truncate">Kinetic Pop</span>
+                    <span
+                      aria-hidden="true"
+                      className={`h-1.5 w-1.5 shrink-0 rounded-full ${
+                        kineticOn ? 'bg-emerald-400' : 'bg-[#1C1B18]/25'
+                      }`}
+                    />
+                  </button>
+                </div>
+                <p className="text-center text-[10.5px] text-[#1C1B18]/50">
+                  Toggle live micro-animations on the preview above
+                </p>
+              </div>
+            )}
+          </div>
+
+          <button
+            type="button"
+            onClick={handleBuildHandoff}
+            className="mt-2.5 inline-flex h-10 w-full items-center justify-center gap-2 rounded-full bg-[#1C1B18] px-5 text-[12px] font-semibold text-[#F7F5F0] whitespace-nowrap transition-colors duration-200 active:bg-[#C98A3A]"
+          >
+            <span>Build in this style</span>
+            <ArrowRight className="h-3.5 w-3.5" />
+          </button>
+        </motion.div>
+
+        {/* STEP 3 OF WORKBENCH ENTRANCE: Desktop Bottom Controls Dock inside Workbench Frame */}
         <motion.div
           initial={prefersReducedMotion ? false : { opacity: 0, y: 22 }}
           animate={
@@ -875,7 +1084,7 @@ export function StylePlayground({ onBuildInStyle }: StylePlaygroundProps) {
             delay: stageEntered && !prefersReducedMotion ? 0.28 : 0,
             ease: WORKBENCH_EASE,
           }}
-          className="mt-2.5 flex flex-col items-stretch justify-between gap-3 rounded-xl border border-[#1C1B18]/8 bg-[#FAF8F4]/92 p-3 sm:flex-row sm:items-center md:mt-4 md:rounded-2xl md:px-5 md:py-3"
+          className="mt-4 hidden flex-col items-stretch justify-between gap-3 rounded-2xl border border-[#1C1B18]/8 bg-[#FAF8F4]/92 px-5 py-3 sm:flex-row sm:items-center md:flex"
         >
           <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:items-center sm:gap-2.5">
             <span className="font-mono-tabular col-span-2 inline-flex items-center gap-1.5 text-[10px] font-semibold tracking-[0.04em] text-[#1C1B18]/55 uppercase sm:col-span-1 sm:mr-1 sm:text-[11px]">
