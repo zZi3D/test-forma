@@ -58,6 +58,7 @@ function StudioWidgetFrame({
 }
 
 const CARD_GPU_STYLE: React.CSSProperties = {
+  contain: 'layout paint',
   backfaceVisibility: 'hidden',
   WebkitBackfaceVisibility: 'hidden',
 };
@@ -470,84 +471,6 @@ const CarouselDemoCards = memo(function CarouselDemoCards({
   );
 });
 
-interface SlideIndicatorProps {
-  registerUpdater: (fn: ((idx: number) => void) | null) => void;
-  onSelectSlide: (idx: number) => void;
-}
-
-const SlideHeaderControls = memo(function SlideHeaderControls({
-  registerUpdater,
-  onSelectSlide,
-}: SlideIndicatorProps) {
-  const [activeIdx, setActiveIdx] = useState(0);
-
-  useEffect(() => {
-    registerUpdater(setActiveIdx);
-    return () => registerUpdater(null);
-  }, [registerUpdater]);
-
-  return (
-    <div className="flex items-center gap-3 self-start md:self-auto">
-      <div className="font-mono-tabular flex items-center gap-1 rounded-full border border-[#1C1B18]/12 bg-white/80 px-3 py-1 text-[11px] font-semibold text-[#1C1B18]">
-        <span>0{activeIdx + 1}</span>
-        <span className="opacity-35">/</span>
-        <span className="opacity-55">0{DEMO_SLIDE_COUNT}</span>
-      </div>
-
-      <div className="flex items-center gap-1.5">
-        <button
-          type="button"
-          onClick={() => onSelectSlide(activeIdx - 1)}
-          disabled={activeIdx === 0}
-          aria-label="Previous demo card"
-          className="flex h-8 w-8 items-center justify-center rounded-full border border-[#1C1B18]/14 bg-white/85 text-[#1C1B18] transition-colors hover:bg-[#1C1B18] hover:text-white disabled:opacity-35 disabled:hover:bg-white/85 disabled:hover:text-[#1C1B18]"
-        >
-          <ChevronLeft className="h-4 w-4" />
-        </button>
-        <button
-          type="button"
-          onClick={() => onSelectSlide(activeIdx + 1)}
-          disabled={activeIdx === DEMO_SLIDE_COUNT - 1}
-          aria-label="Next demo card"
-          className="flex h-8 w-8 items-center justify-center rounded-full border border-[#1C1B18]/14 bg-white/85 text-[#1C1B18] transition-colors hover:bg-[#1C1B18] hover:text-white disabled:opacity-35 disabled:hover:bg-white/85 disabled:hover:text-[#1C1B18]"
-        >
-          <ChevronRight className="h-4 w-4" />
-        </button>
-      </div>
-    </div>
-  );
-});
-
-const SlideDotControls = memo(function SlideDotControls({
-  registerUpdater,
-  onSelectSlide,
-}: SlideIndicatorProps) {
-  const [activeIdx, setActiveIdx] = useState(0);
-
-  useEffect(() => {
-    registerUpdater(setActiveIdx);
-    return () => registerUpdater(null);
-  }, [registerUpdater]);
-
-  return (
-    <div className="flex items-center gap-1.5">
-      {Array.from({ length: DEMO_SLIDE_COUNT }).map((_, i) => (
-        <button
-          key={`slide-dot-${i}`}
-          type="button"
-          aria-label={`Scroll to demo ${i + 1}`}
-          onClick={() => onSelectSlide(i)}
-          className={`h-1.5 rounded-full transition-all duration-200 ${
-            activeIdx === i
-              ? 'w-7 bg-[#1C1B18]'
-              : 'w-2 bg-[#1C1B18]/22 hover:bg-[#1C1B18]/45'
-          }`}
-        />
-      ))}
-    </div>
-  );
-});
-
 export function DirectionsMarqueeShowcase({
   onOpenLiveDemo,
 }: DirectionsMarqueeShowcaseProps) {
@@ -557,25 +480,7 @@ export function DirectionsMarqueeShowcase({
   const trackRef = useRef<HTMLDivElement | null>(null);
 
   const [spacerHeight, setSpacerHeight] = useState<number>(1900);
-  const headerUpdaterRef = useRef<((idx: number) => void) | null>(null);
-  const dotUpdaterRef = useRef<((idx: number) => void) | null>(null);
-  const lastActiveIdxRef = useRef<number>(0);
-
-  const registerHeaderUpdater = useCallback(
-    (fn: ((idx: number) => void) | null) => {
-      headerUpdaterRef.current = fn;
-      if (fn) fn(lastActiveIdxRef.current);
-    },
-    [],
-  );
-
-  const registerDotUpdater = useCallback(
-    (fn: ((idx: number) => void) | null) => {
-      dotUpdaterRef.current = fn;
-      if (fn) fn(lastActiveIdxRef.current);
-    },
-    [],
-  );
+  const [activeSlideIdx, setActiveSlideIdx] = useState<number>(0);
 
   const metricsRef = useRef<{
     maxShift: number;
@@ -596,8 +501,7 @@ export function DirectionsMarqueeShowcase({
     const trackWidth = track.scrollWidth;
     const maxShift = Math.max(0, trackWidth - stageWidth);
     const stickyTopPx = window.innerWidth >= 768 ? 82 : 72;
-    const stageHeight =
-      stage.offsetHeight || Math.max(window.innerHeight - stickyTopPx, 520);
+    const stageHeight = stage.offsetHeight || Math.max(window.innerHeight - stickyTopPx, 520);
     const desiredHeight = Math.round(stageHeight + Math.max(480, maxShift * 1.05));
     const scrollableSpan = Math.max(desiredHeight - stageHeight, 1);
 
@@ -614,6 +518,11 @@ export function DirectionsMarqueeShowcase({
 
   useEffect(() => {
     let scrollRafId = 0;
+    let lerpRafId = 0;
+    let currentX = 0;
+    let targetX = 0;
+    let hasInitializedX = false;
+    let lastTime = performance.now();
     let lastWidth = window.innerWidth;
     let lastStageW = 0;
     let lastTrackW = 0;
@@ -643,6 +552,27 @@ export function DirectionsMarqueeShowcase({
       measureMetrics();
     };
 
+    const stepSmoothTrack = (now: number) => {
+      lerpRafId = 0;
+      const track = trackRef.current;
+      if (!track || prefersReducedMotion) return;
+
+      const dt = Math.min(Math.max((now - lastTime) / 1000, 0.001), 0.05);
+      lastTime = now;
+
+      const diff = targetX - currentX;
+      if (Math.abs(diff) <= 0.35) {
+        currentX = targetX;
+        track.style.transform = `translate3d(${currentX.toFixed(1)}px, 0, 0)`;
+        return;
+      }
+
+      const alpha = 1 - Math.exp(-30 * dt);
+      currentX += diff * alpha;
+      track.style.transform = `translate3d(${currentX.toFixed(1)}px, 0, 0)`;
+      lerpRafId = window.requestAnimationFrame(stepSmoothTrack);
+    };
+
     const syncScroll = () => {
       scrollRafId = 0;
       const track = trackRef.current;
@@ -658,20 +588,22 @@ export function DirectionsMarqueeShowcase({
       const rect = spacer.getBoundingClientRect();
       const scrolled = stickyTopPx - rect.top;
       const progress = Math.min(Math.max(scrolled / scrollableSpan, 0), 1);
-      const translateX = -(progress * maxShift);
 
-      // Direct 1:1 scroll coupling so track stays locked in phase with sticky compositor
-      track.style.transform = `translate3d(${translateX.toFixed(1)}px, 0, 0)`;
+      targetX = -(progress * maxShift);
+      if (!hasInitializedX) {
+        hasInitializedX = true;
+        currentX = targetX;
+        track.style.transform = `translate3d(${currentX.toFixed(1)}px, 0, 0)`;
+      } else if (!lerpRafId) {
+        lastTime = performance.now();
+        lerpRafId = window.requestAnimationFrame(stepSmoothTrack);
+      }
 
       const nextActive = Math.min(
         DEMO_SLIDE_COUNT - 1,
         Math.round(progress * (DEMO_SLIDE_COUNT - 1)),
       );
-      if (nextActive !== lastActiveIdxRef.current) {
-        lastActiveIdxRef.current = nextActive;
-        headerUpdaterRef.current?.(nextActive);
-        dotUpdaterRef.current?.(nextActive);
-      }
+      setActiveSlideIdx((prev) => (prev === nextActive ? prev : nextActive));
     };
 
     const scheduleScroll = () => {
@@ -712,39 +644,31 @@ export function DirectionsMarqueeShowcase({
       window.removeEventListener('scroll', scheduleScroll);
       window.removeEventListener('resize', onWindowResize);
       if (scrollRafId) window.cancelAnimationFrame(scrollRafId);
+      if (lerpRafId) window.cancelAnimationFrame(lerpRafId);
     };
   }, [measureMetrics, prefersReducedMotion]);
 
-  const scrollToSlide = useCallback(
-    (targetIdx: number) => {
-      const clampedIdx = Math.max(0, Math.min(DEMO_SLIDE_COUNT - 1, targetIdx));
-      const spacer = spacerRef.current;
-      if (!spacer) return;
+  const scrollToSlide = (targetIdx: number) => {
+    const clampedIdx = Math.max(0, Math.min(DEMO_SLIDE_COUNT - 1, targetIdx));
+    const spacer = spacerRef.current;
+    if (!spacer) return;
 
-      if (prefersReducedMotion && trackRef.current) {
-        const cardEl = trackRef.current.children[clampedIdx] as
-          | HTMLElement
-          | undefined;
-        cardEl?.scrollIntoView({
-          behavior: 'smooth',
-          inline: 'start',
-          block: 'nearest',
-        });
-        return;
-      }
+    if (prefersReducedMotion && trackRef.current) {
+      const cardEl = trackRef.current.children[clampedIdx] as HTMLElement | undefined;
+      cardEl?.scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' });
+      return;
+    }
 
-      const { stickyTopPx, scrollableSpan } = metricsRef.current;
-      const spacerDocTop = spacer.getBoundingClientRect().top + window.scrollY;
-      const ratio = clampedIdx / (DEMO_SLIDE_COUNT - 1);
-      const targetScrollY = spacerDocTop - stickyTopPx + ratio * scrollableSpan;
+    const { stickyTopPx, scrollableSpan } = metricsRef.current;
+    const spacerDocTop = spacer.getBoundingClientRect().top + window.scrollY;
+    const ratio = clampedIdx / (DEMO_SLIDE_COUNT - 1);
+    const targetScrollY = spacerDocTop - stickyTopPx + ratio * scrollableSpan;
 
-      window.scrollTo({
-        top: Math.max(0, targetScrollY),
-        behavior: 'smooth',
-      });
-    },
-    [prefersReducedMotion],
-  );
+    window.scrollTo({
+      top: Math.max(0, targetScrollY),
+      behavior: 'smooth',
+    });
+  };
 
   return (
     <section
@@ -758,7 +682,7 @@ export function DirectionsMarqueeShowcase({
         className={`${
           prefersReducedMotion
             ? 'relative py-10 md:py-14'
-            : 'sticky top-[72px] flex min-h-[calc(100svh-84px)] flex-col justify-center py-6 md:top-[82px] md:py-8'
+            : 'sticky top-[72px] flex min-h-[calc(100svh-84px)] flex-col justify-center overflow-x-clip py-6 md:top-[82px] md:py-8'
         }`}
       >
         {/* Header Bar & Progress Indicator */}
@@ -773,23 +697,47 @@ export function DirectionsMarqueeShowcase({
               </h2>
             </div>
 
-            <SlideHeaderControls
-              registerUpdater={registerHeaderUpdater}
-              onSelectSlide={scrollToSlide}
-            />
+            <div className="flex items-center gap-3 self-start md:self-auto">
+              <div className="font-mono-tabular flex items-center gap-1 rounded-full border border-[#1C1B18]/12 bg-white/80 px-3 py-1 text-[11px] font-semibold text-[#1C1B18]">
+                <span>0{activeSlideIdx + 1}</span>
+                <span className="opacity-35">/</span>
+                <span className="opacity-55">0{DEMO_SLIDE_COUNT}</span>
+              </div>
+
+              <div className="flex items-center gap-1.5">
+                <button
+                  type="button"
+                  onClick={() => scrollToSlide(activeSlideIdx - 1)}
+                  disabled={activeSlideIdx === 0}
+                  aria-label="Previous demo card"
+                  className="flex h-8 w-8 items-center justify-center rounded-full border border-[#1C1B18]/14 bg-white/85 text-[#1C1B18] transition-colors hover:bg-[#1C1B18] hover:text-white disabled:opacity-35 disabled:hover:bg-white/85 disabled:hover:text-[#1C1B18]"
+                >
+                  <ChevronLeft className="h-4 w-4" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => scrollToSlide(activeSlideIdx + 1)}
+                  disabled={activeSlideIdx === DEMO_SLIDE_COUNT - 1}
+                  aria-label="Next demo card"
+                  className="flex h-8 w-8 items-center justify-center rounded-full border border-[#1C1B18]/14 bg-white/85 text-[#1C1B18] transition-colors hover:bg-[#1C1B18] hover:text-white disabled:opacity-35 disabled:hover:bg-white/85 disabled:hover:text-[#1C1B18]"
+                >
+                  <ChevronRight className="h-4 w-4" />
+                </button>
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* Scroll-Scrubbed Horizontal 5-Demo Track (1:1 synchronous scroll mapping, single clean overflow boundary) */}
+        {/* Scroll-Scrubbed Horizontal 5-Demo Track (No auto-scroll: glides strictly on user scroll) */}
         <div
           className={`mt-6 w-full md:mt-7 ${
-            prefersReducedMotion ? 'overflow-x-auto px-4 md:px-8' : 'overflow-hidden'
+            prefersReducedMotion ? 'overflow-x-auto px-4 md:px-8' : 'overflow-x-clip'
           }`}
         >
           <div
             ref={trackRef}
             className="flex w-max items-stretch gap-6 px-4 sm:gap-8 sm:px-8 md:px-[max(2rem,calc((100vw-1200px)/2+2rem))]"
-            style={{ willChange: 'transform', transform: 'translate3d(0, 0, 0)' }}
+            style={{ willChange: 'transform' }}
           >
             <CarouselDemoCards onOpenLiveDemo={onOpenLiveDemo} />
           </div>
@@ -797,10 +745,21 @@ export function DirectionsMarqueeShowcase({
 
         {/* Bottom Scroll Cue / Dot Nav */}
         <div className="mx-auto mt-4 flex w-full max-w-[1200px] items-center justify-between gap-4 px-4 md:mt-6 md:px-8">
-          <SlideDotControls
-            registerUpdater={registerDotUpdater}
-            onSelectSlide={scrollToSlide}
-          />
+          <div className="flex items-center gap-1.5">
+            {Array.from({ length: DEMO_SLIDE_COUNT }).map((_, i) => (
+              <button
+                key={`slide-dot-${i}`}
+                type="button"
+                aria-label={`Scroll to demo ${i + 1}`}
+                onClick={() => scrollToSlide(i)}
+                className={`h-1.5 rounded-full transition-all duration-200 ${
+                  activeSlideIdx === i
+                    ? 'w-7 bg-[#1C1B18]'
+                    : 'w-2 bg-[#1C1B18]/22 hover:bg-[#1C1B18]/45'
+                }`}
+              />
+            ))}
+          </div>
 
           <span className="font-mono-tabular text-[10.5px] text-[#1C1B18]/55">
             Scroll door voor de volgende demo’s of klik een voorbeeld aan →
