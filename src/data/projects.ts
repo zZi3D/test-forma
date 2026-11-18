@@ -78,60 +78,60 @@ export type ProjectItem = DesignDirection;
  */
 export const PROJECTS: DesignDirection[] = [
   // =========================================================================
-  // 01 — HIGH-CONVERTING WEBSHOP (Dopamine Commerce · Vibrant Cream #FFFDF7)
+  // 01 — AUTOMOTIVE & RDW SERVICE (Warm Bone & Crimson · #F3ECE1) [was 10]
   // =========================================================================
   {
-    id: 'dopamine-commerce',
+    id: 'automotive-rdw',
     index: '01',
-    businessTitle: 'High-Converting Webshop',
-    styleSubtitle: 'Dopamine Commerce',
-    targetBusinesses: 'Treat & Gift Shops, D2C Stores',
-    industries: ['Retail & Webshops'],
-    bestMatchFor: ['Retail & Webshops'],
-    linkedDemoId: 'demo-candyshop',
-    linkedDemoLabel: 'Demo 06 · Candy Pop',
+    businessTitle: 'Automotive & RDW Service',
+    styleSubtitle: 'Warm Bone & Crimson',
+    targetBusinesses: 'Garages, MOT Stations & Specialists',
+    industries: ['Salons & Local', 'Tech & Products'],
+    bestMatchFor: ['Tech & Products'],
+    linkedDemoId: 'demo-garage',
+    linkedDemoLabel: 'Demo 01 · Garage',
     problemSolved:
-      'Boring online stores struggle to justify impulse purchases or bundle upsells. Playful color pops, social-proof review pills, and instant add-to-bag actions spark excitement and lift average order value.',
+      'Drivers hesitate to book service online when garages look outdated or hide vehicle pricing. Combining warm industrial typography with a live Dutch RDW license plate & MOT lookup builds instant technical confidence and turns car owners into booked service bays.',
     bestFor: [
-      'Treat, Confectionery & Snack Shops',
-      'Curated Gift Boxes & Stationery Stores',
-      'Direct-to-Consumer Food & Drink Brands',
-      'Subscription Boxes & Retail Launches',
+      'Independent Garages & MOT Stations',
+      'Brake, Suspension & Timing Specialists',
+      'EV & Hybrid Diagnostic Workshops',
+      'Multi-Bay Automotive Service Centers',
     ],
     visualCharacteristics: [
-      'Candy-bright pink, lemon, mint & cobalt accents',
-      'Subtle pop-art halftone dots & bestseller sticker',
-      'Chunky two-tone display typography',
-      'Social-proof review cards & one-tap €28 checkout',
+      'Warm bone #F3ECE1 & workshop crimson #B8291E',
+      'Floating white capsule header & brake rotor showcase',
+      'Interactive Dutch yellow license plate RDW lookup',
+      'Live MOT validity date & recall check before booking',
     ],
-    typographyNote: 'Chunky Rounded Display + Crisp Sans',
-    uiStyle: 'dopamine-commerce',
+    typographyNote: 'Technical Outfit Sans + Tabular Plate Mono',
+    uiStyle: 'skeuomorphism',
     palette: {
-      bg: '#FFFDF7',
-      surface: '#FFE4EC',
-      text: '#1C1917',
-      accent: '#FF3B6B',
-      secondary: '#2563EB',
+      bg: '#F3ECE1',
+      surface: '#FFFFFF',
+      text: '#1C1C1C',
+      accent: '#B8291E',
+      secondary: '#6E6961',
     },
     previewSample: {
-      masthead: 'GOODS & TREATS',
-      navItems: ['SHOP ALL', 'GIFT BOXES', 'REVIEWS', 'BAG (2)'],
-      eyebrow: 'BESTSELLER · LIMITED BATCH',
-      headline: 'Daily Joy, Delivered.',
+      masthead: 'KORVER AUTO',
+      navItems: ['SERVICES', 'MOT CHECK', 'PRICING', 'BOOK BAY →'],
+      eyebrow: 'BAYS 1–4 · MOT LANE · 4.9★ GOOGLE',
+      headline: 'Repairs & MOT, Done to Spec.',
       subheadline:
-        'Playful product cards, bright pops & one-tap checkout.',
-      ctaLabel: 'ADD TO BAG — €28 →',
+        'Brakes, diagnostics & factory-spec maintenance paired with live Dutch RDW license plate lookup.',
+      ctaLabel: 'BOOK MOT FOR THIS CAR →',
       metrics: [
-        { label: 'RATED', value: '4.9 ★ (2.4K)' },
-        { label: 'DISPATCH', value: 'SAME DAY' },
-        { label: 'PACKAGING', value: 'GIFT WRAPPED' },
+        { label: 'MAKE & MODEL', value: 'AUDI A5 AVANT' },
+        { label: 'MOT EXPIRY', value: '01-10-2030' },
+        { label: 'OPEN RECALL', value: 'NONE · CLEAR' },
       ],
-      cardLabels: ['TREATS', 'GIFT BOXES', 'LIMITED'],
+      cardLabels: ['KXT-67-P', '91-LBL-6', 'KXT-67-S'],
     },
   },
 
   // =========================================================================
-  // 02 — BARBERSHOP & GROOMING (Barber Red & Charcoal · Dark #1C1C1C)
+  // 02 — BARBERSHOP & GROOMING (Barber Red & Charcoal · Dark #1C1C1C) [was 02]
   // =========================================================================
   {
     id: 'noir-luxury',
@@ -184,58 +184,60 @@ export const PROJECTS: DesignDirection[] = [
   },
 
   // =========================================================================
-  // 03 — AUTHORITY & TRUST (Swiss Minimalism · Light #F5F3EE)
+  // 03 — FASHION & EYEWEAR DROP (Blush Wine Atelier · Soft Blush #F6CBD4) [was 05]
   // =========================================================================
   {
-    id: 'swiss-minimalism',
+    id: 'soft-aura-atelier',
     index: '03',
-    businessTitle: 'Authority & Trust',
-    styleSubtitle: 'Swiss Minimalism',
-    targetBusinesses: 'Law Firms, Consultants & B2B',
-    industries: ['Advisory & B2B'],
-    bestMatchFor: ['Advisory & B2B'],
+    businessTitle: 'Fashion & Eyewear Drop',
+    styleSubtitle: 'Blush Wine Atelier',
+    targetBusinesses: 'Fashion Labels, Eyewear & Boutiques',
+    industries: ['Retail & Webshops', 'Salons & Local'],
+    bestMatchFor: ['Retail & Webshops', 'Salons & Local'],
+    linkedDemoId: 'demo-fashion',
+    linkedDemoLabel: 'Demo 05 · Fashion',
     problemSolved:
-      'High-value B2B clients leave dated or cluttered websites before ever reading your credentials. This structured editorial layout signals senior credibility in seconds and guides prospects straight to booking a consultation.',
+      'Fashion capsules and style boutiques lose their allure in rigid white grids. Editorial blush-rose framing, deep wine contrast, and a vibrant Kelly-green instant drop selector build desire and convert visitors straight via WhatsApp or quick bag.',
     bestFor: [
-      'Law & Legal Advisory Firms',
-      'Management & Strategy Consultants',
-      'Accounting & Tax Practices',
-      'Architecture & Engineering Firms',
+      'Fashion & Eyewear Capsule Drops',
+      'Independent Clothing Boutiques',
+      'Personal Stylists & Bridal Studios',
+      'Curated Interior & Perfume Showrooms',
     ],
     visualCharacteristics: [
-      'Asymmetric 3-column grid with 1px hairlines',
-      'Warm off-white & deep graphite contrast',
-      'Clear practice-area index & partner credentials',
-      'Direct consultation booking hierarchy',
+      'Soft blush #F6CBD4 & deep wine #4A0F24 contrast',
+      'Kelly green #2DC92A high-pop Bag & Drop CTA',
+      'Arched editorial lookbook frame with Solaris shield motif',
+      'Floating colorway swatch & frame fit selector card',
     ],
-    typographyNote: 'Neo-Grotesque Sans + Technical Mono',
-    uiStyle: 'swiss-minimalism',
+    typographyNote: 'High-Contrast Serif + Refined Sans',
+    uiStyle: 'new-age-gradient',
     palette: {
-      bg: '#F5F3EE',
-      surface: '#EAE7DF',
-      text: '#141414',
-      accent: '#141414',
-      secondary: '#73716C',
+      bg: '#F6CBD4',
+      surface: '#4A0F24',
+      text: '#4A0F24',
+      accent: '#2DC92A',
+      secondary: '#7D3950',
     },
     previewSample: {
-      masthead: 'VANDENBERG & PARTNERS',
-      navItems: ['PRACTICE AREAS', 'PARTNERS', 'INSIGHTS', 'CONTACT'],
-      eyebrow: '03 — LEGAL & ADVISORY PRACTICE',
-      headline: 'Trusted Counsel. Proven Clarity.',
+      masthead: 'STUDIO VESPER',
+      navItems: ['SUNGLASSES', 'OPTICAL', 'DROPS', 'BAG (1)'],
+      eyebrow: 'THE SUMMER CAPSULE · LIMITED DROP',
+      headline: 'Solaris Edition',
       subheadline:
-        'Disciplined digital presence built to win corporate retainers and high-trust client inquiries.',
-      ctaLabel: 'SCHEDULE CONSULTATION →',
+        'Mirrored UV400 shield acetate, studio colorway swatches & instant WhatsApp drop checkout.',
+      ctaLabel: 'SHOP SOLARIS DROP →',
       metrics: [
-        { label: 'CLIENT RETENTION', value: '96%' },
-        { label: 'PARTNER TENURE', value: '25+ YRS' },
-        { label: 'FIRST RESPONSE', value: '< 2 HRS' },
+        { label: 'LENS SPEC', value: 'UV400 SHIELD' },
+        { label: 'FRAME FIT', value: '52MM / 56MM' },
+        { label: 'STUDIO STOCK', value: '7 PIECES' },
       ],
-      cardLabels: ['CORPORATE LAW', 'M&A ADVISORY', 'COMPLIANCE'],
+      cardLabels: ['KELLY GREEN', 'DEEP WINE', 'BLUSH MIRROR'],
     },
   },
 
   // =========================================================================
-  // 04 — SPECIALTY CAFÉ & TERRACE (Latte Cream & Espresso · #EFE2CF)
+  // 04 — SPECIALTY CAFÉ & TERRACE (Latte Cream & Espresso · #EFE2CF) [was 04]
   // =========================================================================
   {
     id: 'specialty-cafe-terrace',
@@ -288,217 +290,115 @@ export const PROJECTS: DesignDirection[] = [
   },
 
   // =========================================================================
-  // 05 — FASHION & EYEWEAR DROP (Blush Wine Atelier · Soft Blush #F6CBD4)
-  // =========================================================================
-  {
-    id: 'soft-aura-atelier',
-    index: '05',
-    businessTitle: 'Fashion & Eyewear Drop',
-    styleSubtitle: 'Blush Wine Atelier',
-    targetBusinesses: 'Fashion Labels, Eyewear & Boutiques',
-    industries: ['Retail & Webshops', 'Salons & Local'],
-    bestMatchFor: ['Retail & Webshops', 'Salons & Local'],
-    linkedDemoId: 'demo-fashion',
-    linkedDemoLabel: 'Demo 05 · Fashion',
-    problemSolved:
-      'Fashion capsules and style boutiques lose their allure in rigid white grids. Editorial blush-rose framing, deep wine contrast, and a vibrant Kelly-green instant drop selector build desire and convert visitors straight via WhatsApp or quick bag.',
-    bestFor: [
-      'Fashion & Eyewear Capsule Drops',
-      'Independent Clothing Boutiques',
-      'Personal Stylists & Bridal Studios',
-      'Curated Interior & Perfume Showrooms',
-    ],
-    visualCharacteristics: [
-      'Soft blush #F6CBD4 & deep wine #4A0F24 contrast',
-      'Kelly green #2DC92A high-pop Bag & Drop CTA',
-      'Arched editorial lookbook frame with Solaris shield motif',
-      'Floating colorway swatch & frame fit selector card',
-    ],
-    typographyNote: 'High-Contrast Serif + Refined Sans',
-    uiStyle: 'new-age-gradient',
-    palette: {
-      bg: '#F6CBD4',
-      surface: '#4A0F24',
-      text: '#4A0F24',
-      accent: '#2DC92A',
-      secondary: '#7D3950',
-    },
-    previewSample: {
-      masthead: 'STUDIO VESPER',
-      navItems: ['SUNGLASSES', 'OPTICAL', 'DROPS', 'BAG (1)'],
-      eyebrow: 'THE SUMMER CAPSULE · LIMITED DROP',
-      headline: 'Solaris Edition',
-      subheadline:
-        'Mirrored UV400 shield acetate, studio colorway swatches & instant WhatsApp drop checkout.',
-      ctaLabel: 'SHOP SOLARIS DROP →',
-      metrics: [
-        { label: 'LENS SPEC', value: 'UV400 SHIELD' },
-        { label: 'FRAME FIT', value: '52MM / 56MM' },
-        { label: 'STUDIO STOCK', value: '7 PIECES' },
-      ],
-      cardLabels: ['KELLY GREEN', 'DEEP WINE', 'BLUSH MIRROR'],
-    },
-  },
-
-  // =========================================================================
-  // 06 — HIGH-ENERGY & ACTION (Kinetic Performance · Dark #09090B)
+  // 05 — BOUTIQUE GYM (Dark Performance Studio · Charcoal & Ember #EA580C) [was 06]
   // =========================================================================
   {
     id: 'kinetic-performance',
-    index: '06',
-    businessTitle: 'High-Energy & Action',
-    styleSubtitle: 'Kinetic Performance',
-    targetBusinesses: 'Gyms, Trainers & E-Mobility',
+    index: '05',
+    businessTitle: 'Boutique Gym',
+    styleSubtitle: 'Dark Performance Studio',
+    targetBusinesses: 'Gyms, Trainers & Personal Coaching',
     industries: ['Sports & Events', 'Tech & Products'],
     bestMatchFor: ['Sports & Events'],
     problemSolved:
-      'Fitness studios, coaches, and performance brands fail when their site feels slow or passive. Bold diagonal light streaks, dynamic motion silhouettes, and high-contrast action blocks inject momentum and drive trial sign-ups.',
+      'Exclusieve sportstudio’s en personal trainers missen proeflessen wanneer hun website oogt als een generieke prijsvechter. Sfeervolle donkere interieurfotografie met krachtig oranje accent brengt rust, focus en directe proefles-aanvragen.',
     bestFor: [
-      'Boutique Gyms & Training Studios',
+      'Boutique Strength & PT Studio’s',
       'Personal Trainers & Athletic Coaches',
-      'E-Bikes, Automotive & Mobility Brands',
-      'Sports Gear & Endurance Events',
+      'Small-Group Conditioning Clubs',
+      'Performance & Recovery Centers',
     ],
     visualCharacteristics: [
-      'Carbon black with diagonal light streaks & orange energy',
-      'Dynamic sprinter motion silhouette & live pulse wave',
-      'Structured program cards for coaching & HIIT',
-      'High-visibility trial session booking CTA',
+      'Donkere studiofoto met warme spiegelverlichting',
+      'Scherp contrast met oranje #EA580C actieknoppen',
+      'Overzicht voor roosters, trainers en programma’s',
+      'Directe proefles-knop boven de vouw',
     ],
-    typographyNote: 'Wide Display Sans + Technical Mono',
+    typographyNote: 'Bold Display Sans + Technical Mono',
     uiStyle: 'dark-kinetic',
     palette: {
-      bg: '#09090B',
-      surface: '#141418',
-      text: '#E4E4E7',
-      accent: '#FF4D24',
-      secondary: '#8A8A94',
+      bg: '#111113',
+      surface: '#1C1B1A',
+      text: '#F5F2EB',
+      accent: '#EA580C',
+      secondary: '#A1A1AA',
     },
     previewSample: {
-      masthead: 'APEX PERFORMANCE',
-      navItems: ['COACHING', 'PROGRAMS', 'CLUB', 'BOOK TRIAL'],
-      eyebrow: 'ATHLETIC CLUB & COACHING // 06',
-      headline: 'TRAIN WITHOUT LIMITS.',
+      masthead: 'BOUTIQUE GYM',
+      navItems: ['ROOSTERS', 'PROGRAMMA', 'TRAINERS', 'TRAIN GRATIS MEE'],
+      eyebrow: 'BOUTIQUE GYM & PERSONAL TRAINING',
+      headline: 'Train op jouw niveau, zonder drukte.',
       subheadline:
-        'High-velocity coaching & athletic club layout engineered to fill sessions and trial memberships.',
-      ctaLabel: 'BOOK TRIAL SESSION →',
+        'Persoonlijke begeleiding en kleine groepen in een rustige, luxe trainingsruimte.',
+      ctaLabel: 'PLAN PROEFLES →',
       metrics: [
-        { label: '01', value: 'STRENGTH & HIIT' },
-        { label: '02', value: '1-ON-1 COACHING' },
-        { label: '03', value: 'PERFORMANCE LAB' },
+        { label: 'GROEPEN', value: 'MAX 8 PERS.' },
+        { label: 'COACHING', value: '1-OP-1 FOCUS' },
+        { label: 'OPENING', value: '06:00 – 22:00' },
       ],
-      cardLabels: ['STRENGTH & HIIT', '1-ON-1 COACHING', 'PERFORMANCE LAB'],
+      cardLabels: ['STRENGTH STUDIO', '1-ON-1 COACHING', 'SMALL GROUP'],
     },
   },
 
   // =========================================================================
-  // 07 — WARM, NATURAL & LOCAL (Organic Biophilic · Warm Linen #EFECE6)
+  // 06 — HIGH-CONVERTING WEBSHOP (Dopamine Commerce · Vibrant Cream #FFFDF7) [was 01]
   // =========================================================================
   {
-    id: 'organic-biophilic',
-    index: '07',
-    businessTitle: 'Warm, Natural & Local',
-    styleSubtitle: 'Organic Biophilic',
-    targetBusinesses: 'Wellness, Gift Shops & Bakeries',
-    industries: ['Salons & Local', 'Retail & Webshops'],
+    id: 'dopamine-commerce',
+    index: '06',
+    businessTitle: 'High-Converting Webshop',
+    styleSubtitle: 'Dopamine Commerce',
+    targetBusinesses: 'Treat & Gift Shops, D2C Stores',
+    industries: ['Retail & Webshops'],
     bestMatchFor: ['Retail & Webshops'],
+    linkedDemoId: 'demo-candyshop',
+    linkedDemoLabel: 'Demo 06 · Candy Pop',
     problemSolved:
-      'Neighborhood bakeries, wellness studios, and handmade gift shops lose their personal warmth on cold corporate layouts. Earthy sage, linen, and terracotta tones evoke authenticity and invite local foot traffic and orders.',
+      'Boring online stores struggle to justify impulse purchases or bundle upsells. Playful color pops, social-proof review pills, and instant add-to-bag actions spark excitement and lift average order value.',
     bestFor: [
-      'Wellness, Yoga & Massage Studios',
-      'Local Treat, Gift & Flower Shops',
-      'Artisan Bakeries & Specialty Cafés',
-      'Organic Skincare & Boutique Hospitality',
+      'Treat, Confectionery & Snack Shops',
+      'Curated Gift Boxes & Stationery Stores',
+      'Direct-to-Consumer Food & Drink Brands',
+      'Subscription Boxes & Retail Launches',
     ],
     visualCharacteristics: [
-      'Warm linen, deep sage green & terracotta palette',
-      'Soft organic shapes with subtle paper grain',
-      'Warm editorial serif & friendly sans pairing',
-      'Daylight product framing & trust notes',
+      'Candy-bright pink, lemon, mint & cobalt accents',
+      'Subtle pop-art halftone dots & bestseller sticker',
+      'Chunky two-tone display typography',
+      'Social-proof review cards & one-tap €28 checkout',
     ],
-    typographyNote: 'Warm Editorial Serif + Organic Sans',
-    uiStyle: 'organic-biophilic',
+    typographyNote: 'Chunky Rounded Display + Crisp Sans',
+    uiStyle: 'dopamine-commerce',
     palette: {
-      bg: '#EFECE6',
-      surface: '#F7F5F0',
-      text: '#2F4538',
-      accent: '#C47451',
-      secondary: '#627266',
+      bg: '#FFFDF7',
+      surface: '#FFE4EC',
+      text: '#1C1917',
+      accent: '#FF3B6B',
+      secondary: '#2563EB',
     },
     previewSample: {
-      masthead: 'SAGE & LINEN HOUSE',
-      navItems: ['SHOP GOODS', 'WELLNESS', 'STORY', 'VISIT US'],
-      eyebrow: 'WELLNESS, ARTISAN BAKERY & GIFTS',
-      headline: 'Natural Warmth Crafted Daily.',
+      masthead: 'GOODS & TREATS',
+      navItems: ['SHOP ALL', 'GIFT BOXES', 'REVIEWS', 'BAG (2)'],
+      eyebrow: 'BESTSELLER · LIMITED BATCH',
+      headline: 'Daily Joy, Delivered.',
       subheadline:
-        'Inviting earthy tones and tactile framing built for loyal local customers and online orders.',
-      ctaLabel: 'RESERVE OR ORDER →',
+        'Playful product cards, bright pops & one-tap checkout.',
+      ctaLabel: 'ADD TO BAG — €28 →',
       metrics: [
-        { label: 'CRAFT', value: 'SMALL BATCH' },
-        { label: 'SOURCING', value: '100% LOCAL' },
-        { label: 'REVIEWS', value: '4.9 ★ LOCAL' },
+        { label: 'RATED', value: '4.9 ★ (2.4K)' },
+        { label: 'DISPATCH', value: 'SAME DAY' },
+        { label: 'PACKAGING', value: 'GIFT WRAPPED' },
       ],
-      cardLabels: ['WELLNESS', 'GIFT BOXES', 'ARTISAN'],
+      cardLabels: ['TREATS', 'GIFT BOXES', 'LIMITED'],
     },
   },
 
   // =========================================================================
-  // 08 — UNFORGETTABLE STANDOUT (Neo-Brutalist Pop · High-Contrast #FAF8F2)
-  // =========================================================================
-  {
-    id: 'neo-brutalist-pop',
-    index: '08',
-    businessTitle: 'Unforgettable Standout',
-    styleSubtitle: 'Neo-Brutalist Pop',
-    targetBusinesses: 'Festivals, Agencies & Culture',
-    industries: ['Sports & Events'],
-    bestMatchFor: ['Sports & Events'],
-    problemSolved:
-      'Events, festivals, and bold creative studios cannot afford to blend in with lookalike websites. Thick ink borders, primary color blocking, and fearless typography make your brand impossible to scroll past.',
-    bestFor: [
-      'Music Festivals, Events & Pop-Ups',
-      'Creative & Branding Agencies',
-      'Streetwear & Youth Culture Labels',
-      'Independent Media & Live Podcasts',
-    ],
-    visualCharacteristics: [
-      'Crisp 2px black borders & hard offset shadows',
-      'Bold cobalt blue, butter yellow & rust orange blocks',
-      'Expressive oversized typography & stamp badges',
-      'High-impact ticket & drop callouts',
-    ],
-    typographyNote: 'Heavy Display Grotesque + Bold Mono',
-    uiStyle: 'neo-brutalism',
-    palette: {
-      bg: '#FAF8F2',
-      surface: '#FACC15',
-      text: '#0A0A0A',
-      accent: '#E05A36',
-      secondary: '#1D4ED8',
-    },
-    previewSample: {
-      masthead: 'CULTURE & EVENTS',
-      navItems: ['LINEUP', 'SCHEDULE', 'SHOP', 'TICKETS!'],
-      eyebrow: 'HIGH-IMPACT CREATIVE & EVENTS',
-      headline: 'FORM AGAINST SILENCE',
-      subheadline:
-        'Unapologetic color blocking, hard ink borders, and expressive energy that sells out tickets.',
-      ctaLabel: 'CLAIM PASSES ↗',
-      metrics: [
-        { label: 'STAGE 01', value: 'LIVE EXPERIENCES' },
-        { label: 'STAGE 02', value: 'SOUND & ART' },
-        { label: 'STAGE 03', value: 'LIMITED DROPS' },
-      ],
-      cardLabels: ['NEW SEASON', 'ALL ACCESS', 'STAND OUT'],
-    },
-  },
-
-  // =========================================================================
-  // 09 — ARCHITECTURE & OUTDOOR CRAFT (Midnight Pine & Copper · #162921)
+  // 07 — ARCHITECTURE & OUTDOOR CRAFT (Midnight Pine & Copper · #162921) [was 09]
   // =========================================================================
   {
     id: 'architectural-outdoor',
-    index: '09',
+    index: '07',
     businessTitle: 'Architecture & Outdoor Craft',
     styleSubtitle: 'Midnight Pine & Copper',
     targetBusinesses: 'Landscapers, Architects & Roofing',
@@ -547,55 +447,155 @@ export const PROJECTS: DesignDirection[] = [
   },
 
   // =========================================================================
-  // 10 — AUTOMOTIVE & RDW SERVICE (Warm Bone & Crimson · #F3ECE1)
+  // 08 — WARM, NATURAL & LOCAL (Organic Biophilic · Warm Linen #EFECE6) [was 07]
   // =========================================================================
   {
-    id: 'automotive-rdw',
-    index: '10',
-    businessTitle: 'Automotive & RDW Service',
-    styleSubtitle: 'Warm Bone & Crimson',
-    targetBusinesses: 'Garages, MOT Stations & Specialists',
-    industries: ['Salons & Local', 'Tech & Products'],
-    bestMatchFor: ['Tech & Products'],
-    linkedDemoId: 'demo-garage',
-    linkedDemoLabel: 'Demo 01 · Garage',
+    id: 'organic-biophilic',
+    index: '08',
+    businessTitle: 'Warm, Natural & Local',
+    styleSubtitle: 'Organic Biophilic',
+    targetBusinesses: 'Wellness, Gift Shops & Bakeries',
+    industries: ['Salons & Local', 'Retail & Webshops'],
+    bestMatchFor: ['Retail & Webshops'],
     problemSolved:
-      'Drivers hesitate to book service online when garages look outdated or hide vehicle pricing. Combining warm industrial typography with a live Dutch RDW license plate & MOT lookup builds instant technical confidence and turns car owners into booked service bays.',
+      'Neighborhood bakeries, wellness studios, and handmade gift shops lose their personal warmth on cold corporate layouts. Earthy sage, linen, and terracotta tones evoke authenticity and invite local foot traffic and orders.',
     bestFor: [
-      'Independent Garages & MOT Stations',
-      'Brake, Suspension & Timing Specialists',
-      'EV & Hybrid Diagnostic Workshops',
-      'Multi-Bay Automotive Service Centers',
+      'Wellness, Yoga & Massage Studios',
+      'Local Treat, Gift & Flower Shops',
+      'Artisan Bakeries & Specialty Cafés',
+      'Organic Skincare & Boutique Hospitality',
     ],
     visualCharacteristics: [
-      'Warm bone #F3ECE1 & workshop crimson #B8291E',
-      'Floating white capsule header & brake rotor showcase',
-      'Interactive Dutch yellow license plate RDW lookup',
-      'Live MOT validity date & recall check before booking',
+      'Warm linen, deep sage green & terracotta palette',
+      'Soft organic shapes with subtle paper grain',
+      'Warm editorial serif & friendly sans pairing',
+      'Daylight product framing & trust notes',
     ],
-    typographyNote: 'Technical Outfit Sans + Tabular Plate Mono',
-    uiStyle: 'skeuomorphism',
+    typographyNote: 'Warm Editorial Serif + Organic Sans',
+    uiStyle: 'organic-biophilic',
     palette: {
-      bg: '#F3ECE1',
-      surface: '#FFFFFF',
-      text: '#1C1C1C',
-      accent: '#B8291E',
-      secondary: '#6E6961',
+      bg: '#EFECE6',
+      surface: '#F7F5F0',
+      text: '#2F4538',
+      accent: '#C47451',
+      secondary: '#627266',
     },
     previewSample: {
-      masthead: 'KORVER AUTO',
-      navItems: ['SERVICES', 'MOT CHECK', 'PRICING', 'BOOK BAY →'],
-      eyebrow: 'BAYS 1–4 · MOT LANE · 4.9★ GOOGLE',
-      headline: 'Repairs & MOT, Done to Spec.',
+      masthead: 'SAGE & LINEN HOUSE',
+      navItems: ['SHOP GOODS', 'WELLNESS', 'STORY', 'VISIT US'],
+      eyebrow: 'WELLNESS, ARTISAN BAKERY & GIFTS',
+      headline: 'Natural Warmth Crafted Daily.',
       subheadline:
-        'Brakes, diagnostics & factory-spec maintenance paired with live Dutch RDW license plate lookup.',
-      ctaLabel: 'BOOK MOT FOR THIS CAR →',
+        'Inviting earthy tones and tactile framing built for loyal local customers and online orders.',
+      ctaLabel: 'RESERVE OR ORDER →',
       metrics: [
-        { label: 'MAKE & MODEL', value: 'AUDI A5 AVANT' },
-        { label: 'MOT EXPIRY', value: '01-10-2030' },
-        { label: 'OPEN RECALL', value: 'NONE · CLEAR' },
+        { label: 'CRAFT', value: 'SMALL BATCH' },
+        { label: 'SOURCING', value: '100% LOCAL' },
+        { label: 'REVIEWS', value: '4.9 ★ LOCAL' },
       ],
-      cardLabels: ['KXT-67-P', '91-LBL-6', 'KXT-67-S'],
+      cardLabels: ['WELLNESS', 'GIFT BOXES', 'ARTISAN'],
+    },
+  },
+
+  // =========================================================================
+  // 09 — CREATIVE STUDIO & EVENTS (Editorial Bento Collage · Pure White #FFFFFF) [was 08]
+  // =========================================================================
+  {
+    id: 'neo-brutalist-pop',
+    index: '09',
+    businessTitle: 'Creative Studio & Events',
+    styleSubtitle: 'Editorial Bento Showcase',
+    targetBusinesses: 'Agencies, Festivals & Cultuur',
+    industries: ['Sports & Events'],
+    bestMatchFor: ['Sports & Events'],
+    problemSolved:
+      'Creatieve bureaus, culturele podia en eventproducties moeten binnen drie seconden hun signatuur tonen. Een strakke witte bento-collage met krachtige podium- en portretfotografie maakt je portfolio direct onvergetelijk.',
+    bestFor: [
+      'Music Festivals, Events & Culture',
+      'Creative, Brand & Film Studios',
+      'Stage, Lighting & Media Agencies',
+      'Exhibition & Experience Collectives',
+    ],
+    visualCharacteristics: [
+      'Helder wit canvas met redactioneel bento-fotokader',
+      'Contrastrijke rood/cyaan podium- & monochrome portretten',
+      'Compacte 18+ statistiekkaart & zwart showcase-blok',
+      'Strakke navigatie voor Portfolio, Media, Events & Contact',
+    ],
+    typographyNote: 'Bold Geometric Display + Editorial Sans',
+    uiStyle: 'neo-brutalism',
+    palette: {
+      bg: '#FFFFFF',
+      surface: '#F4F4F5',
+      text: '#09090B',
+      accent: '#EF4444',
+      secondary: '#71717A',
+    },
+    previewSample: {
+      masthead: 'STUDIO CULTUUR',
+      navItems: ['PORTFOLIO', 'MEDIA', 'EVENTS', 'CONTACT'],
+      eyebrow: 'AGENCIES, FESTIVALS & CULTUUR',
+      headline: 'Merken en evenementen die blijven hangen.',
+      subheadline:
+        'Visueel sprekende case-collage met sprekende fotografie, compacte cijfers en snelle eventboekingen.',
+      ctaLabel: 'BEKIJK PORTFOLIO →',
+      metrics: [
+        { label: 'PROJECTEN', value: '18+ JAAR' },
+        { label: 'PRODUCTIES', value: '120+ LIVE' },
+        { label: 'BEREIK', value: 'LANDELIJK' },
+      ],
+      cardLabels: ['PORTFOLIO', 'PODIUM & MEDIA', 'LIVE EVENTS'],
+    },
+  },
+
+  // =========================================================================
+  // 10 — NOTARIS & RECHT (Warm Heritage Desk · Espresso & Gold #E2AD5E) [was 03]
+  // =========================================================================
+  {
+    id: 'swiss-minimalism',
+    index: '10',
+    businessTitle: 'Notaris & Recht',
+    styleSubtitle: 'Heritage Notary & Legal',
+    targetBusinesses: 'Notariaat & Juridisch',
+    industries: ['Advisory & B2B'],
+    bestMatchFor: ['Advisory & B2B'],
+    problemSolved:
+      'Cliënten die een huis kopen, een bedrijf oprichten of hun nalatenschap regelen zoeken direct vertrouwen en heldere uitleg. Warme kantoorfotografie met gouden accenten en overzichtelijke praktijkkaarten neemt drempels weg en nodigt uit tot kennismaking.',
+    bestFor: [
+      'Notariskantoren & Familierecht',
+      'Advocaten & Juridisch Advies',
+      'Vastgoed- & Ondernemingsrecht',
+      'Vermogens- & Estate Planners',
+    ],
+    visualCharacteristics: [
+      'Warme notenhouten kantoorfoto met gouden #E2AD5E accent',
+      'Drie zwevende praktijkkaarten voor Oprichting, Kosten & Advies',
+      'Heldere typografie met directe kennismakingsknop',
+      'Rustige, gezaghebbende structuur voor complexe aktes',
+    ],
+    typographyNote: 'Modern Editorial Sans + Warm Gold Hierarchy',
+    uiStyle: 'swiss-minimalism',
+    palette: {
+      bg: '#2B211A',
+      surface: '#FAF5ED',
+      text: '#FAF5ED',
+      accent: '#E2AD5E',
+      secondary: '#A89888',
+    },
+    previewSample: {
+      masthead: 'Notaris & Recht',
+      navItems: ['VAKGEBIEDEN', 'KANTOREN', 'OVER ONS', 'KENNISMAKING'],
+      eyebrow: 'NOTARIAAT & JURIDISCH',
+      headline: 'Zekerheid bij elke grote stap.',
+      subheadline:
+        'Persoonlijk advies en heldere notariële aktes voor gezin, vastgoed en onderneming.',
+      ctaLabel: 'CONTACT OP MAAT →',
+      metrics: [
+        { label: 'OPRICHTING', value: 'VASTE PRIJS' },
+        { label: 'VASTGOED', value: 'SNELLE AKTE' },
+        { label: 'FAMILIERECHT', value: 'PERSOONLIJK' },
+      ],
+      cardLabels: ['OPRICHTING', 'KOSTENBEHEER', 'VERMOGENSPLANNING'],
     },
   },
 
@@ -651,53 +651,53 @@ export const PROJECTS: DesignDirection[] = [
   },
 
   // =========================================================================
-  // 12 — CLEAR SERVICE & PRODUCT MAP (Modular Bento · Light #F4F5F7)
+  // 12 — B2B SOFTWARE & SAAS (Modular Analytics Bento · Bright Slate #F8FAFC)
   // =========================================================================
   {
     id: 'modular-bento',
     index: '12',
-    businessTitle: 'Clear Service & Product Map',
-    styleSubtitle: 'Modular Bento',
-    targetBusinesses: 'SaaS, Apps & Client Portals',
+    businessTitle: 'B2B Software & SaaS',
+    styleSubtitle: 'Modular Analytics Bento',
+    targetBusinesses: 'SaaS, Apps & Automatisering',
     industries: ['Tech & Products', 'Advisory & B2B'],
     bestMatchFor: ['Tech & Products'],
     problemSolved:
-      'When your software, app, or client portal does several things at once, long walls of text confuse buyers. This Apple-inspired bento grid breaks every portal module, workflow, and proof point into scannable cards anyone grasps in 5 seconds.',
+      'Wanneer je B2B-software, app of automatisering veel kan, haken beslissers af door lange teksten. Een helder dashboard-venster met directe grafieken, checklijsten en KPI-tegels laat de waarde in 5 seconden zien.',
     bestFor: [
-      'SaaS & Cloud Software Companies',
-      'Client Portals & Member Dashboards',
-      'Mobile & Web App Startups',
-      'Multi-Service Digital Agencies',
+      'B2B SaaS & Cloud Platformen',
+      'Financiële & Boekhoudkundige Apps',
+      'Workflow- & CRM-Automatisering',
+      'Klantportalen & Analytics Suites',
     ],
     visualCharacteristics: [
-      'Rounded modular cards of varying proportions',
-      'Bright neutral canvas with focused cobalt accent',
-      'Client portal workflow & live analytics blocks',
-      'Mobile + Web app sync & free trial CTA',
+      'Heldere interface in browserkader met kobalt #2563EB focus',
+      'Interactieve staafgrafiek, donut-efficiency & checklistkaart',
+      'Donkere rekentegel & snelle 4.500+ / 98.4% KPI-bewijzen',
+      'Directe Gratis Proberen en Proefperiode-knop',
     ],
-    typographyNote: 'Clean Geometric Sans + Tabular Figures',
+    typographyNote: 'Crisp Geometric Sans + Tabular Metrics',
     uiStyle: 'modular-bento',
     palette: {
-      bg: '#F4F5F7',
+      bg: '#F8FAFC',
       surface: '#FFFFFF',
-      text: '#111827',
+      text: '#0F172A',
       accent: '#2563EB',
       secondary: '#64748B',
     },
     previewSample: {
-      masthead: 'PLATFORM SUITE',
-      navItems: ['PORTAL', 'WORKFLOWS', 'PRICING', 'DEMO'],
-      eyebrow: 'SAAS, APPS & CLIENT PORTALS',
-      headline: 'Every capability, crystal clear.',
+      masthead: 'B2B Software Suite',
+      navItems: ['PRODUCT', 'DASHBOARD', 'PRIJZEN', 'GRATIS PROBEREN'],
+      eyebrow: 'SAAS, APPS & AUTOMATISERING',
+      headline: 'Minder handwerk, meer grip op je cijfers.',
       subheadline:
-        'Structured portal and product modules so users understand your platform in seconds.',
-      ctaLabel: 'START FREE TRIAL →',
+        'Overzichtelijke dashboards, automatische rapportages en live teamworkflows in één B2B-portaal.',
+      ctaLabel: 'START PROEFPERIODE →',
       metrics: [
-        { label: 'SETUP TIME', value: '4 MIN' },
-        { label: 'ADOPTION', value: '98.4%' },
+        { label: 'ACTIEVE TEAMS', value: '4.500+' },
+        { label: 'TEVREDENHEID', value: '98.4%' },
         { label: 'UPTIME SLA', value: '99.99%' },
       ],
-      cardLabels: ['CLIENT PORTAL', 'LIVE WORKFLOWS', 'MOBILE + WEB APP'],
+      cardLabels: ['ACTIVITY', 'CHECKLIST', 'EFFICIENCY'],
     },
   },
 ];

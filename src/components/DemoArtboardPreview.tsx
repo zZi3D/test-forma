@@ -1,9 +1,14 @@
 import { useLayoutEffect, useRef, useState } from 'react';
 import {
   ArrowUpRight,
+  CheckCircle2,
   CloudSun,
   Coffee,
+  FileCheck2,
+  Landmark,
   MapPin,
+  Menu,
+  Scale,
   Scissors,
   ShoppingBag,
   Sparkles,
@@ -15,6 +20,11 @@ import barberPortraitImg from '../assets/images/demo_barber_portrait_17949587887
 import cafeCroissantImg from '../assets/images/demo_horeca_coffee_1794958789876.jpg';
 import fashionModelImg from '../assets/images/demo_fashion_campaign_1794958789947.jpg';
 import gardenPavilionImg from '../assets/images/demo_buitenwerk_garden_1794958789119.jpg';
+import notarisWalnutImg from '../assets/images/notaris_walnut_desk_1794998687602.jpg';
+import boutiqueGymImg from '../assets/images/boutique_gym_interior_1794998688220.jpg';
+import studioEditorialImg from '../assets/images/studio_editorial_portrait_1794998687094.jpg';
+import studioMonoImg from '../assets/images/studio_monochrome_profile_1794998704973.jpg';
+import studioCrimsonImg from '../assets/images/studio_crimson_closeup_1794998704495.jpg';
 
 const ARTBOARD_WIDTH = 680;
 const ARTBOARD_HEIGHT = 425; // Exact 16:10 aspect ratio (680 × 425)
@@ -22,10 +32,14 @@ const ARTBOARD_HEIGHT = 425; // Exact 16:10 aspect ratio (680 × 425)
 const LIVE_DEMO_TILE_IDS = new Set([
   'dopamine-commerce',
   'noir-luxury',
+  'swiss-minimalism',
   'specialty-cafe-terrace',
   'soft-aura-atelier',
+  'kinetic-performance',
+  'neo-brutalist-pop',
   'architectural-outdoor',
   'automotive-rdw',
+  'modular-bento',
 ]);
 
 export function hasLiveDemoArtboard(projectId: string): boolean {
@@ -554,67 +568,535 @@ function DemoArtboardCanvas({ projectId }: { projectId: string }) {
   }
 
   // 10 — KORVER AUTO (Autogarage · Demo 01)
-  return (
-    <div className="font-demo-outfit relative h-[425px] w-[680px] overflow-hidden bg-[#F3ECE1] text-[#1C1C1C]">
-      <div className="relative z-10 px-6 pt-4">
-        <div className="flex items-center justify-between rounded-full border border-[#1C1C1C]/10 bg-white px-4 py-2 shadow-xs">
-          <span className="inline-flex items-center gap-1.5 text-[14px] font-bold tracking-[-0.01em]">
-            <Wrench className="h-3.5 w-3.5 text-[#B8291E]" />
-            <span>KORVER AUTO</span>
-          </span>
-          <div className="flex items-center gap-4 text-[10.5px] font-medium text-[#1C1C1C]/65">
-            <span>Onderhoud</span>
-            <span>APK-Check</span>
-            <span>Tarieven</span>
+  if (projectId === 'automotive-rdw') {
+    return (
+      <div className="font-demo-outfit relative h-[425px] w-[680px] overflow-hidden bg-[#F3ECE1] text-[#1C1C1C]">
+        <div className="relative z-10 px-6 pt-4">
+          <div className="flex items-center justify-between rounded-full border border-[#1C1C1C]/10 bg-white px-4 py-2 shadow-xs">
+            <span className="inline-flex items-center gap-1.5 text-[14px] font-bold tracking-[-0.01em]">
+              <Wrench className="h-3.5 w-3.5 text-[#B8291E]" />
+              <span>KORVER AUTO</span>
+            </span>
+            <div className="flex items-center gap-4 text-[10.5px] font-medium text-[#1C1C1C]/65">
+              <span>Onderhoud</span>
+              <span>APK-Check</span>
+              <span>Tarieven</span>
+            </div>
+            <span className="rounded-full bg-[#B8291E] px-3 py-1 text-[10px] font-semibold text-white">
+              Afspraak →
+            </span>
           </div>
-          <span className="rounded-full bg-[#B8291E] px-3 py-1 text-[10px] font-semibold text-white">
-            Afspraak →
-          </span>
         </div>
-      </div>
 
-      <div className="relative z-10 grid h-[calc(100%-64px)] grid-cols-12 gap-4 px-6 pt-5 pb-4">
-        <div className="col-span-7 flex flex-col justify-between">
-          <div>
-            <h3 className="text-[34px] leading-[1.03] font-bold tracking-[-0.025em]">
-              Onderhoud en APK, volgens fabrieksnorm.
-            </h3>
-            <p className="mt-1.5 line-clamp-2 text-[12px] leading-[1.45] text-[#1C1C1C]/70">
-              Remmen, distributie en merkonafhankelijke diagnose met directe kentekencheck.
-            </p>
-          </div>
+        <div className="relative z-10 grid h-[calc(100%-64px)] grid-cols-12 gap-4 px-6 pt-5 pb-4">
+          <div className="col-span-7 flex flex-col justify-between">
+            <div>
+              <h3 className="text-[34px] leading-[1.03] font-bold tracking-[-0.025em]">
+                Onderhoud en APK, volgens fabrieksnorm.
+              </h3>
+              <p className="mt-1.5 line-clamp-2 text-[12px] leading-[1.45] text-[#1C1C1C]/70">
+                Remmen, distributie en merkonafhankelijke diagnose met directe kentekencheck.
+              </p>
+            </div>
 
-          <div className="mt-2">
-            <TileStudioWidgetFrame pillLabel="Autogarage · Live RDW API">
-              <div className="p-3">
-                <div className="flex items-center gap-2">
-                  <div className="flex h-7 flex-1 items-center overflow-hidden rounded border border-[#1C1C1C] bg-[#F7C600]">
-                    <span className="flex h-full items-center bg-[#003399] px-1.5 text-[8.5px] font-bold text-white">
-                      NL
-                    </span>
-                    <span className="font-mono-tabular flex-1 text-center text-[11.5px] font-extrabold tracking-[0.08em] text-[#111]">
-                      KXT-67-P
+            <div className="mt-2">
+              <TileStudioWidgetFrame pillLabel="Autogarage · Live RDW API">
+                <div className="p-3">
+                  <div className="flex items-center gap-2">
+                    <div className="flex h-7 flex-1 items-center overflow-hidden rounded border border-[#1C1C1C] bg-[#F7C600]">
+                      <span className="flex h-full items-center bg-[#003399] px-1.5 text-[8.5px] font-bold text-white">
+                        NL
+                      </span>
+                      <span className="font-mono-tabular flex-1 text-center text-[11.5px] font-extrabold tracking-[0.08em] text-[#111]">
+                        KXT-67-P
+                      </span>
+                    </div>
+                    <span className="rounded bg-[#1C1C1C] px-2 py-1 text-[9.5px] font-semibold text-white">
+                      AUDI A5
                     </span>
                   </div>
-                  <span className="rounded bg-[#1C1C1C] px-2 py-1 text-[9.5px] font-semibold text-white">
-                    AUDI A5
-                  </span>
+                  <div className="mt-2 flex items-center justify-between rounded bg-[#B8291E] px-2.5 py-1.5 text-[10px] font-semibold text-white">
+                    <span>APK Geldig t/m 01-10-2030 · Plan APK</span>
+                    <ArrowUpRight className="h-3 w-3" />
+                  </div>
                 </div>
-                <div className="mt-2 flex items-center justify-between rounded bg-[#B8291E] px-2.5 py-1.5 text-[10px] font-semibold text-white">
-                  <span>APK Geldig t/m 01-10-2030 · Plan APK</span>
-                  <ArrowUpRight className="h-3 w-3" />
-                </div>
-              </div>
-            </TileStudioWidgetFrame>
+              </TileStudioWidgetFrame>
+            </div>
+          </div>
+
+          <div className="col-span-5 overflow-hidden rounded-xl border border-[#1C1C1C]/12 bg-[#141416]">
+            <img
+              src={brakeDiscImg}
+              alt="Korver Auto performance brake rotor"
+              className="h-full w-full object-cover"
+            />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // 03 — NOTARIS & RECHT (Notariaat & Juridisch)
+  if (projectId === 'swiss-minimalism') {
+    return (
+      <div className="font-demo-dmsans relative h-[425px] w-[680px] overflow-hidden bg-[#241911] text-[#FAF5ED]">
+        <img
+          src={notarisWalnutImg}
+          alt="Warm notary wood office interior"
+          className="absolute inset-0 h-full w-full object-cover object-center"
+        />
+        <div
+          aria-hidden="true"
+          className="absolute inset-0"
+          style={{
+            background:
+              'linear-gradient(98deg, rgba(24,17,12,0.92) 0%, rgba(30,21,15,0.74) 48%, rgba(24,17,12,0.22) 100%)',
+          }}
+        />
+        <div
+          aria-hidden="true"
+          className="absolute inset-x-0 bottom-0 h-32"
+          style={{
+            background:
+              'linear-gradient(180deg, transparent 0%, rgba(18,13,9,0.78) 100%)',
+          }}
+        />
+
+        {/* Top Bar */}
+        <div className="relative z-10 flex items-center justify-between px-6 pt-4">
+          <span className="inline-flex items-center gap-2 text-[14px] font-semibold tracking-[-0.01em] text-[#FAF5ED]">
+            <span className="flex h-6 w-6 items-center justify-center rounded-md border border-[#E2AD5E]/60 bg-[#E2AD5E]/15 text-[#E2AD5E]">
+              <Scale className="h-3.5 w-3.5" />
+            </span>
+            <span>Notaris &amp; Recht</span>
+          </span>
+          <div className="flex items-center gap-4 text-[10px] font-medium text-[#FAF5ED]/75">
+            <span>Vakgebieden</span>
+            <span>Kantoren</span>
+            <span>Over ons</span>
+            <span>Log in</span>
+          </div>
+          <span className="rounded-md bg-[#E2AD5E] px-3 py-1.5 text-[10px] font-semibold text-[#1C140D] shadow-sm">
+            Kennismaking
+          </span>
+        </div>
+
+        {/* Hero Copy */}
+        <div className="relative z-10 px-6 pt-7">
+          <p className="text-[10.5px] font-semibold tracking-[0.04em] text-[#E2AD5E]">
+            Notariaat &amp; Juridisch
+          </p>
+          <h3 className="mt-1.5 max-w-[350px] text-[34px] leading-[1.03] font-bold tracking-[-0.02em] text-white">
+            Zekerheid bij elke grote stap.
+          </h3>
+          <p className="mt-2 max-w-[320px] text-[11px] leading-[1.45] text-[#FAF5ED]/78">
+            Persoonlijk advies en duidelijke notariële aktes voor gezin, vastgoed en onderneming.
+          </p>
+          <div className="mt-4 flex items-center gap-2.5">
+            <span className="rounded-md bg-[#E2AD5E] px-3.5 py-2 text-[10.5px] font-bold text-[#1C140D] shadow-sm">
+              Contact op maat
+            </span>
+            <span className="rounded-md border border-[#FAF5ED]/30 bg-black/25 px-3.5 py-2 text-[10.5px] font-medium text-[#FAF5ED]">
+              Vakgebieden →
+            </span>
           </div>
         </div>
 
-        <div className="col-span-5 overflow-hidden rounded-xl border border-[#1C1C1C]/12 bg-[#141416]">
-          <img
-            src={brakeDiscImg}
-            alt="Korver Auto performance brake rotor"
-            className="h-full w-full object-cover"
-          />
+        {/* Floating 3 Cream Legal Feature Cards */}
+        <div className="relative z-10 mt-6 grid grid-cols-3 gap-3 px-6">
+          <div className="rounded-xl border border-white/75 bg-[#FBF6EE] p-3 text-[#1C1917] shadow-lg">
+            <div className="flex items-center gap-1.5">
+              <FileCheck2 className="h-3.5 w-3.5 text-[#C58C3C]" />
+              <span className="text-[11px] font-bold">Oprichting</span>
+            </div>
+            <p className="mt-1.5 text-[8.5px] leading-[1.4] text-[#1C1917]/65">
+              Heldere statuten, aandeelhoudersovereenkomst en snelle inschrijving.
+            </p>
+          </div>
+          <div className="rounded-xl border border-white/75 bg-[#FBF6EE] p-3 text-[#1C1917] shadow-lg">
+            <div className="flex items-center gap-1.5">
+              <Landmark className="h-3.5 w-3.5 text-[#C58C3C]" />
+              <span className="text-[11px] font-bold">Kostenbeheer</span>
+            </div>
+            <p className="mt-1.5 text-[8.5px] leading-[1.4] text-[#1C1917]/65">
+              Transparante vaste tarieven voor iedere leverings- of hypotheekakte.
+            </p>
+          </div>
+          <div className="rounded-xl border border-white/75 bg-[#FBF6EE] p-3 text-[#1C1917] shadow-lg">
+            <div className="flex items-center gap-1.5">
+              <CheckCircle2 className="h-3.5 w-3.5 text-[#C58C3C]" />
+              <span className="text-[11px] font-bold">Vastgoed &amp; Familie</span>
+            </div>
+            <p className="mt-1.5 text-[8.5px] leading-[1.4] text-[#1C1917]/65">
+              Zorgvuldige begeleiding bij overdracht, samenwonen en testament.
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // 06 — BOUTIQUE GYM (Gyms, Trainers & Personal Coaching)
+  if (projectId === 'kinetic-performance') {
+    return (
+      <div className="font-demo-outfit relative h-[425px] w-[680px] overflow-hidden bg-[#111113] text-[#F5F2EB]">
+        <img
+          src={boutiqueGymImg}
+          alt="Boutique gym strength training interior"
+          className="absolute inset-0 h-full w-full object-cover object-center"
+        />
+        <div
+          aria-hidden="true"
+          className="absolute inset-0"
+          style={{
+            background:
+              'linear-gradient(95deg, rgba(10,10,12,0.92) 0%, rgba(12,12,15,0.72) 48%, rgba(10,10,12,0.28) 100%)',
+          }}
+        />
+
+        {/* Top Bar */}
+        <div className="relative z-10 flex items-center justify-between px-6 pt-4">
+          <span className="font-demo-oswald text-[16px] font-bold tracking-[0.04em] text-white uppercase">
+            BOUTIQUE GYM
+          </span>
+          <div className="flex items-center gap-4 text-[10px] font-medium text-white/75">
+            <span>Roosters</span>
+            <span>Programma</span>
+            <span>Trainers</span>
+            <span>Log in</span>
+          </div>
+          <span className="rounded-md bg-[#EA580C] px-3 py-1.5 text-[10px] font-semibold text-white shadow-sm">
+            Train gratis mee
+          </span>
+        </div>
+
+        {/* Hero Copy */}
+        <div className="relative z-10 flex h-[calc(100%-60px)] flex-col justify-between px-6 pt-12 pb-3">
+          <div>
+            <p className="text-[10.5px] font-semibold tracking-[0.02em] text-[#EA580C]">
+              Boutique Gym &amp; Personal Training
+            </p>
+            <h3 className="mt-1.5 max-w-[390px] text-[37px] leading-[1.03] font-bold tracking-[-0.025em] text-white">
+              Train op jouw niveau, zonder drukte.
+            </h3>
+            <p className="mt-2.5 max-w-[310px] text-[11px] leading-[1.45] text-white/72">
+              Persoonlijke krachttraining en small-group coaching in een rustige studio met vaste begeleiding.
+            </p>
+            <div className="mt-5">
+              <span className="inline-flex rounded-md bg-[#EA580C] px-4 py-2 text-[11px] font-semibold text-white shadow-md">
+                Plan proefles
+              </span>
+            </div>
+          </div>
+
+          {/* Subtle Bottom Tab Strip */}
+          <div className="grid grid-cols-3 gap-3">
+            <div className="rounded-t-xl border-t border-x border-white/10 bg-[#141417]/88 px-3 py-2 text-[9.5px] font-semibold text-white/78">
+              01 · Strength Club
+            </div>
+            <div className="rounded-t-xl border-t border-x border-white/10 bg-[#141417]/88 px-3 py-2 text-[9.5px] font-semibold text-white/78">
+              02 · 1-op-1 Coaching
+            </div>
+            <div className="rounded-t-xl border-t border-x border-white/10 bg-[#141417]/88 px-3 py-2 text-[9.5px] font-semibold text-white/78">
+              03 · Small Group
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // 08 — CREATIVE STUDIO & EVENTS (Agencies, Festivals & Cultuur)
+  if (projectId === 'neo-brutalist-pop') {
+    return (
+      <div className="font-demo-dmsans relative h-[425px] w-[680px] overflow-hidden bg-white text-[#09090B]">
+        {/* Header Bar */}
+        <div className="flex items-center justify-between border-b border-black/8 px-6 py-3">
+          <span className="flex h-6 w-6 items-center justify-center rounded bg-[#09090B] text-[11px] font-black text-white">
+            S
+          </span>
+          <div className="flex items-center gap-5 text-[10.5px] font-medium text-[#09090B]/70">
+            <span>Portfolio</span>
+            <span>Media</span>
+            <span>Events</span>
+            <span>Contact</span>
+          </div>
+          <Menu className="h-4 w-4 text-[#09090B]" />
+        </div>
+
+        {/* 2-Row Bento Masonry Grid matching screenshot proportions */}
+        <div className="grid h-[calc(100%-49px)] grid-rows-2 gap-2.5 px-6 pt-3 pb-4">
+          {/* Top Row */}
+          <div className="grid grid-cols-12 gap-2.5">
+            <div className="col-span-6 flex items-center pr-2">
+              <h3 className="text-[28px] leading-[1.06] font-bold tracking-[-0.03em] text-[#09090B]">
+                Merken en evenementen die blijven hangen.
+              </h3>
+            </div>
+            <div className="col-span-3 overflow-hidden rounded-xl bg-[#0B0B0E]">
+              <img
+                src={studioEditorialImg}
+                alt="Stage spotlight editorial portrait"
+                className="h-full w-full object-cover object-top"
+              />
+            </div>
+            <div className="col-span-3 flex flex-col gap-2">
+              <div className="flex-1 overflow-hidden rounded-xl bg-[#E4E4E7]">
+                <img
+                  src={studioMonoImg}
+                  alt="Creative director monochrome portrait"
+                  className="h-full w-full object-cover object-top"
+                />
+              </div>
+              <div className="rounded-xl bg-[#09090B] px-3 py-2 text-white">
+                <p className="text-[8px] font-semibold tracking-[0.04em] text-white/75 uppercase">
+                  Live Stages &amp; Film
+                </p>
+                <p className="mt-0.5 text-[9px] font-bold">
+                  120+ Producties
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Bottom Row */}
+          <div className="grid grid-cols-12 gap-2.5">
+            <div className="col-span-3 overflow-hidden rounded-xl bg-[#EF4444]">
+              <img
+                src={studioCrimsonImg}
+                alt="Crimson concert portrait"
+                className="h-full w-full object-cover object-top"
+              />
+            </div>
+            <div className="col-span-3 overflow-hidden rounded-xl bg-[#18181B]">
+              <img
+                src={studioMonoImg}
+                alt="Monochrome festival profile"
+                className="h-full w-full scale-110 object-cover object-center grayscale contrast-125"
+              />
+            </div>
+            <div className="col-span-3 flex flex-col justify-between rounded-xl bg-[#F4F4F5] p-3 text-[#09090B]">
+              <div>
+                <p className="text-[11px] font-bold">18+</p>
+                <p className="mt-1 text-[8.5px] leading-[1.35] text-[#09090B]/70">
+                  Jaar ervaring met merkactivaties, festivals en culturele campagnes.
+                </p>
+              </div>
+              <span className="text-[8.5px] font-semibold text-[#09090B]">
+                Meer →
+              </span>
+            </div>
+            <div className="col-span-3 overflow-hidden rounded-xl bg-[#DC2626]">
+              <img
+                src={studioCrimsonImg}
+                alt="Live event close-up stage"
+                className="h-full w-full scale-125 object-cover object-bottom"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // 12 — B2B SOFTWARE & SAAS (SaaS, Apps & Automatisering)
+  return (
+    <div className="font-demo-dmsans relative h-[425px] w-[680px] overflow-hidden bg-[#F1F5F9] p-3 text-[#0F172A]">
+      <div className="flex h-full w-full flex-col overflow-hidden rounded-2xl border border-[#CBD5E1]/70 bg-[#F8FAFC] shadow-sm">
+        {/* Browser Chrome Strip */}
+        <div className="flex items-center justify-between border-b border-[#E2E8F0] bg-white px-4 py-1.5">
+          <div className="flex items-center gap-1.5">
+            <span className="h-2 w-2 rounded-full bg-[#FCA5A5]" />
+            <span className="h-2 w-2 rounded-full bg-[#FDE047]" />
+            <span className="h-2 w-2 rounded-full bg-[#86EFAC]" />
+          </div>
+          <span className="font-mono-tabular rounded bg-[#F1F5F9] px-3 py-0.5 text-[8px] text-[#64748B]">
+            app.b2bsuite.nl/dashboard
+          </span>
+          <span className="w-8" />
+        </div>
+
+        {/* App Nav Bar */}
+        <div className="flex items-center justify-between border-b border-[#E2E8F0]/70 bg-white px-5 py-2.5">
+          <span className="text-[12px] font-bold tracking-[-0.015em] text-[#0F172A]">
+            B2B Software &amp; ...
+          </span>
+          <div className="flex items-center gap-3">
+            <span className="text-[9.5px] font-medium text-[#64748B]">Log in</span>
+            <span className="rounded-md bg-[#2563EB] px-2.5 py-1 text-[9.5px] font-semibold text-white">
+              Gratis proberen
+            </span>
+          </div>
+        </div>
+
+        {/* Split Hero + Bento Analytics Dashboard */}
+        <div className="grid flex-1 grid-cols-12 gap-3.5 p-4">
+          {/* Left SaaS Value Prop + KPI cards */}
+          <div className="col-span-5 flex flex-col justify-between py-1">
+            <div>
+              <span className="inline-flex rounded-full bg-[#DBEAFE] px-2.5 py-0.5 text-[8.5px] font-semibold text-[#1D4ED8]">
+                Nieuw · Slimme Automatisering
+              </span>
+              <h3 className="mt-2.5 text-[23px] leading-[1.08] font-bold tracking-[-0.025em] text-[#0F172A]">
+                Minder handwerk, meer grip op je cijfers.
+              </h3>
+              <p className="mt-2 text-[9.5px] leading-[1.45] text-[#64748B]">
+                Automatische facturatie, realtime dashboards en foutloze synchronisatie voor teams.
+              </p>
+              <div className="mt-3.5 flex items-center gap-2.5">
+                <span className="rounded-md bg-[#2563EB] px-3 py-1.5 text-[9.5px] font-semibold text-white shadow-xs">
+                  Start proefperiode
+                </span>
+                <span className="text-[9.5px] font-semibold text-[#475569]">
+                  Bekijk demo →
+                </span>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-2 pt-2">
+              <div className="rounded-xl border border-[#E2E8F0] bg-white p-2.5">
+                <p className="font-mono-tabular text-[13px] font-bold text-[#0F172A]">
+                  4.500+
+                </p>
+                <p className="text-[8px] text-[#64748B]">Actieve bedrijven</p>
+              </div>
+              <div className="rounded-xl border border-[#E2E8F0] bg-white p-2.5">
+                <p className="font-mono-tabular text-[13px] font-bold text-[#2563EB]">
+                  98.4%
+                </p>
+                <p className="text-[8px] text-[#64748B]">Klantscore</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Right 4 Dashboard Bento Modules */}
+          <div className="col-span-7 grid grid-cols-2 grid-rows-2 gap-2.5">
+            {/* Module 1: Activity Bar Chart */}
+            <div className="flex flex-col justify-between rounded-xl border border-[#E2E8F0] bg-white p-3">
+              <div className="flex items-center justify-between">
+                <span className="text-[8.5px] font-semibold text-[#64748B]">
+                  Activity Dashboard
+                </span>
+                <span className="font-mono-tabular text-[9px] font-bold text-[#0F172A]">
+                  € 142.8K
+                </span>
+              </div>
+              <div className="mt-2 flex h-20 items-end justify-between gap-2 px-1">
+                <span className="h-[46%] w-full rounded-t bg-[#3B82F6]" />
+                <span className="h-[72%] w-full rounded-t bg-[#F97316]" />
+                <span className="h-[54%] w-full rounded-t bg-[#FACC15]" />
+                <span className="h-[88%] w-full rounded-t bg-[#2563EB]" />
+                <span className="h-[64%] w-full rounded-t bg-[#10B981]" />
+                <span className="h-[78%] w-full rounded-t bg-[#6366F1]" />
+              </div>
+            </div>
+
+            {/* Module 2: Workflow Checklist */}
+            <div className="flex flex-col justify-between rounded-xl border border-[#E2E8F0] bg-white p-3">
+              <div className="flex items-center justify-between">
+                <span className="text-[8.5px] font-semibold text-[#64748B]">
+                  Checklist
+                </span>
+                <span className="rounded-full bg-[#DCFCE7] px-1.5 py-0.5 text-[7.5px] font-bold text-[#15803D]">
+                  LIVE SYNC
+                </span>
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <div className="flex items-center gap-1.5 rounded-md bg-[#F8FAFC] px-2 py-1 text-[8.5px] font-medium">
+                  <span className="h-2 w-2 rounded-full bg-[#F97316]" />
+                  <span>Factuur koppeling</span>
+                </div>
+                <div className="flex items-center gap-1.5 rounded-md bg-[#F8FAFC] px-2 py-1 text-[8.5px] font-medium">
+                  <span className="h-2 w-2 rounded-full bg-[#10B981]" />
+                  <span>Bank mutaties</span>
+                </div>
+                <div className="flex items-center gap-1.5 rounded-md bg-[#F8FAFC] px-2 py-1 text-[8.5px] font-medium">
+                  <span className="h-2 w-2 rounded-full bg-[#2563EB]" />
+                  <span>BTW rapportage</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Module 3: Efficiency Donut */}
+            <div className="flex items-center justify-between rounded-xl border border-[#E2E8F0] bg-white p-3">
+              <div>
+                <p className="text-[8.5px] font-semibold text-[#64748B]">
+                  Efficiency
+                </p>
+                <p className="font-mono-tabular mt-1 text-[16px] font-bold text-[#0F172A]">
+                  +78%
+                </p>
+                <p className="text-[7.5px] text-[#64748B]">Minder handwerk</p>
+              </div>
+              <svg viewBox="0 0 36 36" className="h-14 w-14 -rotate-90">
+                <circle
+                  cx="18"
+                  cy="18"
+                  r="13"
+                  fill="none"
+                  stroke="#E2E8F0"
+                  strokeWidth="5"
+                />
+                <circle
+                  cx="18"
+                  cy="18"
+                  r="13"
+                  fill="none"
+                  stroke="#3B82F6"
+                  strokeWidth="5"
+                  strokeDasharray="34 82"
+                />
+                <circle
+                  cx="18"
+                  cy="18"
+                  r="13"
+                  fill="none"
+                  stroke="#FACC15"
+                  strokeWidth="5"
+                  strokeDasharray="22 82"
+                  strokeDashoffset="-34"
+                />
+                <circle
+                  cx="18"
+                  cy="18"
+                  r="13"
+                  fill="none"
+                  stroke="#F97316"
+                  strokeWidth="5"
+                  strokeDasharray="16 82"
+                  strokeDashoffset="-56"
+                />
+              </svg>
+            </div>
+
+            {/* Module 4: Dark Calculator Quickpad */}
+            <div className="flex flex-col justify-between rounded-xl bg-[#0F172A] p-3 text-white">
+              <div className="flex items-center justify-between">
+                <span className="text-[8px] font-semibold tracking-[0.04em] text-white/60 uppercase">
+                  Margin Calc
+                </span>
+                <span className="font-mono-tabular text-[9.5px] font-bold text-[#60A5FA]">
+                  € 4.250
+                </span>
+              </div>
+              <div className="grid grid-cols-4 gap-1">
+                {['7', '8', '9', '÷', '4', '5', '6', '×', '1', '2', '3', 'OK'].map(
+                  (key) => (
+                    <span
+                      key={key}
+                      className={`font-mono-tabular flex h-4.5 items-center justify-center rounded text-[8px] font-semibold ${
+                        key === 'OK'
+                          ? 'bg-[#2563EB] text-white'
+                          : 'bg-white/10 text-white/80'
+                      }`}
+                    >
+                      {key}
+                    </span>
+                  ),
+                )}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

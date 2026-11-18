@@ -1,7 +1,6 @@
 import { ArrowLeft } from 'lucide-react';
 import { ProjectItem } from '../data/projects';
 import { SelectedWorkGrid } from './SelectedWorkGrid';
-import { DirectionsMarqueeShowcase } from './DirectionsMarqueeShowcase';
 
 interface WorkPageProps {
   onSelectProject: (project: ProjectItem) => void;
@@ -34,9 +33,6 @@ export function WorkPage({
           onStartProject={onStartProject}
           onBackToOverview={onBackToOverview}
         />
-
-        {/* Continuous Horizontal 4-Demo Showcase Marquee (Barber, Autogarage, Horeca, Fashionshop) */}
-        <DirectionsMarqueeShowcase onOpenLiveDemo={onOpenLiveDemo} />
 
         {/* Dedicated Directions Page Closing CTA & Studio Footer */}
         <section

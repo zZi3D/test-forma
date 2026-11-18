@@ -6,9 +6,11 @@
 import { Suspense, lazy, useCallback, useEffect, useState } from 'react';
 import { IndustryFilter, ProjectItem } from './data/projects';
 import { WaveBackground } from './components/WaveBackground';
+import { ScrollProgressBar } from './components/ScrollProgressBar';
 import { GlassHeader } from './components/GlassHeader';
 import { HeroSection } from './components/HeroSection';
 import { SelectedWorkGrid } from './components/SelectedWorkGrid';
+import { DirectionsMarqueeShowcase } from './components/DirectionsMarqueeShowcase';
 import { StylePlayground } from './components/StylePlayground';
 import { ProcessSection } from './components/ProcessSection';
 
@@ -186,6 +188,9 @@ export default function App() {
       {/* Pinned 52-line 3D Perspective HTML5 2D Canvas Wave + Mist Overlay */}
       <WaveBackground />
 
+      {/* Subtle Top Scroll Progress Bar on Homepage */}
+      {currentPage === 'home' && <ScrollProgressBar />}
+
       {/* Sticky Elevated Glass Floating Header */}
       <GlassHeader
         activePage={currentPage}
@@ -245,6 +250,10 @@ export default function App() {
                 onSelectProject={handleSelectProject}
                 onOpenLiveDemo={(demoId) => navigateTo('examples', demoId)}
                 onStartProject={() => openBookingDrawer('brief')}
+              />
+
+              <DirectionsMarqueeShowcase
+                onOpenLiveDemo={(demoId) => navigateTo('examples', demoId)}
               />
 
               <StylePlayground
