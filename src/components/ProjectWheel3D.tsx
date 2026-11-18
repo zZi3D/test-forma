@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { ChevronLeft, ChevronRight, Pause, Play } from 'lucide-react';
 import { PROJECTS, ProjectItem } from '../data/projects';
 import { useProjectThumbnails } from '../utils/mockupGenerator';
+import { hasLiveDemoArtboard, ScaledDemoArtboard } from './DemoArtboardPreview';
 
 interface ProjectWheel3DProps {
   onSelectProject: (project: ProjectItem) => void;
@@ -525,18 +526,27 @@ export function ProjectWheel3D({
                       className="relative aspect-[16/10] w-full overflow-hidden rounded-xl border border-[#1C1B18]/10"
                       style={{ backgroundColor: project.palette.bg }}
                     >
-                      {imgSrc && (
-                        <img
-                          src={imgSrc}
-                          alt={`${project.businessTitle} (${project.styleSubtitle}) — ${project.targetBusinesses}`}
-                          draggable={false}
-                          decoding="async"
-                          referrerPolicy="no-referrer"
-                          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
-                        />
+                      {hasLiveDemoArtboard(project.id) ? (
+                        <div className="h-full w-full transition-transform duration-500 group-hover:scale-[1.02]">
+                          <ScaledDemoArtboard
+                            projectId={project.id}
+                            initialWidth={dimensions.cardWidth - 24}
+                          />
+                        </div>
+                      ) : (
+                        imgSrc && (
+                          <img
+                            src={imgSrc}
+                            alt={`${project.businessTitle} (${project.styleSubtitle}) — ${project.targetBusinesses}`}
+                            draggable={false}
+                            decoding="async"
+                            referrerPolicy="no-referrer"
+                            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+                          />
+                        )
                       )}
                     </div>
-                    <div className="mt-2.5 flex items-baseline justify-between gap-2 px-1">
+                    <div className="mt-2.5 flex items-center justify-between gap-2 px-1">
                       <div className="min-w-0">
                         <span className="block truncate text-[13px] font-semibold tracking-[-0.015em] text-[#1C1B18] sm:text-[15px]">
                           {project.businessTitle}
@@ -545,9 +555,16 @@ export function ProjectWheel3D({
                           {project.targetBusinesses}
                         </span>
                       </div>
-                      <span className="font-mono-tabular shrink-0 text-[11px] text-[#1C1B18]/65 sm:text-[12px]">
-                        {project.index}
-                      </span>
+                      <div className="flex shrink-0 flex-col items-end gap-0.5">
+                        <span className="font-mono-tabular text-[11px] leading-none text-[#1C1B18]/65 sm:text-[12px]">
+                          {project.index}
+                        </span>
+                        {project.linkedDemoId && (
+                          <span className="font-mono-tabular rounded-full bg-[#2563EB] px-1.5 py-0.5 text-[7.5px] font-bold tracking-[0.04em] text-white uppercase shadow-xs">
+                            Live Demo ↗
+                          </span>
+                        )}
+                      </div>
                     </div>
                   </button>
 

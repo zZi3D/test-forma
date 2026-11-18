@@ -8,20 +8,27 @@ import { DemoBuitenwerkBand } from './examples/DemoBuitenwerkBand';
 import { DemoBarberBand } from './examples/DemoBarberBand';
 import { DemoHorecaBand } from './examples/DemoHorecaBand';
 import { DemoFashionBand } from './examples/DemoFashionBand';
+import { DemoCandyPopBand } from './examples/DemoCandyPopBand';
 
 interface ExamplesPageProps {
+  initialDemoId?: string | null;
+  onConsumeInitialDemo?: () => void;
   onStartProject: (prefilledStyle?: string) => void;
   onBookCall: () => void;
   onBackToOverview: () => void;
 }
 
 export function ExamplesPage({
+  initialDemoId,
+  onConsumeInitialDemo,
   onStartProject,
   onBookCall,
   onBackToOverview,
 }: ExamplesPageProps) {
   const [lang, setLang] = useState<DemoLang>('nl');
-  const [activeDemoId, setActiveDemoId] = useState<string>(DEMO_JUMP_ITEMS[0].id);
+  const [activeDemoId, setActiveDemoId] = useState<string>(
+    initialDemoId || DEMO_JUMP_ITEMS[0].id,
+  );
   const stickyBarRef = useRef<HTMLDivElement | null>(null);
   const manualLockUntilRef = useRef<number>(0);
 
@@ -102,6 +109,28 @@ export function ExamplesPage({
     };
   }, []);
 
+  useEffect(() => {
+    if (!initialDemoId) return;
+    const raf = window.requestAnimationFrame(() => {
+      const target = document.getElementById(initialDemoId);
+      if (target) {
+        setActiveDemoId(initialDemoId);
+        manualLockUntilRef.current = Date.now() + 900;
+        const stickyHeight = stickyBarRef.current?.offsetHeight ?? 62;
+        const stickyTop = window.innerWidth >= 768 ? 78 : 70;
+        const clearance = stickyTop + stickyHeight + 8;
+        const targetTop =
+          target.getBoundingClientRect().top + window.scrollY - clearance;
+        window.scrollTo({
+          top: Math.max(0, targetTop),
+          behavior: 'smooth',
+        });
+      }
+      onConsumeInitialDemo?.();
+    });
+    return () => window.cancelAnimationFrame(raf);
+  }, [initialDemoId, onConsumeInitialDemo]);
+
   const jumpToBand = (id: string) => {
     setActiveDemoId(id);
     manualLockUntilRef.current = Date.now() + 750;
@@ -123,10 +152,10 @@ export function ExamplesPage({
   const t = {
     nl: {
       back: 'Terug naar Studio Overview',
-      kicker: 'Testpagina · 5 Interactieve Branch-Demo’s',
-      title: 'Vijf eigen werelden. Werkend met echte API’s.',
+      kicker: 'Testpagina · 6 Interactieve Branch-Demo’s',
+      title: 'Zes eigen werelden. Werkend met echte API’s.',
       subtitle:
-        'Scroll door alle vijf volledige demo’s — elk met een eigen header, eigen typografie, uniek kleurenpalet en direct testbare live data.',
+        'Scroll door alle zes volledige demo’s — elk met een eigen header, eigen typografie, uniek kleurenpalet en direct testbare interactieve functies.',
       closingKicker: 'Klaar voor een eigen live concept?',
       closingTitle:
         'Ontvang binnen 24 uur jouw persoonlijke websiteplan en eerste klikbare concept.',
@@ -136,10 +165,10 @@ export function ExamplesPage({
     },
     en: {
       back: 'Back to Studio Overview',
-      kicker: 'Test Sandbox · 5 Interactive Industry Demos',
-      title: 'Five distinct web worlds. Live working APIs.',
+      kicker: 'Test Sandbox · 6 Interactive Industry Demos',
+      title: 'Six distinct web worlds. Live working APIs.',
       subtitle:
-        'Scroll through all five showcase bands — each crafted with its own header geometry, typography pairing, color palette, and live interactive tools.',
+        'Scroll through all six showcase bands — each crafted with its own header geometry, typography pairing, color palette, and live interactive tools.',
       closingKicker: 'Ready for your own live concept?',
       closingTitle:
         'Receive your tailored website plan and first clickable concept within 24 hours.',
@@ -307,6 +336,16 @@ export function ExamplesPage({
             className="border-t border-[#1C1B18]/10 pt-10 md:pt-12"
           >
             <DemoFashionBand
+              lang={lang}
+              onBuildInStyle={(desc) => onStartProject(desc)}
+            />
+          </DemoWorkbenchFrame>
+
+          <DemoWorkbenchFrame
+            id="demo-candyshop"
+            className="border-t border-[#1C1B18]/10 pt-10 md:pt-12"
+          >
+            <DemoCandyPopBand
               lang={lang}
               onBuildInStyle={(desc) => onStartProject(desc)}
             />

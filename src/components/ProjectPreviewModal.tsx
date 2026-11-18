@@ -1,14 +1,16 @@
 import { useEffect } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import { ArrowLeft, ArrowRight, Check, Sparkles, X } from 'lucide-react';
+import { ArrowLeft, ArrowRight, ArrowUpRight, Check, Sparkles, X } from 'lucide-react';
 import { PROJECTS, ProjectItem } from '../data/projects';
 import { useProjectModalPreview } from '../utils/mockupGenerator';
+import { hasLiveDemoArtboard, ScaledDemoArtboard } from './DemoArtboardPreview';
 
 interface ProjectPreviewModalProps {
   project: ProjectItem | null;
   onClose: () => void;
   onSelectProject: (project: ProjectItem) => void;
   onStartSimilarSprint: (project: ProjectItem) => void;
+  onOpenLiveDemo?: (demoId: string) => void;
 }
 
 export function ProjectPreviewModal({
@@ -16,6 +18,7 @@ export function ProjectPreviewModal({
   onClose,
   onSelectProject,
   onStartSimilarSprint,
+  onOpenLiveDemo,
 }: ProjectPreviewModalProps) {
   useEffect(() => {
     if (!project) return;
@@ -115,7 +118,9 @@ export function ProjectPreviewModal({
               className="mt-6 aspect-[16/10] w-full overflow-hidden rounded-xl border border-[#1C1B18]/10"
               style={{ backgroundColor: project.palette.bg }}
             >
-              {previewUrl ? (
+              {hasLiveDemoArtboard(project.id) ? (
+                <ScaledDemoArtboard projectId={project.id} initialWidth={960} />
+              ) : previewUrl ? (
                 <img
                   src={previewUrl}
                   alt={`${project.businessTitle} (${project.styleSubtitle}) website preview`}
@@ -260,6 +265,21 @@ export function ProjectPreviewModal({
                     <ArrowRight className="h-4 w-4" />
                   </button>
                 </div>
+
+                {project.linkedDemoId && onOpenLiveDemo && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const targetDemoId = project.linkedDemoId!;
+                      onClose();
+                      onOpenLiveDemo(targetDemoId);
+                    }}
+                    className="inline-flex h-10 items-center justify-center gap-1.5 rounded-full border border-[#2563EB]/30 bg-[#2563EB] px-4 text-[12px] font-semibold text-white whitespace-nowrap shrink-0 shadow-[0_8px_20px_-8px_rgba(37,99,235,0.55)] transition-colors hover:bg-[#1D4ED8] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2563EB]"
+                  >
+                    <span>Bekijk live demo</span>
+                    <ArrowUpRight className="h-3.5 w-3.5" />
+                  </button>
+                )}
 
                 <button
                   type="button"

@@ -63,6 +63,7 @@ function getInitialPage(): PageView {
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState<PageView>(getInitialPage);
+  const [pendingDemoScrollId, setPendingDemoScrollId] = useState<string | null>(null);
   const [selectedProject, setSelectedProject] = useState<ProjectItem | null>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [bookingState, setBookingState] = useState<{
@@ -93,7 +94,7 @@ export default function App() {
   }, []);
 
   const navigateTo = useCallback(
-    (target: string) => {
+    (target: string, demoId?: string) => {
       if (target === 'work') {
         if (window.location.hash !== '#/directions') {
           window.history.pushState(null, '', '#/directions');
@@ -107,8 +108,11 @@ export default function App() {
         if (window.location.hash !== '#/examples') {
           window.history.pushState(null, '', '#/examples');
         }
+        setPendingDemoScrollId(demoId ?? null);
         setCurrentPage('examples');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        if (!demoId) {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
         return;
       }
 
@@ -195,6 +199,7 @@ export default function App() {
           <Suspense fallback={<div className="min-h-screen" />}>
             <WorkPage
               onSelectProject={handleSelectProject}
+              onOpenLiveDemo={(demoId) => navigateTo('examples', demoId)}
               onStartProject={() => openBookingDrawer('brief')}
               onBookCall={() => openBookingDrawer('call')}
               onBackToOverview={() => navigateTo('hero-wave')}
@@ -205,6 +210,8 @@ export default function App() {
         <main className="relative z-10">
           <Suspense fallback={<div className="min-h-screen" />}>
             <ExamplesPage
+              initialDemoId={pendingDemoScrollId}
+              onConsumeInitialDemo={() => setPendingDemoScrollId(null)}
               onStartProject={(prefilledStyle) =>
                 openBookingDrawer('brief', undefined, prefilledStyle)
               }
@@ -236,6 +243,7 @@ export default function App() {
             <div className="relative z-10">
               <SelectedWorkGrid
                 onSelectProject={handleSelectProject}
+                onOpenLiveDemo={(demoId) => navigateTo('examples', demoId)}
                 onStartProject={() => openBookingDrawer('brief')}
               />
 
@@ -261,6 +269,7 @@ export default function App() {
             project={selectedProject}
             onClose={() => setSelectedProject(null)}
             onSelectProject={handleSelectProject}
+            onOpenLiveDemo={(demoId) => navigateTo('examples', demoId)}
             onStartSimilarSprint={(project) => {
               setSelectedProject(null);
               openBookingDrawer(

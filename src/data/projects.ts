@@ -65,6 +65,8 @@ export interface DesignDirection {
   uiStyle: UiStyle;
   palette: ProjectPalette;
   previewSample: MockupPreviewContent;
+  linkedDemoId?: string;
+  linkedDemoLabel?: string;
 }
 
 export type ProjectConfig = DesignDirection;
@@ -86,6 +88,8 @@ export const PROJECTS: DesignDirection[] = [
     targetBusinesses: 'Treat & Gift Shops, D2C Stores',
     industries: ['Retail & Webshops'],
     bestMatchFor: ['Retail & Webshops'],
+    linkedDemoId: 'demo-candyshop',
+    linkedDemoLabel: 'Demo 06 · Candy Pop',
     problemSolved:
       'Boring online stores struggle to justify impulse purchases or bundle upsells. Playful color pops, social-proof review pills, and instant add-to-bag actions spark excitement and lift average order value.',
     bestFor: [
@@ -137,6 +141,8 @@ export const PROJECTS: DesignDirection[] = [
     targetBusinesses: 'Barbershops, Salons & Grooming',
     industries: ['Salons & Local'],
     bestMatchFor: ['Salons & Local'],
+    linkedDemoId: 'demo-barber',
+    linkedDemoLabel: 'Demo 03 · Barber',
     problemSolved:
       'Local barbershops and grooming studios lose bookings on generic template sites that undersell their craft. A matte charcoal look with atmospheric Barber Red backlight, Google 4.9★ reviews, and instant WhatsApp chair booking turns visitors into booked chairs.',
     bestFor: [
@@ -239,6 +245,8 @@ export const PROJECTS: DesignDirection[] = [
     targetBusinesses: 'Cafés, Bakeries & Hospitality',
     industries: ['Salons & Local', 'Retail & Webshops'],
     bestMatchFor: ['Salons & Local'],
+    linkedDemoId: 'demo-horeca',
+    linkedDemoLabel: 'Demo 04 · Horeca',
     problemSolved:
       'Neighborhood cafés and restaurants hide their menu inside clunky PDFs and miss spontaneous foot traffic. Rich espresso-on-cream storytelling paired with live Open-Meteo terrace weather and a tabbed coffee & pastry menu brings guests straight to your tables.',
     bestFor: [
@@ -290,6 +298,8 @@ export const PROJECTS: DesignDirection[] = [
     targetBusinesses: 'Fashion Labels, Eyewear & Boutiques',
     industries: ['Retail & Webshops', 'Salons & Local'],
     bestMatchFor: ['Retail & Webshops', 'Salons & Local'],
+    linkedDemoId: 'demo-fashion',
+    linkedDemoLabel: 'Demo 05 · Fashion',
     problemSolved:
       'Fashion capsules and style boutiques lose their allure in rigid white grids. Editorial blush-rose framing, deep wine contrast, and a vibrant Kelly-green instant drop selector build desire and convert visitors straight via WhatsApp or quick bag.',
     bestFor: [
@@ -494,6 +504,8 @@ export const PROJECTS: DesignDirection[] = [
     targetBusinesses: 'Landscapers, Architects & Roofing',
     industries: ['Advisory & B2B', 'Salons & Local'],
     bestMatchFor: ['Advisory & B2B'],
+    linkedDemoId: 'demo-buitenwerk',
+    linkedDemoLabel: 'Demo 02 · Architecture',
     problemSolved:
       'Architectural landscapers and bespoke roofing studios undersell €10k–€50k projects on generic contractor sites. Midnight pine editorial framing paired with live Dutch PDOK address lookup, 3-day build weather, and a transparent m² estimator pre-qualifies serious homeowners.',
     bestFor: [
@@ -545,6 +557,8 @@ export const PROJECTS: DesignDirection[] = [
     targetBusinesses: 'Garages, MOT Stations & Specialists',
     industries: ['Salons & Local', 'Tech & Products'],
     bestMatchFor: ['Tech & Products'],
+    linkedDemoId: 'demo-garage',
+    linkedDemoLabel: 'Demo 01 · Garage',
     problemSolved:
       'Drivers hesitate to book service online when garages look outdated or hide vehicle pricing. Combining warm industrial typography with a live Dutch RDW license plate & MOT lookup builds instant technical confidence and turns car owners into booked service bays.',
     bestFor: [

@@ -13,10 +13,12 @@ import {
   ProjectConfig,
 } from '../data/projects';
 import { useProjectThumbnails } from '../utils/mockupGenerator';
+import { hasLiveDemoArtboard, ScaledDemoArtboard } from './DemoArtboardPreview';
 import { ShowcaseMosaic } from './ShowcaseMosaic';
 
 interface SelectedWorkGridProps {
   onSelectProject: (project: ProjectConfig) => void;
+  onOpenLiveDemo?: (demoId: string) => void;
   onStartProject: () => void;
   variant?: 'section' | 'page';
   onBackToOverview?: () => void;
@@ -59,6 +61,7 @@ interface WorkTileCardProps {
   onHoverStart: (id: string) => void;
   onHoverEnd: () => void;
   onSelect: (project: ProjectConfig) => void;
+  onOpenLiveDemo?: (demoId: string) => void;
 }
 
 function WorkTileCard({
@@ -77,6 +80,7 @@ function WorkTileCard({
   onHoverStart,
   onHoverEnd,
   onSelect,
+  onOpenLiveDemo,
 }: WorkTileCardProps) {
   const buttonRef = useRef<HTMLButtonElement | null>(null);
   const sheenRef = useRef<HTMLDivElement | null>(null);
@@ -292,7 +296,11 @@ function WorkTileCard({
                   Best Match
                 </span>
               )}
-              {imgSrc ? (
+              {hasLiveDemoArtboard(project.id) ? (
+                <div className="h-full w-full transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.03]">
+                  <ScaledDemoArtboard projectId={project.id} initialWidth={270} />
+                </div>
+              ) : imgSrc ? (
                 <img
                   src={imgSrc}
                   alt={`${project.businessTitle} (${project.styleSubtitle}) — ${project.targetBusinesses}`}
@@ -308,7 +316,7 @@ function WorkTileCard({
               )}
             </div>
 
-            <div className="relative z-10 mt-2 flex items-baseline justify-between gap-1.5 px-0.5 sm:mt-3 sm:gap-2">
+            <div className="relative z-10 mt-2 flex items-center justify-between gap-1.5 px-0.5 sm:mt-3 sm:gap-2">
               <div className="min-w-0">
                 <h3 className="truncate text-[12.5px] font-semibold tracking-[-0.015em] text-[#1C1B18] transition-colors group-hover:text-[#C98A3A] sm:text-[14.5px]">
                   {project.businessTitle}
@@ -317,11 +325,34 @@ function WorkTileCard({
                   {project.targetBusinesses}
                 </p>
               </div>
-              <span className="font-mono-tabular shrink-0 text-[10px] font-medium text-[#1C1B18]/50 sm:text-[11px]">
-                {project.index}
-              </span>
+              <div className="flex shrink-0 flex-col items-end gap-0.5">
+                <span className="font-mono-tabular text-[10px] font-medium leading-none text-[#1C1B18]/50 sm:text-[11px]">
+                  {project.index}
+                </span>
+                {project.linkedDemoId && onOpenLiveDemo && (
+                  <span
+                    aria-hidden="true"
+                    className="font-mono-tabular invisible inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[8px] font-bold tracking-[0.04em] uppercase sm:px-2.5 sm:text-[8.5px]"
+                  >
+                    Live Demo ↗
+                  </span>
+                )}
+              </div>
             </div>
           </button>
+
+          {project.linkedDemoId && onOpenLiveDemo && (
+            <button
+              type="button"
+              tabIndex={isOpen ? 0 : -1}
+              onClick={() => onOpenLiveDemo(project.linkedDemoId!)}
+              aria-label={`Open live demo for ${project.businessTitle}`}
+              className="font-mono-tabular absolute right-2 bottom-2 z-30 inline-flex items-center gap-1 rounded-full bg-[#2563EB] px-2 py-0.5 text-[8px] font-bold tracking-[0.04em] text-white uppercase shadow-sm transition-transform duration-150 hover:scale-105 hover:bg-[#1D4ED8] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2563EB] sm:right-3 sm:bottom-2.5 sm:px-2.5 sm:text-[8.5px]"
+            >
+              <span>Live Demo</span>
+              <span aria-hidden="true">↗</span>
+            </button>
+          )}
         </div>
 
         {/* Back Face: Warm Alabaster Glass Cover matching Edition One brand palette (unmounted once settled) */}
@@ -374,6 +405,7 @@ function WorkTileCard({
 
 export function SelectedWorkGrid({
   onSelectProject,
+  onOpenLiveDemo,
   onStartProject,
   variant = 'section',
   onBackToOverview,
@@ -786,6 +818,7 @@ export function SelectedWorkGrid({
                     onHoverStart={(id) => setHoveredId(id)}
                     onHoverEnd={() => setHoveredId(null)}
                     onSelect={onSelectProject}
+                    onOpenLiveDemo={onOpenLiveDemo}
                   />
                 );
               })}
@@ -818,7 +851,10 @@ export function SelectedWorkGrid({
       </div>
 
       {!isStandalonePage && (
-        <ShowcaseMosaic onSelectProject={onSelectProject} />
+        <ShowcaseMosaic
+          onSelectProject={onSelectProject}
+          onOpenLiveDemo={onOpenLiveDemo}
+        />
       )}
     </section>
   );

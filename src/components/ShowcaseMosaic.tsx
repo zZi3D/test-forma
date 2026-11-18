@@ -8,9 +8,11 @@ import {
   ProjectConfig,
 } from '../data/projects';
 import { useProjectThumbnails } from '../utils/mockupGenerator';
+import { hasLiveDemoArtboard, ScaledDemoArtboard } from './DemoArtboardPreview';
 
 interface ShowcaseMosaicProps {
   onSelectProject: (project: ProjectConfig) => void;
+  onOpenLiveDemo?: (demoId: string) => void;
   isHeroPage?: boolean;
 }
 
@@ -75,6 +77,7 @@ interface CardFaceProps {
   isBestMatch?: boolean;
   isClickable: boolean;
   onSelect: (project: ProjectConfig) => void;
+  onOpenLiveDemo?: (demoId: string) => void;
 }
 
 function OpenProjectCard({
@@ -84,57 +87,87 @@ function OpenProjectCard({
   isBestMatch,
   isClickable,
   onSelect,
+  onOpenLiveDemo,
 }: CardFaceProps) {
   return (
-    <button
-      type="button"
-      tabIndex={isClickable ? 0 : -1}
-      onClick={() => onSelect(project)}
-      aria-label={`Inspect ${project.businessTitle} (${project.styleSubtitle})`}
-      className={`glass-tile group relative block w-full overflow-hidden rounded-2xl p-2 text-left transition-all duration-200 hover:border-[#C98A3A]/55 hover:shadow-[0_24px_48px_-14px_rgba(28,27,24,0.16)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#C98A3A] md:p-2.5 ${
-        isStartCard
-          ? 'border-white/85 shadow-[0_24px_54px_-18px_rgba(28,27,24,0.16)]'
-          : ''
-      }`}
-    >
-      <div
-        className="relative aspect-[16/10] w-full overflow-hidden rounded-xl border border-[#1C1B18]/10"
-        style={{ backgroundColor: project.palette.bg }}
+    <div className="relative">
+      <button
+        type="button"
+        tabIndex={isClickable ? 0 : -1}
+        onClick={() => onSelect(project)}
+        aria-label={`Inspect ${project.businessTitle} (${project.styleSubtitle})`}
+        className={`glass-tile group relative block w-full overflow-hidden rounded-2xl p-2 text-left transition-all duration-200 hover:border-[#C98A3A]/55 hover:shadow-[0_24px_48px_-14px_rgba(28,27,24,0.16)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#C98A3A] md:p-2.5 ${
+          isStartCard
+            ? 'border-white/85 shadow-[0_24px_54px_-18px_rgba(28,27,24,0.16)]'
+            : ''
+        }`}
       >
-        {isBestMatch && (
-          <span className="font-mono-tabular pointer-events-none absolute top-1.5 right-1.5 z-10 rounded-md border border-[#C98A3A]/45 bg-[#FAF8F4]/95 px-1.5 py-0.5 text-[8px] font-semibold tracking-[0.04em] text-[#B47323] uppercase shadow-xs md:top-2 md:right-2 md:px-2 md:text-[9px]">
-            Best Match
-          </span>
-        )}
-        {imageUrl ? (
-          <img
-            src={imageUrl}
-            alt={`${project.businessTitle} (${project.styleSubtitle}) — ${project.targetBusinesses}`}
-            referrerPolicy="no-referrer"
-            draggable={false}
-            className="h-full w-full object-cover object-top transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.03]"
-          />
-        ) : (
-          <div className="flex h-full w-full items-center justify-center p-3 text-xs font-medium text-[#1C1B18] md:p-4 md:text-sm">
-            {project.businessTitle}
-          </div>
-        )}
-      </div>
-
-      <div className="relative z-10 mt-2 flex items-baseline justify-between gap-1.5 px-0.5 md:mt-2.5 md:gap-2">
-        <div className="min-w-0">
-          <h3 className="truncate text-[12px] font-semibold tracking-[-0.015em] text-[#1C1B18] transition-colors group-hover:text-[#C98A3A] md:text-[13.5px]">
-            {project.businessTitle}
-          </h3>
-          <p className="mt-0.5 truncate text-[10px] text-[#1C1B18]/65 md:text-[10.5px]">
-            {project.targetBusinesses}
-          </p>
+        <div
+          className="relative aspect-[16/10] w-full overflow-hidden rounded-xl border border-[#1C1B18]/10"
+          style={{ backgroundColor: project.palette.bg }}
+        >
+          {isBestMatch && (
+            <span className="font-mono-tabular pointer-events-none absolute top-1.5 right-1.5 z-10 rounded-md border border-[#C98A3A]/45 bg-[#FAF8F4]/95 px-1.5 py-0.5 text-[8px] font-semibold tracking-[0.04em] text-[#B47323] uppercase shadow-xs md:top-2 md:right-2 md:px-2 md:text-[9px]">
+              Best Match
+            </span>
+          )}
+          {hasLiveDemoArtboard(project.id) ? (
+            <div className="h-full w-full transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.03]">
+              <ScaledDemoArtboard projectId={project.id} initialWidth={270} />
+            </div>
+          ) : imageUrl ? (
+            <img
+              src={imageUrl}
+              alt={`${project.businessTitle} (${project.styleSubtitle}) — ${project.targetBusinesses}`}
+              referrerPolicy="no-referrer"
+              draggable={false}
+              className="h-full w-full object-cover object-top transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.03]"
+            />
+          ) : (
+            <div className="flex h-full w-full items-center justify-center p-3 text-xs font-medium text-[#1C1B18] md:p-4 md:text-sm">
+              {project.businessTitle}
+            </div>
+          )}
         </div>
-        <span className="font-mono-tabular shrink-0 text-[10px] font-medium text-[#1C1B18]/50 md:text-[10.5px]">
-          {project.index}
-        </span>
-      </div>
-    </button>
+
+        <div className="relative z-10 mt-2 flex items-center justify-between gap-1.5 px-0.5 md:mt-2.5 md:gap-2">
+          <div className="min-w-0">
+            <h3 className="truncate text-[12px] font-semibold tracking-[-0.015em] text-[#1C1B18] transition-colors group-hover:text-[#C98A3A] md:text-[13.5px]">
+              {project.businessTitle}
+            </h3>
+            <p className="mt-0.5 truncate text-[10px] text-[#1C1B18]/65 md:text-[10.5px]">
+              {project.targetBusinesses}
+            </p>
+          </div>
+          <div className="flex shrink-0 flex-col items-end gap-0.5">
+            <span className="font-mono-tabular text-[10px] font-medium leading-none text-[#1C1B18]/50 md:text-[10.5px]">
+              {project.index}
+            </span>
+            {project.linkedDemoId && onOpenLiveDemo && (
+              <span
+                aria-hidden="true"
+                className="font-mono-tabular invisible inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[8px] font-bold tracking-[0.04em] uppercase md:px-2.5 md:text-[8.5px]"
+              >
+                Live Demo ↗
+              </span>
+            )}
+          </div>
+        </div>
+      </button>
+
+      {project.linkedDemoId && onOpenLiveDemo && (
+        <button
+          type="button"
+          tabIndex={isClickable ? 0 : -1}
+          onClick={() => onOpenLiveDemo(project.linkedDemoId!)}
+          aria-label={`Open live demo for ${project.businessTitle}`}
+          className="font-mono-tabular absolute right-2 bottom-1.5 z-20 inline-flex items-center gap-1 rounded-full bg-[#2563EB] px-2 py-0.5 text-[8px] font-bold tracking-[0.04em] text-white uppercase shadow-sm transition-transform duration-150 hover:scale-105 hover:bg-[#1D4ED8] md:right-3 md:bottom-2 md:px-2.5 md:text-[8.5px]"
+        >
+          <span>Live Demo</span>
+          <span aria-hidden="true">↗</span>
+        </button>
+      )}
+    </div>
   );
 }
 
@@ -189,6 +222,7 @@ interface UnfoldingGridCardProps {
   cols: number;
   reducedMotion: boolean;
   onSelect: (project: ProjectConfig) => void;
+  onOpenLiveDemo?: (demoId: string) => void;
 }
 
 function UnfoldingGridCard({
@@ -199,6 +233,7 @@ function UnfoldingGridCard({
   cols,
   reducedMotion,
   onSelect,
+  onOpenLiveDemo,
 }: UnfoldingGridCardProps) {
   const [isSettled, setIsSettled] = useState(reducedMotion || isOpen);
   const centerIdx = (cols - 1) / 2;
@@ -250,6 +285,7 @@ function UnfoldingGridCard({
             imageUrl={imageUrl}
             isClickable={isOpen || reducedMotion}
             onSelect={onSelect}
+            onOpenLiveDemo={onOpenLiveDemo}
           />
         </div>
 
@@ -261,6 +297,7 @@ function UnfoldingGridCard({
 
 export function ShowcaseMosaic({
   onSelectProject,
+  onOpenLiveDemo,
   isHeroPage = false,
 }: ShowcaseMosaicProps) {
   const prefersReducedMotion = Boolean(useReducedMotion());
@@ -699,6 +736,7 @@ export function ShowcaseMosaic({
                   isBestMatch={project.bestMatchFor.includes(activeFilter)}
                   isClickable
                   onSelect={onSelectProject}
+                  onOpenLiveDemo={onOpenLiveDemo}
                 />
               ))}
             </div>
@@ -722,6 +760,7 @@ export function ShowcaseMosaic({
                             isStartCard
                             isClickable
                             onSelect={onSelectProject}
+                            onOpenLiveDemo={onOpenLiveDemo}
                           />
                         </div>
                       );
@@ -750,6 +789,7 @@ export function ShowcaseMosaic({
                           cols={gridCols}
                           reducedMotion={prefersReducedMotion}
                           onSelect={onSelectProject}
+                          onOpenLiveDemo={onOpenLiveDemo}
                         />
                       </div>
                     );

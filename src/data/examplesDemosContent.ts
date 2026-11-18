@@ -38,6 +38,12 @@ export const DEMO_JUMP_ITEMS: DemoSectionNav[] = [
     shortLabel: { nl: 'Fashion', en: 'Fashion' },
     label: { nl: 'Fashion · Drop & WhatsApp', en: 'Fashion · Drop & Cart' },
   },
+  {
+    id: 'demo-candyshop',
+    num: '06',
+    shortLabel: { nl: 'Candy', en: 'Candy' },
+    label: { nl: 'Webshop · Candy Pop 3D', en: 'Webshop · Candy Pop 3D' },
+  },
 ];
 
 export const GARAGE_TEST_PLATES = [
@@ -267,3 +273,77 @@ export const FASHION_VARIANTS: FashionVariant[] = [
 ];
 
 export const FASHION_FITS = ['Regular · 52mm', 'Wide · 56mm'];
+
+export interface CandyFlavorOption {
+  id: string;
+  name: Record<DemoLang, string>;
+  primaryHex: string;
+  secondaryHex: string;
+  ribbonHex: string;
+  tag: Record<DemoLang, string>;
+}
+
+export const CANDY_FLAVORS: CandyFlavorOption[] = [
+  {
+    id: 'strawberry-pop',
+    name: { nl: 'Strawberry Glaze', en: 'Strawberry Glaze' },
+    primaryHex: '#FF3B6B',
+    secondaryHex: '#FF9BB8',
+    ribbonHex: '#2563EB',
+    tag: { nl: 'Bestseller · Zure Berry', en: 'Bestseller · Tangy Berry' },
+  },
+  {
+    id: 'yuzu-lemon',
+    name: { nl: 'Yuzu Citrus Glow', en: 'Yuzu Citrus Glow' },
+    primaryHex: '#FACC15',
+    secondaryHex: '#FEF08A',
+    ribbonHex: '#FF3B6B',
+    tag: { nl: 'Fris & Bruisend', en: 'Bright & Zesty' },
+  },
+  {
+    id: 'mint-splash',
+    name: { nl: 'Watermelon Mint', en: 'Watermelon Mint' },
+    primaryHex: '#10B981',
+    secondaryHex: '#A7F3D0',
+    ribbonHex: '#FACC15',
+    tag: { nl: 'Zomerse Limited Editie', en: 'Summer Limited Batch' },
+  },
+  {
+    id: 'cobalt-berry',
+    name: { nl: 'Blueberry Fizz', en: 'Blueberry Fizz' },
+    primaryHex: '#2563EB',
+    secondaryHex: '#93C5FD',
+    ribbonHex: '#FF3B6B',
+    tag: { nl: 'Zoet-Zure Kick', en: 'Sweet-Tart Kick' },
+  },
+];
+
+export interface CandyBoxSize {
+  id: string;
+  label: Record<DemoLang, string>;
+  pieces: number;
+  price: number;
+}
+
+export const CANDY_BOX_SIZES: CandyBoxSize[] = [
+  { id: 'signature-6', label: { nl: 'Signature Box (6×)', en: 'Signature Box (6×)' }, pieces: 6, price: 28 },
+  { id: 'deluxe-12', label: { nl: 'Deluxe Box (12×)', en: 'Deluxe Box (12×)' }, pieces: 12, price: 46 },
+  { id: 'party-24', label: { nl: 'Gift Crate (24×)', en: 'Gift Crate (24×)' }, pieces: 24, price: 78 },
+];
+
+export const CANDY_REVIEWS: { author: string; quote: Record<DemoLang, string> }[] = [
+  {
+    author: 'Lotte V.',
+    quote: {
+      nl: '“Die glanzende cadeauverpakking en smaken voelen echt als een luxe cadeautje!”',
+      en: '“The glossy gift box and bright flavors feel like pure happiness delivered!”',
+    },
+  },
+  {
+    author: 'Milan D.',
+    quote: {
+      nl: '“Vandaag besteld voor 16:00, morgenochtend feestelijk ingepakt in huis.”',
+      en: '“Ordered before 4 PM and delivered gift-wrapped the very next morning.”',
+    },
+  },
+];
