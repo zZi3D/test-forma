@@ -1,57 +1,94 @@
 import { ProjectConfig } from '../../data/projects';
-import { drawBrowserChrome, drawRoundedRect } from './canvasPrimitives';
+import {
+  drawBrowserChrome,
+  drawRoundedRect,
+  drawWrappedText,
+} from './canvasPrimitives';
 
-function drawMachinedDial(
+function drawBrakeRotorGraphic(
   ctx: CanvasRenderingContext2D,
   cx: number,
   cy: number,
-  r: number,
-  angleRad: number,
+  radius: number,
+  crimson: string,
 ) {
-  // Subtle dial calibration ticks
-  for (let t = 0; t <= 12; t++) {
-    const a = Math.PI * 0.75 + (t / 12) * Math.PI * 1.5;
-    const r1 = r + 9;
-    const r2 = r + (t % 4 === 0 ? 17 : 13);
-    ctx.strokeStyle = t === 12 ? '#FF4D24' : 'rgba(24, 24, 27, 0.42)';
-    ctx.lineWidth = t % 4 === 0 ? 2 : 1.2;
+  // Outer ventilated steel disc ring
+  const rotorGrad = ctx.createRadialGradient(
+    cx - radius * 0.25,
+    cy - radius * 0.25,
+    radius * 0.15,
+    cx,
+    cy,
+    radius,
+  );
+  rotorGrad.addColorStop(0, '#E4E4E7');
+  rotorGrad.addColorStop(0.55, '#9CA3AF');
+  rotorGrad.addColorStop(1, '#52525B');
+
+  ctx.fillStyle = rotorGrad;
+  ctx.beginPath();
+  ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Concentric machine turning grooves
+  ctx.strokeStyle = 'rgba(24, 24, 27, 0.28)';
+  ctx.lineWidth = 1.2;
+  [0.92, 0.78, 0.62].forEach((rMul) => {
     ctx.beginPath();
-    ctx.moveTo(cx + Math.cos(a) * r1, cy + Math.sin(a) * r1);
-    ctx.lineTo(cx + Math.cos(a) * r2, cy + Math.sin(a) * r2);
+    ctx.arc(cx, cy, radius * rMul, 0, Math.PI * 2);
     ctx.stroke();
+  });
+
+  // Cross-drilled ceramic cooling holes
+  ctx.fillStyle = '#18181B';
+  for (let spoke = 0; spoke < 12; spoke++) {
+    const baseAngle = (spoke / 12) * Math.PI * 2;
+    for (let ring = 0; ring < 3; ring++) {
+      const a = baseAngle + ring * 0.08;
+      const dist = radius * (0.58 + ring * 0.13);
+      ctx.beginPath();
+      ctx.arc(cx + Math.cos(a) * dist, cy + Math.sin(a) * dist, 3.2, 0, Math.PI * 2);
+      ctx.fill();
+    }
   }
 
-  // Dial machined recess & shadow
-  ctx.save();
-  ctx.shadowColor = 'rgba(0, 0, 0, 0.38)';
-  ctx.shadowBlur = 16;
-  ctx.shadowOffsetX = 3;
-  ctx.shadowOffsetY = 7;
-  const knobGrad = ctx.createLinearGradient(cx - r, cy - r, cx + r, cy + r);
-  knobGrad.addColorStop(0, '#F4F4F5');
-  knobGrad.addColorStop(0.5, '#D4D4D8');
-  knobGrad.addColorStop(1, '#8E8E98');
-  ctx.fillStyle = knobGrad;
+  // Dark anodized center hat & 5 lug bolts
+  ctx.fillStyle = '#27272A';
   ctx.beginPath();
-  ctx.arc(cx, cy, r, 0, Math.PI * 2);
+  ctx.arc(cx, cy, radius * 0.42, 0, Math.PI * 2);
   ctx.fill();
-  ctx.restore();
 
-  // Inner concentric chamfer ring
-  ctx.strokeStyle = 'rgba(24, 24, 27, 0.25)';
+  for (let bolt = 0; bolt < 5; bolt++) {
+    const ba = (bolt / 5) * Math.PI * 2 - Math.PI * 0.5;
+    ctx.fillStyle = '#D4D4D8';
+    ctx.beginPath();
+    ctx.arc(
+      cx + Math.cos(ba) * (radius * 0.27),
+      cy + Math.sin(ba) * (radius * 0.27),
+      5.5,
+      0,
+      Math.PI * 2,
+    );
+    ctx.fill();
+  }
+
+  ctx.fillStyle = '#141416';
+  ctx.beginPath();
+  ctx.arc(cx, cy, radius * 0.14, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Crimson 6-piston Performance Brake Caliper hugging top-right quadrant
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(cx, cy, radius * 1.07, -Math.PI * 0.38, Math.PI * 0.14);
+  ctx.arc(cx, cy, radius * 0.66, Math.PI * 0.14, -Math.PI * 0.38, true);
+  ctx.closePath();
+  ctx.fillStyle = crimson;
+  ctx.fill();
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.28)';
   ctx.lineWidth = 1.5;
-  ctx.beginPath();
-  ctx.arc(cx, cy, r * 0.82, 0, Math.PI * 2);
   ctx.stroke();
-
-  // Signal-orange indicator groove
-  ctx.strokeStyle = '#FF4D24';
-  ctx.lineWidth = 4;
-  ctx.lineCap = 'round';
-  ctx.beginPath();
-  ctx.moveTo(cx + Math.cos(angleRad) * (r * 0.28), cy + Math.sin(angleRad) * (r * 0.28));
-  ctx.lineTo(cx + Math.cos(angleRad) * (r * 0.72), cy + Math.sin(angleRad) * (r * 0.72));
-  ctx.stroke();
+  ctx.restore();
 }
 
 export function renderSkeuomorphism(
@@ -61,232 +98,268 @@ export function renderSkeuomorphism(
   project: ProjectConfig,
 ) {
   const { palette, previewSample } = project;
+  const boneBg = palette.bg; // #F3ECE1
+  const cardWhite = palette.surface; // #FFFFFF
+  const ink = palette.text; // #1C1C1C
+  const crimson = palette.accent; // #B8291E
+  const muted = palette.secondary; // #6E6961
 
-  // Anodized matte black canvas (#18181B)
-  ctx.fillStyle = palette.bg;
+  // Warm Bone Workshop Canvas (#F3ECE1)
+  ctx.fillStyle = boneBg;
   ctx.fillRect(0, 0, width, height);
 
   const { padX, headerBottom } = drawBrowserChrome(ctx, width, height, project, {
-    chromeBg: '#121215',
-    borderAlpha: 0.14,
-    navItemsColor: palette.surface,
+    chromeBg: '#E8DFD1',
+    borderAlpha: 0.12,
+    navItemsColor: muted,
   });
 
-  const topY = headerBottom + height * 0.055;
+  const topY = headerBottom + height * 0.045;
   const contentW = width - padX * 2;
-  const totalH = height - topY - height * 0.07;
+  const gap = width * 0.028;
+  const leftW = contentW * 0.47;
+  const rightW = contentW - leftW - gap;
+  const rightX = padX + leftW + gap;
+  const totalH = height - topY - height * 0.06;
 
   // =========================================================================
-  // LEFT EDITORIAL & MATERIAL CALLOUT COLUMN (~43% width)
+  // LEFT COLUMN: Workshop Hero + Perforated Brake Rotor Visual Frame
   // =========================================================================
-  const leftW = contentW * 0.43;
+  ctx.fillStyle = 'rgba(28, 28, 28, 0.07)';
+  const pillW = width * 0.235;
+  const pillH = 32;
+  drawRoundedRect(ctx, padX, topY, pillW, pillH, 16);
+  ctx.fill();
 
-  ctx.fillStyle = palette.accent;
-  ctx.font = `600 ${Math.round(width * 0.0095)}px "JetBrains Mono", monospace`;
-  ctx.fillText(previewSample.eyebrow, padX, topY + 24);
+  ctx.fillStyle = crimson;
+  ctx.beginPath();
+  ctx.arc(padX + 16, topY + pillH * 0.5, 4, 0, Math.PI * 2);
+  ctx.fill();
 
-  ctx.fillStyle = palette.text;
-  ctx.font = `700 ${Math.round(width * 0.039)}px "Plus Jakarta Sans", sans-serif`;
-  ctx.fillText('Built with', padX, topY + 90);
-  ctx.fillText('Tactile Honesty.', padX, topY + 158);
+  ctx.fillStyle = ink;
+  ctx.font = `600 ${Math.round(width * 0.0082)}px "JetBrains Mono", monospace`;
+  ctx.fillText(previewSample.eyebrow, padX + 28, topY + pillH * 0.53);
 
-  ctx.fillStyle = palette.secondary;
-  ctx.font = `400 ${Math.round(width * 0.0124)}px "Plus Jakarta Sans", sans-serif`;
-  ctx.fillText('Milled aluminum, honest materials, and flagship', padX, topY + 216);
-  ctx.fillText('product storytelling engineered for makers.', padX, topY + 244);
+  ctx.fillStyle = ink;
+  ctx.font = `800 ${Math.round(width * 0.038)}px "Plus Jakarta Sans", sans-serif`;
+  ctx.fillText('Repairs & MOT,', padX, topY + 94);
+  ctx.fillText('done to spec.', padX, topY + 150);
 
-  // 3 Clean Material Craftsmanship Callout Pills
-  const badges = [
-    { label: 'MILLED ALUMINUM', active: true },
-    { label: 'HAND-ASSEMBLED', active: false },
-    { label: '5-YR WARRANTY', active: false },
-  ];
-  const badgeY = topY + 292;
-  let bx = padX;
-  badges.forEach((b) => {
-    ctx.font = `600 ${Math.round(width * 0.0085)}px "JetBrains Mono", monospace`;
-    const bw = ctx.measureText(b.label).width + 30;
-    ctx.fillStyle = '#222227';
-    drawRoundedRect(ctx, bx, badgeY, bw, 38, 8);
-    ctx.fill();
-    ctx.strokeStyle = b.active ? 'rgba(255, 77, 36, 0.55)' : 'rgba(212, 212, 216, 0.2)';
-    ctx.lineWidth = 1.25;
-    ctx.stroke();
+  ctx.fillStyle = muted;
+  ctx.font = `400 ${Math.round(width * 0.0122)}px "Plus Jakarta Sans", sans-serif`;
+  drawWrappedText(
+    ctx,
+    previewSample.subheadline,
+    padX,
+    topY + 196,
+    leftW - 16,
+    height * 0.026,
+    2,
+  );
 
-    ctx.fillStyle = b.active ? '#FAFAFA' : palette.surface;
-    ctx.fillText(b.label, bx + 15, badgeY + 20);
-    bx += bw + 12;
-  });
-
-  // Tactile Signal-Orange CTA Button + Price Note
-  const ctaY = topY + totalH - 86;
-  const ctaW = width * 0.195;
+  // Lower-left Workshop Brake Rotor Card
+  const rotorCardY = topY + 278;
+  const rotorCardH = totalH - 278;
   ctx.save();
-  ctx.shadowColor = 'rgba(255, 77, 36, 0.35)';
-  ctx.shadowBlur = 24;
-  ctx.shadowOffsetY = 8;
-  ctx.fillStyle = palette.accent;
-  drawRoundedRect(ctx, padX, ctaY, ctaW, 56, 28);
+  ctx.shadowColor = 'rgba(28, 28, 28, 0.18)';
+  ctx.shadowBlur = 28;
+  ctx.shadowOffsetY = 14;
+  ctx.fillStyle = '#141416';
+  drawRoundedRect(ctx, padX, rotorCardY, leftW, rotorCardH, 22);
   ctx.fill();
   ctx.restore();
+
+  // Subtle dark workshop grid lines inside rotor card
+  ctx.save();
+  drawRoundedRect(ctx, padX, rotorCardY, leftW, rotorCardH, 22);
+  ctx.clip();
+
+  const bayGlow = ctx.createRadialGradient(
+    padX + leftW * 0.72,
+    rotorCardY + rotorCardH * 0.48,
+    10,
+    padX + leftW * 0.72,
+    rotorCardY + rotorCardH * 0.48,
+    leftW * 0.48,
+  );
+  bayGlow.addColorStop(0, 'rgba(184, 41, 30, 0.25)');
+  bayGlow.addColorStop(1, 'transparent');
+  ctx.fillStyle = bayGlow;
+  ctx.fillRect(padX, rotorCardY, leftW, rotorCardH);
+
+  drawBrakeRotorGraphic(
+    ctx,
+    padX + leftW * 0.72,
+    rotorCardY + rotorCardH * 0.52,
+    rotorCardH * 0.37,
+    crimson,
+  );
+
+  // Technical spec overlay text on left side of brake card
+  ctx.fillStyle = '#F3ECE1';
+  ctx.font = `700 ${Math.round(width * 0.0088)}px "JetBrains Mono", monospace`;
+  ctx.fillText('BAY 02 // BRAKES & CHASSIS', padX + 26, rotorCardY + 42);
 
   ctx.fillStyle = '#FFFFFF';
-  ctx.font = `700 ${Math.round(width * 0.0098)}px "JetBrains Mono", monospace`;
-  ctx.fillText(previewSample.ctaLabel, padX + 26, ctaY + 29);
+  ctx.font = `700 ${Math.round(width * 0.0175)}px "Plus Jakarta Sans", sans-serif`;
+  ctx.fillText('Factory Calibration', padX + 26, rotorCardY + rotorCardH * 0.48);
 
-  // Subtle edition & price tag right of CTA
-  ctx.fillStyle = palette.secondary;
-  ctx.font = `600 ${Math.round(width * 0.0092)}px "JetBrains Mono", monospace`;
-  ctx.fillText('M-01 UNIT · FROM €490', padX + ctaW + 24, ctaY + 29);
+  ctx.fillStyle = 'rgba(243, 236, 225, 0.65)';
+  ctx.font = `400 ${Math.round(width * 0.0102)}px "Plus Jakarta Sans", sans-serif`;
+  ctx.fillText('OEM diagnostics, MOT & brakes', padX + 26, rotorCardY + rotorCardH * 0.62);
 
-  // =========================================================================
-  // RIGHT SHOWCASE STAGE: Dieter Rams / Teenage Engineering Physical Product
-  // =========================================================================
-  const stageX = padX + leftW + width * 0.03;
-  const stageW = contentW - leftW - width * 0.03;
-  const stageH = totalH;
-
-  // Matte precision display stage card
-  ctx.fillStyle = '#1E1E23';
-  drawRoundedRect(ctx, stageX, topY, stageW, stageH, 22);
+  ctx.fillStyle = '#22C55E';
+  ctx.beginPath();
+  ctx.arc(padX + 32, rotorCardY + rotorCardH - 34, 4.5, 0, Math.PI * 2);
   ctx.fill();
-  ctx.strokeStyle = 'rgba(212, 212, 216, 0.18)';
+  ctx.fillStyle = '#F3ECE1';
+  ctx.font = `600 ${Math.round(width * 0.0086)}px "JetBrains Mono", monospace`;
+  ctx.fillText('4.9★ GOOGLE · 214 REVIEWS', padX + 46, rotorCardY + rotorCardH - 33);
+
+  ctx.restore();
+
+  // =========================================================================
+  // RIGHT COLUMN: LIVE DUTCH RDW LICENSE PLATE & MOT CONSOLE CARD
+  // =========================================================================
+  ctx.save();
+  ctx.shadowColor = 'rgba(28, 28, 28, 0.10)';
+  ctx.shadowBlur = 32;
+  ctx.shadowOffsetY = 14;
+  ctx.fillStyle = cardWhite;
+  drawRoundedRect(ctx, rightX, topY, rightW, totalH, 24);
+  ctx.fill();
+  ctx.restore();
+  ctx.strokeStyle = 'rgba(28, 28, 28, 0.1)';
   ctx.lineWidth = 1.5;
   ctx.stroke();
 
-  // Subtle architectural grid lines inside showcase stage
-  ctx.strokeStyle = 'rgba(212, 212, 216, 0.05)';
-  ctx.lineWidth = 1;
+  const cPad = 32;
+  const ix = rightX + cPad;
+  const iw = rightW - cPad * 2;
+
+  // Card header + Live RDW Open Data pill
+  ctx.fillStyle = ink;
+  ctx.font = `700 ${Math.round(width * 0.0148)}px "Plus Jakarta Sans", sans-serif`;
+  ctx.fillText('Live RDW Vehicle Check', ix, topY + 42);
+
+  const liveBadgeW = 148;
+  ctx.fillStyle = 'rgba(22, 163, 74, 0.12)';
+  drawRoundedRect(ctx, ix + iw - liveBadgeW, topY + 26, liveBadgeW, 28, 14);
+  ctx.fill();
+  ctx.fillStyle = '#16A34A';
   ctx.beginPath();
-  ctx.moveTo(stageX + stageW * 0.5, topY + 24);
-  ctx.lineTo(stageX + stageW * 0.5, topY + stageH - 24);
-  ctx.moveTo(stageX + 24, topY + stageH * 0.5);
-  ctx.lineTo(stageX + stageW - 24, topY + stageH * 0.5);
+  ctx.arc(ix + iw - liveBadgeW + 16, topY + 40, 4, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.font = `700 ${Math.round(width * 0.0076)}px "JetBrains Mono", monospace`;
+  ctx.fillText('LIVE RDW DATA', ix + iw - liveBadgeW + 26, topY + 41);
+
+  // Realistic Dutch Yellow License Plate Input + Crimson Lookup Button
+  const plateY = topY + 76;
+  const plateH = 66;
+  const btnW = 166;
+  const plateW = iw - btnW - 14;
+
+  // Plate Frame
+  ctx.fillStyle = '#F7C600';
+  drawRoundedRect(ctx, ix, plateY, plateW, plateH, 10);
+  ctx.fill();
+  ctx.strokeStyle = '#1C1C1C';
+  ctx.lineWidth = 2.5;
   ctx.stroke();
 
-  // Top stage engineering telemetry header
-  ctx.fillStyle = palette.secondary;
-  ctx.font = `600 ${Math.round(width * 0.0084)}px "JetBrains Mono", monospace`;
-  ctx.fillText('SERIES 01 // ACOUSTIC MONITOR', stageX + 32, topY + 34);
-  ctx.textAlign = 'right';
-  ctx.fillStyle = '#D4D4D8';
-  ctx.fillText('ANODIZED AL-6061', stageX + stageW - 32, topY + 34);
-  ctx.textAlign = 'left';
-
-  // Soft studio pedestal shadow under hardware unit
-  const hwW = stageW * 0.80;
-  const hwH = stageH * 0.56;
-  const hwX = stageX + (stageW - hwW) * 0.5;
-  const hwY = topY + (stageH - hwH) * 0.5 + 8;
-
-  // Rubber elastomer isolation feet under chassis
-  ctx.fillStyle = '#09090B';
-  drawRoundedRect(ctx, hwX + 42, hwY + hwH - 2, 42, 12, 4);
-  ctx.fill();
-  drawRoundedRect(ctx, hwX + hwW - 84, hwY + hwH - 2, 42, 12, 4);
-  ctx.fill();
-
-  // Milled Brushed Aluminum Enclosure Body
+  // Blue EU "NL" side band
   ctx.save();
-  ctx.shadowColor = 'rgba(0, 0, 0, 0.72)';
-  ctx.shadowBlur = 42;
-  ctx.shadowOffsetY = 24;
-  const metalGrad = ctx.createLinearGradient(hwX, hwY, hwX + hwW, hwY + hwH);
-  metalGrad.addColorStop(0, '#E4E4E7');
-  metalGrad.addColorStop(0.45, '#D4D4D8');
-  metalGrad.addColorStop(1, '#A1A1AA');
-  ctx.fillStyle = metalGrad;
-  drawRoundedRect(ctx, hwX, hwY, hwW, hwH, 24);
-  ctx.fill();
-  ctx.restore();
-
-  // Crisp machined bevel highlight along top edge of chassis
-  ctx.strokeStyle = 'rgba(255, 255, 255, 0.75)';
-  ctx.lineWidth = 2;
-  drawRoundedRect(ctx, hwX + 2, hwY + 2, hwW - 4, hwH - 4, 22);
-  ctx.stroke();
-
-  // Left 62% of hardware face: Recessed Matte Charcoal Acoustic Grille
-  const innerPad = 24;
-  const grilleW = hwW * 0.60;
-  const grilleH = hwH - innerPad * 2;
-  const grilleX = hwX + innerPad;
-  const grilleY = hwY + innerPad;
-
-  ctx.fillStyle = '#18181B';
-  drawRoundedRect(ctx, grilleX, grilleY, grilleW, grilleH, 16);
-  ctx.fill();
-  ctx.strokeStyle = 'rgba(24, 24, 27, 0.45)';
-  ctx.lineWidth = 2;
-  ctx.stroke();
-
-  // Precision circular acoustic perforation grid inside speaker grille
-  const cols = 12;
-  const rows = 9;
-  const dotGapX = (grilleW - 44) / (cols - 1);
-  const dotGapY = (grilleH - 44) / (rows - 1);
-  for (let r = 0; r < rows; r++) {
-    for (let c = 0; c < cols; c++) {
-      ctx.fillStyle = '#09090B';
-      ctx.beginPath();
-      ctx.arc(grilleX + 22 + c * dotGapX, grilleY + 22 + r * dotGapY, 4.2, 0, Math.PI * 2);
-      ctx.fill();
-    }
+  drawRoundedRect(ctx, ix, plateY, plateW, plateH, 10);
+  ctx.clip();
+  ctx.fillStyle = '#003399';
+  ctx.fillRect(ix, plateY, 44, plateH);
+  ctx.fillStyle = '#FFFFFF';
+  ctx.font = `800 ${Math.round(width * 0.0096)}px "Plus Jakarta Sans", sans-serif`;
+  ctx.textAlign = 'center';
+  ctx.fillText('NL', ix + 22, plateY + plateH * 0.66);
+  // Subtle EU stars dot ring
+  ctx.fillStyle = '#F7C600';
+  for (let s = 0; s < 6; s++) {
+    const sa = (s / 6) * Math.PI * 2;
+    ctx.beginPath();
+    ctx.arc(ix + 22 + Math.cos(sa) * 9, plateY + 19 + Math.sin(sa) * 9, 1.3, 0, Math.PI * 2);
+    ctx.fill();
   }
 
-  // Right 35% of hardware face: Control Bay with Machined Dial, Warm LED & Switch
-  const ctrlX = grilleX + grilleW + 24;
-  const ctrlW = hwX + hwW - innerPad - ctrlX;
-  const ctrlCenterX = ctrlX + ctrlW * 0.5;
-
-  // Vertical machined hairline seam separating grille & controls
-  ctx.strokeStyle = 'rgba(24, 24, 27, 0.16)';
-  ctx.lineWidth = 1.5;
-  ctx.beginPath();
-  ctx.moveTo(ctrlX - 12, grilleY + 8);
-  ctx.lineTo(ctrlX - 12, grilleY + grilleH - 8);
-  ctx.stroke();
-
-  // Top Control Status Row: Engraved Model Code + Warm Signal-Orange Status LED
-  ctx.fillStyle = '#27272A';
-  ctx.font = `700 ${Math.round(width * 0.0082)}px "JetBrains Mono", monospace`;
-  ctx.fillText('M-01', ctrlX + 6, grilleY + 22);
-
-  // Glowing Status LED
-  const ledX = ctrlX + ctrlW - 14;
-  const ledY = grilleY + 21;
-  ctx.save();
-  ctx.shadowColor = 'rgba(255, 77, 36, 0.85)';
-  ctx.shadowBlur = 12;
-  ctx.fillStyle = '#FF4D24';
-  ctx.beginPath();
-  ctx.arc(ledX, ledY, 5.5, 0, Math.PI * 2);
-  ctx.fill();
+  // Bold Dutch Plate Characters: KXT-67-P
+  ctx.fillStyle = '#111111';
+  ctx.font = `800 ${Math.round(width * 0.022)}px "JetBrains Mono", monospace`;
+  ctx.fillText('KXT-67-P', ix + 44 + (plateW - 44) * 0.5, plateY + plateH * 0.54);
+  ctx.textAlign = 'left';
   ctx.restore();
 
-  // Precision Machined Volume Dial
-  const dialR = Math.min(ctrlW * 0.34, grilleH * 0.25);
-  const dialCY = grilleY + grilleH * 0.52;
-  drawMachinedDial(ctx, ctrlCenterX, dialCY, dialR, -Math.PI * 0.28);
-
-  // Minimalist tactile rocker switch bottom of control panel
-  const swW = 46;
-  const swH = 18;
-  const swX = ctrlCenterX - swW * 0.5;
-  const swY = grilleY + grilleH - 28;
-  ctx.fillStyle = '#27272A';
-  drawRoundedRect(ctx, swX, swY, swW, swH, 9);
+  // Crimson Lookup Button beside plate
+  ctx.fillStyle = crimson;
+  drawRoundedRect(ctx, ix + plateW + 14, plateY, btnW, plateH, 10);
   ctx.fill();
-  ctx.fillStyle = '#FF4D24';
-  drawRoundedRect(ctx, swX + swW - 20, swY + 3, 16, swH - 6, 6);
-  ctx.fill();
+  ctx.textAlign = 'center';
+  ctx.fillStyle = '#FFFFFF';
+  ctx.font = `700 ${Math.round(width * 0.01)}px "Plus Jakarta Sans", sans-serif`;
+  ctx.fillText('Lookup Plate', ix + plateW + 14 + btnW * 0.5, plateY + plateH * 0.52);
+  ctx.textAlign = 'left';
 
-  // Subtle dimension & craftsmanship footer inside showcase stage
-  ctx.fillStyle = palette.secondary;
-  ctx.font = `500 ${Math.round(width * 0.008)}px "JetBrains Mono", monospace`;
-  ctx.fillText('220 × 140 × 115 MM', stageX + 32, topY + stageH - 28);
-  ctx.textAlign = 'right';
-  ctx.fillStyle = palette.accent;
-  ctx.fillText('ZERO-RESONANCE ENCLOSURE', stageX + stageW - 32, topY + stageH - 28);
+  // Quick Test Plate Chips
+  let tx = ix;
+  const chipY = plateY + plateH + 18;
+  previewSample.cardLabels.forEach((p, idx) => {
+    const isAct = idx === 0;
+    ctx.font = `600 ${Math.round(width * 0.0082)}px "JetBrains Mono", monospace`;
+    const pw = ctx.measureText(p).width + 24;
+    ctx.fillStyle = isAct ? '#1C1C1C' : '#F3ECE1';
+    drawRoundedRect(ctx, tx, chipY, pw, 28, 14);
+    ctx.fill();
+    ctx.fillStyle = isAct ? '#FFFFFF' : ink;
+    ctx.fillText(p, tx + 12, chipY + 15);
+    tx += pw + 8;
+  });
+
+  // 2x2 RDW Vehicle Spec & MOT Telemetry Cards
+  const gridY = chipY + 46;
+  const gridGap = 14;
+  const cellW = (iw - gridGap) / 2;
+  const cellH = 88;
+  const rdwCells = [
+    { label: 'MAKE & MODEL', value: 'AUDI A5 AVANT', accent: false },
+    { label: 'MOT EXPIRY', value: '01-10-2030', accent: true },
+    { label: 'POWERTRAIN', value: 'HYBRID · BLUE', accent: false },
+    { label: 'OPEN RECALL', value: 'NONE · CLEAR', accent: false },
+  ];
+
+  rdwCells.forEach((cell, idx) => {
+    const col = idx % 2;
+    const row = Math.floor(idx / 2);
+    const cx = ix + col * (cellW + gridGap);
+    const cy = gridY + row * (cellH + gridGap);
+
+    ctx.fillStyle = '#F7F3EC';
+    drawRoundedRect(ctx, cx, cy, cellW, cellH, 14);
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(28, 28, 28, 0.08)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+    ctx.fillStyle = muted;
+    ctx.font = `600 ${Math.round(width * 0.0078)}px "JetBrains Mono", monospace`;
+    ctx.fillText(cell.label, cx + 18, cy + 28);
+
+    ctx.fillStyle = cell.accent ? '#15803D' : ink;
+    ctx.font = `700 ${Math.round(width * 0.0128)}px "Plus Jakarta Sans", sans-serif`;
+    ctx.fillText(cell.value, cx + 18, cy + 58);
+  });
+
+  // Bottom Full-Width Crimson Booking CTA
+  const bookY = topY + totalH - 74;
+  ctx.fillStyle = crimson;
+  drawRoundedRect(ctx, ix, bookY, iw, 48, 24);
+  ctx.fill();
+  ctx.textAlign = 'center';
+  ctx.fillStyle = '#FFFFFF';
+  ctx.font = `700 ${Math.round(width * 0.0098)}px "Plus Jakarta Sans", sans-serif`;
+  ctx.fillText(previewSample.ctaLabel, ix + iw * 0.5, bookY + 25);
   ctx.textAlign = 'left';
 }

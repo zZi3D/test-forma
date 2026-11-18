@@ -157,7 +157,7 @@ export function ExamplesPage({
         className="pointer-events-none fixed inset-0 z-0 bg-gradient-to-b from-[#F7F5F0]/80 via-[#F7F5F0]/52 to-[#F7F5F0]/68"
       />
 
-      <div className="relative z-10 mx-auto max-w-[1280px] px-3 pt-16 md:px-8 md:pt-24">
+      <div className="relative z-10 mx-auto max-w-[1280px] px-3 pt-24 md:px-8 md:pt-28">
         {/* Top Controls + Editorial Intro */}
         <section className="pb-3 md:pb-6">
           <div className="flex flex-wrap items-center justify-between gap-3">
@@ -187,7 +187,7 @@ export function ExamplesPage({
         {/* STICKY 5-DEMO JUMP FILTER + INTEGRATED NL / EN SWITCHER */}
         <div
           ref={stickyBarRef}
-          className="sticky top-[68px] z-30 -mx-1 px-1 pb-3 md:top-[78px] md:-mx-2 md:px-2 md:pb-4"
+          className="sticky top-[74px] z-30 -mx-1 px-1 pb-3 md:top-[82px] md:-mx-2 md:px-2 md:pb-4"
         >
           <div className="glass-elevated flex items-center justify-between gap-1.5 rounded-full p-1 shadow-[0_14px_34px_-12px_rgba(28,27,24,0.16)] md:gap-2 md:p-1.5">
             <nav

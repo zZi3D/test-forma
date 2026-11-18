@@ -13,319 +13,327 @@ export function renderBentoEditorial(
   project: ProjectConfig,
 ) {
   const { palette, previewSample } = project;
+  const pineBg = palette.bg; // #162921
+  const ivory = palette.surface; // #F3EFE6
+  const copper = palette.accent; // #C86D44
+  const mutedPine = palette.secondary; // #9BB0A5
 
-  // Warm archival paper white (#F7F5F0)
-  ctx.fillStyle = palette.bg;
+  // Midnight Pine canvas (#162921)
+  ctx.fillStyle = pineBg;
+  ctx.fillRect(0, 0, width, height);
+
+  // Delicate ambient glow from warm garden pavilion hearth on upper right
+  const hearthGlow = ctx.createRadialGradient(
+    width * 0.74,
+    height * 0.36,
+    20,
+    width * 0.74,
+    height * 0.36,
+    width * 0.42,
+  );
+  hearthGlow.addColorStop(0, 'rgba(200, 109, 68, 0.22)');
+  hearthGlow.addColorStop(1, 'transparent');
+  ctx.fillStyle = hearthGlow;
   ctx.fillRect(0, 0, width, height);
 
   const { padX, headerBottom } = drawBrowserChrome(ctx, width, height, project, {
-    chromeBg: '#EFECE4',
+    chromeBg: '#10201A',
     borderAlpha: 0.14,
-    navItemsColor: palette.accent,
+    navItemsColor: mutedPine,
+    highlightLastNav: true,
   });
 
-  // Subtle Reading Progress Bar along bottom edge of top navigation
-  ctx.fillStyle = 'rgba(28, 27, 24, 0.08)';
-  ctx.fillRect(0, headerBottom, width, 5);
-  ctx.fillStyle = palette.accent;
-  ctx.fillRect(0, headerBottom, width * 0.62, 5);
-
-  const topY = headerBottom + height * 0.048;
   const contentW = width - padX * 2;
-  const gap = width * 0.02;
-
-  // 3 Bento Columns
-  const leftW = contentW * 0.37;
-  const midW = contentW * 0.39;
-  const rightW = contentW - leftW - midW - gap * 2;
-  const fullH = height - topY - height * 0.065;
+  const gap = width * 0.022;
+  const heroY = headerBottom + height * 0.042;
+  const heroH = height * 0.45;
+  const leftW = contentW * 0.54;
+  const rightW = contentW - leftW - gap;
+  const rightX = padX + leftW + gap;
 
   // =========================================================================
-  // LEFT COLUMN: Feature Editorial Headline + Pull-Quote & Keynote CTA
+  // UPPER LEFT: Midnight Pine Editorial Copy & PDOK Quick Postals
   // =========================================================================
-  const leftTopH = fullH * 0.57;
-  ctx.fillStyle = '#FFFFFF';
-  drawRoundedRect(ctx, padX, topY, leftW, leftTopH, 16);
+  ctx.fillStyle = 'rgba(200, 109, 68, 0.18)';
+  const tagW = width * 0.26;
+  const tagH = 34;
+  drawRoundedRect(ctx, padX, heroY, tagW, tagH, 17);
   ctx.fill();
-  ctx.strokeStyle = 'rgba(28, 27, 24, 0.10)';
-  ctx.lineWidth = 1.5;
+  ctx.strokeStyle = 'rgba(200, 109, 68, 0.52)';
+  ctx.lineWidth = 1.2;
   ctx.stroke();
 
-  const innerPad = width * 0.023;
-  ctx.fillStyle = palette.accent;
-  ctx.font = `600 ${Math.round(width * 0.0092)}px "JetBrains Mono", monospace`;
-  ctx.fillText(previewSample.eyebrow, padX + innerPad, topY + height * 0.052);
+  ctx.fillStyle = '#F3B496';
+  ctx.font = `600 ${Math.round(width * 0.0082)}px "JetBrains Mono", monospace`;
+  ctx.fillText(previewSample.eyebrow, padX + 16, heroY + tagH * 0.53);
 
-  // Literary serif headline: "Ideas Worth / Sharing on Stage."
-  ctx.fillStyle = palette.text;
-  ctx.font = `600 ${Math.round(width * 0.039)}px "Cormorant Garamond", Georgia, serif`;
-  ctx.fillText('Ideas Worth', padX + innerPad, topY + height * 0.13);
-  ctx.fillText('Sharing on Stage.', padX + innerPad, topY + height * 0.205);
+  // Fraunces-style Ivory Editorial Headline
+  ctx.fillStyle = ivory;
+  ctx.font = `600 ${Math.round(width * 0.041)}px "Cormorant Garamond", Georgia, serif`;
+  ctx.fillText('Architectural Gardens', padX, heroY + height * 0.125);
+  ctx.fillText('Built for Every Season.', padX, heroY + height * 0.20);
 
-  ctx.fillStyle = palette.secondary;
-  ctx.font = `400 ${Math.round(width * 0.0115)}px "Plus Jakarta Sans", sans-serif`;
-  ctx.fillText('Book showcases, keynote recordings & essays.', padX + innerPad, topY + height * 0.275);
-
-  // Two-column simulated editorial text rules inside magazine tile
-  ctx.fillStyle = 'rgba(28, 27, 24, 0.20)';
-  const miniColW = (leftW - innerPad * 2 - 18) / 2;
-  for (let line = 0; line < 4; line++) {
-    ctx.fillRect(
-      padX + innerPad,
-      topY + height * (0.33 + line * 0.028),
-      miniColW * (line === 3 ? 0.65 : 1),
-      4,
-    );
-    ctx.fillRect(
-      padX + innerPad + miniColW + 18,
-      topY + height * (0.33 + line * 0.028),
-      miniColW * (line === 3 ? 0.5 : 1),
-      4,
-    );
-  }
-
-  // Bottom-left Editorial Pull-Quote & Keynote CTA Tile
-  const quoteY = topY + leftTopH + gap;
-  const quoteH = fullH - leftTopH - gap;
-  ctx.fillStyle = palette.text; // Deep espresso-graphite contrast tile
-  drawRoundedRect(ctx, padX, quoteY, leftW, quoteH, 16);
-  ctx.fill();
-
-  ctx.fillStyle = palette.surface;
-  ctx.font = `italic 500 ${Math.round(width * 0.0188)}px "Cormorant Garamond", Georgia, serif`;
-  const quoteText =
-    previewSample.quote || '“Great editorial design gives every idea room to breathe.”';
+  ctx.fillStyle = mutedPine;
+  ctx.font = `400 ${Math.round(width * 0.0122)}px "Plus Jakarta Sans", sans-serif`;
   drawWrappedText(
     ctx,
-    quoteText,
-    padX + innerPad,
-    quoteY + quoteH * 0.34,
-    leftW - innerPad * 2,
-    quoteH * 0.19,
+    previewSample.subheadline,
+    padX,
+    heroY + height * 0.268,
+    leftW - 20,
+    height * 0.027,
     2,
   );
 
-  ctx.fillStyle = '#D6C4AD';
-  ctx.font = `600 ${Math.round(width * 0.009)}px "JetBrains Mono", monospace`;
-  ctx.fillText(previewSample.ctaLabel, padX + innerPad, quoteY + quoteH * 0.78);
-
-  // =========================================================================
-  // CENTER COLUMN: Author Hardcover Book Mockup + Embedded Keynote Audio Bar
-  // =========================================================================
-  const midX = padX + leftW + gap;
-  ctx.save();
-  drawRoundedRect(ctx, midX, topY, midW, fullH, 16);
-  ctx.clip();
-
-  // Warm archival sunlit desk background
-  const showcaseGrad = ctx.createLinearGradient(midX, topY, midX + midW, topY + fullH);
-  showcaseGrad.addColorStop(0, '#EFEAE1');
-  showcaseGrad.addColorStop(0.6, '#E2DACD');
-  showcaseGrad.addColorStop(1, '#CFC3B2');
-  ctx.fillStyle = showcaseGrad;
-  ctx.fillRect(midX, topY, midW, fullH);
-
-  // Subtle warm radial spotlight behind hardcover book
-  const bookCenterX = midX + midW * 0.5;
-  const bookCenterY = topY + fullH * 0.39;
-  const spotGrad = ctx.createRadialGradient(
-    bookCenterX - 30,
-    bookCenterY - 40,
-    20,
-    bookCenterX,
-    bookCenterY,
-    midW * 0.55,
-  );
-  spotGrad.addColorStop(0, 'rgba(255, 253, 248, 0.75)');
-  spotGrad.addColorStop(1, 'rgba(255, 253, 248, 0)');
-  ctx.fillStyle = spotGrad;
-  ctx.fillRect(midX, topY, midW, fullH * 0.75);
-
-  // Book dimensions
-  const bookW = midW * 0.48;
-  const bookH = fullH * 0.56;
-  const bookX = bookCenterX - bookW * 0.5;
-  const bookY = topY + fullH * 0.095;
-
-  // Drop shadow beneath hardcover book
-  ctx.save();
-  ctx.shadowColor = 'rgba(28, 27, 24, 0.28)';
-  ctx.shadowBlur = 34;
-  ctx.shadowOffsetX = 16;
-  ctx.shadowOffsetY = 24;
-  ctx.fillStyle = '#1C1B18';
-  drawRoundedRect(ctx, bookX, bookY, bookW, bookH, 8);
-  ctx.fill();
-  ctx.restore();
-
-  // Subtle cream page thickness protruding slightly at right & bottom
-  ctx.fillStyle = '#F7F5F0';
-  drawRoundedRect(ctx, bookX + 8, bookY + 5, bookW + 6, bookH - 4, 6);
-  ctx.fill();
-  // Fine horizontal page striations on right edge
-  ctx.strokeStyle = 'rgba(107, 91, 75, 0.28)';
-  ctx.lineWidth = 1;
-  for (let p = 1; p <= 4; p++) {
-    ctx.beginPath();
-    ctx.moveTo(bookX + bookW + p * 1.4, bookY + 8);
-    ctx.lineTo(bookX + bookW + p * 1.4, bookY + bookH - 2);
-    ctx.stroke();
-  }
-
-  // Bookmark ribbon peeking from bottom edge of book
-  ctx.fillStyle = '#8C4A32';
-  ctx.beginPath();
-  ctx.moveTo(bookX + bookW * 0.74, bookY + bookH - 2);
-  ctx.lineTo(bookX + bookW * 0.80, bookY + bookH - 2);
-  ctx.lineTo(bookX + bookW * 0.80, bookY + bookH + 34);
-  ctx.lineTo(bookX + bookW * 0.77, bookY + bookH + 25);
-  ctx.lineTo(bookX + bookW * 0.74, bookY + bookH + 34);
-  ctx.closePath();
+  // Copper CTA Pill + Quick Dutch Postal Chips
+  const ctaY = heroY + heroH - height * 0.072;
+  const ctaW = width * 0.185;
+  const ctaH = height * 0.062;
+  ctx.fillStyle = copper;
+  drawRoundedRect(ctx, padX, ctaY, ctaW, ctaH, 31);
   ctx.fill();
 
-  // Main tactile linen-bound hardcover front cover
-  const coverGrad = ctx.createLinearGradient(bookX, bookY, bookX + bookW, bookY + bookH);
-  coverGrad.addColorStop(0, '#292622');
-  coverGrad.addColorStop(0.5, '#1F1D1A');
-  coverGrad.addColorStop(1, '#141311');
-  ctx.fillStyle = coverGrad;
-  drawRoundedRect(ctx, bookX, bookY, bookW, bookH, 7);
-  ctx.fill();
-
-  // Tactile spine crease & brass-gold foil spine rule
-  ctx.fillStyle = 'rgba(255, 255, 255, 0.06)';
-  ctx.fillRect(bookX + 16, bookY, 3, bookH);
-  ctx.fillStyle = '#C9A875';
-  ctx.fillRect(bookX + 20, bookY + 28, 1.5, bookH - 56);
-
-  // Subtle brass frame inside book cover
-  ctx.strokeStyle = 'rgba(201, 168, 117, 0.35)';
-  ctx.lineWidth = 1.2;
-  drawRoundedRect(ctx, bookX + 32, bookY + 24, bookW - 48, bookH - 48, 3);
-  ctx.stroke();
-
-  // Book cover typography (gold-foil embossed style)
-  ctx.fillStyle = '#C9A875';
-  ctx.font = `600 ${Math.round(width * 0.0075)}px "JetBrains Mono", monospace`;
-  ctx.fillText('MONOGRAPH VOL. IV', bookX + 46, bookY + 54);
-
-  ctx.fillStyle = '#F7F5F0';
-  ctx.font = `600 ${Math.round(width * 0.021)}px "Cormorant Garamond", Georgia, serif`;
-  ctx.fillText('The Architecture', bookX + 46, bookY + 114);
-  ctx.fillText('of Clear Ideas', bookX + 46, bookY + 148);
-
-  // Minimal geometric book emblem
-  const embX = bookX + bookW * 0.53;
-  const embY = bookY + bookH * 0.62;
-  ctx.strokeStyle = '#C9A875';
-  ctx.lineWidth = 1.5;
-  ctx.beginPath();
-  ctx.arc(embX, embY, 26, 0, Math.PI * 2);
-  ctx.stroke();
-  ctx.beginPath();
-  ctx.arc(embX, embY, 13, 0, Math.PI * 2);
-  ctx.stroke();
-  ctx.fillStyle = '#C9A875';
-  ctx.beginPath();
-  ctx.arc(embX, embY, 3.5, 0, Math.PI * 2);
-  ctx.fill();
-
-  ctx.fillStyle = 'rgba(247, 245, 240, 0.68)';
-  ctx.font = `500 ${Math.round(width * 0.0072)}px "JetBrains Mono", monospace`;
-  ctx.fillText('4TH PRINT // HARDCOVER', bookX + 46, bookY + bookH - 42);
-
-  // Sleek Embedded Podcast / Keynote Audio Player Bar (bottom of center tile)
-  const playerPad = 24;
-  const playerW = midW - playerPad * 2;
-  const playerH = fullH * 0.195;
-  const playerX = midX + playerPad;
-  const playerY = topY + fullH - playerH - 22;
-
-  ctx.save();
-  ctx.shadowColor = 'rgba(28, 27, 24, 0.22)';
-  ctx.shadowBlur = 22;
-  ctx.shadowOffsetY = 10;
-  ctx.fillStyle = '#1C1B18';
-  drawRoundedRect(ctx, playerX, playerY, playerW, playerH, 14);
-  ctx.fill();
-  ctx.restore();
-
-  // Play Button Circle
-  const playR = playerH * 0.27;
-  const playCX = playerX + 26 + playR;
-  const playCY = playerY + playerH * 0.5;
-  ctx.fillStyle = '#EAE5DC';
-  ctx.beginPath();
-  ctx.arc(playCX, playCY, playR, 0, Math.PI * 2);
-  ctx.fill();
-
-  // Play Triangle
-  ctx.fillStyle = '#1C1B18';
-  ctx.beginPath();
-  ctx.moveTo(playCX - playR * 0.24, playCY - playR * 0.34);
-  ctx.lineTo(playCX + playR * 0.38, playCY);
-  ctx.lineTo(playCX - playR * 0.24, playCY + playR * 0.34);
-  ctx.closePath();
-  ctx.fill();
-
-  // Track Title & Duration
-  const trackX = playCX + playR + 20;
-  ctx.fillStyle = '#F7F5F0';
-  ctx.font = `600 ${Math.round(width * 0.0086)}px "JetBrains Mono", monospace`;
-  ctx.fillText('EP. 14 · THE FUTURE OF WORK', trackX, playerY + playerH * 0.34);
-
-  ctx.fillStyle = '#A89B8C';
-  ctx.font = `500 ${Math.round(width * 0.0076)}px "JetBrains Mono", monospace`;
-  ctx.textAlign = 'right';
-  ctx.fillText('14:22 / 28:40', playerX + playerW - 22, playerY + playerH * 0.34);
+  ctx.textAlign = 'center';
+  ctx.fillStyle = '#FFFFFF';
+  ctx.font = `700 ${Math.round(width * 0.0092)}px "Plus Jakarta Sans", sans-serif`;
+  ctx.fillText(previewSample.ctaLabel, padX + ctaW * 0.5, ctaY + ctaH * 0.52);
   ctx.textAlign = 'left';
 
-  // Waveform bars inside audio player
-  const waveHeights = [0.35, 0.65, 0.9, 0.5, 0.85, 0.45, 0.95, 0.7, 0.4, 0.8, 0.6, 0.9, 0.55, 0.75, 0.45, 0.85, 0.6, 0.35, 0.7, 0.5, 0.65, 0.4];
-  const waveStartX = trackX;
-  const waveEndX = playerX + playerW - 24;
-  const waveSpan = waveEndX - waveStartX;
-  const barStep = waveSpan / waveHeights.length;
-  const barW = Math.max(3, barStep * 0.52);
-  const maxWaveH = playerH * 0.34;
-  const waveBaseY = playerY + playerH * 0.76;
-
-  waveHeights.forEach((wh, i) => {
-    const bx = waveStartX + i * barStep;
-    const bh = maxWaveH * wh;
-    const isPlayed = i < 12;
-    ctx.fillStyle = isPlayed ? '#EAE5DC' : 'rgba(234, 229, 220, 0.28)';
-    drawRoundedRect(ctx, bx, waveBaseY - bh * 0.7, barW, bh, 2);
+  const postals = ['1012 JS AMSTERDAM', '2611 GW DELFT'];
+  let px = padX + ctaW + 14;
+  postals.forEach((p, idx) => {
+    ctx.font = `500 ${Math.round(width * 0.0078)}px "JetBrains Mono", monospace`;
+    const pw = ctx.measureText(p).width + 22;
+    ctx.fillStyle = idx === 0 ? 'rgba(243, 239, 230, 0.14)' : 'rgba(243, 239, 230, 0.06)';
+    drawRoundedRect(ctx, px, ctaY + 8, pw, ctaH - 16, 16);
     ctx.fill();
+    ctx.strokeStyle = 'rgba(243, 239, 230, 0.22)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+    ctx.fillStyle = ivory;
+    ctx.fillText(p, px + 11, ctaY + ctaH * 0.52);
+    px += pw + 8;
   });
 
-  applyEditorialGrain(ctx, midX, topY, midW, fullH, 707, 0.035);
+  // =========================================================================
+  // UPPER RIGHT: Modern Charred Cedar Pavilion & Slate Patio Dusk Illustration
+  // =========================================================================
+  ctx.save();
+  drawRoundedRect(ctx, rightX, heroY, rightW, heroH, 22);
+  ctx.clip();
+
+  // Dusk twilight gradient behind garden architecture
+  const skyGrad = ctx.createLinearGradient(rightX, heroY, rightX, heroY + heroH);
+  skyGrad.addColorStop(0, '#0E1C16');
+  skyGrad.addColorStop(0.6, '#1E382D');
+  skyGrad.addColorStop(1, '#111E18');
+  ctx.fillStyle = skyGrad;
+  ctx.fillRect(rightX, heroY, rightW, heroH);
+
+  // Soft golden moon / dusk glow
+  const moonGlow = ctx.createRadialGradient(
+    rightX + rightW * 0.72,
+    heroY + heroH * 0.28,
+    4,
+    rightX + rightW * 0.72,
+    heroY + heroH * 0.28,
+    rightW * 0.35,
+  );
+  moonGlow.addColorStop(0, 'rgba(243, 239, 230, 0.24)');
+  moonGlow.addColorStop(1, 'transparent');
+  ctx.fillStyle = moonGlow;
+  ctx.fillRect(rightX, heroY, rightW, heroH);
+
+  // Garden Patio Slate Floor Horizon
+  const deckY = heroY + heroH * 0.72;
+  ctx.fillStyle = '#18241F';
+  ctx.fillRect(rightX, deckY, rightW, heroH - (deckY - heroY));
+
+  // Subtle Belgian slate terrace slab joints
+  ctx.strokeStyle = 'rgba(243, 239, 230, 0.12)';
+  ctx.lineWidth = 1.2;
+  ctx.beginPath();
+  ctx.moveTo(rightX, deckY);
+  ctx.lineTo(rightX + rightW, deckY);
+  for (let s = 1; s < 5; s++) {
+    const sx = rightX + (rightW / 5) * s;
+    ctx.moveTo(sx, deckY);
+    ctx.lineTo(sx - 24, heroY + heroH);
+  }
+  ctx.stroke();
+
+  // Architectural Charred Cedar Pavilion Structure
+  const pavX = rightX + rightW * 0.14;
+  const pavW = rightW * 0.72;
+  const pavTop = heroY + heroH * 0.22;
+  const pavBot = deckY;
+
+  // Warm illuminated interior amber-copper pavilion recess
+  const intGlow = ctx.createLinearGradient(pavX, pavTop, pavX + pavW, pavBot);
+  intGlow.addColorStop(0, '#E89D5A');
+  intGlow.addColorStop(0.6, '#C86D44');
+  intGlow.addColorStop(1, '#5C2F1E');
+  ctx.fillStyle = intGlow;
+  ctx.fillRect(pavX + 18, pavTop + 18, pavW - 36, pavBot - pavTop - 18);
+
+  // Warm ambient light spilled onto slate patio
+  const spillGrad = ctx.createLinearGradient(0, deckY, 0, heroY + heroH);
+  spillGrad.addColorStop(0, 'rgba(232, 157, 90, 0.32)');
+  spillGrad.addColorStop(1, 'rgba(232, 157, 90, 0)');
+  ctx.fillStyle = spillGrad;
+  ctx.beginPath();
+  ctx.moveTo(pavX + 18, deckY);
+  ctx.lineTo(pavX + pavW - 18, deckY);
+  ctx.lineTo(pavX + pavW + 24, heroY + heroH);
+  ctx.lineTo(pavX - 24, heroY + heroH);
+  ctx.closePath();
+  ctx.fill();
+
+  // Dark Zinc Overhanging Flat Roof Fascia
+  ctx.fillStyle = '#0D1311';
+  drawRoundedRect(ctx, pavX - 18, pavTop, pavW + 36, 20, 4);
+  ctx.fill();
+  ctx.fillStyle = copper;
+  ctx.fillRect(pavX - 16, pavTop + 17, pavW + 32, 2.5);
+
+  // Charred Cedar Columns & Vertical Timber Slats
+  ctx.fillStyle = '#121815';
+  ctx.fillRect(pavX + 8, pavTop + 18, 16, pavBot - pavTop - 18);
+  ctx.fillRect(pavX + pavW - 24, pavTop + 18, 16, pavBot - pavTop - 18);
+  ctx.fillRect(pavX + pavW * 0.42, pavTop + 18, 10, pavBot - pavTop - 18);
+
+  for (let slat = 0; slat < 6; slat++) {
+    ctx.fillRect(pavX + 40 + slat * 20, pavTop + 18, 7, pavBot - pavTop - 18);
+  }
+
+  // Stylized Garden Pines / Shrubs framing pavilion
+  ctx.fillStyle = '#0F221A';
+  ctx.beginPath();
+  ctx.arc(rightX + 34, deckY - 12, 42, 0, Math.PI * 2);
+  ctx.arc(rightX + rightW - 28, deckY - 6, 48, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Tag overlay on pavilion photo
+  ctx.fillStyle = 'rgba(22, 41, 33, 0.85)';
+  drawRoundedRect(ctx, rightX + 18, heroY + 18, width * 0.145, 28, 14);
+  ctx.fill();
+  ctx.fillStyle = ivory;
+  ctx.font = `600 ${Math.round(width * 0.0074)}px "JetBrains Mono", monospace`;
+  ctx.fillText('CHARRED CEDAR PAVILION', rightX + 30, heroY + 33);
+
   ctx.restore();
+  ctx.strokeStyle = 'rgba(243, 239, 230, 0.18)';
+  ctx.lineWidth = 1.5;
+  drawRoundedRect(ctx, rightX, heroY, rightW, heroH, 22);
+  ctx.stroke();
 
   // =========================================================================
-  // RIGHT COLUMN: 3 Stacked Modular Index Cards (Speaking, Monograph, Podcast)
+  // BOTTOM FULL-WIDTH SANDSTONE IVORY (#F3EFE6) ESTIMATOR & WEATHER BAR
   // =========================================================================
-  const rightX = midX + midW + gap;
-  const tileH = (fullH - gap * 2) / 3;
-  previewSample.metrics.forEach((m, idx) => {
-    const ty = topY + idx * (tileH + gap);
-    ctx.fillStyle = idx === 1 ? palette.surface : '#FFFFFF';
-    drawRoundedRect(ctx, rightX, ty, rightW, tileH, 16);
+  const botY = heroY + heroH + height * 0.04;
+  const botH = height - botY - height * 0.055;
+
+  ctx.fillStyle = ivory;
+  drawRoundedRect(ctx, padX, botY, contentW, botH, 22);
+  ctx.fill();
+
+  const bPad = 28;
+  const halfW = (contentW - bPad * 3) * 0.5;
+
+  // Vertical hairline divider inside sandstone card
+  ctx.strokeStyle = 'rgba(22, 41, 33, 0.12)';
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.moveTo(padX + bPad + halfW + bPad * 0.5, botY + 24);
+  ctx.lineTo(padX + bPad + halfW + bPad * 0.5, botY + botH - 24);
+  ctx.stroke();
+
+  // LEFT HALF: PDOK Address & 3-Day Site Build Weather
+  const wx = padX + bPad;
+  ctx.fillStyle = copper;
+  ctx.font = `700 ${Math.round(width * 0.0084)}px "JetBrains Mono", monospace`;
+  ctx.fillText('PDOK PARCEL · DAM, 1012 JS AMSTERDAM', wx, botY + 38);
+
+  const weatherDays = [
+    { day: 'WED', temp: '13°C', status: 'Ideal outdoor', dry: true },
+    { day: 'THU', temp: '14°C', status: 'Clear window', dry: true },
+    { day: 'FRI', temp: '11°C', status: 'Roofed prep', dry: false },
+  ];
+  const wGap = 12;
+  const dayW = (halfW - wGap * 2) / 3;
+  const dayY = botY + 62;
+  const dayH = botH - 86;
+
+  weatherDays.forEach((d, idx) => {
+    const dx = wx + idx * (dayW + wGap);
+    ctx.fillStyle = '#FFFFFF';
+    drawRoundedRect(ctx, dx, dayY, dayW, dayH, 14);
     ctx.fill();
-    ctx.strokeStyle = 'rgba(28, 27, 24, 0.10)';
-    ctx.lineWidth = 1.5;
+    ctx.strokeStyle = 'rgba(22, 41, 33, 0.1)';
+    ctx.lineWidth = 1.2;
     ctx.stroke();
 
-    ctx.fillStyle = palette.accent;
-    ctx.font = `600 ${Math.round(width * 0.0082)}px "JetBrains Mono", monospace`;
-    ctx.fillText(previewSample.cardLabels[idx] || m.label, rightX + 22, ty + tileH * 0.28);
+    ctx.fillStyle = '#586E63';
+    ctx.font = `600 ${Math.round(width * 0.008)}px "JetBrains Mono", monospace`;
+    ctx.fillText(d.day, dx + 14, dayY + 26);
 
-    ctx.fillStyle = palette.text;
-    ctx.font = `600 ${Math.round(width * 0.0195)}px "Cormorant Garamond", Georgia, serif`;
-    ctx.fillText(m.value, rightX + 22, ty + tileH * 0.58);
+    ctx.fillStyle = pineBg;
+    ctx.font = `700 ${Math.round(width * 0.019)}px "Plus Jakarta Sans", sans-serif`;
+    ctx.fillText(d.temp, dx + 14, dayY + 62);
 
-    ctx.fillStyle = palette.secondary;
-    ctx.font = `500 ${Math.round(width * 0.0084)}px "Plus Jakarta Sans", sans-serif`;
-    ctx.fillText(m.label, rightX + 22, ty + tileH * 0.8);
+    ctx.fillStyle = d.dry ? '#166534' : copper;
+    ctx.font = `600 ${Math.round(width * 0.008)}px "Plus Jakarta Sans", sans-serif`;
+    ctx.fillText(d.status, dx + 14, dayY + dayH - 18);
   });
+
+  // RIGHT HALF: Project Scope Tabs + 48 m² Slider + Price Range
+  const ex = padX + bPad * 2 + halfW;
+  ctx.fillStyle = '#586E63';
+  ctx.font = `700 ${Math.round(width * 0.0084)}px "JetBrains Mono", monospace`;
+  ctx.fillText('TURNKEY M² SCOPE ESTIMATOR', ex, botY + 38);
+
+  // Scope Pill Tabs
+  let sx = ex;
+  previewSample.cardLabels.forEach((lbl, idx) => {
+    const isAct = idx === 0;
+    ctx.font = `600 ${Math.round(width * 0.0082)}px "JetBrains Mono", monospace`;
+    const sw = ctx.measureText(lbl).width + 24;
+    ctx.fillStyle = isAct ? pineBg : 'rgba(22, 41, 33, 0.08)';
+    drawRoundedRect(ctx, sx, botY + 56, sw, 32, 16);
+    ctx.fill();
+    ctx.fillStyle = isAct ? ivory : pineBg;
+    ctx.fillText(lbl, sx + 12, botY + 73);
+    sx += sw + 8;
+  });
+
+  // Slider Bar for 48 m²
+  const trackY = botY + 114;
+  ctx.fillStyle = 'rgba(22, 41, 33, 0.14)';
+  drawRoundedRect(ctx, ex, trackY, halfW - 95, 8, 4);
+  ctx.fill();
+  ctx.fillStyle = copper;
+  drawRoundedRect(ctx, ex, trackY, (halfW - 95) * 0.45, 8, 4);
+  ctx.fill();
+  ctx.beginPath();
+  ctx.arc(ex + (halfW - 95) * 0.45, trackY + 4, 9, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.textAlign = 'right';
+  ctx.fillStyle = pineBg;
+  ctx.font = `700 ${Math.round(width * 0.011)}px "JetBrains Mono", monospace`;
+  ctx.fillText('48 m²', ex + halfW, trackY + 5);
+  ctx.textAlign = 'left';
+
+  // Estimated Price Range
+  ctx.fillStyle = pineBg;
+  ctx.font = `700 ${Math.round(width * 0.024)}px "Cormorant Garamond", Georgia, serif`;
+  ctx.fillText('€ 5.960 – € 7.260', ex, botY + botH - 28);
+
+  ctx.textAlign = 'right';
+  ctx.fillStyle = copper;
+  ctx.font = `700 ${Math.round(width * 0.0094)}px "JetBrains Mono", monospace`;
+  ctx.fillText('INCL. INSTALL →', ex + halfW, botY + botH - 30);
+  ctx.textAlign = 'left';
+
+  applyEditorialGrain(ctx, 0, headerBottom, width, height - headerBottom, 707, 0.025);
 }

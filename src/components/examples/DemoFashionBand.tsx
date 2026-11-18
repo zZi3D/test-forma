@@ -6,9 +6,11 @@ import {
   Glasses,
   MapPin,
   Minus,
+  Moon,
   Plus,
   ShoppingBag,
   Sparkles,
+  Sun,
 } from 'lucide-react';
 import { motion, useReducedMotion } from 'motion/react';
 import fashionModelImg from '../../assets/images/demo_fashion_campaign_1794958789947.jpg';
@@ -25,6 +27,7 @@ interface DemoFashionBandProps {
 
 export function DemoFashionBand({ lang, onBuildInStyle }: DemoFashionBandProps) {
   const prefersReducedMotion = Boolean(useReducedMotion());
+  const [isDark, setIsDark] = useState(false);
   const [activeNavIdx, setActiveNavIdx] = useState(0);
   const [variantId, setVariantId] = useState(FASHION_VARIANTS[0].id);
   const [fit, setFit] = useState(FASHION_FITS[0]);
@@ -63,6 +66,7 @@ export function DemoFashionBand({ lang, onBuildInStyle }: DemoFashionBandProps) 
       stockText: `Nog ${activeVariant.stock} stuks op voorraad`,
       checkoutBtn: 'Bestel direct via WhatsApp →',
       orderMsg: `WhatsApp order klaar: ${bagCount}× Solaris (${activeVariant.label.nl}, ${fit}) — € ${totalEur}`,
+      themeLabel: isDark ? 'Wissel naar lichte blush-modus' : 'Wissel naar donkere velvet-modus',
     },
     en: {
       demoTag: 'Demo 05 · High-Contrast Fashion Store',
@@ -78,18 +82,58 @@ export function DemoFashionBand({ lang, onBuildInStyle }: DemoFashionBandProps) 
       stockText: `${activeVariant.stock} pieces left in studio stock`,
       checkoutBtn: 'Order via WhatsApp →',
       orderMsg: `WhatsApp order ready: ${bagCount}× Solaris (${activeVariant.label.en}, ${fit}) — € ${totalEur}`,
+      themeLabel: isDark ? 'Switch to blush light mode' : 'Switch to velvet noir dark mode',
     },
   }[lang];
+
+  const renderThemeSwitch = () => (
+    <button
+      type="button"
+      onClick={() => setIsDark((prev) => !prev)}
+      aria-label={t.themeLabel}
+      aria-pressed={isDark}
+      className={`inline-flex h-8 items-center gap-0.5 rounded-full border p-0.5 transition-colors shrink-0 ${
+        isDark
+          ? 'border-[#F6CBD4]/20 bg-[#200610] text-[#F6CBD4]'
+          : 'border-white/20 bg-[#350919] text-[#F6CBD4]'
+      }`}
+    >
+      <span
+        className={`flex h-6.5 w-6.5 items-center justify-center rounded-full transition-colors ${
+          !isDark ? 'bg-[#F6CBD4] text-[#4A0F24] shadow-xs' : 'text-[#F6CBD4]/45'
+        }`}
+      >
+        <Sun className="h-3.5 w-3.5" />
+      </span>
+      <span
+        className={`flex h-6.5 w-6.5 items-center justify-center rounded-full transition-colors ${
+          isDark ? 'bg-[#2DC92A] text-[#142914] shadow-xs' : 'text-[#F6CBD4]/45'
+        }`}
+      >
+        <Moon className="h-3.5 w-3.5" />
+      </span>
+    </button>
+  );
 
   return (
     <section
       aria-label={t.demoTag}
-      className="relative overflow-hidden rounded-3xl border border-[#4A0F24]/15 bg-[#F6CBD4] text-[#4A0F24] shadow-[0_24px_60px_-24px_rgba(74,15,36,0.22)]"
+      className={`relative overflow-hidden rounded-3xl border transition-colors duration-300 ${
+        isDark
+          ? 'border-[#F6CBD4]/15 bg-[#200610] text-[#F6CBD4] shadow-[0_24px_60px_-24px_rgba(0,0,0,0.65)]'
+          : 'border-[#4A0F24]/15 bg-[#F6CBD4] text-[#4A0F24] shadow-[0_24px_60px_-24px_rgba(74,15,36,0.22)]'
+      }`}
     >
-      {/* HEADER VARIANT 5: Bold Deep Wine Capsule Header with Translucent Glass Active Tile + Kelly Green Bag Pop (Skin 1 from screenshot) */}
+      {/* HEADER VARIANT 5: Bold Deep Wine Capsule Header with Translucent Glass Active Tile + Kelly Green Bag Pop + Sun/Moon */}
       <div className="px-3 pt-3 md:px-8 md:pt-6">
-        <header className="flex flex-col gap-1.5 rounded-2xl bg-[#4A0F24] px-3.5 py-2 text-[#F6CBD4] shadow-[0_14px_34px_-12px_rgba(74,15,36,0.45)] lg:flex-row lg:items-center lg:justify-between lg:gap-4 lg:rounded-full lg:px-5">
-          <div className="flex items-center justify-between gap-3">
+        <header
+          className={`flex flex-col gap-1.5 rounded-2xl border px-3.5 py-2 text-[#F6CBD4] transition-colors duration-300 lg:flex-row lg:items-center lg:justify-between lg:gap-4 lg:rounded-full lg:px-5 ${
+            isDark
+              ? 'border-[#F6CBD4]/14 bg-[#350B1C] shadow-[0_14px_34px_-12px_rgba(0,0,0,0.65)]'
+              : 'border-transparent bg-[#4A0F24] shadow-[0_14px_34px_-12px_rgba(74,15,36,0.45)]'
+          }`}
+        >
+          <div className="flex items-center justify-between gap-2">
             <a
               href="#demo-fashion"
               onClick={(e) => {
@@ -102,24 +146,27 @@ export function DemoFashionBand({ lang, onBuildInStyle }: DemoFashionBandProps) 
               STUDIO VESPER
             </a>
 
-            <motion.button
-              key={`bag-m-${bagCount}`}
-              type="button"
-              onClick={scrollToDrop}
-              initial={
-                prefersReducedMotion
-                  ? false
-                  : { scale: 1.24, rotate: -4 }
-              }
-              animate={{ scale: [1.24, 0.94, 1.06, 1], rotate: [-4, 4, 0] }}
-              transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
-              className="inline-flex h-8 items-center gap-1.5 rounded-full bg-[#2DC92A] px-3 text-[11px] font-bold tracking-[0.06em] text-[#142914] uppercase whitespace-nowrap shrink-0 shadow-[0_0_20px_-4px_rgba(45,201,42,0.7)] lg:hidden"
-            >
-              <ShoppingBag className="h-3 w-3" />
-              <span className="font-mono-tabular">
-                {t.bagLabel} ({bagCount})
-              </span>
-            </motion.button>
+            <div className="flex items-center gap-1.5 lg:hidden">
+              {renderThemeSwitch()}
+              <motion.button
+                key={`bag-m-${bagCount}`}
+                type="button"
+                onClick={scrollToDrop}
+                initial={
+                  prefersReducedMotion
+                    ? false
+                    : { scale: 1.24, rotate: -4 }
+                }
+                animate={{ scale: [1.24, 0.94, 1.06, 1], rotate: [-4, 4, 0] }}
+                transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
+                className="inline-flex h-8 items-center gap-1.5 rounded-full bg-[#2DC92A] px-2.5 text-[11px] font-bold tracking-[0.06em] text-[#142914] uppercase whitespace-nowrap shrink-0 shadow-[0_0_20px_-4px_rgba(45,201,42,0.7)]"
+              >
+                <ShoppingBag className="h-3 w-3" />
+                <span className="font-mono-tabular">
+                  {t.bagLabel} ({bagCount})
+                </span>
+              </motion.button>
+            </div>
           </div>
 
           {/* Mobile 4-icon Deep Wine Translucent Glass Tile Strip (always visible on phone) */}
@@ -189,24 +236,27 @@ export function DemoFashionBand({ lang, onBuildInStyle }: DemoFashionBandProps) 
             })}
           </nav>
 
-          <motion.button
-            key={`bag-${bagCount}`}
-            type="button"
-            onClick={scrollToDrop}
-            initial={
-              prefersReducedMotion
-                ? false
-                : { scale: 1.24, rotate: -4 }
-            }
-            animate={{ scale: [1.24, 0.94, 1.06, 1], rotate: [-4, 4, 0] }}
-            transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
-            className="hidden h-9 items-center gap-2 rounded-full bg-[#2DC92A] px-4 text-[12px] font-bold tracking-[0.06em] text-[#142914] uppercase whitespace-nowrap shrink-0 shadow-[0_0_20px_-4px_rgba(45,201,42,0.7)] transition-colors hover:bg-[#25B122] lg:inline-flex"
-          >
-            <ShoppingBag className="h-3.5 w-3.5" />
-            <span className="font-mono-tabular">
-              {t.bagLabel} ({bagCount})
-            </span>
-          </motion.button>
+          <div className="hidden items-center gap-2 lg:flex shrink-0">
+            {renderThemeSwitch()}
+            <motion.button
+              key={`bag-${bagCount}`}
+              type="button"
+              onClick={scrollToDrop}
+              initial={
+                prefersReducedMotion
+                  ? false
+                  : { scale: 1.24, rotate: -4 }
+              }
+              animate={{ scale: [1.24, 0.94, 1.06, 1], rotate: [-4, 4, 0] }}
+              transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
+              className="inline-flex h-9 items-center gap-2 rounded-full bg-[#2DC92A] px-4 text-[12px] font-bold tracking-[0.06em] text-[#142914] uppercase whitespace-nowrap shrink-0 shadow-[0_0_20px_-4px_rgba(45,201,42,0.7)] transition-colors hover:bg-[#25B122]"
+            >
+              <ShoppingBag className="h-3.5 w-3.5" />
+              <span className="font-mono-tabular">
+                {t.bagLabel} ({bagCount})
+              </span>
+            </motion.button>
+          </div>
         </header>
       </div>
 
@@ -214,21 +264,41 @@ export function DemoFashionBand({ lang, onBuildInStyle }: DemoFashionBandProps) 
       <div className="px-4 pt-5 pb-5 md:px-10 md:pt-10 md:pb-10">
         <div className="grid grid-cols-1 items-center gap-5 lg:grid-cols-12 lg:gap-8">
           <div className="lg:col-span-6">
-            <div className="flex flex-wrap items-center gap-2 text-[10.5px] font-semibold tracking-[0.12em] text-[#4A0F24]/70 uppercase md:text-[11px]">
+            <div
+              className={`flex flex-wrap items-center gap-2 text-[10.5px] font-semibold tracking-[0.12em] uppercase md:text-[11px] ${
+                isDark ? 'text-[#F6CBD4]/70' : 'text-[#4A0F24]/70'
+              }`}
+            >
               <span>{t.demoTag}</span>
               <span aria-hidden="true">·</span>
-              <span>#F6CBD4 · #4A0F24 · #2DC92A</span>
+              <span>
+                {isDark
+                  ? '#200610 · #F6CBD4 · #2DC92A'
+                  : '#F6CBD4 · #4A0F24 · #2DC92A'}
+              </span>
             </div>
 
-            <p className="mt-2.5 text-[11px] font-bold tracking-[0.14em] text-[#4A0F24]/80 uppercase md:mt-4 md:text-[12px]">
+            <p
+              className={`mt-2.5 text-[11px] font-bold tracking-[0.14em] uppercase md:mt-4 md:text-[12px] ${
+                isDark ? 'text-[#F6CBD4]/82' : 'text-[#4A0F24]/80'
+              }`}
+            >
               {t.eyebrow}
             </p>
 
-            <h2 className="font-demo-antonio mt-1 text-[clamp(3.3rem,10vw,7.25rem)] leading-[0.86] font-bold tracking-[-0.02em] text-[#4A0F24] uppercase">
+            <h2
+              className={`font-demo-antonio mt-1 text-[clamp(3.3rem,10vw,7.25rem)] leading-[0.86] font-bold tracking-[-0.02em] uppercase ${
+                isDark ? 'text-[#F6CBD4]' : 'text-[#4A0F24]'
+              }`}
+            >
               {t.headline}
             </h2>
 
-            <p className="mt-2.5 max-w-[38ch] text-[12.5px] font-medium tracking-[0.04em] text-[#4A0F24]/85 uppercase md:mt-4 md:text-[13.5px]">
+            <p
+              className={`mt-2.5 max-w-[38ch] text-[12.5px] font-medium tracking-[0.04em] uppercase md:mt-4 md:text-[13.5px] ${
+                isDark ? 'text-[#F6CBD4]/84' : 'text-[#4A0F24]/85'
+              }`}
+            >
               {t.specs}
             </p>
 
@@ -245,10 +315,14 @@ export function DemoFashionBand({ lang, onBuildInStyle }: DemoFashionBandProps) 
                 type="button"
                 onClick={() =>
                   onBuildInStyle(
-                    `Fashion Store Demo (Blush, Deep Wine & Kelly Green) — ${activeVariant.label[lang]}`,
+                    `Fashion Store Demo (${isDark ? 'Velvet Noir' : 'Blush'}, Deep Wine & Kelly Green) — ${activeVariant.label[lang]}`,
                   )
                 }
-                className="text-[12px] font-bold text-[#4A0F24]/80 underline-offset-4 hover:text-[#4A0F24] hover:underline md:text-[12.5px]"
+                className={`text-[12px] font-bold underline-offset-4 hover:underline md:text-[12.5px] ${
+                  isDark
+                    ? 'text-[#F6CBD4]/80 hover:text-[#F6CBD4]'
+                    : 'text-[#4A0F24]/80 hover:text-[#4A0F24]'
+                }`}
               >
                 {t.buildThis}
               </button>
@@ -302,14 +376,30 @@ export function DemoFashionBand({ lang, onBuildInStyle }: DemoFashionBandProps) 
         {/* INTERACTIVE DROP CONFIGURATOR + WHATSAPP BAG */}
         <div
           id="fashion-drop-module"
-          className="mt-5 rounded-2xl border border-[#4A0F24]/15 bg-white/85 p-3.5 md:mt-8 md:p-6"
+          className={`mt-5 rounded-2xl border p-3.5 transition-colors duration-300 md:mt-8 md:p-6 ${
+            isDark
+              ? 'border-[#F6CBD4]/15 bg-[#2A0816]'
+              : 'border-[#4A0F24]/15 bg-white/85'
+          }`}
         >
-          <div className="flex flex-col justify-between gap-2 border-b border-[#4A0F24]/10 pb-3.5 sm:flex-row sm:items-center">
-            <span className="inline-flex items-center gap-2 text-[12.5px] font-bold tracking-[0.06em] text-[#4A0F24] uppercase">
+          <div
+            className={`flex flex-col justify-between gap-2 border-b pb-3.5 sm:flex-row sm:items-center ${
+              isDark ? 'border-[#F6CBD4]/12' : 'border-[#4A0F24]/10'
+            }`}
+          >
+            <span
+              className={`inline-flex items-center gap-2 text-[12.5px] font-bold tracking-[0.06em] uppercase ${
+                isDark ? 'text-[#F6CBD4]' : 'text-[#4A0F24]'
+              }`}
+            >
               <Sparkles className="h-4 w-4 text-[#2DC92A]" />
               <span>{t.moduleTitle}</span>
             </span>
-            <span className="font-mono-tabular text-[12px] font-semibold text-[#4A0F24]/70">
+            <span
+              className={`font-mono-tabular text-[12px] font-semibold ${
+                isDark ? 'text-[#F6CBD4]/72' : 'text-[#4A0F24]/70'
+              }`}
+            >
               {t.stockText}
             </span>
           </div>
@@ -318,7 +408,11 @@ export function DemoFashionBand({ lang, onBuildInStyle }: DemoFashionBandProps) 
             {/* Colorway & Fit Selectors */}
             <div className="space-y-4 lg:col-span-7">
               <div>
-                <p className="text-[11px] font-bold tracking-[0.1em] text-[#4A0F24]/65 uppercase">
+                <p
+                  className={`text-[11px] font-bold tracking-[0.1em] uppercase ${
+                    isDark ? 'text-[#F6CBD4]/68' : 'text-[#4A0F24]/65'
+                  }`}
+                >
                   {t.colorLabel}
                 </p>
                 <div className="mt-2 flex flex-wrap gap-2">
@@ -334,8 +428,12 @@ export function DemoFashionBand({ lang, onBuildInStyle }: DemoFashionBandProps) 
                         }}
                         className={`inline-flex h-9 items-center gap-2 rounded-full px-3.5 text-[12px] font-semibold transition-colors ${
                           active
-                            ? 'bg-[#4A0F24] text-[#F6CBD4]'
-                            : 'border border-[#4A0F24]/20 bg-[#F6CBD4]/35 text-[#4A0F24] hover:border-[#4A0F24]'
+                            ? isDark
+                              ? 'bg-[#F6CBD4] text-[#200610]'
+                              : 'bg-[#4A0F24] text-[#F6CBD4]'
+                            : isDark
+                              ? 'border border-[#F6CBD4]/22 bg-[#350B1C] text-[#F6CBD4] hover:border-[#F6CBD4]'
+                              : 'border border-[#4A0F24]/20 bg-[#F6CBD4]/35 text-[#4A0F24] hover:border-[#4A0F24]'
                         }`}
                       >
                         <span
@@ -351,7 +449,11 @@ export function DemoFashionBand({ lang, onBuildInStyle }: DemoFashionBandProps) 
               </div>
 
               <div>
-                <p className="text-[11px] font-bold tracking-[0.1em] text-[#4A0F24]/65 uppercase">
+                <p
+                  className={`text-[11px] font-bold tracking-[0.1em] uppercase ${
+                    isDark ? 'text-[#F6CBD4]/68' : 'text-[#4A0F24]/65'
+                  }`}
+                >
                   {t.fitLabel}
                 </p>
                 <div className="mt-2 flex flex-wrap gap-2">
@@ -368,7 +470,9 @@ export function DemoFashionBand({ lang, onBuildInStyle }: DemoFashionBandProps) 
                         className={`font-mono-tabular relative h-9 rounded-lg px-3.5 text-[12px] font-semibold transition-colors ${
                           activeFit
                             ? 'text-[#142914]'
-                            : 'border border-[#4A0F24]/20 bg-white text-[#4A0F24] hover:border-[#4A0F24]'
+                            : isDark
+                              ? 'border border-[#F6CBD4]/20 bg-[#200610] text-[#F6CBD4] hover:border-[#F6CBD4]'
+                              : 'border border-[#4A0F24]/20 bg-white text-[#4A0F24] hover:border-[#4A0F24]'
                         }`}
                       >
                         {activeFit && (
@@ -391,18 +495,38 @@ export function DemoFashionBand({ lang, onBuildInStyle }: DemoFashionBandProps) 
             </div>
 
             {/* Live Bag Summary & WhatsApp Checkout */}
-            <div className="rounded-xl border border-[#4A0F24]/15 bg-[#FCEAF0] p-4 lg:col-span-5">
+            <div
+              className={`rounded-xl border p-4 lg:col-span-5 ${
+                isDark
+                  ? 'border-[#F6CBD4]/16 bg-[#350B1C]'
+                  : 'border-[#4A0F24]/15 bg-[#FCEAF0]'
+              }`}
+            >
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-[14px] font-bold text-[#4A0F24]">
+                  <p
+                    className={`text-[14px] font-bold ${
+                      isDark ? 'text-[#F6CBD4]' : 'text-[#4A0F24]'
+                    }`}
+                  >
                     Solaris 01 · {activeVariant.label[lang]}
                   </p>
-                  <p className="font-mono-tabular text-[11.5px] text-[#4A0F24]/65">
+                  <p
+                    className={`font-mono-tabular text-[11.5px] ${
+                      isDark ? 'text-[#F6CBD4]/68' : 'text-[#4A0F24]/65'
+                    }`}
+                  >
                     {fit} · € {activeVariant.price}/st
                   </p>
                 </div>
 
-                <div className="inline-flex items-center gap-2 rounded-full border border-[#4A0F24]/20 bg-white px-2 py-1">
+                <div
+                  className={`inline-flex items-center gap-2 rounded-full border px-2 py-1 ${
+                    isDark
+                      ? 'border-[#F6CBD4]/20 bg-[#200610]'
+                      : 'border-[#4A0F24]/20 bg-white'
+                  }`}
+                >
                   <button
                     type="button"
                     aria-label="Decrease quantity"
@@ -410,7 +534,11 @@ export function DemoFashionBand({ lang, onBuildInStyle }: DemoFashionBandProps) 
                       setBagCount((c) => Math.max(1, c - 1));
                       setOrderSubmitted(false);
                     }}
-                    className="inline-flex h-6 w-6 items-center justify-center rounded-full text-[#4A0F24] hover:bg-[#F6CBD4]/50"
+                    className={`inline-flex h-6 w-6 items-center justify-center rounded-full ${
+                      isDark
+                        ? 'text-[#F6CBD4] hover:bg-white/10'
+                        : 'text-[#4A0F24] hover:bg-[#F6CBD4]/50'
+                    }`}
                   >
                     <Minus className="h-3 w-3" />
                   </button>
@@ -424,15 +552,27 @@ export function DemoFashionBand({ lang, onBuildInStyle }: DemoFashionBandProps) 
                       setBagCount((c) => Math.min(activeVariant.stock, c + 1));
                       setOrderSubmitted(false);
                     }}
-                    className="inline-flex h-6 w-6 items-center justify-center rounded-full text-[#4A0F24] hover:bg-[#F6CBD4]/50"
+                    className={`inline-flex h-6 w-6 items-center justify-center rounded-full ${
+                      isDark
+                        ? 'text-[#F6CBD4] hover:bg-white/10'
+                        : 'text-[#4A0F24] hover:bg-[#F6CBD4]/50'
+                    }`}
                   >
                     <Plus className="h-3 w-3" />
                   </button>
                 </div>
               </div>
 
-              <div className="mt-4 flex items-center justify-between border-t border-[#4A0F24]/12 pt-3">
-                <span className="text-[12px] font-medium text-[#4A0F24]/70">
+              <div
+                className={`mt-4 flex items-center justify-between border-t pt-3 ${
+                  isDark ? 'border-[#F6CBD4]/12' : 'border-[#4A0F24]/12'
+                }`}
+              >
+                <span
+                  className={`text-[12px] font-medium ${
+                    isDark ? 'text-[#F6CBD4]/72' : 'text-[#4A0F24]/70'
+                  }`}
+                >
                   {lang === 'nl' ? 'Totaalbedrag' : 'Order total'}
                 </span>
                 <motion.span
@@ -440,7 +580,9 @@ export function DemoFashionBand({ lang, onBuildInStyle }: DemoFashionBandProps) 
                   initial={prefersReducedMotion ? false : { scale: 1.2, y: -2 }}
                   animate={{ scale: 1, y: 0 }}
                   transition={{ type: 'spring', stiffness: 420, damping: 20 }}
-                  className="font-mono-tabular text-[20px] font-bold text-[#4A0F24]"
+                  className={`font-mono-tabular text-[20px] font-bold ${
+                    isDark ? 'text-[#F6CBD4]' : 'text-[#4A0F24]'
+                  }`}
                 >
                   € {totalEur}
                 </motion.span>
@@ -449,13 +591,21 @@ export function DemoFashionBand({ lang, onBuildInStyle }: DemoFashionBandProps) 
               <button
                 type="button"
                 onClick={() => setOrderSubmitted(true)}
-                className="mt-3 inline-flex h-10 w-full items-center justify-center gap-2 rounded-full bg-[#4A0F24] px-5 text-[12.5px] font-bold text-[#F6CBD4] transition-colors hover:bg-[#2DC92A] hover:text-[#142914]"
+                className={`mt-3 inline-flex h-10 w-full items-center justify-center gap-2 rounded-full px-5 text-[12.5px] font-bold transition-colors ${
+                  isDark
+                    ? 'bg-[#2DC92A] text-[#142914] hover:bg-[#F6CBD4] hover:text-[#200610]'
+                    : 'bg-[#4A0F24] text-[#F6CBD4] hover:bg-[#2DC92A] hover:text-[#142914]'
+                }`}
               >
                 <span>{t.checkoutBtn}</span>
               </button>
 
               {orderSubmitted && (
-                <p className="mt-2 inline-flex items-start gap-1.5 text-[11.5px] font-semibold text-emerald-900">
+                <p
+                  className={`mt-2 inline-flex items-start gap-1.5 text-[11.5px] font-semibold ${
+                    isDark ? 'text-emerald-300' : 'text-emerald-900'
+                  }`}
+                >
                   <Check className="mt-0.5 h-3.5 w-3.5 shrink-0" />
                   <span>{t.orderMsg}</span>
                 </p>

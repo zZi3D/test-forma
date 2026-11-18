@@ -17,7 +17,7 @@ function drawNeumorphicSurface(
   recessed = false,
 ) {
   ctx.save();
-  ctx.shadowColor = recessed ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.85)';
+  ctx.shadowColor = recessed ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.82)';
   ctx.shadowBlur = recessed ? 6 : 18;
   ctx.shadowOffsetX = recessed ? -3 : 6;
   ctx.shadowOffsetY = recessed ? -3 : 7;
@@ -25,7 +25,7 @@ function drawNeumorphicSurface(
   drawRoundedRect(ctx, x, y, w, h, r);
   ctx.fill();
 
-  ctx.shadowColor = recessed ? 'rgba(0,0,0,0.9)' : 'rgba(255,255,255,0.07)';
+  ctx.shadowColor = recessed ? 'rgba(0,0,0,0.88)' : 'rgba(255,255,255,0.06)';
   ctx.shadowBlur = recessed ? 8 : 14;
   ctx.shadowOffsetX = recessed ? 4 : -5;
   ctx.shadowOffsetY = recessed ? 4 : -5;
@@ -37,7 +37,7 @@ function drawNeumorphicSurface(
   ctx.save();
   ctx.strokeStyle = recessed
     ? 'rgba(0, 0, 0, 0.55)'
-    : 'rgba(255, 255, 255, 0.08)';
+    : 'rgba(237, 230, 216, 0.09)';
   ctx.lineWidth = 1.25;
   drawRoundedRect(ctx, x, y, w, h, r);
   ctx.stroke();
@@ -51,12 +51,14 @@ export function renderDarkNeumorphism(
   project: ProjectConfig,
 ) {
   const { palette, previewSample } = project;
+  const barberRed = palette.accent; // #B3261E
+  const brightCrimson = '#E14B42';
 
-  // Deep obsidian canvas (#0B0B0D)
+  // Deep matte charcoal canvas (#1C1C1C)
   ctx.fillStyle = palette.bg;
   ctx.fillRect(0, 0, width, height);
 
-  // Rich warm amber studio spotlight illuminating the upper-right portrait & hero
+  // Atmospheric breathing Barber Red spotlight illuminating the upper-right portrait & hero
   const studioSpotlight = ctx.createRadialGradient(
     width * 0.77,
     height * 0.34,
@@ -65,15 +67,15 @@ export function renderDarkNeumorphism(
     height * 0.34,
     width * 0.44,
   );
-  studioSpotlight.addColorStop(0, 'rgba(217, 138, 43, 0.34)');
-  studioSpotlight.addColorStop(0.45, 'rgba(217, 138, 43, 0.11)');
+  studioSpotlight.addColorStop(0, 'rgba(179, 38, 30, 0.40)');
+  studioSpotlight.addColorStop(0.45, 'rgba(179, 38, 30, 0.14)');
   studioSpotlight.addColorStop(1, 'transparent');
   ctx.fillStyle = studioSpotlight;
   ctx.fillRect(0, 0, width, height);
 
   const { padX, headerBottom } = drawBrowserChrome(ctx, width, height, project, {
-    chromeBg: '#121215',
-    borderAlpha: 0.09,
+    chromeBg: '#141416',
+    borderAlpha: 0.1,
     navItemsColor: palette.secondary,
   });
 
@@ -83,26 +85,26 @@ export function renderDarkNeumorphism(
   const rightW = contentW - leftW - gap;
   const rightX = padX + leftW + gap;
 
-  // TOP HERO SECTION: Left (4.9★ Review Badge + Headline + Booking CTA) | Right (Warm Studio Portrait Silhouette)
+  // TOP HERO SECTION: Left (4.9★ Google Review Badge + Headline + WhatsApp CTA) | Right (Barber Red Studio Portrait)
   const heroY = headerBottom + height * 0.04;
   const heroH = height * 0.34;
 
   // 4.9★ Google Review Badge Pill
-  const badgeW = width * 0.275;
+  const badgeW = width * 0.285;
   const badgeH = height * 0.048;
-  drawNeumorphicSurface(ctx, padX, heroY, badgeW, badgeH, 24, '#171410', true);
-  ctx.strokeStyle = 'rgba(217, 138, 43, 0.5)';
+  drawNeumorphicSurface(ctx, padX, heroY, badgeW, badgeH, 24, '#241717', true);
+  ctx.strokeStyle = 'rgba(179, 38, 30, 0.58)';
   ctx.lineWidth = 1.25;
   drawRoundedRect(ctx, padX, heroY, badgeW, badgeH, 24);
   ctx.stroke();
 
-  ctx.fillStyle = palette.accent;
-  ctx.font = `600 ${Math.round(width * 0.009)}px "JetBrains Mono", monospace`;
+  ctx.fillStyle = '#F28B82';
+  ctx.font = `600 ${Math.round(width * 0.0088)}px "JetBrains Mono", monospace`;
   ctx.fillText(previewSample.eyebrow, padX + width * 0.015, heroY + badgeH * 0.55);
 
   // Hero Headline & Subheadline
   ctx.fillStyle = palette.text;
-  ctx.font = `500 ${Math.round(width * 0.044)}px "Cormorant Garamond", Georgia, serif`;
+  ctx.font = `700 ${Math.round(width * 0.036)}px "Plus Jakarta Sans", sans-serif`;
   ctx.fillText(previewSample.headline, padX, heroY + height * 0.125);
 
   ctx.fillStyle = palette.secondary;
@@ -117,35 +119,38 @@ export function renderDarkNeumorphism(
     2,
   );
 
-  // Primary Tactile "BOOK APPOINTMENT →" Pill
-  const ctaW = width * 0.215;
-  const ctaH = height * 0.07;
+  // Primary Crimson "CONFIRM VIA WHATSAPP →" Pill
+  const ctaW = width * 0.225;
+  const ctaH = height * 0.068;
   const ctaY = heroY + height * 0.242;
-  drawNeumorphicSurface(ctx, padX, ctaY, ctaW, ctaH, 35, '#1D1710', false);
-  ctx.strokeStyle = 'rgba(217, 138, 43, 0.72)';
-  ctx.lineWidth = 1.5;
-  drawRoundedRect(ctx, padX, ctaY, ctaW, ctaH, 35);
-  ctx.stroke();
+  ctx.save();
+  ctx.shadowColor = 'rgba(179, 38, 30, 0.42)';
+  ctx.shadowBlur = 22;
+  ctx.shadowOffsetY = 8;
+  ctx.fillStyle = barberRed;
+  drawRoundedRect(ctx, padX, ctaY, ctaW, ctaH, 34);
+  ctx.fill();
+  ctx.restore();
 
   ctx.textAlign = 'center';
-  ctx.fillStyle = palette.accent;
-  ctx.font = `600 ${Math.round(width * 0.0102)}px "JetBrains Mono", monospace`;
-  ctx.fillText(previewSample.ctaLabel, padX + ctaW * 0.5, ctaY + ctaH * 0.54);
+  ctx.fillStyle = '#FFFFFF';
+  ctx.font = `600 ${Math.round(width * 0.0098)}px "JetBrains Mono", monospace`;
+  ctx.fillText(previewSample.ctaLabel, padX + ctaW * 0.5, ctaY + ctaH * 0.53);
   ctx.textAlign = 'left';
 
-  // UPPER-RIGHT STUDIO PORTRAIT FRAME (Stylized Salon / Grooming Silhouette + Amber Backlight)
+  // UPPER-RIGHT BARBER STUDIO PORTRAIT FRAME
   const portX = rightX;
   const portY = heroY;
   const portW = rightW;
   const portH = heroH;
 
-  drawNeumorphicSurface(ctx, portX, portY, portW, portH, 24, '#131215', false);
+  drawNeumorphicSurface(ctx, portX, portY, portW, portH, 24, '#151518', false);
 
   ctx.save();
   drawRoundedRect(ctx, portX + 10, portY + 10, portW - 20, portH - 20, 18);
   ctx.clip();
 
-  // Warm illuminated studio backdrop inside portrait frame
+  // Crimson studio backlight inside portrait frame
   const portBackdrop = ctx.createRadialGradient(
     portX + portW * 0.58,
     portY + portH * 0.44,
@@ -154,27 +159,26 @@ export function renderDarkNeumorphism(
     portY + portH * 0.46,
     portW * 0.62,
   );
-  portBackdrop.addColorStop(0, 'rgba(217, 138, 43, 0.46)');
-  portBackdrop.addColorStop(0.5, 'rgba(138, 82, 24, 0.22)');
-  portBackdrop.addColorStop(1, '#09090B');
+  portBackdrop.addColorStop(0, 'rgba(179, 38, 30, 0.52)');
+  portBackdrop.addColorStop(0.5, 'rgba(120, 22, 18, 0.24)');
+  portBackdrop.addColorStop(1, '#111113');
   ctx.fillStyle = portBackdrop;
   ctx.fillRect(portX + 10, portY + 10, portW - 20, portH - 20);
 
-  // Soft studio arch mirror halo behind silhouette
+  // Subtle barber mirror halo behind silhouette
   const haloX = portX + portW * 0.56;
   const haloY = portY + portH * 0.52;
-  ctx.strokeStyle = 'rgba(245, 242, 235, 0.14)';
+  ctx.strokeStyle = 'rgba(237, 230, 216, 0.14)';
   ctx.lineWidth = 1.5;
   ctx.beginPath();
   ctx.arc(haloX, haloY - 12, portH * 0.36, 0, Math.PI * 2);
   ctx.stroke();
 
-  // Stylized Grooming / Salon Silhouette Portrait (sculpted head, tailored hair & collar shoulders)
+  // Stylized Grooming / Fade Silhouette Portrait
   const silBaseY = portY + portH - 8;
   const silCenterX = portX + portW * 0.56;
 
-  // Shoulders & tailored dark jacket silhouette
-  ctx.fillStyle = '#070709';
+  ctx.fillStyle = '#09090B';
   ctx.beginPath();
   ctx.moveTo(silCenterX - portW * 0.34, silBaseY);
   ctx.bezierCurveTo(
@@ -197,7 +201,6 @@ export function renderDarkNeumorphism(
   ctx.closePath();
   ctx.fill();
 
-  // Neck
   ctx.fillRect(
     silCenterX - portW * 0.048,
     silBaseY - portH * 0.48,
@@ -205,7 +208,6 @@ export function renderDarkNeumorphism(
     portH * 0.16,
   );
 
-  // Crisp Hair & Editorial Profile Silhouette
   ctx.beginPath();
   ctx.ellipse(
     silCenterX - 2,
@@ -218,7 +220,6 @@ export function renderDarkNeumorphism(
   );
   ctx.fill();
 
-  // Sculpted haircut sweep along crown
   ctx.beginPath();
   ctx.moveTo(silCenterX - portH * 0.18, silBaseY - portH * 0.65);
   ctx.bezierCurveTo(
@@ -233,8 +234,8 @@ export function renderDarkNeumorphism(
   ctx.closePath();
   ctx.fill();
 
-  // Warm amber rim light tracing right contour of face & shoulder
-  ctx.strokeStyle = 'rgba(245, 184, 96, 0.78)';
+  // Crimson rim light tracing right contour
+  ctx.strokeStyle = 'rgba(235, 92, 82, 0.82)';
   ctx.lineWidth = 2.4;
   ctx.beginPath();
   ctx.moveTo(silCenterX + portH * 0.12, silBaseY - portH * 0.82);
@@ -248,21 +249,20 @@ export function renderDarkNeumorphism(
   );
   ctx.stroke();
 
-  // Subtle editorial tag top-left of portrait frame
-  ctx.fillStyle = 'rgba(11, 11, 13, 0.68)';
-  drawRoundedRect(ctx, portX + 22, portY + 22, width * 0.118, 28, 14);
+  // Tag top-left of portrait frame
+  ctx.fillStyle = 'rgba(17, 17, 19, 0.78)';
+  drawRoundedRect(ctx, portX + 22, portY + 22, width * 0.125, 28, 14);
   ctx.fill();
-  ctx.fillStyle = '#F5F2EB';
-  ctx.font = `600 ${Math.round(width * 0.0076)}px "JetBrains Mono", monospace`;
-  ctx.fillText('MASTER STUDIO', portX + 34, portY + 37);
+  ctx.fillStyle = '#EDE6D8';
+  ctx.font = `600 ${Math.round(width * 0.0074)}px "JetBrains Mono", monospace`;
+  ctx.fillText('NOORD BARBERS', portX + 34, portY + 37);
 
   ctx.restore();
 
-  // LOWER BODY: Left (Category Pills + Compact Service Menu) | Right (Instant Time Slot Booking)
+  // LOWER BODY: Left (Category Pills + Barber Service Menu) | Right (Chair Time Slot Picker)
   const bodyY = heroY + heroH + height * 0.042;
   const bodyH = height - bodyY - height * 0.058;
 
-  // 3 Service Category Cards across top of Left Column
   const catGap = width * 0.014;
   const catW = (leftW - catGap * 2) / 3;
   const catH = bodyH * 0.22;
@@ -271,20 +271,20 @@ export function renderDarkNeumorphism(
     const active = idx === 0;
     drawNeumorphicSurface(ctx, cx, bodyY, catW, catH, 14, palette.surface, active);
 
-    ctx.fillStyle = active ? palette.accent : palette.secondary;
+    ctx.fillStyle = active ? brightCrimson : palette.secondary;
     ctx.beginPath();
     ctx.arc(cx + width * 0.018, bodyY + catH * 0.5, 4.5, 0, Math.PI * 2);
     ctx.fill();
 
     ctx.fillStyle = active ? palette.text : palette.secondary;
-    ctx.font = `600 ${Math.round(width * 0.0098)}px "Plus Jakarta Sans", sans-serif`;
+    ctx.font = `600 ${Math.round(width * 0.0094)}px "Plus Jakarta Sans", sans-serif`;
     ctx.fillText(lbl, cx + width * 0.03, bodyY + catH * 0.54);
   });
 
-  // Compact Luxury Price List Panel
+  // Compact Service Price List Panel
   const listY = bodyY + catH + height * 0.025;
   const listH = bodyH - catH - height * 0.025;
-  drawNeumorphicSurface(ctx, padX, listY, leftW, listH, 20, '#141417', false);
+  drawNeumorphicSurface(ctx, padX, listY, leftW, listH, 20, '#161619', false);
 
   const rowH = (listH - height * 0.036) / previewSample.metrics.length;
   previewSample.metrics.forEach((m, idx) => {
@@ -293,7 +293,7 @@ export function renderDarkNeumorphism(
     const rw = leftW - width * 0.048;
 
     if (idx > 0) {
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.07)';
+      ctx.strokeStyle = 'rgba(237, 230, 216, 0.08)';
       ctx.lineWidth = 1;
       ctx.beginPath();
       ctx.moveTo(rx, ry);
@@ -301,33 +301,33 @@ export function renderDarkNeumorphism(
       ctx.stroke();
     }
 
-    ctx.fillStyle = idx === 0 ? palette.text : '#D6D1C7';
-    ctx.font = `600 ${Math.round(width * 0.0112)}px "Plus Jakarta Sans", sans-serif`;
+    ctx.fillStyle = idx === 0 ? palette.text : '#D6CFC1';
+    ctx.font = `600 ${Math.round(width * 0.011)}px "Plus Jakarta Sans", sans-serif`;
     ctx.fillText(m.label, rx, ry + rowH * 0.54);
 
     ctx.textAlign = 'right';
-    ctx.fillStyle = palette.accent;
+    ctx.fillStyle = '#F28B82';
     ctx.font = `700 ${Math.round(width * 0.0165)}px "JetBrains Mono", monospace`;
     ctx.fillText(m.value, rx + rw, ry + rowH * 0.55);
     ctx.textAlign = 'left';
   });
 
-  // LOWER-RIGHT: Today's Chair Availability Card
-  drawNeumorphicSurface(ctx, rightX, bodyY, rightW, bodyH, 22, '#141417', false);
+  // LOWER-RIGHT: Chair Availability & Google Review Card
+  drawNeumorphicSurface(ctx, rightX, bodyY, rightW, bodyH, 22, '#161619', false);
 
   const slotPad = width * 0.02;
   const innerX = rightX + slotPad;
   const innerW = rightW - slotPad * 2;
 
-  ctx.fillStyle = palette.accent;
+  ctx.fillStyle = '#F28B82';
   ctx.font = `600 ${Math.round(width * 0.0085)}px "JetBrains Mono", monospace`;
-  ctx.fillText('NEXT AVAILABLE TODAY', innerX, bodyY + height * 0.058);
+  ctx.fillText('NEXT AVAILABLE CHAIR TODAY', innerX, bodyY + height * 0.058);
 
   ctx.fillStyle = palette.text;
-  ctx.font = `600 ${Math.round(width * 0.0155)}px "Plus Jakarta Sans", sans-serif`;
-  ctx.fillText('Select your chair & time', innerX, bodyY + height * 0.108);
+  ctx.font = `600 ${Math.round(width * 0.015)}px "Plus Jakarta Sans", sans-serif`;
+  ctx.fillText('Pick treatment & time slot', innerX, bodyY + height * 0.108);
 
-  const times = ['14:30', '16:00', '17:45'];
+  const times = ['13:30', '14:45', '16:15'];
   const slotGap = width * 0.01;
   const slotW = (innerW - slotGap * 2) / 3;
   const slotH = height * 0.068;
@@ -342,38 +342,38 @@ export function renderDarkNeumorphism(
       slotW,
       slotH,
       12,
-      isPicked ? '#251B10' : '#18181C',
+      isPicked ? '#2A1414' : '#1E1E22',
       !isPicked,
     );
     if (isPicked) {
-      ctx.strokeStyle = 'rgba(217, 138, 43, 0.65)';
+      ctx.strokeStyle = 'rgba(179, 38, 30, 0.8)';
       ctx.lineWidth = 1.5;
       drawRoundedRect(ctx, sx, slotY, slotW, slotH, 12);
       ctx.stroke();
     }
     ctx.textAlign = 'center';
-    ctx.fillStyle = isPicked ? palette.accent : palette.text;
+    ctx.fillStyle = isPicked ? '#FFFFFF' : palette.text;
     ctx.font = `600 ${Math.round(width * 0.0108)}px "JetBrains Mono", monospace`;
     ctx.fillText(time, sx + slotW * 0.5, slotY + slotH * 0.55);
     ctx.textAlign = 'left';
   });
 
   // Trust & Confirmation Note at Bottom
-  ctx.strokeStyle = 'rgba(255, 255, 255, 0.07)';
+  ctx.strokeStyle = 'rgba(237, 230, 216, 0.08)';
   ctx.beginPath();
   ctx.moveTo(innerX, bodyY + bodyH - height * 0.088);
   ctx.lineTo(innerX + innerW, bodyY + bodyH - height * 0.088);
   ctx.stroke();
 
-  ctx.fillStyle = palette.accent;
+  ctx.fillStyle = brightCrimson;
   ctx.beginPath();
   ctx.arc(innerX + 5, bodyY + bodyH - height * 0.048, 4, 0, Math.PI * 2);
   ctx.fill();
 
   ctx.fillStyle = palette.secondary;
-  ctx.font = `500 ${Math.round(width * 0.0095)}px "Plus Jakarta Sans", sans-serif`;
+  ctx.font = `500 ${Math.round(width * 0.0092)}px "Plus Jakarta Sans", sans-serif`;
   ctx.fillText(
-    'Instant SMS confirmation · No prepayment needed',
+    'Instant WhatsApp confirmation · 4.9★ Google',
     innerX + 18,
     bodyY + bodyH - height * 0.044,
   );

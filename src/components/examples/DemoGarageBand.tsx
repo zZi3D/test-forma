@@ -5,9 +5,11 @@ import {
   CarFront,
   CheckCircle2,
   Loader2,
+  Moon,
   Phone,
   Search,
   ShieldCheck,
+  Sun,
   Tag,
   Wrench,
 } from 'lucide-react';
@@ -50,6 +52,7 @@ function getApkDaysLeft(raw?: string): number | null {
 
 export function DemoGarageBand({ lang, onBuildInStyle }: DemoGarageBandProps) {
   const prefersReducedMotion = Boolean(useReducedMotion());
+  const [isDark, setIsDark] = useState(false);
   const [activeTabIdx, setActiveTabIdx] = useState(0);
   const [plateInput, setPlateInput] = useState('KXT-67-P');
   const [vehicle, setVehicle] = useState<RdwFallbackRecord>(
@@ -178,6 +181,7 @@ export function DemoGarageBand({ lang, onBuildInStyle }: DemoGarageBandProps) {
       bookedFeedback:
         'APK-aanvraag klaargezet — datumvoorstel verstuurd via WhatsApp.',
       buildThis: 'Bouw deze garage-stijl →',
+      themeLabel: isDark ? 'Wissel naar lichte modus' : 'Wissel naar donkere modus',
     },
     en: {
       demoTag: 'Demo 01 · Automotive & MOT Workshop',
@@ -209,18 +213,58 @@ export function DemoGarageBand({ lang, onBuildInStyle }: DemoGarageBandProps) {
       bookedFeedback:
         'Workshop request prepared — available slots ready via WhatsApp.',
       buildThis: 'Build in this garage style →',
+      themeLabel: isDark ? 'Switch to light mode' : 'Switch to dark mode',
     },
   }[lang];
+
+  const renderThemeSwitch = () => (
+    <button
+      type="button"
+      onClick={() => setIsDark((prev) => !prev)}
+      aria-label={t.themeLabel}
+      aria-pressed={isDark}
+      className={`inline-flex h-8 items-center gap-0.5 rounded-full border p-0.5 transition-colors shrink-0 ${
+        isDark
+          ? 'border-[#F3ECE1]/18 bg-[#141416] text-[#F3ECE1]'
+          : 'border-[#1C1C1C]/12 bg-[#F3ECE1] text-[#1C1C1C]'
+      }`}
+    >
+      <span
+        className={`flex h-6.5 w-6.5 items-center justify-center rounded-full transition-colors ${
+          !isDark ? 'bg-white text-[#B8291E] shadow-xs' : 'text-[#F3ECE1]/45'
+        }`}
+      >
+        <Sun className="h-3.5 w-3.5" />
+      </span>
+      <span
+        className={`flex h-6.5 w-6.5 items-center justify-center rounded-full transition-colors ${
+          isDark ? 'bg-[#B8291E] text-white shadow-xs' : 'text-[#1C1C1C]/45'
+        }`}
+      >
+        <Moon className="h-3.5 w-3.5" />
+      </span>
+    </button>
+  );
 
   return (
     <section
       aria-label={t.demoTag}
-      className="font-demo-outfit relative overflow-hidden rounded-3xl border border-[#1C1C1C]/12 bg-[#F3ECE1] text-[#1C1C1C] shadow-[0_24px_60px_-24px_rgba(28,28,28,0.16)]"
+      className={`font-demo-outfit relative overflow-hidden rounded-3xl border transition-colors duration-300 ${
+        isDark
+          ? 'border-[#F3ECE1]/12 bg-[#141416] text-[#F3ECE1] shadow-[0_24px_60px_-24px_rgba(0,0,0,0.65)]'
+          : 'border-[#1C1C1C]/12 bg-[#F3ECE1] text-[#1C1C1C] shadow-[0_24px_60px_-24px_rgba(28,28,28,0.16)]'
+      }`}
     >
-      {/* HEADER VARIANT 1: Floating Crisp White Capsule Header with Sliding Crimson Pill (Skin 3 from screenshot) */}
+      {/* HEADER VARIANT 1: Floating Crisp Capsule Header with Sliding Crimson Pill + Sun/Moon Toggle */}
       <div className="px-3 pt-3 md:px-8 md:pt-6">
-        <header className="flex flex-col gap-1.5 rounded-2xl border border-[#1C1C1C]/8 bg-white px-3 py-2 shadow-[0_10px_28px_-12px_rgba(28,28,28,0.14)] lg:flex-row lg:items-center lg:justify-between lg:gap-4 lg:rounded-full lg:px-4 lg:py-1.5">
-          <div className="flex items-center justify-between gap-3">
+        <header
+          className={`flex flex-col gap-1.5 rounded-2xl border px-3 py-2 transition-colors duration-300 lg:flex-row lg:items-center lg:justify-between lg:gap-4 lg:rounded-full lg:px-4 lg:py-1.5 ${
+            isDark
+              ? 'border-[#F3ECE1]/12 bg-[#1E1E22] shadow-[0_12px_30px_-12px_rgba(0,0,0,0.65)]'
+              : 'border-[#1C1C1C]/8 bg-white shadow-[0_10px_28px_-12px_rgba(28,28,28,0.14)]'
+          }`}
+        >
+          <div className="flex items-center justify-between gap-2">
             <a
               href="#demo-garage"
               onClick={(e) => {
@@ -228,24 +272,35 @@ export function DemoGarageBand({ lang, onBuildInStyle }: DemoGarageBandProps) {
                 setActiveTabIdx(0);
                 scrollToApi();
               }}
-              className="pl-1 text-[14.5px] font-extrabold tracking-[0.06em] text-[#1C1C1C] uppercase whitespace-nowrap shrink-0 md:pl-2 md:text-[16px]"
+              className={`pl-1 text-[14.5px] font-extrabold tracking-[0.06em] uppercase whitespace-nowrap shrink-0 md:pl-2 md:text-[16px] ${
+                isDark ? 'text-[#F3ECE1]' : 'text-[#1C1C1C]'
+              }`}
             >
               KORVER AUTO
             </a>
 
-            <button
-              type="button"
-              onClick={scrollToApi}
-              className="inline-flex h-8 items-center justify-center rounded-full bg-[#1C1C1C] px-3.5 text-[11.5px] font-semibold text-white whitespace-nowrap shrink-0 transition-colors hover:bg-[#B8291E] lg:hidden"
-            >
-              {t.ctaNav}
-            </button>
+            <div className="flex items-center gap-1.5 lg:hidden">
+              {renderThemeSwitch()}
+              <button
+                type="button"
+                onClick={scrollToApi}
+                className={`inline-flex h-8 items-center justify-center rounded-full px-3 text-[11.5px] font-semibold whitespace-nowrap shrink-0 transition-colors ${
+                  isDark
+                    ? 'bg-[#B8291E] text-white hover:bg-[#961F16]'
+                    : 'bg-[#1C1C1C] text-white hover:bg-[#B8291E]'
+                }`}
+              >
+                {t.ctaNav}
+              </button>
+            </div>
           </div>
 
           {/* Mobile 4-icon sculpted capsule strip (always visible on phone) */}
           <nav
             aria-label="Garage sections"
-            className="grid grid-cols-4 gap-1 border-t border-[#1C1C1C]/6 pt-1.5 lg:hidden"
+            className={`grid grid-cols-4 gap-1 border-t pt-1.5 lg:hidden ${
+              isDark ? 'border-[#F3ECE1]/10' : 'border-[#1C1C1C]/6'
+            }`}
           >
             {navItems.map((item, idx) => {
               const Icon = item.icon;
@@ -261,7 +316,9 @@ export function DemoGarageBand({ lang, onBuildInStyle }: DemoGarageBandProps) {
                   className={`relative flex h-8 flex-col items-center justify-center rounded-full text-[10px] font-semibold transition-colors ${
                     isActive
                       ? 'text-white'
-                      : 'text-[#1C1C1C]/62 hover:text-[#1C1C1C]'
+                      : isDark
+                        ? 'text-[#F3ECE1]/62 hover:text-[#F3ECE1]'
+                        : 'text-[#1C1C1C]/62 hover:text-[#1C1C1C]'
                   }`}
                 >
                   {isActive && (
@@ -292,7 +349,9 @@ export function DemoGarageBand({ lang, onBuildInStyle }: DemoGarageBandProps) {
                   className={`relative inline-flex h-9 items-center gap-1.5 rounded-full px-3.5 text-[12.5px] font-semibold whitespace-nowrap shrink-0 transition-colors ${
                     isActive
                       ? 'text-white'
-                      : 'text-[#1C1C1C]/68 hover:text-[#1C1C1C]'
+                      : isDark
+                        ? 'text-[#F3ECE1]/68 hover:text-[#F3ECE1]'
+                        : 'text-[#1C1C1C]/68 hover:text-[#1C1C1C]'
                   }`}
                 >
                   {isActive && (
@@ -309,13 +368,20 @@ export function DemoGarageBand({ lang, onBuildInStyle }: DemoGarageBandProps) {
             })}
           </nav>
 
-          <button
-            type="button"
-            onClick={scrollToApi}
-            className="hidden h-9 items-center justify-center rounded-full bg-[#1C1C1C] px-4 text-[12px] font-semibold text-white whitespace-nowrap shrink-0 transition-colors hover:bg-[#B8291E] lg:inline-flex"
-          >
-            {t.ctaNav}
-          </button>
+          <div className="hidden items-center gap-2 lg:flex shrink-0">
+            {renderThemeSwitch()}
+            <button
+              type="button"
+              onClick={scrollToApi}
+              className={`inline-flex h-9 items-center justify-center rounded-full px-4 text-[12px] font-semibold whitespace-nowrap shrink-0 transition-colors ${
+                isDark
+                  ? 'bg-[#B8291E] text-white hover:bg-[#961F16]'
+                  : 'bg-[#1C1C1C] text-white hover:bg-[#B8291E]'
+              }`}
+            >
+              {t.ctaNav}
+            </button>
+          </div>
         </header>
       </div>
 
@@ -323,17 +389,33 @@ export function DemoGarageBand({ lang, onBuildInStyle }: DemoGarageBandProps) {
       <div className="relative px-4 pt-5 pb-5 md:px-10 md:pt-10 md:pb-8">
         <div className="grid grid-cols-1 items-center gap-5 lg:grid-cols-12 lg:gap-8">
           <div className="lg:col-span-6">
-            <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[11.5px] font-medium text-[#1C1C1C]/60 md:text-[12px]">
+            <div
+              className={`flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[11.5px] font-medium md:text-[12px] ${
+                isDark ? 'text-[#F3ECE1]/60' : 'text-[#1C1C1C]/60'
+              }`}
+            >
               <span>{t.demoTag}</span>
               <span aria-hidden="true">·</span>
-              <span>#F3ECE1 · #1C1C1C · #B8291E</span>
+              <span>
+                {isDark
+                  ? '#141416 · #F3ECE1 · #B8291E'
+                  : '#F3ECE1 · #1C1C1C · #B8291E'}
+              </span>
             </div>
 
-            <h2 className="mt-2 max-w-[14ch] text-[clamp(1.9rem,4.4vw,3.85rem)] leading-[1.02] font-bold tracking-[-0.03em] text-[#1C1C1C] [text-wrap:balance] md:mt-3">
+            <h2
+              className={`mt-2 max-w-[14ch] text-[clamp(1.9rem,4.4vw,3.85rem)] leading-[1.02] font-bold tracking-[-0.03em] [text-wrap:balance] md:mt-3 ${
+                isDark ? 'text-[#F3ECE1]' : 'text-[#1C1C1C]'
+              }`}
+            >
               {t.headline}
             </h2>
 
-            <p className="mt-2.5 max-w-[44ch] text-[13.5px] leading-[1.55] text-[#1C1C1C]/75 md:mt-4 md:text-[16px] md:leading-[1.6]">
+            <p
+              className={`mt-2.5 max-w-[44ch] text-[13.5px] leading-[1.55] md:mt-4 md:text-[16px] md:leading-[1.6] ${
+                isDark ? 'text-[#F3ECE1]/76' : 'text-[#1C1C1C]/75'
+              }`}
+            >
               {t.sub}
             </p>
 
@@ -350,17 +432,27 @@ export function DemoGarageBand({ lang, onBuildInStyle }: DemoGarageBandProps) {
                 type="button"
                 onClick={() =>
                   onBuildInStyle(
-                    `Garage Demo (Warm Bone & Workshop Crimson) — ${vehicle.merk} RDW`,
+                    `Garage Demo (${isDark ? 'Carbon Dark & Workshop Crimson' : 'Warm Bone & Workshop Crimson'}) — ${vehicle.merk} RDW`,
                   )
                 }
-                className="text-[12.5px] font-semibold text-[#1C1C1C]/75 underline-offset-4 transition-colors hover:text-[#1C1C1C] hover:underline md:text-[13px]"
+                className={`text-[12.5px] font-semibold underline-offset-4 transition-colors hover:underline md:text-[13px] ${
+                  isDark
+                    ? 'text-[#F3ECE1]/78 hover:text-[#F3ECE1]'
+                    : 'text-[#1C1C1C]/75 hover:text-[#1C1C1C]'
+                }`}
               >
                 {t.buildThis}
               </button>
             </div>
 
             {/* Unboxed Metadata Bar */}
-            <div className="mt-4 inline-flex flex-wrap items-center gap-2.5 rounded-lg bg-[#1C1C1C] px-3 py-1.5 text-[11px] font-medium text-[#F3ECE1] md:mt-7 md:gap-3 md:px-4 md:py-2 md:text-[11.5px]">
+            <div
+              className={`mt-4 inline-flex flex-wrap items-center gap-2.5 rounded-lg px-3 py-1.5 text-[11px] font-medium md:mt-7 md:gap-3 md:px-4 md:py-2 md:text-[11.5px] ${
+                isDark
+                  ? 'border border-[#F3ECE1]/12 bg-[#1E1E22] text-[#F3ECE1]'
+                  : 'bg-[#1C1C1C] text-[#F3ECE1]'
+              }`}
+            >
               {t.proof.map((item, idx) => (
                 <span key={item} className="inline-flex items-center gap-2.5 md:gap-3">
                   {idx > 0 && (
@@ -395,7 +487,9 @@ export function DemoGarageBand({ lang, onBuildInStyle }: DemoGarageBandProps) {
                   ? undefined
                   : { rotateX, rotateY, transformStyle: 'preserve-3d' }
               }
-              className="group relative overflow-hidden rounded-2xl bg-[#EAE0D0] shadow-[0_22px_50px_-20px_rgba(28,28,28,0.28)]"
+              className={`group relative overflow-hidden rounded-2xl shadow-[0_22px_50px_-20px_rgba(28,28,28,0.28)] ${
+                isDark ? 'bg-[#222226] ring-1 ring-[#F3ECE1]/12' : 'bg-[#EAE0D0]'
+              }`}
             >
               {/* Warm workshop red rim pulse */}
               {!prefersReducedMotion && (
@@ -445,20 +539,36 @@ export function DemoGarageBand({ lang, onBuildInStyle }: DemoGarageBandProps) {
         {/* WORKING RDW API MODULE */}
         <div
           id="garage-rdw-tool"
-          className="mt-5 rounded-2xl border border-[#1C1C1C]/12 bg-white/85 p-3.5 md:mt-8 md:p-6"
+          className={`mt-5 rounded-2xl border p-3.5 transition-colors duration-300 md:mt-8 md:p-6 ${
+            isDark
+              ? 'border-[#F3ECE1]/12 bg-[#1C1C1F]'
+              : 'border-[#1C1C1C]/12 bg-white/85'
+          }`}
         >
-          <div className="flex flex-col justify-between gap-2 border-b border-[#1C1C1C]/10 pb-3 md:flex-row md:items-end md:gap-4 md:pb-4">
+          <div
+            className={`flex flex-col justify-between gap-2 border-b pb-3 md:flex-row md:items-end md:gap-4 md:pb-4 ${
+              isDark ? 'border-[#F3ECE1]/10' : 'border-[#1C1C1C]/10'
+            }`}
+          >
             <div>
               <div className="flex items-center gap-2 text-[12px] font-semibold text-[#B8291E]">
                 <CarFront className="h-4 w-4" />
                 <span>{t.toolTitle}</span>
               </div>
-              <p className="mt-0.5 text-[12.5px] text-[#1C1C1C]/70 md:mt-1 md:text-[13.5px]">
+              <p
+                className={`mt-0.5 text-[12.5px] md:mt-1 md:text-[13.5px] ${
+                  isDark ? 'text-[#F3ECE1]/70' : 'text-[#1C1C1C]/70'
+                }`}
+              >
                 {t.toolSub}
               </p>
             </div>
 
-            <div className="font-mono-tabular flex items-center gap-2 text-[11px] text-[#1C1C1C]/60">
+            <div
+              className={`font-mono-tabular flex items-center gap-2 text-[11px] ${
+                isDark ? 'text-[#F3ECE1]/58' : 'text-[#1C1C1C]/60'
+              }`}
+            >
               <span>{dataSource === 'live' ? t.liveLabel : t.cachedLabel}</span>
             </div>
           </div>
@@ -471,7 +581,11 @@ export function DemoGarageBand({ lang, onBuildInStyle }: DemoGarageBandProps) {
               }}
               className="flex flex-1 flex-wrap items-center gap-2"
             >
-              <div className="flex h-10 min-w-[190px] overflow-hidden rounded-md border-2 border-[#1C1C1C] bg-[#F5BA18] shadow-xs md:h-11 md:min-w-[210px]">
+              <div
+                className={`flex h-10 min-w-[190px] overflow-hidden rounded-md border-2 bg-[#F5BA18] shadow-xs md:h-11 md:min-w-[210px] ${
+                  isDark ? 'border-[#F3ECE1]/45' : 'border-[#1C1C1C]'
+                }`}
+              >
                 <div className="flex w-7 flex-col items-center justify-center bg-[#003399] text-[10px] font-bold text-white md:w-8">
                   NL
                 </div>
@@ -489,7 +603,11 @@ export function DemoGarageBand({ lang, onBuildInStyle }: DemoGarageBandProps) {
               <button
                 type="submit"
                 disabled={loading}
-                className="inline-flex h-10 items-center gap-1.5 rounded-md bg-[#1C1C1C] px-3.5 text-[12.5px] font-semibold text-white transition-colors hover:bg-[#B8291E] disabled:opacity-60 md:h-11 md:gap-2 md:px-4 md:text-[13px]"
+                className={`inline-flex h-10 items-center gap-1.5 rounded-md px-3.5 text-[12.5px] font-semibold transition-colors disabled:opacity-60 md:h-11 md:gap-2 md:px-4 md:text-[13px] ${
+                  isDark
+                    ? 'bg-[#B8291E] text-white hover:bg-[#961F16]'
+                    : 'bg-[#1C1C1C] text-white hover:bg-[#B8291E]'
+                }`}
               >
                 {loading ? (
                   <Loader2 className="h-4 w-4 animate-spin" />
@@ -501,7 +619,11 @@ export function DemoGarageBand({ lang, onBuildInStyle }: DemoGarageBandProps) {
             </form>
 
             <div className="flex flex-wrap items-center gap-1.5">
-              <span className="mr-1 text-[11px] font-medium text-[#1C1C1C]/60 md:text-[11.5px]">
+              <span
+                className={`mr-1 text-[11px] font-medium md:text-[11.5px] ${
+                  isDark ? 'text-[#F3ECE1]/60' : 'text-[#1C1C1C]/60'
+                }`}
+              >
                 {t.testLabel}
               </span>
               {GARAGE_TEST_PLATES.map((sample) => (
@@ -512,7 +634,11 @@ export function DemoGarageBand({ lang, onBuildInStyle }: DemoGarageBandProps) {
                     setPlateInput(sample.plate);
                     void lookupPlate(sample.raw);
                   }}
-                  className="font-mono-tabular inline-flex h-7 items-center rounded border border-[#1C1C1C]/15 bg-[#F3ECE1] px-2 text-[11px] font-semibold text-[#1C1C1C] transition-colors hover:border-[#B8291E] hover:text-[#B8291E] md:h-8 md:px-2.5 md:text-[11.5px]"
+                  className={`font-mono-tabular inline-flex h-7 items-center rounded border px-2 text-[11px] font-semibold transition-colors md:h-8 md:px-2.5 md:text-[11.5px] ${
+                    isDark
+                      ? 'border-[#F3ECE1]/16 bg-[#26262A] text-[#F3ECE1] hover:border-[#B8291E] hover:text-[#F3ECE1]'
+                      : 'border-[#1C1C1C]/15 bg-[#F3ECE1] text-[#1C1C1C] hover:border-[#B8291E] hover:text-[#B8291E]'
+                  }`}
                 >
                   {sample.plate}
                 </button>
@@ -521,7 +647,7 @@ export function DemoGarageBand({ lang, onBuildInStyle }: DemoGarageBandProps) {
           </div>
 
           {errorMsg && (
-            <div className="mt-3 flex items-center gap-2 rounded-lg border border-[#B8291E]/30 bg-[#B8291E]/8 px-3.5 py-2.5 text-[12.5px] text-[#B8291E]">
+            <div className="mt-3 flex items-center gap-2 rounded-lg border border-[#B8291E]/35 bg-[#B8291E]/12 px-3.5 py-2.5 text-[12.5px] text-[#E35D52]">
               <AlertCircle className="h-4 w-4 shrink-0" />
               <span>{errorMsg}</span>
             </div>
@@ -533,7 +659,11 @@ export function DemoGarageBand({ lang, onBuildInStyle }: DemoGarageBandProps) {
             initial={prefersReducedMotion ? false : { opacity: 0.72, scale: 0.985 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.34, ease: [0.22, 1, 0.36, 1] }}
-            className="relative mt-3.5 grid grid-cols-2 gap-3 overflow-hidden rounded-xl border border-[#1C1C1C]/12 bg-[#FAF6EE] p-3.5 sm:gap-4 md:mt-4 md:p-4 lg:grid-cols-5 lg:items-center"
+            className={`relative mt-3.5 grid grid-cols-2 gap-3 overflow-hidden rounded-xl border p-3.5 sm:gap-4 md:mt-4 md:p-4 lg:grid-cols-5 lg:items-center ${
+              isDark
+                ? 'border-[#F3ECE1]/10 bg-[#141416]'
+                : 'border-[#1C1C1C]/12 bg-[#FAF6EE]'
+            }`}
           >
             {!prefersReducedMotion && (loading || scanCycle > 0) && (
               <motion.div
@@ -555,10 +685,18 @@ export function DemoGarageBand({ lang, onBuildInStyle }: DemoGarageBandProps) {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.28, delay: 0.04 }}
             >
-              <p className="text-[11px] font-medium text-[#1C1C1C]/55">
+              <p
+                className={`text-[11px] font-medium ${
+                  isDark ? 'text-[#F3ECE1]/55' : 'text-[#1C1C1C]/55'
+                }`}
+              >
                 {t.fields.brand}
               </p>
-              <p className="mt-0.5 text-[14.5px] font-bold text-[#1C1C1C]">
+              <p
+                className={`mt-0.5 text-[14.5px] font-bold ${
+                  isDark ? 'text-[#F3ECE1]' : 'text-[#1C1C1C]'
+                }`}
+              >
                 {vehicle.merk} · {vehicle.handelsbenaming}
               </p>
             </motion.div>
@@ -568,15 +706,21 @@ export function DemoGarageBand({ lang, onBuildInStyle }: DemoGarageBandProps) {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.28, delay: 0.1 }}
             >
-              <p className="text-[11px] font-medium text-[#1C1C1C]/55">
+              <p
+                className={`text-[11px] font-medium ${
+                  isDark ? 'text-[#F3ECE1]/55' : 'text-[#1C1C1C]/55'
+                }`}
+              >
                 {t.fields.apk}
               </p>
-              <p className="font-mono-tabular mt-0.5 text-[14.5px] font-bold text-[#1C1C1C]">
+              <p
+                className={`font-mono-tabular mt-0.5 text-[14.5px] font-bold ${
+                  isDark ? 'text-[#F3ECE1]' : 'text-[#1C1C1C]'
+                }`}
+              >
                 {formatApkDate(vehicle.vervaldatum_apk, lang)}
               </p>
-              <p className="text-[11px] font-medium text-[#B8291E]">
-                {t.daysText}
-              </p>
+              <p className="text-[11px] font-medium text-[#E04D41]">{t.daysText}</p>
             </motion.div>
 
             <motion.div
@@ -584,10 +728,18 @@ export function DemoGarageBand({ lang, onBuildInStyle }: DemoGarageBandProps) {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.28, delay: 0.16 }}
             >
-              <p className="text-[11px] font-medium text-[#1C1C1C]/55">
+              <p
+                className={`text-[11px] font-medium ${
+                  isDark ? 'text-[#F3ECE1]/55' : 'text-[#1C1C1C]/55'
+                }`}
+              >
                 {t.fields.color}
               </p>
-              <p className="mt-0.5 text-[14px] font-semibold text-[#1C1C1C] capitalize">
+              <p
+                className={`mt-0.5 text-[14px] font-semibold capitalize ${
+                  isDark ? 'text-[#F3ECE1]' : 'text-[#1C1C1C]'
+                }`}
+              >
                 {(vehicle.eerste_kleur || '—').toLowerCase()}
               </p>
             </motion.div>
@@ -597,11 +749,23 @@ export function DemoGarageBand({ lang, onBuildInStyle }: DemoGarageBandProps) {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.28, delay: 0.22 }}
             >
-              <p className="text-[11px] font-medium text-[#1C1C1C]/55">
+              <p
+                className={`text-[11px] font-medium ${
+                  isDark ? 'text-[#F3ECE1]/55' : 'text-[#1C1C1C]/55'
+                }`}
+              >
                 {t.fields.recall}
               </p>
-              <p className="mt-0.5 inline-flex items-center gap-1.5 text-[14px] font-semibold text-[#1C1C1C]">
-                <ShieldCheck className="h-4 w-4 text-emerald-700" />
+              <p
+                className={`mt-0.5 inline-flex items-center gap-1.5 text-[14px] font-semibold ${
+                  isDark ? 'text-[#F3ECE1]' : 'text-[#1C1C1C]'
+                }`}
+              >
+                <ShieldCheck
+                  className={`h-4 w-4 ${
+                    isDark ? 'text-emerald-400' : 'text-emerald-700'
+                  }`}
+                />
                 <span>
                   {vehicle.openstaande_terugroepactie_indicator === 'Ja'
                     ? lang === 'nl'
@@ -623,7 +787,11 @@ export function DemoGarageBand({ lang, onBuildInStyle }: DemoGarageBandProps) {
               <button
                 type="button"
                 onClick={() => setBookingConfirmed(true)}
-                className="inline-flex h-10 items-center gap-2 rounded-md bg-[#1C1C1C] px-4 text-[12.5px] font-semibold text-white whitespace-nowrap transition-transform active:scale-95 hover:bg-[#B8291E]"
+                className={`inline-flex h-10 items-center gap-2 rounded-md px-4 text-[12.5px] font-semibold whitespace-nowrap transition-transform active:scale-95 ${
+                  isDark
+                    ? 'bg-[#F3ECE1] text-[#141416] hover:bg-[#B8291E] hover:text-white'
+                    : 'bg-[#1C1C1C] text-white hover:bg-[#B8291E]'
+                }`}
               >
                 <Wrench className="h-3.5 w-3.5" />
                 <span>{t.bookVehicleBtn}</span>
@@ -632,7 +800,9 @@ export function DemoGarageBand({ lang, onBuildInStyle }: DemoGarageBandProps) {
                 <motion.p
                   initial={prefersReducedMotion ? false : { opacity: 0, y: 4 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="mt-1.5 inline-flex items-center gap-1 text-[11px] font-medium text-emerald-800"
+                  className={`mt-1.5 inline-flex items-center gap-1 text-[11px] font-medium ${
+                    isDark ? 'text-emerald-400' : 'text-emerald-800'
+                  }`}
                 >
                   <CalendarCheck className="h-3.5 w-3.5" />
                   <span>{t.bookedFeedback}</span>
@@ -642,8 +812,16 @@ export function DemoGarageBand({ lang, onBuildInStyle }: DemoGarageBandProps) {
           </motion.div>
 
           {!errorMsg && dataSource === 'live' && (
-            <p className="mt-2 inline-flex items-center gap-1.5 text-[11px] text-[#1C1C1C]/55">
-              <CheckCircle2 className="h-3.5 w-3.5 text-emerald-700" />
+            <p
+              className={`mt-2 inline-flex items-center gap-1.5 text-[11px] ${
+                isDark ? 'text-[#F3ECE1]/55' : 'text-[#1C1C1C]/55'
+              }`}
+            >
+              <CheckCircle2
+                className={`h-3.5 w-3.5 ${
+                  isDark ? 'text-emerald-400' : 'text-emerald-700'
+                }`}
+              />
               <span>
                 {lang === 'nl'
                   ? `Opgehaald uit officiële RDW API voor kenteken ${vehicle.kenteken}`

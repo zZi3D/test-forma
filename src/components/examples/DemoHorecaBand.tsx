@@ -5,6 +5,7 @@ import {
   Coffee,
   Loader2,
   MapPin,
+  Moon,
   Sun,
   Wind,
 } from 'lucide-react';
@@ -30,6 +31,7 @@ interface TerraceWeather {
 
 export function DemoHorecaBand({ lang, onBuildInStyle }: DemoHorecaBandProps) {
   const prefersReducedMotion = Boolean(useReducedMotion());
+  const [isDark, setIsDark] = useState(false);
   const [cityId, setCityId] = useState(CAFE_CITIES[0].id);
   const [weather, setWeather] = useState<TerraceWeather>({
     temp: 18,
@@ -112,6 +114,7 @@ export function DemoHorecaBand({ lang, onBuildInStyle }: DemoHorecaBandProps) {
         { id: 'pastry' as const, label: 'Patisserie' },
       ],
       bookConfirm: `Tafel voor 2 aangevraagd in ${activeCity.city} (${activeCity.address}).`,
+      themeLabel: isDark ? 'Wissel naar lichte latte-modus' : 'Wissel naar donkere espresso-modus',
     },
     en: {
       demoTag: 'Demo 04 · Specialty Roastery & Bakery',
@@ -132,23 +135,38 @@ export function DemoHorecaBand({ lang, onBuildInStyle }: DemoHorecaBandProps) {
         { id: 'pastry' as const, label: 'Pastry' },
       ],
       bookConfirm: `Table request prepared for ${activeCity.city} (${activeCity.address}).`,
+      themeLabel: isDark ? 'Switch to light latte cream mode' : 'Switch to dark roast espresso mode',
     },
   }[lang];
 
   return (
     <section
       aria-label={t.demoTag}
-      className="relative overflow-hidden rounded-3xl border border-[#4A2C1D]/15 bg-[#EFE2CF] text-[#4A2C1D] shadow-[0_24px_60px_-24px_rgba(74,44,29,0.2)]"
+      className={`relative overflow-hidden rounded-3xl border transition-colors duration-300 ${
+        isDark
+          ? 'border-[#EFE2CF]/14 bg-[#1D120C] text-[#EFE2CF] shadow-[0_24px_60px_-24px_rgba(0,0,0,0.55)]'
+          : 'border-[#4A2C1D]/15 bg-[#EFE2CF] text-[#4A2C1D] shadow-[0_24px_60px_-24px_rgba(74,44,29,0.2)]'
+      }`}
     >
-      {/* HEADER VARIANT 4: Classic Centered Brasserie Crest Header */}
-      <header className="grid grid-cols-2 items-center gap-4 border-b border-[#4A2C1D]/12 px-4 py-3 md:grid-cols-3 md:px-10 md:py-4">
-        <nav className="hidden items-center gap-5 text-[13px] font-medium text-[#4A2C1D]/80 md:flex">
+      {/* HEADER VARIANT 4: Classic Centered Brasserie Crest Header + Sun/Moon Toggle */}
+      <header
+        className={`flex items-center justify-between gap-2 border-b px-4 py-3 md:grid md:grid-cols-3 md:gap-4 md:px-10 md:py-4 ${
+          isDark ? 'border-[#EFE2CF]/12' : 'border-[#4A2C1D]/12'
+        }`}
+      >
+        <nav
+          className={`hidden items-center gap-5 text-[13px] font-medium md:flex ${
+            isDark ? 'text-[#EFE2CF]/78' : 'text-[#4A2C1D]/80'
+          }`}
+        >
           {t.leftNav.map((item) => (
             <button
               key={item}
               type="button"
               onClick={scrollToMenu}
-              className="whitespace-nowrap shrink-0 transition-colors hover:text-[#4A2C1D]"
+              className={`whitespace-nowrap shrink-0 transition-colors ${
+                isDark ? 'hover:text-[#EFE2CF]' : 'hover:text-[#4A2C1D]'
+              }`}
             >
               {item}
             </button>
@@ -161,19 +179,52 @@ export function DemoHorecaBand({ lang, onBuildInStyle }: DemoHorecaBandProps) {
             e.preventDefault();
             scrollToMenu();
           }}
-          className="font-demo-oswald text-left text-[18px] font-bold tracking-[0.04em] text-[#4A2C1D] uppercase whitespace-nowrap md:text-center md:text-[22px]"
+          className={`font-demo-oswald text-left text-[17px] font-bold tracking-[0.04em] uppercase whitespace-nowrap md:text-center md:text-[22px] ${
+            isDark ? 'text-[#EFE2CF]' : 'text-[#4A2C1D]'
+          }`}
         >
           CAFÉ KORNELIS
         </a>
 
-        <div className="flex justify-end">
+        <div className="flex items-center justify-end gap-2 shrink-0">
+          <button
+            type="button"
+            onClick={() => setIsDark((prev) => !prev)}
+            aria-label={t.themeLabel}
+            aria-pressed={isDark}
+            className={`inline-flex h-8 items-center gap-0.5 rounded-full border p-0.5 transition-colors shrink-0 ${
+              isDark
+                ? 'border-[#EFE2CF]/18 bg-[#2A1B12] text-[#EFE2CF]'
+                : 'border-[#4A2C1D]/15 bg-[#FAF4EA] text-[#4A2C1D]'
+            }`}
+          >
+            <span
+              className={`flex h-6.5 w-6.5 items-center justify-center rounded-full transition-colors ${
+                !isDark
+                  ? 'bg-[#E0A526] text-[#4A2C1D] shadow-xs'
+                  : 'text-[#EFE2CF]/45'
+              }`}
+            >
+              <Sun className="h-3.5 w-3.5" />
+            </span>
+            <span
+              className={`flex h-6.5 w-6.5 items-center justify-center rounded-full transition-colors ${
+                isDark
+                  ? 'bg-[#E0A526] text-[#1D120C] shadow-xs'
+                  : 'text-[#4A2C1D]/45'
+              }`}
+            >
+              <Moon className="h-3.5 w-3.5" />
+            </span>
+          </button>
+
           <button
             type="button"
             onClick={() => {
               setTableBooked(true);
               scrollToMenu();
             }}
-            className="inline-flex h-8 items-center gap-1.5 rounded-full bg-[#E0A526] px-3.5 text-[11.5px] font-semibold text-[#4A2C1D] whitespace-nowrap shrink-0 transition-colors hover:bg-[#CA921B] md:h-9 md:px-4 md:text-[12.5px]"
+            className="inline-flex h-8 items-center gap-1 rounded-full bg-[#E0A526] px-3 text-[11px] font-semibold text-[#1D120C] whitespace-nowrap shrink-0 transition-colors hover:bg-[#CA921B] md:h-9 md:gap-1.5 md:px-4 md:text-[12.5px]"
           >
             <span>{t.ctaNav}</span>
             <ArrowUpRight className="h-3.5 w-3.5" />
@@ -183,25 +234,46 @@ export function DemoHorecaBand({ lang, onBuildInStyle }: DemoHorecaBandProps) {
 
       {/* HERO SECTION */}
       <div className="px-4 pt-5 pb-5 md:px-10 md:pt-10 md:pb-10">
-        <div className="flex flex-wrap items-center justify-between gap-2 text-[11.5px] font-medium text-[#4A2C1D]/72 md:text-[12px]">
-          <span>{t.demoTag} · #EFE2CF · #4A2C1D · #E0A526</span>
-          <span className="font-semibold text-[#4A2C1D]">{t.kickerRight}</span>
+        <div
+          className={`flex flex-wrap items-center justify-between gap-2 text-[11.5px] font-medium md:text-[12px] ${
+            isDark ? 'text-[#EFE2CF]/70' : 'text-[#4A2C1D]/72'
+          }`}
+        >
+          <span>
+            {t.demoTag} ·{' '}
+            {isDark ? '#1D120C · #EFE2CF · #E0A526' : '#EFE2CF · #4A2C1D · #E0A526'}
+          </span>
+          <span
+            className={`font-semibold ${
+              isDark ? 'text-[#E0A526]' : 'text-[#4A2C1D]'
+            }`}
+          >
+            {t.kickerRight}
+          </span>
         </div>
 
-        <h2 className="font-demo-oswald mt-3 text-center text-[clamp(2.25rem,7vw,5.4rem)] leading-[0.94] font-bold tracking-[-0.015em] text-[#4A2C1D] uppercase md:mt-4">
+        <h2
+          className={`font-demo-oswald mt-3 text-center text-[clamp(2.25rem,7vw,5.4rem)] leading-[0.94] font-bold tracking-[-0.015em] uppercase md:mt-4 ${
+            isDark ? 'text-[#EFE2CF]' : 'text-[#4A2C1D]'
+          }`}
+        >
           {t.headline}
         </h2>
 
         <div className="mt-4 grid grid-cols-1 items-center gap-4 md:mt-6 lg:grid-cols-12 lg:gap-6">
           <div className="order-2 lg:order-1 lg:col-span-4">
-            <p className="text-[13.5px] leading-[1.55] text-[#4A2C1D]/82 md:text-[14.5px] md:leading-[1.6]">
+            <p
+              className={`text-[13.5px] leading-[1.55] md:text-[14.5px] md:leading-[1.6] ${
+                isDark ? 'text-[#EFE2CF]/80' : 'text-[#4A2C1D]/82'
+              }`}
+            >
               {t.storyText}
             </p>
             <div className="mt-3.5 flex flex-wrap items-center gap-3 md:mt-4 md:gap-4">
               <button
                 type="button"
                 onClick={scrollToMenu}
-                className="inline-flex h-9.5 items-center rounded-full bg-[#E0A526] px-4.5 text-[12.5px] font-semibold text-[#4A2C1D] transition-colors hover:bg-[#CA921B] md:h-10 md:px-5 md:text-[13px]"
+                className="inline-flex h-9.5 items-center rounded-full bg-[#E0A526] px-4.5 text-[12.5px] font-semibold text-[#1D120C] transition-colors hover:bg-[#CA921B] md:h-10 md:px-5 md:text-[13px]"
               >
                 {t.ctaMenu}
               </button>
@@ -209,10 +281,12 @@ export function DemoHorecaBand({ lang, onBuildInStyle }: DemoHorecaBandProps) {
                 type="button"
                 onClick={() =>
                   onBuildInStyle(
-                    `Horeca Demo (Latte Cream & Mustard) — ${activeCity.city}`,
+                    `Horeca Demo (${isDark ? 'Roast Espresso Dark' : 'Latte Cream'} & Mustard) — ${activeCity.city}`,
                   )
                 }
-                className="text-[12.5px] font-semibold text-[#4A2C1D]/80 underline-offset-4 hover:underline"
+                className={`text-[12.5px] font-semibold underline-offset-4 hover:underline ${
+                  isDark ? 'text-[#EFE2CF]/80 hover:text-[#EFE2CF]' : 'text-[#4A2C1D]/80'
+                }`}
               >
                 {t.buildThis}
               </button>
@@ -266,13 +340,27 @@ export function DemoHorecaBand({ lang, onBuildInStyle }: DemoHorecaBandProps) {
             </motion.div>
           </div>
 
-          <div className="order-3 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[#4A2C1D]/12 bg-[#FAF4EA] p-3.5 lg:block lg:p-4 lg:col-span-3">
+          <div
+            className={`order-3 flex flex-wrap items-center justify-between gap-3 rounded-2xl border p-3.5 transition-colors duration-300 lg:col-span-3 lg:block lg:p-4 ${
+              isDark
+                ? 'border-[#EFE2CF]/12 bg-[#261810]'
+                : 'border-[#4A2C1D]/12 bg-[#FAF4EA]'
+            }`}
+          >
             <div>
-              <div className="flex items-center gap-1.5 text-[12px] font-bold text-[#4A2C1D] uppercase">
+              <div
+                className={`flex items-center gap-1.5 text-[12px] font-bold uppercase ${
+                  isDark ? 'text-[#EFE2CF]' : 'text-[#4A2C1D]'
+                }`}
+              >
                 <MapPin className="h-3.5 w-3.5 text-[#E0A526] md:h-4 md:w-4" />
                 <span>{activeCity.city}</span>
               </div>
-              <p className="mt-0.5 text-[12.5px] text-[#4A2C1D]/75 md:mt-1 md:text-[13px]">
+              <p
+                className={`mt-0.5 text-[12.5px] md:mt-1 md:text-[13px] ${
+                  isDark ? 'text-[#EFE2CF]/75' : 'text-[#4A2C1D]/75'
+                }`}
+              >
                 {activeCity.address}
               </p>
             </div>
@@ -287,8 +375,12 @@ export function DemoHorecaBand({ lang, onBuildInStyle }: DemoHorecaBandProps) {
                   }}
                   className={`rounded-full px-2.5 py-1 text-[11px] font-semibold transition-colors ${
                     cityId === c.id
-                      ? 'bg-[#4A2C1D] text-[#EFE2CF]'
-                      : 'border border-[#4A2C1D]/20 bg-white/70 text-[#4A2C1D]'
+                      ? isDark
+                        ? 'bg-[#E0A526] text-[#1D120C]'
+                        : 'bg-[#4A2C1D] text-[#EFE2CF]'
+                      : isDark
+                        ? 'border border-[#EFE2CF]/18 bg-[#1D120C] text-[#EFE2CF]/85 hover:border-[#E0A526]/60'
+                        : 'border border-[#4A2C1D]/20 bg-white/70 text-[#4A2C1D]'
                   }`}
                 >
                   {c.city}
@@ -301,16 +393,26 @@ export function DemoHorecaBand({ lang, onBuildInStyle }: DemoHorecaBandProps) {
         {/* WORKING TERRACE WEATHER API + CASCADE MENU */}
         <div
           id="horeca-weather-menu"
-          className="mt-5 grid grid-cols-1 gap-4 rounded-2xl border border-[#4A2C1D]/12 bg-[#FAF4EA] p-3.5 md:mt-8 md:gap-5 md:p-5 lg:grid-cols-12"
+          className={`mt-5 grid grid-cols-1 gap-4 rounded-2xl border p-3.5 transition-colors duration-300 md:mt-8 md:gap-5 md:p-5 lg:grid-cols-12 ${
+            isDark
+              ? 'border-[#EFE2CF]/12 bg-[#261810]'
+              : 'border-[#4A2C1D]/12 bg-[#FAF4EA]'
+          }`}
         >
           {/* Left: Live Terrace Weather Readout with Rotating Warm Sun Ring */}
-          <div className="relative flex flex-col justify-between overflow-hidden rounded-xl border border-[#4A2C1D]/10 bg-[#EFE2CF]/70 p-4 lg:col-span-4">
+          <div
+            className={`relative flex flex-col justify-between overflow-hidden rounded-xl border p-4 lg:col-span-4 ${
+              isDark
+                ? 'border-[#EFE2CF]/10 bg-[#1A100A]'
+                : 'border-[#4A2C1D]/10 bg-[#EFE2CF]/70'
+            }`}
+          >
             {terraceNice && !prefersReducedMotion && (
               <motion.div
                 aria-hidden="true"
                 animate={{
                   scale: [0.92, 1.14, 0.92],
-                  opacity: [0.3, 0.58, 0.3],
+                  opacity: isDark ? [0.24, 0.48, 0.24] : [0.3, 0.58, 0.3],
                   rotate: [0, 180, 360],
                 }}
                 transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut' }}
@@ -323,7 +425,11 @@ export function DemoHorecaBand({ lang, onBuildInStyle }: DemoHorecaBandProps) {
             )}
 
             <div className="relative z-10">
-              <div className="flex items-center justify-between text-[12px] font-semibold text-[#4A2C1D]">
+              <div
+                className={`flex items-center justify-between text-[12px] font-semibold ${
+                  isDark ? 'text-[#EFE2CF]' : 'text-[#4A2C1D]'
+                }`}
+              >
                 <span className="inline-flex items-center gap-1.5">
                   <motion.span
                     animate={
@@ -351,22 +457,42 @@ export function DemoHorecaBand({ lang, onBuildInStyle }: DemoHorecaBandProps) {
                 transition={{ type: 'spring', stiffness: 320, damping: 22 }}
                 className="mt-3 flex items-baseline gap-4"
               >
-                <span className="font-demo-oswald font-mono-tabular text-[38px] font-bold text-[#4A2C1D]">
+                <span
+                  className={`font-demo-oswald font-mono-tabular text-[38px] font-bold ${
+                    isDark ? 'text-[#EFE2CF]' : 'text-[#4A2C1D]'
+                  }`}
+                >
                   {weather.temp}°C
                 </span>
-                <span className="inline-flex items-center gap-1 text-[12.5px] font-medium text-[#4A2C1D]/75">
+                <span
+                  className={`inline-flex items-center gap-1 text-[12.5px] font-medium ${
+                    isDark ? 'text-[#EFE2CF]/75' : 'text-[#4A2C1D]/75'
+                  }`}
+                >
                   <Wind className="h-3.5 w-3.5" />
                   <span className="font-mono-tabular">{weather.wind} km/u</span>
                 </span>
               </motion.div>
 
-              <p className="mt-2 text-[13px] font-semibold text-[#4A2C1D]">
+              <p
+                className={`mt-2 text-[13px] font-semibold ${
+                  isDark ? 'text-[#EFE2CF]' : 'text-[#4A2C1D]'
+                }`}
+              >
                 {terraceNice ? t.terraceOpen : t.terraceIndoor}
               </p>
             </div>
 
-            <div className="relative z-10 mt-4 border-t border-[#4A2C1D]/10 pt-3">
-              <span className="font-mono-tabular text-[11px] text-[#4A2C1D]/55">
+            <div
+              className={`relative z-10 mt-4 border-t pt-3 ${
+                isDark ? 'border-[#EFE2CF]/10' : 'border-[#4A2C1D]/10'
+              }`}
+            >
+              <span
+                className={`font-mono-tabular text-[11px] ${
+                  isDark ? 'text-[#EFE2CF]/55' : 'text-[#4A2C1D]/55'
+                }`}
+              >
                 {weather.source === 'live'
                   ? `Open-Meteo Live · ${activeCity.city}`
                   : activeCity.city}
@@ -377,7 +503,11 @@ export function DemoHorecaBand({ lang, onBuildInStyle }: DemoHorecaBandProps) {
           {/* Right: Filterable Menu with Sliding Pill + Energetic Cascade */}
           <div className="lg:col-span-8">
             <div className="flex flex-wrap items-center justify-between gap-3">
-              <div className="inline-flex items-center gap-1 rounded-full bg-[#EFE2CF] p-1">
+              <div
+                className={`inline-flex items-center gap-1 rounded-full p-1 ${
+                  isDark ? 'bg-[#1D120C]' : 'bg-[#EFE2CF]'
+                }`}
+              >
                 {t.cats.map((cat) => {
                   const activeCat = menuCategory === cat.id;
                   return (
@@ -387,8 +517,12 @@ export function DemoHorecaBand({ lang, onBuildInStyle }: DemoHorecaBandProps) {
                       onClick={() => setMenuCategory(cat.id)}
                       className={`relative rounded-full px-3.5 py-1.5 text-[12px] font-semibold transition-colors ${
                         activeCat
-                          ? 'text-[#EFE2CF]'
-                          : 'text-[#4A2C1D]/75 hover:text-[#4A2C1D]'
+                          ? isDark
+                            ? 'text-[#1D120C]'
+                            : 'text-[#EFE2CF]'
+                          : isDark
+                            ? 'text-[#EFE2CF]/75 hover:text-[#EFE2CF]'
+                            : 'text-[#4A2C1D]/75 hover:text-[#4A2C1D]'
                       }`}
                     >
                       {activeCat && (
@@ -399,7 +533,9 @@ export function DemoHorecaBand({ lang, onBuildInStyle }: DemoHorecaBandProps) {
                             stiffness: 420,
                             damping: 30,
                           }}
-                          className="absolute inset-0 rounded-full bg-[#4A2C1D]"
+                          className={`absolute inset-0 rounded-full ${
+                            isDark ? 'bg-[#E0A526]' : 'bg-[#4A2C1D]'
+                          }`}
                         />
                       )}
                       <span className="relative z-10">{cat.label}</span>
@@ -412,7 +548,9 @@ export function DemoHorecaBand({ lang, onBuildInStyle }: DemoHorecaBandProps) {
                 <motion.span
                   initial={prefersReducedMotion ? false : { opacity: 0, scale: 0.92 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-emerald-800"
+                  className={`inline-flex items-center gap-1.5 text-[12px] font-semibold ${
+                    isDark ? 'text-emerald-400' : 'text-emerald-800'
+                  }`}
                 >
                   <Check className="h-4 w-4" />
                   <span>{t.bookConfirm}</span>
@@ -447,18 +585,34 @@ export function DemoHorecaBand({ lang, onBuildInStyle }: DemoHorecaBandProps) {
                       damping: 26,
                       delay: prefersReducedMotion ? 0 : idx * 0.065,
                     }}
-                    className="flex items-start justify-between gap-3 rounded-xl border border-[#4A2C1D]/12 bg-white p-3.5 shadow-xs"
+                    className={`flex items-start justify-between gap-3 rounded-xl border p-3.5 shadow-xs ${
+                      isDark
+                        ? 'border-[#EFE2CF]/12 bg-[#301E14]'
+                        : 'border-[#4A2C1D]/12 bg-white'
+                    }`}
                   >
                     <div>
-                      <p className="inline-flex items-center gap-1.5 text-[14px] font-bold text-[#4A2C1D]">
+                      <p
+                        className={`inline-flex items-center gap-1.5 text-[14px] font-bold ${
+                          isDark ? 'text-[#EFE2CF]' : 'text-[#4A2C1D]'
+                        }`}
+                      >
                         <Coffee className="h-3.5 w-3.5 text-[#E0A526]" />
                         <span>{item.title[lang]}</span>
                       </p>
-                      <p className="mt-0.5 text-[12px] text-[#4A2C1D]/65">
+                      <p
+                        className={`mt-0.5 text-[12px] ${
+                          isDark ? 'text-[#EFE2CF]/68' : 'text-[#4A2C1D]/65'
+                        }`}
+                      >
                         {item.note[lang]}
                       </p>
                     </div>
-                    <span className="font-mono-tabular shrink-0 text-[13.5px] font-bold text-[#4A2C1D]">
+                    <span
+                      className={`font-mono-tabular shrink-0 text-[13.5px] font-bold ${
+                        isDark ? 'text-[#E0A526]' : 'text-[#4A2C1D]'
+                      }`}
+                    >
                       {item.price}
                     </span>
                   </motion.div>

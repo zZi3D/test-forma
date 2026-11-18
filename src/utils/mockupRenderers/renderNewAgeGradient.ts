@@ -32,12 +32,14 @@ export function renderNewAgeGradient(
   project: ProjectConfig,
 ) {
   const { palette, previewSample } = project;
+  const deepWine = palette.text; // #4A0F24
+  const kellyGreen = palette.accent; // #2DC92A
 
-  // Soft sand canvas (#F3ECE1)
+  // Soft blush campaign canvas (#F6CBD4)
   ctx.fillStyle = palette.bg;
   ctx.fillRect(0, 0, width, height);
 
-  // Ethereal diffused peach / amber radial aura gradients across background
+  // Ethereal diffused rose & pearl aura gradients across background
   const aura1 = ctx.createRadialGradient(
     width * 0.64,
     height * 0.48,
@@ -46,8 +48,8 @@ export function renderNewAgeGradient(
     height * 0.48,
     width * 0.48,
   );
-  aura1.addColorStop(0, '#E8B89A');
-  aura1.addColorStop(0.5, 'rgba(232, 184, 154, 0.45)');
+  aura1.addColorStop(0, '#FFE4EA');
+  aura1.addColorStop(0.5, 'rgba(232, 175, 192, 0.52)');
   aura1.addColorStop(1, 'transparent');
   ctx.fillStyle = aura1;
   ctx.fillRect(0, 0, width, height);
@@ -60,29 +62,35 @@ export function renderNewAgeGradient(
     height * 0.85,
     width * 0.35,
   );
-  aura2.addColorStop(0, 'rgba(201, 123, 87, 0.25)');
+  aura2.addColorStop(0, 'rgba(74, 15, 36, 0.14)');
   aura2.addColorStop(1, 'transparent');
   ctx.fillStyle = aura2;
   ctx.fillRect(0, 0, width, height);
 
   const { padX, headerBottom } = drawBrowserChrome(ctx, width, height, project, {
-    chromeBg: 'rgba(243, 236, 225, 0.72)',
-    borderAlpha: 0.1,
+    chromeBg: 'rgba(246, 203, 212, 0.78)',
+    borderAlpha: 0.14,
     navItemsColor: palette.secondary,
   });
 
-  // RIGHT FOCAL VISUAL: Arched Boutique Mirror / Editorial Frame
+  // Kelly-Green status pulse dot beside top nav right "BAG (1)"
+  ctx.fillStyle = kellyGreen;
+  ctx.beginPath();
+  ctx.arc(width - padX - width * 0.062, headerBottom - height * 0.04, 4.5, 0, Math.PI * 2);
+  ctx.fill();
+
+  // RIGHT FOCAL VISUAL: Arched Editorial Lookbook / Solaris Eyewear Campaign Frame
   const archX = width * 0.46;
   const archY = headerBottom + height * 0.05;
   const archW = width * 0.46;
   const archH = height - archY - height * 0.06;
 
-  // Soft golden shadow behind arched mirror
+  // Soft wine-plum shadow behind arched lookbook frame
   ctx.save();
-  ctx.shadowColor = 'rgba(138, 86, 56, 0.16)';
+  ctx.shadowColor = 'rgba(74, 15, 36, 0.18)';
   ctx.shadowBlur = 38;
   ctx.shadowOffsetY = 18;
-  ctx.fillStyle = '#EBD2BE';
+  ctx.fillStyle = '#E8AFC0';
   drawArchedFrame(ctx, archX, archY, archW, archH, 24);
   ctx.fill();
   ctx.restore();
@@ -91,48 +99,48 @@ export function renderNewAgeGradient(
   drawArchedFrame(ctx, archX, archY, archW, archH, 24);
   ctx.clip();
 
-  // Golden-hour studio backdrop inside arched frame
+  // Editorial blush-rose sunset studio backdrop inside arched frame
   const photoGrad = ctx.createLinearGradient(
     archX,
     archY,
     archX + archW,
     archY + archH,
   );
-  photoGrad.addColorStop(0, '#F7ECE0');
-  photoGrad.addColorStop(0.45, '#E9C1A4');
-  photoGrad.addColorStop(1, '#BA7B59');
+  photoGrad.addColorStop(0, '#FDF1F4');
+  photoGrad.addColorStop(0.48, '#F2B8C6');
+  photoGrad.addColorStop(1, '#8C3554');
   ctx.fillStyle = photoGrad;
   ctx.fillRect(archX, archY, archW, archH);
 
-  // Soft solar backlit glow behind editorial silhouette
+  // Soft backlit halo behind editorial silhouette
   const halo = ctx.createRadialGradient(
     archX + archW * 0.56,
-    archY + archH * 0.38,
+    archY + archH * 0.36,
     archW * 0.02,
     archX + archW * 0.56,
-    archY + archH * 0.4,
+    archY + archH * 0.38,
     archW * 0.48,
   );
   halo.addColorStop(0, '#FFFDF9');
-  halo.addColorStop(0.38, 'rgba(255, 242, 224, 0.52)');
+  halo.addColorStop(0.38, 'rgba(255, 232, 238, 0.55)');
   halo.addColorStop(1, 'transparent');
   ctx.fillStyle = halo;
   ctx.fillRect(archX, archY, archW, archH);
 
-  // Refined Editorial Mirror Inner Hairline Ring
-  ctx.strokeStyle = 'rgba(255, 250, 244, 0.48)';
+  // Refined Inner Hairline Ring
+  ctx.strokeStyle = 'rgba(255, 250, 252, 0.52)';
   ctx.lineWidth = 1.75;
   drawArchedFrame(ctx, archX + 12, archY + 12, archW - 24, archH - 24, 18);
   ctx.stroke();
 
-  // FASHION SILHOUETTE: Tailored Coat & Boutique Handbag in Golden-Hour Rim Light
+  // FASHION SILHOUETTE: Deep Wine Tailored Look + Solaris Mirrored Shield Sunglass Glint
   const figX = archX + archW * 0.53;
   const figTop = archY + archH * 0.17;
   const figBottom = archY + archH;
 
-  ctx.fillStyle = '#1D1815';
+  ctx.fillStyle = deepWine;
 
-  // Sculpted head + sleek editorial chignon hair bun
+  // Sculpted head + sleek editorial chignon
   ctx.beginPath();
   ctx.ellipse(figX - 2, figTop + 34, 24, 29, -0.05, 0, Math.PI * 2);
   ctx.fill();
@@ -140,14 +148,25 @@ export function renderNewAgeGradient(
   ctx.arc(figX - 24, figTop + 36, 11, 0, Math.PI * 2);
   ctx.fill();
 
+  // Sleek Kelly-Green Mirrored Shield Sunglasses Visor across face silhouette
+  ctx.save();
+  const visorGrad = ctx.createLinearGradient(figX - 18, figTop + 26, figX + 26, figTop + 38);
+  visorGrad.addColorStop(0, '#142914');
+  visorGrad.addColorStop(0.5, kellyGreen);
+  visorGrad.addColorStop(1, '#A7F3D0');
+  ctx.fillStyle = visorGrad;
+  drawRoundedRect(ctx, figX - 14, figTop + 26, 36, 12, 5);
+  ctx.fill();
+  ctx.restore();
+
+  ctx.fillStyle = deepWine;
   // Neck
   ctx.fillRect(figX - 10, figTop + 56, 18, 28);
 
-  // Tailored structured coat silhouette (defined shoulders, waist cinch, flared A-line drape)
+  // Tailored structured coat silhouette
   ctx.beginPath();
-  ctx.moveTo(figX - 66, figTop + 98); // Left shoulder
-  ctx.quadraticCurveTo(figX - 2, figTop + 76, figX + 68, figTop + 102); // Collar & right shoulder
-  // Right arm poised outward at hip / elbow
+  ctx.moveTo(figX - 66, figTop + 98);
+  ctx.quadraticCurveTo(figX - 2, figTop + 76, figX + 68, figTop + 102);
   ctx.bezierCurveTo(
     figX + 96,
     figTop + 150,
@@ -156,7 +175,6 @@ export function renderNewAgeGradient(
     figX + 86,
     figTop + 255,
   );
-  // Sweeping coat flare down right side
   ctx.bezierCurveTo(
     figX + 104,
     figTop + 340,
@@ -166,7 +184,6 @@ export function renderNewAgeGradient(
     figBottom,
   );
   ctx.lineTo(figX - 104, figBottom);
-  // Left coat hem & waist taper
   ctx.bezierCurveTo(
     figX - 96,
     figTop + 435,
@@ -186,34 +203,31 @@ export function renderNewAgeGradient(
   ctx.closePath();
   ctx.fill();
 
-  // Structured Boutique Handbag hanging cleanly from poised right arm
+  // Structured Boutique Handbag hanging from poised right arm
   const bagX = figX + 68;
   const bagY = figTop + 266;
   const bagW = 58;
   const bagH = 52;
 
-  // Handbag top curved leather handle
-  ctx.strokeStyle = '#1D1815';
+  ctx.strokeStyle = deepWine;
   ctx.lineWidth = 4.5;
   ctx.beginPath();
   ctx.arc(bagX + bagW * 0.5, bagY + 4, 15, Math.PI, 0, false);
   ctx.stroke();
 
-  // Handbag structured silhouette
-  ctx.fillStyle = '#14110F';
+  ctx.fillStyle = '#330818';
   drawRoundedRect(ctx, bagX, bagY, bagW, bagH, 10);
   ctx.fill();
-  ctx.strokeStyle = 'rgba(243, 236, 225, 0.45)';
+  ctx.strokeStyle = 'rgba(246, 203, 212, 0.5)';
   ctx.lineWidth = 1.5;
   ctx.stroke();
 
-  // Tiny warm champagne bag clasp
-  ctx.fillStyle = '#E8C5A0';
+  ctx.fillStyle = '#F6CBD4';
   drawRoundedRect(ctx, bagX + bagW * 0.5 - 5, bagY + 12, 10, 6, 3);
   ctx.fill();
 
-  // Minimalist tailored lapel highlight & waist belt seam on coat
-  ctx.strokeStyle = 'rgba(243, 236, 225, 0.34)';
+  // Minimalist lapel & belt highlight
+  ctx.strokeStyle = 'rgba(246, 203, 212, 0.36)';
   ctx.lineWidth = 2;
   ctx.beginPath();
   ctx.moveTo(figX - 18, figTop + 90);
@@ -226,8 +240,8 @@ export function renderNewAgeGradient(
   ctx.quadraticCurveTo(figX + 4, figTop + 230, figX + 58, figTop + 222);
   ctx.stroke();
 
-  // Golden-hour warm rim light along right silhouette edge
-  ctx.strokeStyle = 'rgba(255, 245, 230, 0.72)';
+  // Rim light along right silhouette contour
+  ctx.strokeStyle = 'rgba(255, 240, 245, 0.78)';
   ctx.lineWidth = 2.6;
   ctx.beginPath();
   ctx.moveTo(figX + 18, figTop + 14);
@@ -252,42 +266,42 @@ export function renderNewAgeGradient(
   applyEditorialGrain(ctx, archX, archY, archW, archH, 404, 0.036);
   ctx.restore();
 
-  // Subtle brass hairline outline on arched frame
-  ctx.strokeStyle = 'rgba(31, 26, 23, 0.16)';
+  // Hairline outline on arched frame
+  ctx.strokeStyle = 'rgba(74, 15, 36, 0.18)';
   ctx.lineWidth = 1.5;
   drawArchedFrame(ctx, archX, archY, archW, archH, 24);
   ctx.stroke();
 
-  // FLOATING TRANSLUCENT BOUTIQUE LOOKBOOK TAG overlaid at bottom-right of arch
-  const tagW = width * 0.255;
+  // FLOATING TRANSLUCENT DROP TAG overlaid at bottom-right of arch
+  const tagW = width * 0.265;
   const tagH = height * 0.145;
   const tagX = archX + archW - tagW - 22;
   const tagY = archY + archH - tagH - 22;
 
   ctx.save();
-  ctx.shadowColor = 'rgba(31, 26, 23, 0.12)';
+  ctx.shadowColor = 'rgba(74, 15, 36, 0.16)';
   ctx.shadowBlur = 24;
   ctx.shadowOffsetY = 10;
-  ctx.fillStyle = 'rgba(255, 250, 245, 0.88)';
+  ctx.fillStyle = 'rgba(255, 246, 248, 0.92)';
   drawRoundedRect(ctx, tagX, tagY, tagW, tagH, 18);
   ctx.fill();
   ctx.restore();
 
-  ctx.strokeStyle = 'rgba(255, 255, 255, 0.85)';
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.9)';
   ctx.lineWidth = 1.5;
   drawRoundedRect(ctx, tagX, tagY, tagW, tagH, 18);
   ctx.stroke();
 
-  ctx.fillStyle = palette.accent;
-  ctx.font = `600 ${Math.round(width * 0.0082)}px "JetBrains Mono", monospace`;
-  ctx.fillText('NEW SEASON · LOOK 04', tagX + 20, tagY + 28);
+  ctx.fillStyle = palette.secondary;
+  ctx.font = `600 ${Math.round(width * 0.008)}px "JetBrains Mono", monospace`;
+  ctx.fillText('SUMMER CAPSULE · UV400', tagX + 20, tagY + 28);
 
-  ctx.fillStyle = palette.text;
-  ctx.font = `600 ${Math.round(width * 0.013)}px "Cormorant Garamond", Georgia, serif`;
-  ctx.fillText('Tailored Trench & Bag', tagX + 20, tagY + 58);
+  ctx.fillStyle = deepWine;
+  ctx.font = `700 ${Math.round(width * 0.013)}px "Cormorant Garamond", Georgia, serif`;
+  ctx.fillText('Solaris Shield Acetate', tagX + 20, tagY + 58);
 
-  // 3 Fabric / Color Swatch Dots
-  const fabricSwatches = ['#1D1815', '#C97B57', '#DFC9B0'];
+  // 3 Exact Demo 5 Variant Swatches (Kelly Green, Deep Wine, Blush Mirror)
+  const fabricSwatches = [kellyGreen, deepWine, '#E88FA5'];
   fabricSwatches.forEach((col, idx) => {
     const sx = tagX + 28 + idx * 24;
     const sy = tagY + tagH - 24;
@@ -296,8 +310,8 @@ export function renderNewAgeGradient(
     ctx.arc(sx, sy, 7, 0, Math.PI * 2);
     ctx.fill();
     if (idx === 0) {
-      ctx.strokeStyle = 'rgba(31, 26, 23, 0.4)';
-      ctx.lineWidth = 1.25;
+      ctx.strokeStyle = 'rgba(74, 15, 36, 0.55)';
+      ctx.lineWidth = 1.4;
       ctx.beginPath();
       ctx.arc(sx, sy, 10, 0, Math.PI * 2);
       ctx.stroke();
@@ -305,18 +319,18 @@ export function renderNewAgeGradient(
   });
 
   ctx.textAlign = 'right';
-  ctx.fillStyle = palette.text;
-  ctx.font = `600 ${Math.round(width * 0.0098)}px "JetBrains Mono", monospace`;
-  ctx.fillText('€240 · IN STOCK', tagX + tagW - 20, tagY + tagH - 22);
+  ctx.fillStyle = deepWine;
+  ctx.font = `600 ${Math.round(width * 0.0095)}px "JetBrains Mono", monospace`;
+  ctx.fillText('€165 · 7 LEFT', tagX + tagW - 20, tagY + tagH - 22);
   ctx.textAlign = 'left';
 
-  // Weightless Editorial Magazine Titles overlapping left edge of arched mirror
-  ctx.fillStyle = palette.accent;
-  ctx.font = `500 ${Math.round(width * 0.01)}px "JetBrains Mono", monospace`;
+  // Weightless Editorial Titles on Left
+  ctx.fillStyle = palette.secondary;
+  ctx.font = `600 ${Math.round(width * 0.0096)}px "JetBrains Mono", monospace`;
   ctx.fillText(previewSample.eyebrow, padX, headerBottom + height * 0.14);
 
-  ctx.fillStyle = palette.text;
-  ctx.font = `italic 400 ${Math.round(width * 0.086)}px "Cormorant Garamond", Georgia, serif`;
+  ctx.fillStyle = deepWine;
+  ctx.font = `italic 400 ${Math.round(width * 0.088)}px "Cormorant Garamond", Georgia, serif`;
   const [line1, ...rest] = previewSample.headline.split(' ');
   ctx.fillText(line1, padX, headerBottom + height * 0.29);
   ctx.fillText(rest.join(' '), padX + width * 0.045, headerBottom + height * 0.415);
@@ -327,37 +341,42 @@ export function renderNewAgeGradient(
     ctx,
     previewSample.subheadline,
     padX,
-    headerBottom + height * 0.50,
+    headerBottom + height * 0.5,
     width * 0.34,
     height * 0.027,
     3,
   );
 
-  // Minimal floating lookbook metrics on bottom left
+  // Minimal floating capsule metrics on bottom left
   const footY = height * 0.77;
   previewSample.metrics.forEach((m, idx) => {
-    const mx = padX + idx * width * 0.125;
+    const mx = padX + idx * width * 0.128;
     ctx.fillStyle = palette.secondary;
-    ctx.font = `500 ${Math.round(width * 0.0084)}px "JetBrains Mono", monospace`;
+    ctx.font = `500 ${Math.round(width * 0.0082)}px "JetBrains Mono", monospace`;
     ctx.fillText(m.label, mx, footY);
-    ctx.fillStyle = palette.text;
-    ctx.font = `500 ${Math.round(width * 0.0125)}px "Plus Jakarta Sans", sans-serif`;
+    ctx.fillStyle = deepWine;
+    ctx.font = `600 ${Math.round(width * 0.0118)}px "Plus Jakarta Sans", sans-serif`;
     ctx.fillText(m.value, mx, footY + height * 0.036);
   });
 
-  // Refined "SHOP THE EDIT →" Boutique Pill Button
+  // High-pop Kelly Green "SHOP SOLARIS DROP →" Pill Button matching Demo 5
   const btnX = padX;
   const btnY = height * 0.865;
-  const btnW = width * 0.18;
+  const btnW = width * 0.19;
   const btnH = height * 0.062;
 
-  ctx.fillStyle = palette.text;
+  ctx.save();
+  ctx.shadowColor = 'rgba(45, 201, 42, 0.35)';
+  ctx.shadowBlur = 18;
+  ctx.shadowOffsetY = 6;
+  ctx.fillStyle = kellyGreen;
   drawRoundedRect(ctx, btnX, btnY, btnW, btnH, 31);
   ctx.fill();
+  ctx.restore();
 
   ctx.textAlign = 'center';
-  ctx.fillStyle = palette.bg;
-  ctx.font = `600 ${Math.round(width * 0.0095)}px "Plus Jakarta Sans", sans-serif`;
+  ctx.fillStyle = '#142914';
+  ctx.font = `700 ${Math.round(width * 0.0094)}px "Plus Jakarta Sans", sans-serif`;
   ctx.fillText(previewSample.ctaLabel, btnX + btnW * 0.5, btnY + btnH * 0.52);
   ctx.textAlign = 'left';
 }
