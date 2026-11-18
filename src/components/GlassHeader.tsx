@@ -270,15 +270,13 @@ export function GlassHeader({
             <path d={mobileWaistPath} fill="rgba(255, 255, 255, 0.42)" />
           </svg>
 
-          {/* Clipped Frosted Glass Fill */}
+          {/* Clipped Luminous Frosted Fill (avoids WebKit clip-path + backdrop-filter sticky flicker on mobile) */}
           <div
             aria-hidden="true"
             className="pointer-events-none absolute inset-0 h-full w-full"
             style={{
               background:
-                'linear-gradient(180deg, rgba(255, 255, 255, 0.84) 0%, rgba(255, 255, 255, 0.7) 100%)',
-              WebkitBackdropFilter: 'blur(14px)',
-              backdropFilter: 'blur(14px)',
+                'linear-gradient(180deg, rgba(255, 255, 255, 0.94) 0%, rgba(250, 248, 243, 0.88) 100%)',
               WebkitClipPath: `path('${mobileWaistPath}')`,
               clipPath: `path('${mobileWaistPath}')`,
             }}

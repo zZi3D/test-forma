@@ -235,14 +235,13 @@ export default function App() {
           />
 
           {/* Rising Sheet (Section 2 & 3 scroll smoothly over fixed Section 1) */}
-          <div className="relative z-20 overflow-x-clip rounded-t-[28px] border-t border-white/75 shadow-[0_-24px_60px_-18px_rgba(28,27,24,0.12)] md:rounded-t-[40px]">
-            {/* Frosted top lip + warm canvas veil at the leading edge without clipping fixed/sticky descendants */}
+          <div id="rising-sheet" className="relative z-20">
+            {/* Rounded frosted top lip + solid alabaster veil kept in an absolute sibling so no overflow-x-clip or border-radius clips sticky descendants */}
             <div
               aria-hidden="true"
-              className="pointer-events-none absolute inset-0 overflow-hidden rounded-t-[28px] md:rounded-t-[40px]"
+              className="pointer-events-none absolute inset-0 overflow-hidden rounded-t-[28px] border-t border-white/75 bg-[#F7F5F0]/[0.97] shadow-[0_-24px_60px_-18px_rgba(28,27,24,0.12)] md:rounded-t-[40px]"
             >
-              <div className="absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-white/75 via-white/35 to-transparent" />
-              <div className="absolute inset-0 bg-gradient-to-b from-[#F7F5F0]/90 via-[#F7F5F0]/45 to-[#F7F5F0]/25" />
+              <div className="absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-white/80 via-white/35 to-transparent" />
             </div>
 
             <div className="relative z-10">

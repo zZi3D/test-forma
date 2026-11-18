@@ -10,23 +10,35 @@ export function ScrollProgressBar() {
 
   useEffect(() => {
     let rafId = 0;
+    let cachedVw = Math.max(window.innerWidth, 1);
+    let cachedMaxScroll = Math.max(
+      0,
+      document.documentElement.scrollHeight - window.innerHeight,
+    );
+
+    const measure = () => {
+      cachedVw = Math.max(window.innerWidth, 1);
+      cachedMaxScroll = Math.max(
+        0,
+        document.documentElement.scrollHeight - window.innerHeight,
+      );
+    };
 
     const updateProgress = () => {
       rafId = 0;
       const bar = barRef.current;
       if (!bar) return;
 
-      const vw = Math.max(window.innerWidth, 1);
-      const maxScroll =
-        document.documentElement.scrollHeight - window.innerHeight;
       const rawProgress =
-        maxScroll > 0 ? Math.min(1, Math.max(0, window.scrollY / maxScroll)) : 0;
+        cachedMaxScroll > 0
+          ? Math.min(1, Math.max(0, window.scrollY / cachedMaxScroll))
+          : 0;
 
       bar.style.transform = `scale3d(${rawProgress.toFixed(4)}, 1, 1)`;
 
       if (glowRef.current) {
         glowRef.current.style.opacity = rawProgress > 0.004 ? '1' : '0';
-        const tipX = Math.max(0, rawProgress * vw - 32);
+        const tipX = Math.max(0, rawProgress * cachedVw - 32);
         glowRef.current.style.transform = `translate3d(${tipX.toFixed(1)}px, 0, 0)`;
       }
     };
@@ -37,13 +49,26 @@ export function ScrollProgressBar() {
       }
     };
 
+    const onResize = () => {
+      measure();
+      scheduleUpdate();
+    };
+
+    const ro =
+      typeof ResizeObserver !== 'undefined'
+        ? new ResizeObserver(onResize)
+        : null;
+    ro?.observe(document.documentElement);
+
+    measure();
     updateProgress();
     window.addEventListener('scroll', scheduleUpdate, { passive: true });
-    window.addEventListener('resize', scheduleUpdate, { passive: true });
+    window.addEventListener('resize', onResize, { passive: true });
 
     return () => {
+      ro?.disconnect();
       window.removeEventListener('scroll', scheduleUpdate);
-      window.removeEventListener('resize', scheduleUpdate);
+      window.removeEventListener('resize', onResize);
       if (rafId) window.cancelAnimationFrame(rafId);
     };
   }, []);

@@ -86,10 +86,24 @@ export function WaveBackground() {
     let rafId = 0;
     let lastNow = performance.now();
     let lastDrawNow = 0;
+    let pauseThresholdY = Infinity;
+    let isPausedOffscreen = false;
 
     const prefersReducedMotion = window.matchMedia(
       '(prefers-reduced-motion: reduce)',
     ).matches;
+
+    const updatePauseThreshold = () => {
+      const sheet = document.getElementById('rising-sheet');
+      if (!sheet) {
+        pauseThresholdY = Infinity;
+        isPausedOffscreen = false;
+        return;
+      }
+      // Rising sheet covers 100% of the viewport once scrollY passes its offsetTop
+      pauseThresholdY = sheet.offsetTop + 40;
+      isPausedOffscreen = window.scrollY >= pauseThresholdY;
+    };
 
     const drawWave = () => {
       if (width <= 0 || height <= 0) return;
@@ -160,7 +174,7 @@ export function WaveBackground() {
         mobile &&
         isMobileViewport &&
         nextWidth === width &&
-        Math.abs(nextHeight - height) < 130
+        Math.abs(nextHeight - height) < 140
       ) {
         return;
       }
@@ -173,6 +187,7 @@ export function WaveBackground() {
         mobile ? MOBILE_WAVE_DPR : MAX_WAVE_DPR,
       );
       if (nextWidth === width && nextHeight === height && nextDpr === dpr) {
+        updatePauseThreshold();
         return;
       }
       width = nextWidth;
@@ -183,23 +198,49 @@ export function WaveBackground() {
       canvas.style.width = `${width}px`;
       canvas.style.height = `${height}px`;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      updatePauseThreshold();
       drawWave();
     };
 
     resizeCanvas();
 
+    const startWave = () => {
+      if (!rafId && !document.hidden && !isPausedOffscreen) {
+        lastNow = performance.now();
+        rafId = window.requestAnimationFrame(renderFrame);
+      }
+    };
+
     const handleScroll = () => {
       targetScrollY = window.scrollY;
+      if (pauseThresholdY === Infinity && document.getElementById('rising-sheet')) {
+        updatePauseThreshold();
+      }
+      const shouldPause = targetScrollY >= pauseThresholdY;
+      if (shouldPause !== isPausedOffscreen) {
+        isPausedOffscreen = shouldPause;
+        if (shouldPause) {
+          if (rafId) {
+            window.cancelAnimationFrame(rafId);
+            rafId = 0;
+          }
+        } else {
+          scrollFactor = targetScrollY;
+          drawWave();
+          startWave();
+        }
+      }
     };
 
     const handleMouseMove = (e: MouseEvent) => {
+      if (isPausedOffscreen) return;
       targetMouseX = (e.clientX / Math.max(width, 1)) * 2 - 1;
       targetMouseY = (e.clientY / Math.max(height, 1)) * 2 - 1;
     };
 
     const renderFrame = (now: number) => {
       rafId = 0;
-      if (document.hidden) return;
+      if (document.hidden || isPausedOffscreen) return;
 
       if (lastDrawNow !== 0 && now - lastDrawNow < minFrameInterval) {
         rafId = window.requestAnimationFrame(renderFrame);
@@ -228,13 +269,6 @@ export function WaveBackground() {
       rafId = window.requestAnimationFrame(renderFrame);
     };
 
-    const startWave = () => {
-      if (!rafId && !document.hidden) {
-        lastNow = performance.now();
-        rafId = window.requestAnimationFrame(renderFrame);
-      }
-    };
-
     const handleVisibility = () => {
       if (document.hidden) {
         if (rafId) {
@@ -242,9 +276,27 @@ export function WaveBackground() {
           rafId = 0;
         }
       } else {
+        updatePauseThreshold();
         startWave();
       }
     };
+
+    const sheetEl = document.getElementById('rising-sheet');
+    const sheetObserver =
+      typeof ResizeObserver !== 'undefined' && sheetEl
+        ? new ResizeObserver(updatePauseThreshold)
+        : null;
+    if (sheetObserver && sheetEl) {
+      sheetObserver.observe(sheetEl);
+    }
+
+    const thresholdInitTimer = window.setTimeout(() => {
+      updatePauseThreshold();
+      if (isPausedOffscreen && rafId) {
+        window.cancelAnimationFrame(rafId);
+        rafId = 0;
+      }
+    }, 80);
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     window.addEventListener('mousemove', handleMouseMove, { passive: true });
@@ -254,6 +306,8 @@ export function WaveBackground() {
     startWave();
 
     return () => {
+      window.clearTimeout(thresholdInitTimer);
+      sheetObserver?.disconnect();
       if (rafId) window.cancelAnimationFrame(rafId);
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('mousemove', handleMouseMove);

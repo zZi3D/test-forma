@@ -90,13 +90,13 @@ function OpenProjectCard({
   onOpenLiveDemo,
 }: CardFaceProps) {
   return (
-    <div className="relative" style={{ contain: 'layout paint' }}>
+    <div className="relative" style={{ contain: 'layout style' }}>
       <button
         type="button"
         tabIndex={isClickable ? 0 : -1}
         onClick={() => onSelect(project)}
         aria-label={`Inspect ${project.businessTitle} (${project.styleSubtitle})`}
-        className={`glass-tile group relative block w-full overflow-hidden rounded-2xl p-2 text-left transition-[border-color,box-shadow] duration-200 hover:border-[#C98A3A]/55 hover:shadow-[0_24px_48px_-14px_rgba(28,27,24,0.16)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#C98A3A] md:p-2.5 ${
+        className={`glass-tile group relative block w-full overflow-hidden rounded-2xl p-2 text-left md:transition-[border-color,box-shadow] md:duration-200 md:hover:border-[#C98A3A]/55 md:hover:shadow-[0_24px_48px_-14px_rgba(28,27,24,0.16)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#C98A3A] md:p-2.5 ${
           isStartCard
             ? 'border-white/85 shadow-[0_24px_54px_-18px_rgba(28,27,24,0.16)]'
             : ''
@@ -112,7 +112,7 @@ function OpenProjectCard({
             </span>
           )}
           {hasLiveDemoArtboard(project.id) ? (
-            <div className="h-full w-full transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.03]">
+            <div className="h-full w-full md:transition-transform md:duration-500 md:ease-[cubic-bezier(0.16,1,0.3,1)] md:group-hover:scale-[1.03]">
               <ScaledDemoArtboard projectId={project.id} initialWidth={270} />
             </div>
           ) : imageUrl ? (
@@ -122,7 +122,7 @@ function OpenProjectCard({
               referrerPolicy="no-referrer"
               decoding="async"
               draggable={false}
-              className="h-full w-full object-cover object-top transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.03]"
+              className="h-full w-full object-cover object-top md:transition-transform md:duration-500 md:ease-[cubic-bezier(0.16,1,0.3,1)] md:group-hover:scale-[1.03]"
             />
           ) : (
             <div className="flex h-full w-full items-center justify-center p-3 text-xs font-medium text-[#1C1B18] md:p-4 md:text-sm">
@@ -133,7 +133,7 @@ function OpenProjectCard({
 
         <div className="relative z-10 mt-2 flex items-center justify-between gap-1.5 px-0.5 md:mt-2.5 md:gap-2">
           <div className="min-w-0">
-            <h3 className="truncate text-[12px] font-semibold tracking-[-0.015em] text-[#1C1B18] transition-colors group-hover:text-[#C98A3A] md:text-[13.5px]">
+            <h3 className="truncate text-[12px] font-semibold tracking-[-0.015em] text-[#1C1B18] transition-colors md:group-hover:text-[#C98A3A] md:text-[13.5px]">
               {project.businessTitle}
             </h3>
             <p className="mt-0.5 truncate text-[10px] text-[#1C1B18]/65 md:text-[10.5px]">
@@ -181,7 +181,7 @@ function ClosedProjectBack({ project }: { project: ProjectConfig }) {
         WebkitBackfaceVisibility: 'hidden',
         transform: 'rotateX(180deg) translateZ(1px)',
         background:
-          'linear-gradient(150deg, rgba(255,255,255,0.88) 0%, rgba(247,245,240,0.78) 55%, rgba(240,236,227,0.86) 100%)',
+          'linear-gradient(150deg, rgba(255,255,255,0.92) 0%, rgba(247,245,240,0.88) 55%, rgba(240,236,227,0.92) 100%)',
       }}
       className="pointer-events-none absolute inset-0 overflow-hidden rounded-2xl border border-white/75 p-2 shadow-[0_16px_36px_-14px_rgba(28,27,24,0.12)] md:p-2.5"
     >
@@ -236,28 +236,12 @@ function UnfoldingGridCard({
   onSelect,
   onOpenLiveDemo,
 }: UnfoldingGridCardProps) {
-  const [isSettled, setIsSettled] = useState(reducedMotion || isOpen);
   const centerIdx = (cols - 1) / 2;
   const outwardStep = Math.floor(Math.abs(colIndex - centerIdx));
 
-  useEffect(() => {
-    if (reducedMotion) {
-      setIsSettled(true);
-      return;
-    }
-    if (!isOpen) {
-      setIsSettled(false);
-      return;
-    }
-    const timer = window.setTimeout(
-      () => setIsSettled(true),
-      720 + outwardStep * 70,
-    );
-    return () => window.clearTimeout(timer);
-  }, [isOpen, outwardStep, reducedMotion]);
-
+  // Keep perspective, preserve-3d, and translateZ constant so WebKit/Chrome never flash-flatten GPU layers mid-scroll
   return (
-    <div style={isSettled ? undefined : { perspective: 1050 }}>
+    <div style={{ perspective: 1050 }}>
       <motion.div
         initial={false}
         animate={{
@@ -270,8 +254,7 @@ function UnfoldingGridCard({
           ease: FLIP_EASE,
         }}
         style={{
-          transformStyle: isSettled ? 'flat' : 'preserve-3d',
-          willChange: isSettled ? 'auto' : 'transform',
+          transformStyle: 'preserve-3d',
         }}
         className="relative"
       >
@@ -279,7 +262,7 @@ function UnfoldingGridCard({
           style={{
             backfaceVisibility: 'hidden',
             WebkitBackfaceVisibility: 'hidden',
-            transform: isSettled ? 'none' : 'translateZ(1px)',
+            transform: 'translateZ(1px)',
           }}
         >
           <OpenProjectCard
@@ -291,7 +274,7 @@ function UnfoldingGridCard({
           />
         </div>
 
-        {!isSettled && <ClosedProjectBack project={project} />}
+        <ClosedProjectBack project={project} />
       </motion.div>
     </div>
   );
@@ -316,17 +299,28 @@ export function ShowcaseMosaic({
   const [pinTopPxState, setPinTopPxState] = useState<number>(() =>
     typeof window !== 'undefined' && window.innerWidth < 768 ? 82 : 120,
   );
-  const [spacerHeightPx, setSpacerHeightPx] = useState<number | null>(null);
-  const metricsRef = useRef<{ pinTopPx: number; stableVh: number; stageH: number }>({
+  const [spacerHeightPx, setSpacerHeightPx] = useState<number | null>(() => {
+    if (typeof window === 'undefined' || prefersReducedMotion) return null;
+    const mobile = window.innerWidth < 768;
+    return mobile ? 660 + MOBILE_HOLD_PX : 720 + DESKTOP_HOLD_PX;
+  });
+  const metricsRef = useRef<{
+    pinTopPx: number;
+    stableVh: number;
+    stageH: number;
+    spacerDocTop: number;
+  }>({
     pinTopPx: 120,
     stableVh: 800,
     stageH: 640,
+    spacerDocTop: 1800,
   });
 
   const spacerRef = useRef<HTMLDivElement | null>(null);
   const pinWrapperRef = useRef<HTMLDivElement | null>(null);
   const stageRef = useRef<HTMLDivElement | null>(null);
   const outerRevealRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const outerAlphaRef = useRef<number>(prefersReducedMotion ? 1 : 0);
   const hasCompletedIntroRef = useRef<boolean>(prefersReducedMotion);
 
   // Supports up to 6 rows (desktop: 3 rows of 4; mobile: 3 rows of 2 initially, 6 rows when expanded)
@@ -381,9 +375,13 @@ export function ShowcaseMosaic({
 
     const timer = window.setTimeout(() => {
       hasCompletedIntroRef.current = true;
+      outerAlphaRef.current = 1;
       setHasCompletedIntro(true);
       setFiltersVisible(true);
       setOpenedRows([true, true, true, true, true, true]);
+      outerRevealRefs.current.forEach((el) => {
+        if (el) el.style.opacity = '1';
+      });
     }, 440);
     return () => window.clearTimeout(timer);
   }, [initialRowsComplete, isFiltered, prefersReducedMotion]);
@@ -392,6 +390,7 @@ export function ShowcaseMosaic({
   useEffect(() => {
     if (showAllMobile) {
       hasCompletedIntroRef.current = true;
+      outerAlphaRef.current = 1;
       setHasCompletedIntro(true);
       setOpenedRows([true, true, true, true, true, true]);
       setFiltersVisible(true);
@@ -408,7 +407,8 @@ export function ShowcaseMosaic({
 
     if (prefersReducedMotion || isFiltered) {
       setSpacerHeightPx(null);
-      if (stage) stage.style.transform = 'none';
+      outerAlphaRef.current = 1;
+      if (stage) stage.style.transform = 'translate3d(0, 0, 0) scale(1)';
       outerRevealRefs.current.forEach((el) => {
         if (el) el.style.opacity = '1';
       });
@@ -416,29 +416,26 @@ export function ShowcaseMosaic({
       return;
     }
 
-    let lerpRafId = 0;
-    let scrollRafId = 0;
-    let currentScale = hasCompletedIntroRef.current ? 1 : -1;
-    let targetScale = 1;
-    let currentOuterAlpha = hasCompletedIntroRef.current ? 1 : 0;
-    let targetOuterAlpha = hasCompletedIntroRef.current ? 1 : 0;
-    let animating = false;
     let lastMeasuredWidth = window.innerWidth;
     let stableVh = Math.max(window.innerHeight, 1);
+    let lastScrollY = -1;
+    let lastScaleStr = '';
+    let lastAlphaStr = '';
 
     const getHoldDist = () => (isMobile ? MOBILE_HOLD_PX : DESKTOP_HOLD_PX);
     const getMaxZoom = () => {
-      if (isMobile) return 1.08;
+      if (isMobile) return 1.07;
       return window.innerWidth >= 1280 ? 1.18 : 1.09;
     };
 
     const measureMetrics = () => {
       const st = stageRef.current;
-      if (!st) return;
+      const sp = spacerRef.current;
+      if (!st || !sp) return;
 
       const nextW = window.innerWidth;
       const nextVh = Math.max(window.innerHeight, 1);
-      if (nextW !== lastMeasuredWidth || Math.abs(nextVh - stableVh) > 130) {
+      if (nextW !== lastMeasuredWidth || Math.abs(nextVh - stableVh) > 140) {
         lastMeasuredWidth = nextW;
         stableVh = nextVh;
       }
@@ -454,77 +451,40 @@ export function ShowcaseMosaic({
             Math.max(MIN_PIN_TOP_PX, Math.round(stableVh - stageH - 40)),
           );
       const nextSpacerH = Math.round(stageH + getHoldDist());
+      const spacerDocTop = sp.getBoundingClientRect().top + window.scrollY;
 
-      metricsRef.current = { pinTopPx, stableVh, stageH };
+      metricsRef.current = { pinTopPx, stableVh, stageH, spacerDocTop };
       setPinTopPxState((prev) => (prev === pinTopPx ? prev : pinTopPx));
       setSpacerHeightPx((prev) =>
         prev !== null && Math.abs(prev - nextSpacerH) <= 4 ? prev : nextSpacerH,
       );
     };
 
-    const stepLerp = () => {
-      lerpRafId = 0;
+    const evaluateScroll = (force = false) => {
       const st = stageRef.current;
-      if (!st) {
-        animating = false;
-        return;
-      }
+      if (!spacer || !st) return;
+
+      const scrollY = window.scrollY;
+      if (!force && scrollY === lastScrollY) return;
+      lastScrollY = scrollY;
 
       if (hasCompletedIntroRef.current) {
-        currentScale = 1;
-        currentOuterAlpha = 1;
-        st.style.transform = 'none';
-        outerRevealRefs.current.forEach((el) => {
-          if (el) el.style.opacity = '1';
-        });
-        animating = false;
-        return;
-      }
-
-      currentScale += (targetScale - currentScale) * 0.24;
-      currentOuterAlpha += (targetOuterAlpha - currentOuterAlpha) * 0.24;
-
-      const settledZoom =
-        Math.abs(targetScale - 1) < 0.002 && Math.abs(currentScale - 1) < 0.002;
-
-      if (settledZoom) {
-        currentScale = 1;
-        currentOuterAlpha = 1;
-        st.style.transform = 'none';
-      } else {
-        st.style.transform = `translate3d(0, 0, 0) scale(${currentScale.toFixed(4)})`;
-      }
-
-      outerRevealRefs.current.forEach((el) => {
-        if (el) el.style.opacity = currentOuterAlpha.toFixed(3);
-      });
-
-      const needsMoreFrames =
-        !settledZoom &&
-        (Math.abs(targetScale - currentScale) > 0.001 ||
-          Math.abs(targetOuterAlpha - currentOuterAlpha) > 0.004);
-
-      if (needsMoreFrames) {
-        lerpRafId = window.requestAnimationFrame(stepLerp);
-      } else {
-        animating = false;
-      }
-    };
-
-    const evaluateScroll = () => {
-      scrollRafId = 0;
-      if (!spacer) return;
-      if (hasCompletedIntroRef.current) {
-        const st = stageRef.current;
-        if (st && st.style.transform !== 'none') {
-          st.style.transform = 'none';
+        outerAlphaRef.current = 1;
+        if (lastScaleStr !== '1.0000') {
+          lastScaleStr = '1.0000';
+          st.style.transform = 'translate3d(0, 0, 0) scale(1)';
+        }
+        if (lastAlphaStr !== '1.000') {
+          lastAlphaStr = '1.000';
+          outerRevealRefs.current.forEach((el) => {
+            if (el) el.style.opacity = '1';
+          });
         }
         return;
       }
 
-      const { pinTopPx, stableVh: vh } = metricsRef.current;
-      const scrollY = window.scrollY;
-      const spacerTop = spacer.getBoundingClientRect().top;
+      const { pinTopPx, stableVh: vh, spacerDocTop } = metricsRef.current;
+      const spacerTop = spacerDocTop - scrollY;
 
       const zoomStartTop = Math.min(
         Math.round(vh * 0.8),
@@ -538,14 +498,25 @@ export function ShowcaseMosaic({
       const easedZoomT = easeOutCubic(rawT);
 
       const maxZoom = getMaxZoom();
-      targetScale = maxZoom - (maxZoom - 1) * easedZoomT;
-      targetOuterAlpha = showAllMobile
+      const nextScale = maxZoom - (maxZoom - 1) * easedZoomT;
+      const nextOuterAlpha = showAllMobile
         ? 1
         : easeOutCubic(clamp01(rawT / 0.36));
 
-      if (currentScale < 0) {
-        currentScale = targetScale;
-        currentOuterAlpha = targetOuterAlpha;
+      outerAlphaRef.current = nextOuterAlpha;
+
+      const scaleStr = nextScale.toFixed(4);
+      if (scaleStr !== lastScaleStr) {
+        lastScaleStr = scaleStr;
+        st.style.transform = `translate3d(0, 0, 0) scale(${scaleStr})`;
+      }
+
+      const alphaStr = nextOuterAlpha.toFixed(3);
+      if (alphaStr !== lastAlphaStr) {
+        lastAlphaStr = alphaStr;
+        outerRevealRefs.current.forEach((el) => {
+          if (el) el.style.opacity = alphaStr;
+        });
       }
 
       const atBottom =
@@ -577,46 +548,43 @@ export function ShowcaseMosaic({
           prev[5] || extraOpen,
         ];
       });
-
-      if (!animating) {
-        animating = true;
-        lerpRafId = window.requestAnimationFrame(stepLerp);
-      }
     };
 
-    const scheduleScroll = () => {
-      if (!scrollRafId) {
-        scrollRafId = window.requestAnimationFrame(evaluateScroll);
-      }
+    const onScroll = () => {
+      evaluateScroll(false);
     };
 
-    const handleResizeOrStageChange = () => {
+    const onResize = () => {
       measureMetrics();
-      scheduleScroll();
+      evaluateScroll(true);
     };
 
-    const resizeObserver =
-      typeof ResizeObserver !== 'undefined' && stage
-        ? new ResizeObserver(handleResizeOrStageChange)
+    // Refresh cached spacerDocTop only if elements above change height (e.g., Hero resize or fonts loaded)
+    const heroEl = document.getElementById('hero-wave');
+    const heroObserver =
+      typeof ResizeObserver !== 'undefined' && heroEl
+        ? new ResizeObserver(onResize)
         : null;
-    if (resizeObserver && stage) {
-      resizeObserver.observe(stage);
+    if (heroObserver && heroEl) {
+      heroObserver.observe(heroEl);
     }
 
+    const initTimer = window.setTimeout(() => {
+      measureMetrics();
+      evaluateScroll(true);
+    }, 40);
+
     measureMetrics();
-    evaluateScroll();
-    window.addEventListener('scroll', scheduleScroll, { passive: true });
-    window.addEventListener('resize', handleResizeOrStageChange, {
-      passive: true,
-    });
+    evaluateScroll(true);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onResize, { passive: true });
 
     return () => {
-      resizeObserver?.disconnect();
-      if (lerpRafId) window.cancelAnimationFrame(lerpRafId);
-      if (scrollRafId) window.cancelAnimationFrame(scrollRafId);
-      window.removeEventListener('scroll', scheduleScroll);
-      window.removeEventListener('resize', handleResizeOrStageChange);
-      if (stage) stage.style.transform = 'none';
+      window.clearTimeout(initTimer);
+      heroObserver?.disconnect();
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onResize);
+      if (stage) stage.style.transform = 'translate3d(0, 0, 0) scale(1)';
     };
   }, [prefersReducedMotion, isFiltered, isMobile, showAllMobile, isHeroPage]);
 
@@ -669,14 +637,10 @@ export function ShowcaseMosaic({
       >
         <div
           ref={stageRef}
-          style={
-            prefersReducedMotion || isFiltered || hasCompletedIntro
-              ? undefined
-              : {
-                  transformOrigin: '50% 44px',
-                  willChange: 'transform',
-                }
-          }
+          style={{
+            transformOrigin: '50% 44px',
+            transform: 'translate3d(0, 0, 0) scale(1)',
+          }}
         >
           {/* Interactive Business Owner Filter Tabs — reveals smoothly once cards flip open */}
           <div
@@ -787,8 +751,12 @@ export function ShowcaseMosaic({
                         key={project.id}
                         ref={(el) => {
                           outerRevealRefs.current[revealRefIdx] = el;
+                          if (el) {
+                            el.style.opacity = skipInitialHide
+                              ? '1'
+                              : outerAlphaRef.current.toFixed(3);
+                          }
                         }}
-                        style={skipInitialHide ? undefined : { opacity: 0 }}
                       >
                         <UnfoldingGridCard
                           project={project}

@@ -58,27 +58,25 @@ function StudioWidgetFrame({
 }
 
 const CARD_GPU_STYLE: React.CSSProperties = {
-  contain: 'layout paint',
   backfaceVisibility: 'hidden',
   WebkitBackfaceVisibility: 'hidden',
 };
 
-const CarouselDemoCards = memo(function CarouselDemoCards({
-  onOpenLiveDemo,
-}: {
-  onOpenLiveDemo: (demoId: string) => void;
-}) {
-  return (
-    <>
-      {/* ============================================================ */}
-      {/* DEMO 1: BARBER · NOORD BARBERS                              */}
-      {/* ============================================================ */}
+interface DemoSlideDef {
+  id: string;
+  render: (onOpenLiveDemo: (demoId: string) => void) => React.ReactNode;
+}
+
+const DEMO_SLIDES: DemoSlideDef[] = [
+  {
+    id: 'demo-barber',
+    render: (onOpenLiveDemo) => (
       <button
         type="button"
         onClick={() => onOpenLiveDemo('demo-barber')}
         aria-label="Open Demo 03 Noord Barbers"
         style={CARD_GPU_STYLE}
-        className="group font-demo-dmsans relative h-[350px] w-[320px] shrink-0 overflow-hidden rounded-[20px] border border-[#EDE6D8]/16 bg-[#1C1C1C] text-left text-[#EDE6D8] shadow-[0_20px_48px_-20px_rgba(28,27,24,0.32)] transition-[transform,box-shadow] duration-300 md:hover:-translate-y-1 md:hover:ring-2 md:hover:ring-[#2563EB] sm:h-[400px] sm:w-[540px] md:h-[430px] md:w-[660px]"
+        className="group font-demo-dmsans relative h-[350px] w-[320px] shrink-0 overflow-hidden rounded-[20px] border border-[#EDE6D8]/16 bg-[#1C1C1C] text-left text-[#EDE6D8] shadow-[0_20px_48px_-20px_rgba(28,27,24,0.32)] md:transition-[transform,box-shadow] md:duration-300 md:hover:-translate-y-1 md:hover:ring-2 md:hover:ring-[#2563EB] sm:h-[400px] sm:w-[540px] md:h-[430px] md:w-[660px]"
       >
         {/* Atmospheric Barber-Red Glow (pure radial gradient, zero blur filter) */}
         <div
@@ -157,21 +155,23 @@ const CarouselDemoCards = memo(function CarouselDemoCards({
               src={barberPortraitImg}
               alt="Noord Barbers grooming studio"
               decoding="async"
-              className="h-full w-full object-cover object-top transition-transform duration-500 md:group-hover:scale-[1.03]"
+              draggable={false}
+              className="h-full w-full object-cover object-top md:transition-transform md:duration-500 md:group-hover:scale-[1.03]"
             />
           </div>
         </div>
       </button>
-
-      {/* ============================================================ */}
-      {/* DEMO 2: AUTOGARAGE · KORVER AUTO · RDW API                   */}
-      {/* ============================================================ */}
+    ),
+  },
+  {
+    id: 'demo-garage',
+    render: (onOpenLiveDemo) => (
       <button
         type="button"
         onClick={() => onOpenLiveDemo('demo-garage')}
         aria-label="Open Demo 01 Korver Auto Garage"
         style={CARD_GPU_STYLE}
-        className="group font-demo-outfit relative h-[350px] w-[320px] shrink-0 overflow-hidden rounded-[20px] border border-[#1C1C1C]/12 bg-[#F3ECE1] text-left text-[#1C1C1C] shadow-[0_20px_48px_-20px_rgba(28,27,24,0.22)] transition-[transform,box-shadow] duration-300 md:hover:-translate-y-1 md:hover:ring-2 md:hover:ring-[#2563EB] sm:h-[400px] sm:w-[540px] md:h-[430px] md:w-[660px]"
+        className="group font-demo-outfit relative h-[350px] w-[320px] shrink-0 overflow-hidden rounded-[20px] border border-[#1C1C1C]/12 bg-[#F3ECE1] text-left text-[#1C1C1C] shadow-[0_20px_48px_-20px_rgba(28,27,24,0.22)] md:transition-[transform,box-shadow] md:duration-300 md:hover:-translate-y-1 md:hover:ring-2 md:hover:ring-[#2563EB] sm:h-[400px] sm:w-[540px] md:h-[430px] md:w-[660px]"
       >
         {/* Floating White Capsule Header */}
         <div className="relative z-10 px-4 pt-3.5 md:px-6 md:pt-4">
@@ -234,21 +234,23 @@ const CarouselDemoCards = memo(function CarouselDemoCards({
               src={brakeDiscImg}
               alt="Korver Auto performance brake rotor"
               decoding="async"
-              className="h-full w-full object-cover transition-transform duration-500 md:group-hover:scale-[1.03]"
+              draggable={false}
+              className="h-full w-full object-cover md:transition-transform md:duration-500 md:group-hover:scale-[1.03]"
             />
           </div>
         </div>
       </button>
-
-      {/* ============================================================ */}
-      {/* DEMO 3: HORECA · CAFÉ KORNELIS · TERRASWEER API              */}
-      {/* ============================================================ */}
+    ),
+  },
+  {
+    id: 'demo-horeca',
+    render: (onOpenLiveDemo) => (
       <button
         type="button"
         onClick={() => onOpenLiveDemo('demo-horeca')}
         aria-label="Open Demo 04 Café Kornelis Horeca"
         style={CARD_GPU_STYLE}
-        className="group relative h-[350px] w-[320px] shrink-0 overflow-hidden rounded-[20px] border border-[#4A2C1D]/15 bg-[#EFE2CF] text-left text-[#4A2C1D] shadow-[0_20px_48px_-20px_rgba(74,44,29,0.24)] transition-[transform,box-shadow] duration-300 md:hover:-translate-y-1 md:hover:ring-2 md:hover:ring-[#2563EB] sm:h-[400px] sm:w-[540px] md:h-[430px] md:w-[660px]"
+        className="group relative h-[350px] w-[320px] shrink-0 overflow-hidden rounded-[20px] border border-[#4A2C1D]/15 bg-[#EFE2CF] text-left text-[#4A2C1D] shadow-[0_20px_48px_-20px_rgba(74,44,29,0.24)] md:transition-[transform,box-shadow] md:duration-300 md:hover:-translate-y-1 md:hover:ring-2 md:hover:ring-[#2563EB] sm:h-[400px] sm:w-[540px] md:h-[430px] md:w-[660px]"
       >
         {/* Centered Brasserie Crest Header */}
         <div className="flex items-center justify-between border-b border-[#4A2C1D]/12 px-4 py-3 md:px-6">
@@ -311,21 +313,23 @@ const CarouselDemoCards = memo(function CarouselDemoCards({
               src={cafeCroissantImg}
               alt="Café Kornelis koffie en croissant"
               decoding="async"
-              className="h-full w-full object-cover transition-transform duration-500 md:group-hover:scale-[1.03]"
+              draggable={false}
+              className="h-full w-full object-cover md:transition-transform md:duration-500 md:group-hover:scale-[1.03]"
             />
           </div>
         </div>
       </button>
-
-      {/* ============================================================ */}
-      {/* DEMO 4: FASHIONSHOP · STUDIO VESPER · SOLARIS                */}
-      {/* ============================================================ */}
+    ),
+  },
+  {
+    id: 'demo-fashion',
+    render: (onOpenLiveDemo) => (
       <button
         type="button"
         onClick={() => onOpenLiveDemo('demo-fashion')}
         aria-label="Open Demo 05 Studio Vesper Fashionshop"
         style={CARD_GPU_STYLE}
-        className="group relative h-[350px] w-[320px] shrink-0 overflow-hidden rounded-[20px] border border-[#4A0F24]/15 bg-[#F6CBD4] text-left text-[#4A0F24] shadow-[0_20px_48px_-20px_rgba(74,15,36,0.24)] transition-[transform,box-shadow] duration-300 md:hover:-translate-y-1 md:hover:ring-2 md:hover:ring-[#2563EB] sm:h-[400px] sm:w-[540px] md:h-[430px] md:w-[660px]"
+        className="group relative h-[350px] w-[320px] shrink-0 overflow-hidden rounded-[20px] border border-[#4A0F24]/15 bg-[#F6CBD4] text-left text-[#4A0F24] shadow-[0_20px_48px_-20px_rgba(74,15,36,0.24)] md:transition-[transform,box-shadow] md:duration-300 md:hover:-translate-y-1 md:hover:ring-2 md:hover:ring-[#2563EB] sm:h-[400px] sm:w-[540px] md:h-[430px] md:w-[660px]"
       >
         {/* Deep Wine Capsule Header with Kelly Green Bag */}
         <div className="px-4 pt-3.5 md:px-6 md:pt-4">
@@ -390,21 +394,23 @@ const CarouselDemoCards = memo(function CarouselDemoCards({
               src={fashionModelImg}
               alt="Studio Vesper Solaris eyewear campaign"
               decoding="async"
-              className="h-full w-full object-cover object-top transition-transform duration-500 md:group-hover:scale-[1.03]"
+              draggable={false}
+              className="h-full w-full object-cover object-top md:transition-transform md:duration-500 md:group-hover:scale-[1.03]"
             />
           </div>
         </div>
       </button>
-
-      {/* ============================================================ */}
-      {/* DEMO 5: ARCHITECTUUR & BUITENWERK · GROENEVELD · PDOK + WEER */}
-      {/* ============================================================ */}
+    ),
+  },
+  {
+    id: 'demo-buitenwerk',
+    render: (onOpenLiveDemo) => (
       <button
         type="button"
         onClick={() => onOpenLiveDemo('demo-buitenwerk')}
         aria-label="Open Demo 02 Groeneveld Architectuur"
         style={CARD_GPU_STYLE}
-        className="group font-demo-dmsans relative h-[350px] w-[320px] shrink-0 overflow-hidden rounded-[20px] border border-[#F3EFE6]/16 bg-[#162921] text-left text-[#F3EFE6] shadow-[0_20px_48px_-20px_rgba(22,41,33,0.36)] transition-[transform,box-shadow] duration-300 md:hover:-translate-y-1 md:hover:ring-2 md:hover:ring-[#2563EB] sm:h-[400px] sm:w-[540px] md:h-[430px] md:w-[660px]"
+        className="group font-demo-dmsans relative h-[350px] w-[320px] shrink-0 overflow-hidden rounded-[20px] border border-[#F3EFE6]/16 bg-[#162921] text-left text-[#F3EFE6] shadow-[0_20px_48px_-20px_rgba(22,41,33,0.36)] md:transition-[transform,box-shadow] md:duration-300 md:hover:-translate-y-1 md:hover:ring-2 md:hover:ring-[#2563EB] sm:h-[400px] sm:w-[540px] md:h-[430px] md:w-[660px]"
       >
         {/* Hairline Editorial Header */}
         <div className="flex items-center justify-between border-b border-[#F3EFE6]/14 px-4 py-3 md:px-6">
@@ -462,11 +468,55 @@ const CarouselDemoCards = memo(function CarouselDemoCards({
               src={gardenPavilionImg}
               alt="Groeneveld architectural charred cedar pavilion"
               decoding="async"
-              className="h-full w-full object-cover transition-transform duration-500 md:group-hover:scale-[1.03]"
+              draggable={false}
+              className="h-full w-full object-cover md:transition-transform md:duration-500 md:group-hover:scale-[1.03]"
             />
           </div>
         </div>
       </button>
+    ),
+  },
+];
+
+const CarouselCardsLayer = memo(function CarouselCardsLayer({
+  prefersReducedMotion,
+  cardWrapperRefs,
+  onOpenLiveDemo,
+}: {
+  prefersReducedMotion: boolean;
+  cardWrapperRefs: React.MutableRefObject<(HTMLDivElement | null)[]>;
+  onOpenLiveDemo: (demoId: string) => void;
+}) {
+  if (prefersReducedMotion) {
+    return (
+      <>
+        {DEMO_SLIDES.map((slide) => (
+          <div key={slide.id} className="shrink-0">
+            {slide.render(onOpenLiveDemo)}
+          </div>
+        ))}
+      </>
+    );
+  }
+
+  return (
+    <>
+      {DEMO_SLIDES.map((slide, idx) => (
+        <div
+          key={slide.id}
+          ref={(el) => {
+            cardWrapperRefs.current[idx] = el;
+          }}
+          style={{
+            willChange: 'transform',
+            backfaceVisibility: 'hidden',
+            WebkitBackfaceVisibility: 'hidden',
+          }}
+          className="absolute top-0 left-0 h-[350px] w-[320px] sm:h-[400px] sm:w-[540px] md:h-[430px] md:w-[660px]"
+        >
+          {slide.render(onOpenLiveDemo)}
+        </div>
+      ))}
     </>
   );
 });
@@ -477,35 +527,95 @@ export function DirectionsMarqueeShowcase({
   const prefersReducedMotion = Boolean(useReducedMotion());
   const spacerRef = useRef<HTMLElement | null>(null);
   const stageRef = useRef<HTMLDivElement | null>(null);
-  const trackRef = useRef<HTMLDivElement | null>(null);
+  const viewportRef = useRef<HTMLDivElement | null>(null);
+  const cardWrapperRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const counterNumRef = useRef<HTMLSpanElement | null>(null);
+  const prevBtnRef = useRef<HTMLButtonElement | null>(null);
+  const nextBtnRef = useRef<HTMLButtonElement | null>(null);
+  const dotRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const activeSlideIdxRef = useRef<number>(0);
 
-  const [spacerHeight, setSpacerHeight] = useState<number>(1900);
-  const [activeSlideIdx, setActiveSlideIdx] = useState<number>(0);
+  const [spacerHeight, setSpacerHeight] = useState<number>(() => {
+    if (typeof window === 'undefined') return 1900;
+    return window.innerWidth < 768 ? 1960 : 2850;
+  });
 
   const metricsRef = useRef<{
+    spacerDocTop: number;
+    stageWidth: number;
+    cardWidth: number;
+    gap: number;
+    sidePad: number;
     maxShift: number;
     stickyTopPx: number;
     scrollableSpan: number;
   }>({
-    maxShift: 0,
+    spacerDocTop: 2600,
+    stageWidth: 390,
+    cardWidth: 320,
+    gap: 24,
+    sidePad: 16,
+    maxShift: 1360,
     stickyTopPx: 72,
-    scrollableSpan: 1000,
+    scrollableSpan: 1380,
   });
 
-  const measureMetrics = useCallback(() => {
-    const stage = stageRef.current;
-    const track = trackRef.current;
-    if (!stage || !track) return;
+  const updateSlideIndicatorDom = useCallback((nextActive: number) => {
+    if (nextActive === activeSlideIdxRef.current) return;
+    activeSlideIdxRef.current = nextActive;
 
-    const stageWidth = stage.clientWidth;
-    const trackWidth = track.scrollWidth;
-    const maxShift = Math.max(0, trackWidth - stageWidth);
-    const stickyTopPx = window.innerWidth >= 768 ? 82 : 72;
-    const stageHeight = stage.offsetHeight || Math.max(window.innerHeight - stickyTopPx, 520);
-    const desiredHeight = Math.round(stageHeight + Math.max(480, maxShift * 1.05));
+    if (counterNumRef.current) {
+      counterNumRef.current.textContent = `0${nextActive + 1}`;
+    }
+    if (prevBtnRef.current) {
+      prevBtnRef.current.disabled = nextActive === 0;
+    }
+    if (nextBtnRef.current) {
+      nextBtnRef.current.disabled = nextActive === DEMO_SLIDE_COUNT - 1;
+    }
+    dotRefs.current.forEach((dotEl, idx) => {
+      if (!dotEl) return;
+      const isCurrent = idx === nextActive;
+      dotEl.style.width = isCurrent ? '28px' : '8px';
+      dotEl.style.backgroundColor = isCurrent
+        ? '#1C1B18'
+        : 'rgba(28, 27, 24, 0.22)';
+    });
+  }, []);
+
+  const measureMetrics = useCallback(() => {
+    const spacer = spacerRef.current;
+    const stage = stageRef.current;
+    const viewport = viewportRef.current;
+    if (!spacer || !stage || !viewport) return;
+
+    const vw = window.innerWidth;
+    const stageWidth = viewport.clientWidth || vw;
+    const cardWidth = vw < 640 ? 320 : vw < 768 ? 540 : 660;
+    const gap = vw < 640 ? 24 : 32;
+    const sidePad =
+      vw < 640 ? 16 : vw < 768 ? 32 : Math.max(32, (stageWidth - 1200) / 2 + 32);
+
+    const totalTrackWidth =
+      sidePad * 2 +
+      DEMO_SLIDE_COUNT * cardWidth +
+      (DEMO_SLIDE_COUNT - 1) * gap;
+    const maxShift = Math.max(0, totalTrackWidth - stageWidth);
+    const stickyTopPx = vw >= 768 ? 82 : 72;
+    const stageHeight =
+      stage.offsetHeight || Math.max(window.innerHeight - stickyTopPx, 520);
+    const desiredHeight = Math.round(
+      stageHeight + Math.max(480, maxShift * 1.05),
+    );
     const scrollableSpan = Math.max(desiredHeight - stageHeight, 1);
+    const spacerDocTop = spacer.getBoundingClientRect().top + window.scrollY;
 
     metricsRef.current = {
+      spacerDocTop,
+      stageWidth,
+      cardWidth,
+      gap,
+      sidePad,
       maxShift,
       stickyTopPx,
       scrollableSpan,
@@ -517,150 +627,123 @@ export function DirectionsMarqueeShowcase({
   }, []);
 
   useEffect(() => {
-    let scrollRafId = 0;
-    let lerpRafId = 0;
-    let currentX = 0;
-    let targetX = 0;
-    let hasInitializedX = false;
-    let lastTime = performance.now();
     let lastWidth = window.innerWidth;
-    let lastStageW = 0;
-    let lastTrackW = 0;
+    let lastScrollY = -1;
 
-    const handleResizeMetrics = () => {
-      const stage = stageRef.current;
-      const track = trackRef.current;
-      if (!stage || !track) return;
+    const syncScroll = (force = false) => {
+      if (prefersReducedMotion) return;
 
-      const nextW = window.innerWidth;
-      const stageW = stage.clientWidth;
-      const trackW = track.scrollWidth;
+      const scrollY = window.scrollY;
+      if (!force && scrollY === lastScrollY) return;
+      lastScrollY = scrollY;
 
-      // Skip mobile browser toolbar height jitter when horizontal track geometry hasn't changed
-      if (
-        nextW < 768 &&
-        nextW === lastWidth &&
-        stageW === lastStageW &&
-        trackW === lastTrackW
-      ) {
-        return;
-      }
+      const {
+        spacerDocTop,
+        stageWidth,
+        cardWidth,
+        gap,
+        sidePad,
+        maxShift,
+        stickyTopPx,
+        scrollableSpan,
+      } = metricsRef.current;
 
-      lastWidth = nextW;
-      lastStageW = stageW;
-      lastTrackW = trackW;
-      measureMetrics();
-    };
-
-    const stepSmoothTrack = (now: number) => {
-      lerpRafId = 0;
-      const track = trackRef.current;
-      if (!track || prefersReducedMotion) return;
-
-      const dt = Math.min(Math.max((now - lastTime) / 1000, 0.001), 0.05);
-      lastTime = now;
-
-      const diff = targetX - currentX;
-      if (Math.abs(diff) <= 0.35) {
-        currentX = targetX;
-        track.style.transform = `translate3d(${currentX.toFixed(1)}px, 0, 0)`;
-        return;
-      }
-
-      const alpha = 1 - Math.exp(-30 * dt);
-      currentX += diff * alpha;
-      track.style.transform = `translate3d(${currentX.toFixed(1)}px, 0, 0)`;
-      lerpRafId = window.requestAnimationFrame(stepSmoothTrack);
-    };
-
-    const syncScroll = () => {
-      scrollRafId = 0;
-      const track = trackRef.current;
-      const spacer = spacerRef.current;
-      if (!track || !spacer) return;
-
-      if (prefersReducedMotion) {
-        track.style.transform = 'none';
-        return;
-      }
-
-      const { maxShift, stickyTopPx, scrollableSpan } = metricsRef.current;
-      const rect = spacer.getBoundingClientRect();
-      const scrolled = stickyTopPx - rect.top;
+      const scrolled = scrollY - (spacerDocTop - stickyTopPx);
       const progress = Math.min(Math.max(scrolled / scrollableSpan, 0), 1);
+      const shiftX = progress * maxShift;
 
-      targetX = -(progress * maxShift);
-      if (!hasInitializedX) {
-        hasInitializedX = true;
-        currentX = targetX;
-        track.style.transform = `translate3d(${currentX.toFixed(1)}px, 0, 0)`;
-      } else if (!lerpRafId) {
-        lastTime = performance.now();
-        lerpRafId = window.requestAnimationFrame(stepSmoothTrack);
+      for (let i = 0; i < DEMO_SLIDE_COUNT; i++) {
+        const wrapper = cardWrapperRefs.current[i];
+        if (!wrapper) continue;
+        const cardX = sidePad + i * (cardWidth + gap) - shiftX;
+        const isVisible = cardX + cardWidth >= -48 && cardX <= stageWidth + 48;
+
+        if (!isVisible) {
+          if (wrapper.style.visibility !== 'hidden') {
+            wrapper.style.visibility = 'hidden';
+          }
+          continue;
+        }
+
+        if (wrapper.style.visibility !== 'visible') {
+          wrapper.style.visibility = 'visible';
+        }
+        wrapper.style.transform = `translate3d(${cardX.toFixed(1)}px, 0, 0)`;
       }
 
       const nextActive = Math.min(
         DEMO_SLIDE_COUNT - 1,
         Math.round(progress * (DEMO_SLIDE_COUNT - 1)),
       );
-      setActiveSlideIdx((prev) => (prev === nextActive ? prev : nextActive));
+      updateSlideIndicatorDom(nextActive);
     };
 
-    const scheduleScroll = () => {
-      if (!scrollRafId) {
-        scrollRafId = window.requestAnimationFrame(syncScroll);
+    const handleResizeMetrics = () => {
+      const nextW = window.innerWidth;
+      // Ignore mobile URL-bar height shifts unless width actually changed
+      if (nextW < 768 && nextW === lastWidth) {
+        return;
       }
+      lastWidth = nextW;
+      measureMetrics();
+      syncScroll(true);
     };
 
-    const resizeObserver =
-      typeof ResizeObserver !== 'undefined'
-        ? new ResizeObserver(() => {
-            handleResizeMetrics();
-            scheduleScroll();
-          })
-        : null;
+    const handleAncestorLayoutChange = () => {
+      measureMetrics();
+      syncScroll(true);
+    };
 
-    if (resizeObserver) {
-      if (stageRef.current) resizeObserver.observe(stageRef.current);
-      if (trackRef.current) resizeObserver.observe(trackRef.current);
+    const selectedWorkEl = document.getElementById('selected-work');
+    const layoutObserver =
+      typeof ResizeObserver !== 'undefined' && selectedWorkEl
+        ? new ResizeObserver(handleAncestorLayoutChange)
+        : null;
+    if (layoutObserver && selectedWorkEl) {
+      layoutObserver.observe(selectedWorkEl);
     }
+
+    const onScroll = () => {
+      syncScroll(false);
+    };
 
     const initTimer = window.setTimeout(() => {
       measureMetrics();
-      syncScroll();
+      syncScroll(true);
     }, 40);
 
-    const onWindowResize = () => {
-      handleResizeMetrics();
-      scheduleScroll();
-    };
+    measureMetrics();
+    syncScroll(true);
 
-    window.addEventListener('scroll', scheduleScroll, { passive: true });
-    window.addEventListener('resize', onWindowResize, { passive: true });
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', handleResizeMetrics, { passive: true });
 
     return () => {
       window.clearTimeout(initTimer);
-      resizeObserver?.disconnect();
-      window.removeEventListener('scroll', scheduleScroll);
-      window.removeEventListener('resize', onWindowResize);
-      if (scrollRafId) window.cancelAnimationFrame(scrollRafId);
-      if (lerpRafId) window.cancelAnimationFrame(lerpRafId);
+      layoutObserver?.disconnect();
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', handleResizeMetrics);
     };
-  }, [measureMetrics, prefersReducedMotion]);
+  }, [measureMetrics, prefersReducedMotion, updateSlideIndicatorDom]);
 
   const scrollToSlide = (targetIdx: number) => {
     const clampedIdx = Math.max(0, Math.min(DEMO_SLIDE_COUNT - 1, targetIdx));
     const spacer = spacerRef.current;
     if (!spacer) return;
 
-    if (prefersReducedMotion && trackRef.current) {
-      const cardEl = trackRef.current.children[clampedIdx] as HTMLElement | undefined;
-      cardEl?.scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' });
+    if (prefersReducedMotion && viewportRef.current) {
+      const cardEl = viewportRef.current.children[clampedIdx] as
+        | HTMLElement
+        | undefined;
+      cardEl?.scrollIntoView({
+        behavior: 'smooth',
+        inline: 'start',
+        block: 'nearest',
+      });
       return;
     }
 
-    const { stickyTopPx, scrollableSpan } = metricsRef.current;
-    const spacerDocTop = spacer.getBoundingClientRect().top + window.scrollY;
+    const { spacerDocTop, stickyTopPx, scrollableSpan } = metricsRef.current;
     const ratio = clampedIdx / (DEMO_SLIDE_COUNT - 1);
     const targetScrollY = spacerDocTop - stickyTopPx + ratio * scrollableSpan;
 
@@ -682,7 +765,7 @@ export function DirectionsMarqueeShowcase({
         className={`${
           prefersReducedMotion
             ? 'relative py-10 md:py-14'
-            : 'sticky top-[72px] flex min-h-[calc(100svh-84px)] flex-col justify-center overflow-x-clip py-6 md:top-[82px] md:py-8'
+            : 'sticky top-[72px] flex min-h-[calc(100svh-84px)] flex-col justify-center py-6 md:top-[82px] md:py-8'
         }`}
       >
         {/* Header Bar & Progress Indicator */}
@@ -699,25 +782,26 @@ export function DirectionsMarqueeShowcase({
 
             <div className="flex items-center gap-3 self-start md:self-auto">
               <div className="font-mono-tabular flex items-center gap-1 rounded-full border border-[#1C1B18]/12 bg-white/80 px-3 py-1 text-[11px] font-semibold text-[#1C1B18]">
-                <span>0{activeSlideIdx + 1}</span>
+                <span ref={counterNumRef}>01</span>
                 <span className="opacity-35">/</span>
                 <span className="opacity-55">0{DEMO_SLIDE_COUNT}</span>
               </div>
 
               <div className="flex items-center gap-1.5">
                 <button
+                  ref={prevBtnRef}
                   type="button"
-                  onClick={() => scrollToSlide(activeSlideIdx - 1)}
-                  disabled={activeSlideIdx === 0}
+                  disabled
+                  onClick={() => scrollToSlide(activeSlideIdxRef.current - 1)}
                   aria-label="Previous demo card"
                   className="flex h-8 w-8 items-center justify-center rounded-full border border-[#1C1B18]/14 bg-white/85 text-[#1C1B18] transition-colors hover:bg-[#1C1B18] hover:text-white disabled:opacity-35 disabled:hover:bg-white/85 disabled:hover:text-[#1C1B18]"
                 >
                   <ChevronLeft className="h-4 w-4" />
                 </button>
                 <button
+                  ref={nextBtnRef}
                   type="button"
-                  onClick={() => scrollToSlide(activeSlideIdx + 1)}
-                  disabled={activeSlideIdx === DEMO_SLIDE_COUNT - 1}
+                  onClick={() => scrollToSlide(activeSlideIdxRef.current + 1)}
                   aria-label="Next demo card"
                   className="flex h-8 w-8 items-center justify-center rounded-full border border-[#1C1B18]/14 bg-white/85 text-[#1C1B18] transition-colors hover:bg-[#1C1B18] hover:text-white disabled:opacity-35 disabled:hover:bg-white/85 disabled:hover:text-[#1C1B18]"
                 >
@@ -728,19 +812,20 @@ export function DirectionsMarqueeShowcase({
           </div>
         </div>
 
-        {/* Scroll-Scrubbed Horizontal 5-Demo Track (No auto-scroll: glides strictly on user scroll) */}
+        {/* Scroll-Scrubbed Horizontal 5-Demo Viewport (individual small GPU card layers, zero oversized w-max texture) */}
         <div
+          ref={viewportRef}
           className={`mt-6 w-full md:mt-7 ${
-            prefersReducedMotion ? 'overflow-x-auto px-4 md:px-8' : 'overflow-x-clip'
+            prefersReducedMotion
+              ? 'flex items-stretch gap-6 overflow-x-auto px-4 sm:gap-8 sm:px-8 md:px-[max(2rem,calc((100vw-1200px)/2+2rem))]'
+              : 'relative h-[350px] overflow-x-clip sm:h-[400px] md:h-[430px]'
           }`}
         >
-          <div
-            ref={trackRef}
-            className="flex w-max items-stretch gap-6 px-4 sm:gap-8 sm:px-8 md:px-[max(2rem,calc((100vw-1200px)/2+2rem))]"
-            style={{ willChange: 'transform' }}
-          >
-            <CarouselDemoCards onOpenLiveDemo={onOpenLiveDemo} />
-          </div>
+          <CarouselCardsLayer
+            prefersReducedMotion={prefersReducedMotion}
+            cardWrapperRefs={cardWrapperRefs}
+            onOpenLiveDemo={onOpenLiveDemo}
+          />
         </div>
 
         {/* Bottom Scroll Cue / Dot Nav */}
@@ -749,14 +834,18 @@ export function DirectionsMarqueeShowcase({
             {Array.from({ length: DEMO_SLIDE_COUNT }).map((_, i) => (
               <button
                 key={`slide-dot-${i}`}
+                ref={(el) => {
+                  dotRefs.current[i] = el;
+                }}
                 type="button"
                 aria-label={`Scroll to demo ${i + 1}`}
                 onClick={() => scrollToSlide(i)}
-                className={`h-1.5 rounded-full transition-all duration-200 ${
-                  activeSlideIdx === i
-                    ? 'w-7 bg-[#1C1B18]'
-                    : 'w-2 bg-[#1C1B18]/22 hover:bg-[#1C1B18]/45'
-                }`}
+                style={{
+                  width: i === 0 ? '28px' : '8px',
+                  backgroundColor:
+                    i === 0 ? '#1C1B18' : 'rgba(28, 27, 24, 0.22)',
+                }}
+                className="h-1.5 rounded-full"
               />
             ))}
           </div>
