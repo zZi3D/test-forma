@@ -205,8 +205,9 @@ export default function App() {
         <main className="relative z-10">
           <Suspense fallback={<div className="min-h-screen" />}>
             <ExamplesPage
-              onSelectProject={handleSelectProject}
-              onStartProject={() => openBookingDrawer('brief')}
+              onStartProject={(prefilledStyle) =>
+                openBookingDrawer('brief', undefined, prefilledStyle)
+              }
               onBookCall={() => openBookingDrawer('call')}
               onBackToOverview={() => navigateTo('hero-wave')}
             />

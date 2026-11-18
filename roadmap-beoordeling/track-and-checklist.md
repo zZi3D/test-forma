@@ -12,6 +12,7 @@
 - [x] **Pure CSS-3D Wiel (`ProjectWheel3D.tsx`):** 12 cilinderkaarten (`30°`), swipe + scroll + auto-spin + focus-zoom.
 - [x] **Openklappende 3D-Tegels (`SelectedWorkGrid.tsx` & `ProjectPreviewModal.tsx`):** 12 procedurale canvas-mockups (`01` t/m `12`, incl. vernieuwde `05`, `06`, `09` t/m `12`), 5 industrie-filters en scroll-scrub 3-staps animatie.
 - [x] **`03 · Interactive Lab` (`StylePlayground.tsx`):** 5 industrieën × 9 visuele skins, Motion 1 (*Levitate & Pulse*), Motion 2 (*Kinetic Pop & Tilt*), Studio Workbench scroll-entree, Skin Wipe + Diagonal Light Sweep en *Shuffle Combo*.
+- [x] **`#/examples` — 5 Interactieve Branch-Demo’s (NL/EN):** Complete scrollbare sandbox met sticky `01–05` sprongfilter, NL/EN-taalswitch, blijvende 3D Workbench scroll-entree, unieke header-skins & typografie, eigen interactie-animaties en werkende RDW / PDOK / Open-Meteo API’s.
 - [x] **Basis Shell & Overlays (`App.tsx`, `GlassHeader.tsx`, `WorkPage.tsx`, `MenuOverlay.tsx`, `SprintBookingDrawer.tsx`, `ProcessSection.tsx`):** Volledig omgezet naar **Edition One** (`editionone.nl`) en **Nederland (`Europe/Amsterdam` / `CET`)** in Stap 1A.
 
 ---
@@ -92,15 +93,12 @@
 ## Fase 3 · Bouwronde 3 — Alle 5 Live API Demo One-Pagers, Pitch Mode, Review Portal & URL-Slider
 
 ### Stap 3A — De 5 Interactieve Fictieve Demo One-Pagers (`nr. 12`) + Live Pitch Mode (`nr. 29`)
-- [ ] Alle demo's bouwen op hash-routes (`#/demo/...`), voorzien van:
-  - Vaste **Demo Showcase Bar** bovenaan: `← Back to Edition One` · `Live Interactive Demo · Built by Edition One` · invoerveld `"Your business name..."` · knop `Build this for my business →`.
-  - Vaste footer credit: `Interactive One-Pager Concept · Built by Edition One`.
-  - Strikte koppeling aan de vaste **9 Playground-stijlen** (inclusief optionele 9-stijlen switcher binnen de demo).
-- [ ] **Demo A (Prioriteit #1): Garage / Autobedrijf** + échte **RDW Open Data API** (`opendata.rdw.nl/resource/m9d7-ebf2.json`) APK-check + 1-klik testkentekens + dienstenkiezer + WhatsApp-afspraak.
-- [ ] **Demo B: Hovenier / Dakdekker / Schilder** + **PDOK Locatieserver** + **Open-Meteo Weer API** + m² offerte-calculator.
-- [ ] **Demo C: Horeca / Beachclub** + **Open-Meteo Terrasweer** + filterbare menukaart + WhatsApp reserveren.
-- [ ] **Demo D: Kapsalon / Coach / Fysio** + behandelkiezer + tijdsloten + gesimuleerde interactieve Google Reviews widget *(incl. "Voeg test-review toe" in sandbox)*.
-- [ ] **Demo E: Lokale D2C Webshop** + 4–6 SKU's + maat/kleur + winkelwagen-drawer + 1-klik WhatsApp-Commerce.
+- [x] Alle 5 demo’s samengebracht op testpagina `#/examples` *(incl. vaste sticky `01–05` sprongfilter + `NL/EN`-toggle, blijvende 3D Workbench scroll-entree, `Bouw in deze stijl →` koppeling naar `SprintBookingDrawer` en per-demo eigen header-skin, eigen font, kleurenpalet & interactie-animaties)*:
+- [x] **Demo A (`01 · Korver Auto` — Garage / Werkplaats):** Fictieve studio-render + échte **RDW Open Data API** (`opendata.rdw.nl/resource/m9d7-ebf2.json`) APK-check + 1-klik testkentekens + scan-animatie + direct APK inplannen.
+- [x] **Demo B (`02 · Groeneveld` — Hovenier & Architecturaal Dakwerk):** **PDOK Locatieserver** + **Open-Meteo 3-daags Werkweer API** + m² richtprijs calculator.
+- [x] **Demo C (`04 · Café Kornelis` — Specialiteiten Café & Patisserie):** **Open-Meteo Terrasweer** per stad + filterbare menukaart + tafel reserveren.
+- [x] **Demo D (`03 · Noord Barbers` — Herenkapsalon & Barbershop):** Behandelkiezer + tijdsloten + interactieve Google Reviews widget *(incl. 3D-kaartwissel & "+ Test-review plaatsen")*.
+- [x] **Demo E (`05 · Studio Vesper` — Fashion & Eyewear Drop):** Kleurstelling & pasvorm-configurator + live `Bag (N)`-teller + 1-klik WhatsApp-bestelling.
 - [ ] **NFC / QR Live Pitch Mode (`nr. 29`):** URL-parameter `?pitch=true&brand=...#style-playground` zodat je onderweg direct een mobiele Playground-demo opent zonder langs de Hero te scrollen.
 
 ### Stap 3B — 3-Uurs Klantcommunicatie & Review Portal (`nr. 10b`)

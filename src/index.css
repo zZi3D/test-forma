@@ -35,6 +35,26 @@
   font-variant-numeric: tabular-nums;
 }
 
+.font-demo-outfit {
+  font-family: "Outfit", var(--font-sans);
+}
+
+.font-demo-fraunces {
+  font-family: "Fraunces", Georgia, serif;
+}
+
+.font-demo-oswald {
+  font-family: "Oswald", var(--font-sans);
+}
+
+.font-demo-antonio {
+  font-family: "Antonio", var(--font-sans);
+}
+
+.font-demo-dmsans {
+  font-family: "DM Sans", var(--font-sans);
+}
+
 .tabular-nums {
   font-variant-numeric: tabular-nums;
 }
