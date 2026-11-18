@@ -90,7 +90,7 @@ function OpenProjectCard({
   onOpenLiveDemo,
 }: CardFaceProps) {
   return (
-    <div className="relative" style={{ contain: 'layout paint' }}>
+    <div className="relative">
       <button
         type="button"
         tabIndex={isClickable ? 0 : -1}
@@ -236,28 +236,11 @@ function UnfoldingGridCard({
   onSelect,
   onOpenLiveDemo,
 }: UnfoldingGridCardProps) {
-  const [isSettled, setIsSettled] = useState(reducedMotion || isOpen);
   const centerIdx = (cols - 1) / 2;
   const outwardStep = Math.floor(Math.abs(colIndex - centerIdx));
 
-  useEffect(() => {
-    if (reducedMotion) {
-      setIsSettled(true);
-      return;
-    }
-    if (!isOpen) {
-      setIsSettled(false);
-      return;
-    }
-    const timer = window.setTimeout(
-      () => setIsSettled(true),
-      720 + outwardStep * 70,
-    );
-    return () => window.clearTimeout(timer);
-  }, [isOpen, outwardStep, reducedMotion]);
-
   return (
-    <div style={isSettled ? undefined : { perspective: 1050 }}>
+    <div style={{ perspective: 1050 }}>
       <motion.div
         initial={false}
         animate={{
@@ -270,8 +253,7 @@ function UnfoldingGridCard({
           ease: FLIP_EASE,
         }}
         style={{
-          transformStyle: isSettled ? 'flat' : 'preserve-3d',
-          willChange: isSettled ? 'auto' : 'transform',
+          transformStyle: 'preserve-3d',
         }}
         className="relative"
       >
@@ -279,7 +261,7 @@ function UnfoldingGridCard({
           style={{
             backfaceVisibility: 'hidden',
             WebkitBackfaceVisibility: 'hidden',
-            transform: isSettled ? 'none' : 'translateZ(1px)',
+            transform: 'translateZ(1px)',
           }}
         >
           <OpenProjectCard
@@ -291,7 +273,7 @@ function UnfoldingGridCard({
           />
         </div>
 
-        {!isSettled && <ClosedProjectBack project={project} />}
+        {!reducedMotion && <ClosedProjectBack project={project} />}
       </motion.div>
     </div>
   );
@@ -335,9 +317,7 @@ export function ShowcaseMosaic({
       ? [true, true, true, true, true, true]
       : [true, false, false, false, false, false],
   );
-  const [filtersVisible, setFiltersVisible] = useState<boolean>(
-    () => prefersReducedMotion,
-  );
+  const [filtersVisible, setFiltersVisible] = useState<boolean>(true);
 
   useEffect(() => {
     const updateViewport = () => {
@@ -473,7 +453,7 @@ export function ShowcaseMosaic({
       if (hasCompletedIntroRef.current) {
         currentScale = 1;
         currentOuterAlpha = 1;
-        st.style.transform = 'none';
+        st.style.transform = 'translate3d(0, 0, 0) scale(1)';
         outerRevealRefs.current.forEach((el) => {
           if (el) el.style.opacity = '1';
         });
@@ -490,7 +470,7 @@ export function ShowcaseMosaic({
       if (settledZoom) {
         currentScale = 1;
         currentOuterAlpha = 1;
-        st.style.transform = 'none';
+        st.style.transform = 'translate3d(0, 0, 0) scale(1)';
       } else {
         st.style.transform = `translate3d(0, 0, 0) scale(${currentScale.toFixed(4)})`;
       }
@@ -516,8 +496,8 @@ export function ShowcaseMosaic({
       if (!spacer) return;
       if (hasCompletedIntroRef.current) {
         const st = stageRef.current;
-        if (st && st.style.transform !== 'none') {
-          st.style.transform = 'none';
+        if (st && st.style.transform !== 'translate3d(0, 0, 0) scale(1)') {
+          st.style.transform = 'translate3d(0, 0, 0) scale(1)';
         }
         return;
       }
@@ -669,14 +649,10 @@ export function ShowcaseMosaic({
       >
         <div
           ref={stageRef}
-          style={
-            prefersReducedMotion || isFiltered || hasCompletedIntro
-              ? undefined
-              : {
-                  transformOrigin: '50% 44px',
-                  willChange: 'transform',
-                }
-          }
+          style={{
+            transformOrigin: '50% 44px',
+            transform: 'translate3d(0, 0, 0) scale(1)',
+          }}
         >
           {/* Interactive Business Owner Filter Tabs — reveals smoothly once cards flip open */}
           <div

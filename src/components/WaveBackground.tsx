@@ -188,8 +188,19 @@ export function WaveBackground() {
 
     resizeCanvas();
 
+    const isBelowHeroPauseThreshold = () =>
+      window.scrollY > Math.max(window.innerHeight * 1.65, 1300);
+
     const handleScroll = () => {
       targetScrollY = window.scrollY;
+      if (isBelowHeroPauseThreshold()) {
+        if (rafId) {
+          window.cancelAnimationFrame(rafId);
+          rafId = 0;
+        }
+      } else if (!rafId && !document.hidden) {
+        startWave();
+      }
     };
 
     const handleMouseMove = (e: MouseEvent) => {
@@ -199,7 +210,7 @@ export function WaveBackground() {
 
     const renderFrame = (now: number) => {
       rafId = 0;
-      if (document.hidden) return;
+      if (document.hidden || isBelowHeroPauseThreshold()) return;
 
       if (lastDrawNow !== 0 && now - lastDrawNow < minFrameInterval) {
         rafId = window.requestAnimationFrame(renderFrame);
@@ -229,7 +240,11 @@ export function WaveBackground() {
     };
 
     const startWave = () => {
-      if (!rafId && !document.hidden) {
+      if (
+        !rafId &&
+        !document.hidden &&
+        !isBelowHeroPauseThreshold()
+      ) {
         lastNow = performance.now();
         rafId = window.requestAnimationFrame(renderFrame);
       }

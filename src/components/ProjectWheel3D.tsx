@@ -227,7 +227,7 @@ export function ProjectWheel3D({
       const isMobile = window.innerWidth < 768;
       scrollSmoothRef.current +=
         (scrollTargetRef.current - scrollSmoothRef.current) * 0.09;
-      const scrollSensitivity = isMobile ? 0.08 : 0.15;
+      const scrollSensitivity = isMobile ? 0.13 : 0.15;
       const scrollAngleOffset = scrollSmoothRef.current * scrollSensitivity;
       const scrollTiltX = isMobile
         ? -5.5
@@ -375,7 +375,7 @@ export function ProjectWheel3D({
     velocityRef.current = 0;
     const isMobile = window.innerWidth < 768;
     const currentScrollOffset =
-      scrollSmoothRef.current * (isMobile ? 0.08 : 0.15);
+      scrollSmoothRef.current * (isMobile ? 0.13 : 0.15);
     const currentDisplay = angleRef.current - currentScrollOffset;
     const snappedBase = Math.round(currentDisplay / STEP_DEG) * STEP_DEG;
     targetAngleRef.current =

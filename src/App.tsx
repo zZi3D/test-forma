@@ -241,8 +241,8 @@ export default function App() {
               aria-hidden="true"
               className="pointer-events-none absolute inset-0 overflow-hidden rounded-t-[28px] md:rounded-t-[40px]"
             >
-              <div className="absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-white/75 via-white/35 to-transparent" />
-              <div className="absolute inset-0 bg-gradient-to-b from-[#F7F5F0]/90 via-[#F7F5F0]/45 to-[#F7F5F0]/25" />
+              <div className="absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-white/82 via-white/45 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-b from-[#F7F5F0]/96 via-[#F7F5F0]/88 to-[#F7F5F0]/84" />
             </div>
 
             <div className="relative z-10">

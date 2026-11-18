@@ -1153,16 +1153,15 @@ export function ScaledDemoArtboard({
   return (
     <div
       ref={containerRef}
-      style={{ contain: 'layout style paint' }}
+      style={{ contain: 'layout style' }}
       className={`pointer-events-none relative h-full w-full overflow-hidden select-none ${className}`}
     >
       <div
         style={{
           width: ARTBOARD_WIDTH,
           height: ARTBOARD_HEIGHT,
-          transform: `translate3d(0, 0, 0) scale(${scale})`,
+          transform: `scale(${scale})`,
           transformOrigin: 'top left',
-          willChange: 'transform',
         }}
       >
         <DemoArtboardCanvas projectId={projectId} />
