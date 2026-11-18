@@ -90,13 +90,13 @@ function OpenProjectCard({
   onOpenLiveDemo,
 }: CardFaceProps) {
   return (
-    <div className="relative">
+    <div className="relative" style={{ contain: 'layout paint' }}>
       <button
         type="button"
         tabIndex={isClickable ? 0 : -1}
         onClick={() => onSelect(project)}
         aria-label={`Inspect ${project.businessTitle} (${project.styleSubtitle})`}
-        className={`glass-tile group relative block w-full overflow-hidden rounded-2xl p-2 text-left transition-all duration-200 hover:border-[#C98A3A]/55 hover:shadow-[0_24px_48px_-14px_rgba(28,27,24,0.16)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#C98A3A] md:p-2.5 ${
+        className={`glass-tile group relative block w-full overflow-hidden rounded-2xl p-2 text-left transition-[border-color,box-shadow] duration-200 hover:border-[#C98A3A]/55 hover:shadow-[0_24px_48px_-14px_rgba(28,27,24,0.16)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#C98A3A] md:p-2.5 ${
           isStartCard
             ? 'border-white/85 shadow-[0_24px_54px_-18px_rgba(28,27,24,0.16)]'
             : ''
@@ -120,6 +120,7 @@ function OpenProjectCard({
               src={imageUrl}
               alt={`${project.businessTitle} (${project.styleSubtitle}) — ${project.targetBusinesses}`}
               referrerPolicy="no-referrer"
+              decoding="async"
               draggable={false}
               className="h-full w-full object-cover object-top transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.03]"
             />
@@ -270,6 +271,7 @@ function UnfoldingGridCard({
         }}
         style={{
           transformStyle: isSettled ? 'flat' : 'preserve-3d',
+          willChange: isSettled ? 'auto' : 'transform',
         }}
         className="relative"
       >
@@ -311,6 +313,15 @@ export function ShowcaseMosaic({
   const [hasCompletedIntro, setHasCompletedIntro] = useState<boolean>(
     () => prefersReducedMotion,
   );
+  const [pinTopPxState, setPinTopPxState] = useState<number>(() =>
+    typeof window !== 'undefined' && window.innerWidth < 768 ? 82 : 120,
+  );
+  const [spacerHeightPx, setSpacerHeightPx] = useState<number | null>(null);
+  const metricsRef = useRef<{ pinTopPx: number; stableVh: number; stageH: number }>({
+    pinTopPx: 120,
+    stableVh: 800,
+    stageH: 640,
+  });
 
   const spacerRef = useRef<HTMLDivElement | null>(null);
   const pinWrapperRef = useRef<HTMLDivElement | null>(null);
@@ -390,26 +401,14 @@ export function ShowcaseMosaic({
     }
   }, [showAllMobile]);
 
-  // Section-relative zoom-out (Desktop: 01-04, Mobile: 01-02) + viewport pinning; plays once cleanly
+  // Section-relative zoom-out (Desktop: 01-04, Mobile: 01-02) + native CSS sticky pinning
   useEffect(() => {
     const spacer = spacerRef.current;
-    const pinWrapper = pinWrapperRef.current;
     const stage = stageRef.current;
 
-    const resetPinStyles = () => {
-      if (spacer) spacer.style.height = '';
-      if (pinWrapper) {
-        pinWrapper.style.position = '';
-        pinWrapper.style.top = '';
-        pinWrapper.style.left = '';
-        pinWrapper.style.right = '';
-        pinWrapper.style.zIndex = '';
-      }
-      if (stage) stage.style.transform = 'none';
-    };
-
     if (prefersReducedMotion || isFiltered) {
-      resetPinStyles();
+      setSpacerHeightPx(null);
+      if (stage) stage.style.transform = 'none';
       outerRevealRefs.current.forEach((el) => {
         if (el) el.style.opacity = '1';
       });
@@ -417,76 +416,115 @@ export function ShowcaseMosaic({
       return;
     }
 
-    let rafId = 0;
+    let lerpRafId = 0;
+    let scrollRafId = 0;
     let currentScale = hasCompletedIntroRef.current ? 1 : -1;
     let targetScale = 1;
     let currentOuterAlpha = hasCompletedIntroRef.current ? 1 : 0;
     let targetOuterAlpha = hasCompletedIntroRef.current ? 1 : 0;
     let animating = false;
+    let lastMeasuredWidth = window.innerWidth;
+    let stableVh = Math.max(window.innerHeight, 1);
 
     const getHoldDist = () => (isMobile ? MOBILE_HOLD_PX : DESKTOP_HOLD_PX);
-
-    const syncSpacerHeight = () => {
-      if (!spacer || !stage) return;
-      const stageH = stage.offsetHeight;
-      if (stageH > 0) {
-        spacer.style.height = `${stageH + getHoldDist()}px`;
-      }
-    };
-
     const getMaxZoom = () => {
-      if (isMobile) return 1.12;
+      if (isMobile) return 1.08;
       return window.innerWidth >= 1280 ? 1.18 : 1.09;
     };
 
-    const evaluateScroll = () => {
-      syncSpacerHeight();
+    const measureMetrics = () => {
+      const st = stageRef.current;
+      if (!st) return;
 
-      if (!spacer || !pinWrapper) return;
-      const vh = Math.max(window.innerHeight, 1);
-      const scrollY = window.scrollY;
-      const stageH = stage?.offsetHeight ?? (isMobile ? 560 : 700);
-      const holdDist = getHoldDist();
+      const nextW = window.innerWidth;
+      const nextVh = Math.max(window.innerHeight, 1);
+      if (nextW !== lastMeasuredWidth || Math.abs(nextVh - stableVh) > 130) {
+        lastMeasuredWidth = nextW;
+        stableVh = nextVh;
+      }
+
+      const stageH = st.offsetHeight || (isMobile ? 540 : 680);
       const pinTopPx = isMobile
         ? Math.min(
             MOBILE_MAX_PIN_TOP_PX,
-            Math.max(MOBILE_MIN_PIN_TOP_PX, Math.round(vh - stageH - 24)),
+            Math.max(MOBILE_MIN_PIN_TOP_PX, Math.round(stableVh - stageH - 24)),
           )
         : Math.min(
             MAX_PIN_TOP_PX,
-            Math.max(MIN_PIN_TOP_PX, Math.round(vh - stageH - 40)),
+            Math.max(MIN_PIN_TOP_PX, Math.round(stableVh - stageH - 40)),
           );
+      const nextSpacerH = Math.round(stageH + getHoldDist());
 
-      const spacerTop = spacer.getBoundingClientRect().top;
+      metricsRef.current = { pinTopPx, stableVh, stageH };
+      setPinTopPxState((prev) => (prev === pinTopPx ? prev : pinTopPx));
+      setSpacerHeightPx((prev) =>
+        prev !== null && Math.abs(prev - nextSpacerH) <= 4 ? prev : nextSpacerH,
+      );
+    };
 
-      if (spacerTop > pinTopPx) {
-        pinWrapper.style.position = 'relative';
-        pinWrapper.style.top = '0px';
-        pinWrapper.style.left = 'auto';
-        pinWrapper.style.right = 'auto';
-        pinWrapper.style.zIndex = 'auto';
-      } else if (spacerTop >= pinTopPx - holdDist) {
-        pinWrapper.style.position = 'fixed';
-        pinWrapper.style.top = `${pinTopPx}px`;
-        pinWrapper.style.left = '0px';
-        pinWrapper.style.right = '0px';
-        pinWrapper.style.zIndex = '20';
-      } else {
-        pinWrapper.style.position = 'absolute';
-        pinWrapper.style.top = `${holdDist}px`;
-        pinWrapper.style.left = '0px';
-        pinWrapper.style.right = '0px';
-        pinWrapper.style.zIndex = 'auto';
+    const stepLerp = () => {
+      lerpRafId = 0;
+      const st = stageRef.current;
+      if (!st) {
+        animating = false;
+        return;
       }
 
-      // Once animation has played, keep tiles & zoom settled so scrolling back up never re-animates
       if (hasCompletedIntroRef.current) {
-        if (stage) stage.style.transform = 'none';
+        currentScale = 1;
+        currentOuterAlpha = 1;
+        st.style.transform = 'none';
         outerRevealRefs.current.forEach((el) => {
           if (el) el.style.opacity = '1';
         });
+        animating = false;
         return;
       }
+
+      currentScale += (targetScale - currentScale) * 0.24;
+      currentOuterAlpha += (targetOuterAlpha - currentOuterAlpha) * 0.24;
+
+      const settledZoom =
+        Math.abs(targetScale - 1) < 0.002 && Math.abs(currentScale - 1) < 0.002;
+
+      if (settledZoom) {
+        currentScale = 1;
+        currentOuterAlpha = 1;
+        st.style.transform = 'none';
+      } else {
+        st.style.transform = `translate3d(0, 0, 0) scale(${currentScale.toFixed(4)})`;
+      }
+
+      outerRevealRefs.current.forEach((el) => {
+        if (el) el.style.opacity = currentOuterAlpha.toFixed(3);
+      });
+
+      const needsMoreFrames =
+        !settledZoom &&
+        (Math.abs(targetScale - currentScale) > 0.001 ||
+          Math.abs(targetOuterAlpha - currentOuterAlpha) > 0.004);
+
+      if (needsMoreFrames) {
+        lerpRafId = window.requestAnimationFrame(stepLerp);
+      } else {
+        animating = false;
+      }
+    };
+
+    const evaluateScroll = () => {
+      scrollRafId = 0;
+      if (!spacer) return;
+      if (hasCompletedIntroRef.current) {
+        const st = stageRef.current;
+        if (st && st.style.transform !== 'none') {
+          st.style.transform = 'none';
+        }
+        return;
+      }
+
+      const { pinTopPx, stableVh: vh } = metricsRef.current;
+      const scrollY = window.scrollY;
+      const spacerTop = spacer.getBoundingClientRect().top;
 
       const zoomStartTop = Math.min(
         Math.round(vh * 0.8),
@@ -542,77 +580,43 @@ export function ShowcaseMosaic({
 
       if (!animating) {
         animating = true;
-        rafId = window.requestAnimationFrame(stepLerp);
+        lerpRafId = window.requestAnimationFrame(stepLerp);
       }
     };
 
-    const stepLerp = () => {
-      rafId = 0;
-      const st = stageRef.current;
-      if (!st) {
-        animating = false;
-        return;
+    const scheduleScroll = () => {
+      if (!scrollRafId) {
+        scrollRafId = window.requestAnimationFrame(evaluateScroll);
       }
+    };
 
-      if (hasCompletedIntroRef.current) {
-        currentScale = 1;
-        currentOuterAlpha = 1;
-        st.style.transform = 'none';
-        outerRevealRefs.current.forEach((el) => {
-          if (el) el.style.opacity = '1';
-        });
-        animating = false;
-        return;
-      }
-
-      currentScale += (targetScale - currentScale) * 0.22;
-      currentOuterAlpha += (targetOuterAlpha - currentOuterAlpha) * 0.22;
-
-      const settledZoom =
-        Math.abs(targetScale - 1) < 0.002 && Math.abs(currentScale - 1) < 0.002;
-
-      if (settledZoom) {
-        currentScale = 1;
-        currentOuterAlpha = 1;
-        st.style.transform = 'none';
-      } else {
-        st.style.transform = `scale(${currentScale.toFixed(4)})`;
-      }
-
-      outerRevealRefs.current.forEach((el) => {
-        if (el) el.style.opacity = currentOuterAlpha.toFixed(3);
-      });
-
-      const needsMoreFrames =
-        !settledZoom &&
-        (Math.abs(targetScale - currentScale) > 0.001 ||
-          Math.abs(targetOuterAlpha - currentOuterAlpha) > 0.004);
-
-      if (needsMoreFrames) {
-        rafId = window.requestAnimationFrame(stepLerp);
-      } else {
-        animating = false;
-      }
+    const handleResizeOrStageChange = () => {
+      measureMetrics();
+      scheduleScroll();
     };
 
     const resizeObserver =
       typeof ResizeObserver !== 'undefined' && stage
-        ? new ResizeObserver(evaluateScroll)
+        ? new ResizeObserver(handleResizeOrStageChange)
         : null;
     if (resizeObserver && stage) {
       resizeObserver.observe(stage);
     }
 
+    measureMetrics();
     evaluateScroll();
-    window.addEventListener('scroll', evaluateScroll, { passive: true });
-    window.addEventListener('resize', evaluateScroll, { passive: true });
+    window.addEventListener('scroll', scheduleScroll, { passive: true });
+    window.addEventListener('resize', handleResizeOrStageChange, {
+      passive: true,
+    });
 
     return () => {
       resizeObserver?.disconnect();
-      if (rafId) window.cancelAnimationFrame(rafId);
-      window.removeEventListener('scroll', evaluateScroll);
-      window.removeEventListener('resize', evaluateScroll);
-      resetPinStyles();
+      if (lerpRafId) window.cancelAnimationFrame(lerpRafId);
+      if (scrollRafId) window.cancelAnimationFrame(scrollRafId);
+      window.removeEventListener('scroll', scheduleScroll);
+      window.removeEventListener('resize', handleResizeOrStageChange);
+      if (stage) stage.style.transform = 'none';
     };
   }, [prefersReducedMotion, isFiltered, isMobile, showAllMobile, isHeroPage]);
 
@@ -623,18 +627,8 @@ export function ShowcaseMosaic({
     filter: FilterOption,
     btnEl: HTMLButtonElement,
   ) => {
-    if (filter !== activeFilter && spacerRef.current && stageRef.current) {
-      const vh = Math.max(window.innerHeight, 1);
-      const stageH = stageRef.current.offsetHeight || (isMobile ? 560 : 700);
-      const pinTopPx = isMobile
-        ? Math.min(
-            MOBILE_MAX_PIN_TOP_PX,
-            Math.max(MOBILE_MIN_PIN_TOP_PX, Math.round(vh - stageH - 24)),
-          )
-        : Math.min(
-            MAX_PIN_TOP_PX,
-            Math.max(MIN_PIN_TOP_PX, Math.round(vh - stageH - 40)),
-          );
+    if (filter !== activeFilter && spacerRef.current) {
+      const { pinTopPx } = metricsRef.current;
       const spacerTop = spacerRef.current.getBoundingClientRect().top;
       if (spacerTop < pinTopPx) {
         window.scrollTo({
@@ -653,10 +647,25 @@ export function ShowcaseMosaic({
   };
 
   return (
-    <div ref={spacerRef} className="relative mt-5 w-full md:mt-6">
+    <div
+      ref={spacerRef}
+      style={
+        prefersReducedMotion || isFiltered || spacerHeightPx === null
+          ? undefined
+          : { height: `${spacerHeightPx}px` }
+      }
+      className="relative mt-5 w-full md:mt-6"
+    >
       <div
         ref={pinWrapperRef}
-        className="mx-auto w-full max-w-[1200px] px-4 md:px-8"
+        style={
+          prefersReducedMotion || isFiltered
+            ? undefined
+            : { top: `${pinTopPxState}px` }
+        }
+        className={`${
+          prefersReducedMotion || isFiltered ? 'relative' : 'sticky z-20'
+        } mx-auto w-full max-w-[1200px] px-4 md:px-8`}
       >
         <div
           ref={stageRef}
@@ -672,7 +681,7 @@ export function ShowcaseMosaic({
           {/* Interactive Business Owner Filter Tabs — reveals smoothly once cards flip open */}
           <div
             aria-hidden={!filtersVisible}
-            className={`mb-4 transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] md:mb-5 ${
+            className={`mb-4 transition-[opacity,transform] duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] md:mb-5 ${
               filtersVisible
                 ? 'translate-y-0 opacity-100'
                 : 'pointer-events-none translate-y-2 opacity-0'
@@ -802,7 +811,7 @@ export function ShowcaseMosaic({
           {/* Mobile Only: See more / Show fewer toggle (max 6 initially -> 12 on tap) */}
           {isMobile && !isFiltered && (
             <div
-              className={`mt-4 flex justify-center transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+              className={`mt-4 flex justify-center transition-[opacity,transform] duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] ${
                 filtersVisible
                   ? 'translate-y-0 opacity-100'
                   : 'pointer-events-none translate-y-2 opacity-0'

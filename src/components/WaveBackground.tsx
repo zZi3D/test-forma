@@ -6,7 +6,9 @@ const FOV = 640;
 const Z_FAR = 860;
 const Z_NEAR = 45;
 const MAX_WAVE_DPR = 1.25;
-const MIN_FRAME_INTERVAL_MS = 1000 / 36;
+const MOBILE_WAVE_DPR = 1;
+const DESKTOP_FRAME_INTERVAL_MS = 1000 / 36;
+const MOBILE_FRAME_INTERVAL_MS = 1000 / 24;
 
 interface WaveLineDescriptor {
   depthNorm: number;
@@ -56,7 +58,14 @@ export function WaveBackground() {
 
     let width = 0;
     let height = 0;
-    let dpr = Math.min(window.devicePixelRatio || 1, MAX_WAVE_DPR);
+    let isMobileViewport = window.innerWidth < 768;
+    let minFrameInterval = isMobileViewport
+      ? MOBILE_FRAME_INTERVAL_MS
+      : DESKTOP_FRAME_INTERVAL_MS;
+    let dpr = Math.min(
+      window.devicePixelRatio || 1,
+      isMobileViewport ? MOBILE_WAVE_DPR : MAX_WAVE_DPR,
+    );
 
     // Pre-allocate reusable point buffer to eliminate GC churn inside the rAF loop
     const points: ProjectedPoint[] = Array.from(
@@ -145,7 +154,24 @@ export function WaveBackground() {
     const resizeCanvas = () => {
       const nextWidth = window.innerWidth;
       const nextHeight = window.innerHeight;
-      const nextDpr = Math.min(window.devicePixelRatio || 1, MAX_WAVE_DPR);
+      const mobile = nextWidth < 768;
+      // Avoid clearing and reallocating full-screen backing canvas on mobile URL-bar height flicker
+      if (
+        mobile &&
+        isMobileViewport &&
+        nextWidth === width &&
+        Math.abs(nextHeight - height) < 130
+      ) {
+        return;
+      }
+      isMobileViewport = mobile;
+      minFrameInterval = mobile
+        ? MOBILE_FRAME_INTERVAL_MS
+        : DESKTOP_FRAME_INTERVAL_MS;
+      const nextDpr = Math.min(
+        window.devicePixelRatio || 1,
+        mobile ? MOBILE_WAVE_DPR : MAX_WAVE_DPR,
+      );
       if (nextWidth === width && nextHeight === height && nextDpr === dpr) {
         return;
       }
@@ -175,7 +201,7 @@ export function WaveBackground() {
       rafId = 0;
       if (document.hidden) return;
 
-      if (lastDrawNow !== 0 && now - lastDrawNow < MIN_FRAME_INTERVAL_MS) {
+      if (lastDrawNow !== 0 && now - lastDrawNow < minFrameInterval) {
         rafId = window.requestAnimationFrame(renderFrame);
         return;
       }

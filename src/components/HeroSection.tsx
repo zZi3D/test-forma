@@ -19,18 +19,33 @@ export function HeroSection({
   // Scroll until the bottom CTA block is in view, then pin Hero sticky while Section 2 rises over it
   useEffect(() => {
     let rafId = 0;
+    let cachedWidth = window.innerWidth;
+    let stableVh = Math.max(window.innerHeight, 1);
+    let cachedHeroHeight = stickyRef.current?.offsetHeight ?? 0;
+
+    const syncMetrics = () => {
+      const el = stickyRef.current;
+      if (!el) return;
+      const nextWidth = window.innerWidth;
+      const nextVh = Math.max(window.innerHeight, 1);
+      // Ignore small mobile browser toolbar height fluctuations unless viewport width changed
+      if (nextWidth !== cachedWidth || Math.abs(nextVh - stableVh) > 130) {
+        cachedWidth = nextWidth;
+        stableVh = nextVh;
+      }
+      cachedHeroHeight = el.offsetHeight;
+      const stickyTop = Math.min(0, stableVh - cachedHeroHeight);
+      el.style.top = `${stickyTop}px`;
+    };
 
     const updateDepth = () => {
       rafId = 0;
       const el = stickyRef.current;
       if (!el) return;
 
-      const vh = Math.max(window.innerHeight, 1);
-      const heroHeight = el.offsetHeight;
+      const vh = stableVh;
+      const heroHeight = cachedHeroHeight || el.offsetHeight;
       const stickyStart = Math.max(0, heroHeight - vh);
-      const stickyTop = Math.min(0, vh - heroHeight);
-
-      el.style.top = `${stickyTop}px`;
 
       if (window.scrollY <= stickyStart) {
         el.style.opacity = '1';
@@ -51,7 +66,7 @@ export function HeroSection({
       const shouldPause = opacity <= 0.08;
 
       el.style.opacity = opacity.toFixed(3);
-      el.style.transform = `scale(${scale.toFixed(4)})`;
+      el.style.transform = `translate3d(0, 0, 0) scale(${scale.toFixed(4)})`;
       el.style.pointerEvents = shouldPause ? 'none' : 'auto';
       el.style.visibility = opacity <= 0.01 ? 'hidden' : 'visible';
       setIsWheelPaused((prev) => (prev === shouldPause ? prev : shouldPause));
@@ -63,21 +78,27 @@ export function HeroSection({
       }
     };
 
+    const onResize = () => {
+      syncMetrics();
+      onScroll();
+    };
+
     const resizeObserver =
       typeof ResizeObserver !== 'undefined' && stickyRef.current
-        ? new ResizeObserver(onScroll)
+        ? new ResizeObserver(onResize)
         : null;
     if (resizeObserver && stickyRef.current) {
       resizeObserver.observe(stickyRef.current);
     }
 
+    syncMetrics();
     updateDepth();
     window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', onScroll, { passive: true });
+    window.addEventListener('resize', onResize, { passive: true });
     return () => {
       resizeObserver?.disconnect();
       window.removeEventListener('scroll', onScroll);
-      window.removeEventListener('resize', onScroll);
+      window.removeEventListener('resize', onResize);
       if (rafId) window.cancelAnimationFrame(rafId);
     };
   }, []);

@@ -282,10 +282,10 @@ function DemoArtboardCanvas({ projectId }: { projectId: string }) {
       <div className="font-demo-dmsans relative h-[425px] w-[680px] overflow-hidden bg-[#1C1C1C] text-[#EDE6D8]">
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute -top-20 right-0 h-72 w-72 rounded-full opacity-55 blur-3xl"
+          className="pointer-events-none absolute -top-24 -right-6 h-80 w-80 rounded-full opacity-55"
           style={{
             background:
-              'radial-gradient(circle, rgba(179,38,30,0.92) 0%, rgba(179,38,30,0) 70%)',
+              'radial-gradient(circle, rgba(179,38,30,0.85) 0%, rgba(179,38,30,0.22) 38%, rgba(179,38,30,0) 70%)',
           }}
         />
 
@@ -352,6 +352,7 @@ function DemoArtboardCanvas({ projectId }: { projectId: string }) {
             <img
               src={barberPortraitImg}
               alt="Noord Barbers grooming studio"
+              decoding="async"
               className="h-full w-full object-cover object-top"
             />
           </div>
@@ -422,6 +423,7 @@ function DemoArtboardCanvas({ projectId }: { projectId: string }) {
             <img
               src={cafeCroissantImg}
               alt="Café Kornelis koffie en croissant"
+              decoding="async"
               className="h-full w-full object-cover"
             />
           </div>
@@ -494,6 +496,7 @@ function DemoArtboardCanvas({ projectId }: { projectId: string }) {
             <img
               src={fashionModelImg}
               alt="Studio Vesper Solaris eyewear campaign"
+              decoding="async"
               className="h-full w-full object-cover object-top"
             />
           </div>
@@ -559,6 +562,7 @@ function DemoArtboardCanvas({ projectId }: { projectId: string }) {
             <img
               src={gardenPavilionImg}
               alt="Groeneveld architectural charred cedar pavilion"
+              decoding="async"
               className="h-full w-full object-cover"
             />
           </div>
@@ -628,6 +632,7 @@ function DemoArtboardCanvas({ projectId }: { projectId: string }) {
             <img
               src={brakeDiscImg}
               alt="Korver Auto performance brake rotor"
+              decoding="async"
               className="h-full w-full object-cover"
             />
           </div>
@@ -643,6 +648,7 @@ function DemoArtboardCanvas({ projectId }: { projectId: string }) {
         <img
           src={notarisWalnutImg}
           alt="Warm notary wood office interior"
+          decoding="async"
           className="absolute inset-0 h-full w-full object-cover object-center"
         />
         <div
@@ -743,6 +749,7 @@ function DemoArtboardCanvas({ projectId }: { projectId: string }) {
         <img
           src={boutiqueGymImg}
           alt="Boutique gym strength training interior"
+          decoding="async"
           className="absolute inset-0 h-full w-full object-cover object-center"
         />
         <div
@@ -837,6 +844,7 @@ function DemoArtboardCanvas({ projectId }: { projectId: string }) {
               <img
                 src={studioEditorialImg}
                 alt="Stage spotlight editorial portrait"
+                decoding="async"
                 className="h-full w-full object-cover object-top"
               />
             </div>
@@ -845,6 +853,7 @@ function DemoArtboardCanvas({ projectId }: { projectId: string }) {
                 <img
                   src={studioMonoImg}
                   alt="Creative director monochrome portrait"
+                  decoding="async"
                   className="h-full w-full object-cover object-top"
                 />
               </div>
@@ -865,6 +874,7 @@ function DemoArtboardCanvas({ projectId }: { projectId: string }) {
               <img
                 src={studioCrimsonImg}
                 alt="Crimson concert portrait"
+                decoding="async"
                 className="h-full w-full object-cover object-top"
               />
             </div>
@@ -872,6 +882,7 @@ function DemoArtboardCanvas({ projectId }: { projectId: string }) {
               <img
                 src={studioMonoImg}
                 alt="Monochrome festival profile"
+                decoding="async"
                 className="h-full w-full scale-110 object-cover object-center grayscale contrast-125"
               />
             </div>
@@ -890,6 +901,7 @@ function DemoArtboardCanvas({ projectId }: { projectId: string }) {
               <img
                 src={studioCrimsonImg}
                 alt="Live event close-up stage"
+                decoding="async"
                 className="h-full w-full scale-125 object-cover object-bottom"
               />
             </div>
@@ -1125,7 +1137,8 @@ export function ScaledDemoArtboard({
     const updateScale = () => {
       const w = el.clientWidth;
       if (w > 0) {
-        setScale(w / ARTBOARD_WIDTH);
+        const nextScale = w / ARTBOARD_WIDTH;
+        setScale((prev) => (Math.abs(prev - nextScale) > 0.002 ? nextScale : prev));
       }
     };
 
@@ -1140,14 +1153,16 @@ export function ScaledDemoArtboard({
   return (
     <div
       ref={containerRef}
+      style={{ contain: 'layout style paint' }}
       className={`pointer-events-none relative h-full w-full overflow-hidden select-none ${className}`}
     >
       <div
         style={{
           width: ARTBOARD_WIDTH,
           height: ARTBOARD_HEIGHT,
-          transform: `scale(${scale})`,
+          transform: `translate3d(0, 0, 0) scale(${scale})`,
           transformOrigin: 'top left',
+          willChange: 'transform',
         }}
       >
         <DemoArtboardCanvas projectId={projectId} />
