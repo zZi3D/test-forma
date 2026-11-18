@@ -146,26 +146,96 @@ export function DemoBarberBand({ lang, onBuildInStyle }: DemoBarberBandProps) {
       />
 
       {/* HEADER VARIANT 3: Dark Charcoal Pill Header with Animated Barber Red Liquid-Wave Crest (Skin 2 from screenshot) */}
-      <div className="relative z-10 px-4 pt-4 md:px-8 md:pt-6">
-        <header className="relative flex items-center justify-between gap-4 overflow-hidden rounded-full border border-[#EDE6D8]/14 bg-[#111113] px-3.5 py-2 shadow-[0_14px_34px_-12px_rgba(0,0,0,0.7)] md:px-5">
+      <div className="relative z-10 px-3 pt-3 md:px-8 md:pt-6">
+        <header className="relative flex flex-col gap-1.5 overflow-hidden rounded-2xl border border-[#EDE6D8]/14 bg-[#111113] px-3.5 py-2 shadow-[0_14px_34px_-12px_rgba(0,0,0,0.7)] lg:flex-row lg:items-center lg:justify-between lg:gap-4 lg:rounded-full lg:px-5">
           {/* Thin baseline glowing crimson trace across bottom of dark pill */}
           <div
             aria-hidden="true"
             className="pointer-events-none absolute inset-x-6 bottom-0 h-[1.5px] bg-gradient-to-r from-transparent via-[#B3261E]/60 to-transparent"
           />
 
-          <a
-            href="#demo-barber"
-            onClick={(e) => {
-              e.preventDefault();
-              setActiveNavIdx(0);
-              scrollToConsole();
-            }}
-            className="font-demo-oswald inline-flex items-center gap-2 pl-1 text-[17px] font-bold tracking-[0.08em] text-[#EDE6D8] uppercase whitespace-nowrap shrink-0"
+          <div className="flex items-center justify-between gap-3">
+            <a
+              href="#demo-barber"
+              onClick={(e) => {
+                e.preventDefault();
+                setActiveNavIdx(0);
+                scrollToConsole();
+              }}
+              className="font-demo-oswald inline-flex items-center gap-2 pl-1 text-[15.5px] font-bold tracking-[0.08em] text-[#EDE6D8] uppercase whitespace-nowrap shrink-0 md:text-[17px]"
+            >
+              <Scissors className="h-4 w-4 text-[#B3261E]" />
+              <span>NOORD BARBERS</span>
+            </a>
+
+            <button
+              type="button"
+              onClick={scrollToConsole}
+              className="inline-flex h-8 items-center justify-center rounded-full bg-[#B3261E] px-3.5 text-[11.5px] font-semibold text-[#EDE6D8] whitespace-nowrap shrink-0 transition-colors hover:bg-[#951E17] lg:hidden"
+            >
+              {t.ctaNav}
+            </button>
+          </div>
+
+          {/* Mobile 4-icon Liquid-Wave Strip (always visible on phone) */}
+          <nav
+            aria-label="Barber sections"
+            className="grid grid-cols-4 gap-1 border-t border-[#EDE6D8]/8 pt-1 lg:hidden"
           >
-            <Scissors className="h-4 w-4 text-[#B3261E]" />
-            <span>NOORD BARBERS</span>
-          </a>
+            {navItems.map((item, idx) => {
+              const Icon = item.icon;
+              const isActive = activeNavIdx === idx;
+              return (
+                <button
+                  key={`m-${item.label}`}
+                  type="button"
+                  onClick={() => {
+                    setActiveNavIdx(idx);
+                    scrollToConsole();
+                  }}
+                  className={`relative flex h-8 items-center justify-center transition-colors ${
+                    isActive
+                      ? 'text-[#EDE6D8]'
+                      : 'text-[#EDE6D8]/55 hover:text-[#EDE6D8]'
+                  }`}
+                >
+                  {isActive && (
+                    <motion.div
+                      layoutId="barber-wave-crest-m"
+                      transition={{ type: 'spring', stiffness: 380, damping: 28 }}
+                      className="pointer-events-none absolute inset-0"
+                    >
+                      <div
+                        className="absolute inset-x-1 top-1 bottom-0 rounded-t-full opacity-45"
+                        style={{
+                          background:
+                            'radial-gradient(ellipse at bottom, rgba(179,38,30,0.65) 0%, transparent 72%)',
+                        }}
+                      />
+                      <svg
+                        viewBox="0 0 120 18"
+                        preserveAspectRatio="none"
+                        className="absolute inset-x-1 bottom-0 h-3 w-[calc(100%-8px)] overflow-visible"
+                      >
+                        <path
+                          d="M0 17 C24 17 34 3 60 3 C86 3 96 17 120 17"
+                          fill="none"
+                          stroke="#B3261E"
+                          strokeWidth="2.5"
+                          strokeLinecap="round"
+                        />
+                      </svg>
+                    </motion.div>
+                  )}
+                  <Icon
+                    className={`relative z-10 h-3.5 w-3.5 ${
+                      isActive ? 'text-[#B3261E]' : ''
+                    }`}
+                  />
+                </button>
+              );
+            })}
+          </nav>
 
           <nav className="hidden items-center gap-1 lg:flex">
             {navItems.map((item, idx) => {
@@ -228,7 +298,7 @@ export function DemoBarberBand({ lang, onBuildInStyle }: DemoBarberBandProps) {
           <button
             type="button"
             onClick={scrollToConsole}
-            className="inline-flex h-9 items-center justify-center rounded-full bg-[#B3261E] px-4.5 text-[12px] font-semibold text-[#EDE6D8] whitespace-nowrap shrink-0 transition-colors hover:bg-[#951E17]"
+            className="hidden h-9 items-center justify-center rounded-full bg-[#B3261E] px-4.5 text-[12px] font-semibold text-[#EDE6D8] whitespace-nowrap shrink-0 transition-colors hover:bg-[#951E17] lg:inline-flex"
           >
             {t.ctaNav}
           </button>
@@ -236,28 +306,28 @@ export function DemoBarberBand({ lang, onBuildInStyle }: DemoBarberBandProps) {
       </div>
 
       {/* HERO SECTION */}
-      <div className="relative z-10 px-5 pt-7 pb-8 md:px-10 md:pt-10 md:pb-10">
-        <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-12">
+      <div className="relative z-10 px-4 pt-5 pb-5 md:px-10 md:pt-10 md:pb-10">
+        <div className="grid grid-cols-1 items-center gap-5 lg:grid-cols-12 lg:gap-8">
           <div className="lg:col-span-6">
-            <div className="flex items-center gap-2 text-[12px] font-medium text-[#EDE6D8]/60">
+            <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[11.5px] font-medium text-[#EDE6D8]/60 md:text-[12px]">
               <span>{t.demoTag}</span>
               <span aria-hidden="true">·</span>
               <span>#1C1C1C · #EDE6D8 · #B3261E</span>
             </div>
 
-            <h2 className="font-demo-oswald mt-3 max-w-[13ch] text-[clamp(2.35rem,4.5vw,4rem)] leading-[0.98] font-bold tracking-[-0.01em] text-[#EDE6D8] uppercase [text-wrap:balance]">
+            <h2 className="font-demo-oswald mt-2 max-w-[13ch] text-[clamp(2rem,4.5vw,4rem)] leading-[0.98] font-bold tracking-[-0.01em] text-[#EDE6D8] uppercase [text-wrap:balance] md:mt-3">
               {t.headline}
             </h2>
 
-            <p className="mt-4 max-w-[42ch] text-[14.5px] leading-[1.6] text-[#EDE6D8]/76 md:text-[15.5px]">
+            <p className="mt-2.5 max-w-[42ch] text-[13.5px] leading-[1.55] text-[#EDE6D8]/76 md:mt-4 md:text-[15.5px] md:leading-[1.6]">
               {t.sub}
             </p>
 
-            <div className="mt-6 flex flex-wrap items-center gap-4">
+            <div className="mt-4 flex flex-wrap items-center gap-3 md:mt-6 md:gap-4">
               <button
                 type="button"
                 onClick={scrollToConsole}
-                className="inline-flex h-11 items-center rounded-full bg-[#B3261E] px-6 text-[13.5px] font-semibold text-white whitespace-nowrap transition-colors hover:bg-[#951E17]"
+                className="inline-flex h-10 items-center rounded-full bg-[#B3261E] px-5 text-[13px] font-semibold text-white whitespace-nowrap transition-colors hover:bg-[#951E17] md:h-11 md:px-6 md:text-[13.5px]"
               >
                 {t.ctaHero}
               </button>
@@ -269,15 +339,15 @@ export function DemoBarberBand({ lang, onBuildInStyle }: DemoBarberBandProps) {
                     `Barber Demo (Charcoal & Barber Red) — ${activeService.name[lang]}`,
                   )
                 }
-                className="text-[13px] font-medium text-[#EDE6D8]/75 underline-offset-4 transition-colors hover:text-[#EDE6D8] hover:underline"
+                className="text-[12.5px] font-medium text-[#EDE6D8]/75 underline-offset-4 transition-colors hover:text-[#EDE6D8] hover:underline md:text-[13px]"
               >
                 {t.buildThis}
               </button>
             </div>
 
-            <div className="mt-8 flex flex-wrap items-center gap-x-5 gap-y-2 border-t border-[#EDE6D8]/12 pt-4 text-[12px] font-medium text-[#EDE6D8]/80">
+            <div className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-1.5 border-t border-[#EDE6D8]/12 pt-3 text-[11px] font-medium text-[#EDE6D8]/80 md:mt-8 md:gap-x-5 md:gap-y-2 md:pt-4 md:text-[12px]">
               {t.highlights.map((item, idx) => (
-                <span key={item} className="inline-flex items-center gap-3">
+                <span key={item} className="inline-flex items-center gap-2.5 md:gap-3">
                   {idx > 0 && (
                     <span aria-hidden="true" className="text-[#B3261E]">
                       /
@@ -309,9 +379,9 @@ export function DemoBarberBand({ lang, onBuildInStyle }: DemoBarberBandProps) {
                     : { scale: [1, 1.035, 1] }
                 }
                 transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut' }}
-                className="aspect-[4/3] w-full object-cover"
+                className="aspect-[16/10] w-full object-cover object-[50%_22%] sm:aspect-[4/3]"
               />
-              <div className="relative z-10 flex items-center justify-between border-t border-[#EDE6D8]/10 bg-[#181818]/95 px-4 py-2.5 text-[12px]">
+              <div className="relative z-10 flex items-center justify-between border-t border-[#EDE6D8]/10 bg-[#181818]/95 px-3.5 py-2 text-[11.5px] md:px-4 md:py-2.5 md:text-[12px]">
                 <span className="inline-flex items-center gap-1.5 font-semibold text-[#EDE6D8]">
                   <Star className="h-3.5 w-3.5 fill-[#B3261E] text-[#B3261E]" />
                   <span>{t.ratingLabel}</span>
@@ -327,10 +397,10 @@ export function DemoBarberBand({ lang, onBuildInStyle }: DemoBarberBandProps) {
         {/* INTERACTIVE BOOKING + LIVE REVIEW WIDGET */}
         <div
           id="barber-interactive-console"
-          className="mt-8 grid grid-cols-1 gap-5 lg:grid-cols-12"
+          className="mt-5 grid grid-cols-1 gap-4 md:mt-8 md:gap-5 lg:grid-cols-12"
         >
           {/* Left 7 cols: Treatment & Slot Selector */}
-          <div className="rounded-2xl border border-[#EDE6D8]/12 bg-[#242424] p-5 lg:col-span-7">
+          <div className="rounded-2xl border border-[#EDE6D8]/12 bg-[#242424] p-3.5 md:p-5 lg:col-span-7">
             <div className="flex items-center gap-2 text-[12.5px] font-semibold text-[#B3261E]">
               <Calendar className="h-4 w-4" />
               <span>{t.consoleBookTitle}</span>

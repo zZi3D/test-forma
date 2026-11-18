@@ -3,15 +3,41 @@ export type DemoLang = 'nl' | 'en';
 export interface DemoSectionNav {
   id: string;
   num: string;
+  shortLabel: Record<DemoLang, string>;
   label: Record<DemoLang, string>;
 }
 
 export const DEMO_JUMP_ITEMS: DemoSectionNav[] = [
-  { id: 'demo-garage', num: '01', label: { nl: 'Garage · RDW API', en: 'Garage · RDW API' } },
-  { id: 'demo-buitenwerk', num: '02', label: { nl: 'Buitenwerk · PDOK + Weer', en: 'Outdoor · PDOK + Weather' } },
-  { id: 'demo-barber', num: '03', label: { nl: 'Barber · Reviews & Boeking', en: 'Barber · Reviews & Booking' } },
-  { id: 'demo-horeca', num: '04', label: { nl: 'Horeca · Terrasweer API', en: 'Cafe · Terrace Weather' } },
-  { id: 'demo-fashion', num: '05', label: { nl: 'Fashion · Drop & WhatsApp', en: 'Fashion · Drop & Cart' } },
+  {
+    id: 'demo-garage',
+    num: '01',
+    shortLabel: { nl: 'Garage', en: 'Garage' },
+    label: { nl: 'Garage · RDW API', en: 'Garage · RDW API' },
+  },
+  {
+    id: 'demo-buitenwerk',
+    num: '02',
+    shortLabel: { nl: 'Buiten', en: 'Outdoor' },
+    label: { nl: 'Buitenwerk · PDOK + Weer', en: 'Outdoor · PDOK + Weather' },
+  },
+  {
+    id: 'demo-barber',
+    num: '03',
+    shortLabel: { nl: 'Barber', en: 'Barber' },
+    label: { nl: 'Barber · Reviews & Boeking', en: 'Barber · Reviews & Booking' },
+  },
+  {
+    id: 'demo-horeca',
+    num: '04',
+    shortLabel: { nl: 'Horeca', en: 'Cafe' },
+    label: { nl: 'Horeca · Terrasweer API', en: 'Cafe · Terrace Weather' },
+  },
+  {
+    id: 'demo-fashion',
+    num: '05',
+    shortLabel: { nl: 'Fashion', en: 'Fashion' },
+    label: { nl: 'Fashion · Drop & WhatsApp', en: 'Fashion · Drop & Cart' },
+  },
 ];
 
 export const GARAGE_TEST_PLATES = [

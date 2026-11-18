@@ -141,7 +141,7 @@ export function DemoHorecaBand({ lang, onBuildInStyle }: DemoHorecaBandProps) {
       className="relative overflow-hidden rounded-3xl border border-[#4A2C1D]/15 bg-[#EFE2CF] text-[#4A2C1D] shadow-[0_24px_60px_-24px_rgba(74,44,29,0.2)]"
     >
       {/* HEADER VARIANT 4: Classic Centered Brasserie Crest Header */}
-      <header className="grid grid-cols-2 items-center gap-4 border-b border-[#4A2C1D]/12 px-5 py-4 md:grid-cols-3 md:px-10">
+      <header className="grid grid-cols-2 items-center gap-4 border-b border-[#4A2C1D]/12 px-4 py-3 md:grid-cols-3 md:px-10 md:py-4">
         <nav className="hidden items-center gap-5 text-[13px] font-medium text-[#4A2C1D]/80 md:flex">
           {t.leftNav.map((item) => (
             <button
@@ -161,7 +161,7 @@ export function DemoHorecaBand({ lang, onBuildInStyle }: DemoHorecaBandProps) {
             e.preventDefault();
             scrollToMenu();
           }}
-          className="font-demo-oswald text-left text-[20px] font-bold tracking-[0.04em] text-[#4A2C1D] uppercase whitespace-nowrap md:text-center md:text-[22px]"
+          className="font-demo-oswald text-left text-[18px] font-bold tracking-[0.04em] text-[#4A2C1D] uppercase whitespace-nowrap md:text-center md:text-[22px]"
         >
           CAFÉ KORNELIS
         </a>
@@ -173,7 +173,7 @@ export function DemoHorecaBand({ lang, onBuildInStyle }: DemoHorecaBandProps) {
               setTableBooked(true);
               scrollToMenu();
             }}
-            className="inline-flex h-9 items-center gap-1.5 rounded-full bg-[#E0A526] px-4 text-[12.5px] font-semibold text-[#4A2C1D] whitespace-nowrap shrink-0 transition-colors hover:bg-[#CA921B]"
+            className="inline-flex h-8 items-center gap-1.5 rounded-full bg-[#E0A526] px-3.5 text-[11.5px] font-semibold text-[#4A2C1D] whitespace-nowrap shrink-0 transition-colors hover:bg-[#CA921B] md:h-9 md:px-4 md:text-[12.5px]"
           >
             <span>{t.ctaNav}</span>
             <ArrowUpRight className="h-3.5 w-3.5" />
@@ -182,26 +182,26 @@ export function DemoHorecaBand({ lang, onBuildInStyle }: DemoHorecaBandProps) {
       </header>
 
       {/* HERO SECTION */}
-      <div className="px-5 pt-7 pb-8 md:px-10 md:pt-10 md:pb-10">
-        <div className="flex flex-wrap items-center justify-between gap-2 text-[12px] font-medium text-[#4A2C1D]/72">
+      <div className="px-4 pt-5 pb-5 md:px-10 md:pt-10 md:pb-10">
+        <div className="flex flex-wrap items-center justify-between gap-2 text-[11.5px] font-medium text-[#4A2C1D]/72 md:text-[12px]">
           <span>{t.demoTag} · #EFE2CF · #4A2C1D · #E0A526</span>
           <span className="font-semibold text-[#4A2C1D]">{t.kickerRight}</span>
         </div>
 
-        <h2 className="font-demo-oswald mt-4 text-center text-[clamp(2.5rem,7vw,5.4rem)] leading-[0.94] font-bold tracking-[-0.015em] text-[#4A2C1D] uppercase">
+        <h2 className="font-demo-oswald mt-3 text-center text-[clamp(2.25rem,7vw,5.4rem)] leading-[0.94] font-bold tracking-[-0.015em] text-[#4A2C1D] uppercase md:mt-4">
           {t.headline}
         </h2>
 
-        <div className="mt-6 grid grid-cols-1 items-center gap-6 lg:grid-cols-12">
+        <div className="mt-4 grid grid-cols-1 items-center gap-4 md:mt-6 lg:grid-cols-12 lg:gap-6">
           <div className="order-2 lg:order-1 lg:col-span-4">
-            <p className="text-[14.5px] leading-[1.6] text-[#4A2C1D]/82">
+            <p className="text-[13.5px] leading-[1.55] text-[#4A2C1D]/82 md:text-[14.5px] md:leading-[1.6]">
               {t.storyText}
             </p>
-            <div className="mt-4 flex flex-wrap items-center gap-4">
+            <div className="mt-3.5 flex flex-wrap items-center gap-3 md:mt-4 md:gap-4">
               <button
                 type="button"
                 onClick={scrollToMenu}
-                className="inline-flex h-10 items-center rounded-full bg-[#E0A526] px-5 text-[13px] font-semibold text-[#4A2C1D] transition-colors hover:bg-[#CA921B]"
+                className="inline-flex h-9.5 items-center rounded-full bg-[#E0A526] px-4.5 text-[12.5px] font-semibold text-[#4A2C1D] transition-colors hover:bg-[#CA921B] md:h-10 md:px-5 md:text-[13px]"
               >
                 {t.ctaMenu}
               </button>
@@ -261,20 +261,22 @@ export function DemoHorecaBand({ lang, onBuildInStyle }: DemoHorecaBandProps) {
                 referrerPolicy="no-referrer"
                 whileHover={prefersReducedMotion ? undefined : { scale: 1.045 }}
                 transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-                className="aspect-[4/3] w-full object-cover"
+                className="aspect-[16/9] w-full object-cover sm:aspect-[4/3]"
               />
             </motion.div>
           </div>
 
-          <div className="order-3 rounded-2xl border border-[#4A2C1D]/12 bg-[#FAF4EA] p-4 lg:col-span-3">
-            <div className="flex items-center gap-1.5 text-[12px] font-bold text-[#4A2C1D] uppercase">
-              <MapPin className="h-4 w-4 text-[#E0A526]" />
-              <span>{activeCity.city}</span>
+          <div className="order-3 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[#4A2C1D]/12 bg-[#FAF4EA] p-3.5 lg:block lg:p-4 lg:col-span-3">
+            <div>
+              <div className="flex items-center gap-1.5 text-[12px] font-bold text-[#4A2C1D] uppercase">
+                <MapPin className="h-3.5 w-3.5 text-[#E0A526] md:h-4 md:w-4" />
+                <span>{activeCity.city}</span>
+              </div>
+              <p className="mt-0.5 text-[12.5px] text-[#4A2C1D]/75 md:mt-1 md:text-[13px]">
+                {activeCity.address}
+              </p>
             </div>
-            <p className="mt-1 text-[13px] text-[#4A2C1D]/75">
-              {activeCity.address}
-            </p>
-            <div className="mt-3 flex flex-wrap gap-1.5">
+            <div className="flex flex-wrap gap-1.5 lg:mt-3">
               {CAFE_CITIES.map((c) => (
                 <button
                   key={c.id}
@@ -299,7 +301,7 @@ export function DemoHorecaBand({ lang, onBuildInStyle }: DemoHorecaBandProps) {
         {/* WORKING TERRACE WEATHER API + CASCADE MENU */}
         <div
           id="horeca-weather-menu"
-          className="mt-8 grid grid-cols-1 gap-5 rounded-2xl border border-[#4A2C1D]/12 bg-[#FAF4EA] p-5 lg:grid-cols-12"
+          className="mt-5 grid grid-cols-1 gap-4 rounded-2xl border border-[#4A2C1D]/12 bg-[#FAF4EA] p-3.5 md:mt-8 md:gap-5 md:p-5 lg:grid-cols-12"
         >
           {/* Left: Live Terrace Weather Readout with Rotating Warm Sun Ring */}
           <div className="relative flex flex-col justify-between overflow-hidden rounded-xl border border-[#4A2C1D]/10 bg-[#EFE2CF]/70 p-4 lg:col-span-4">

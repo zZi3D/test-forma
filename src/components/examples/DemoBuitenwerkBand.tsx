@@ -199,14 +199,14 @@ export function DemoBuitenwerkBand({
       className="font-demo-dmsans relative overflow-hidden rounded-3xl border border-[#162921]/18 bg-[#162921] text-[#F3EFE6] shadow-[0_24px_60px_-24px_rgba(22,41,33,0.28)]"
     >
       {/* HEADER VARIANT 2: Editorial Hairline Framing on Deep Pine */}
-      <header className="flex items-center justify-between gap-8 border-b border-[#F3EFE6]/12 px-5 py-4 md:px-10">
+      <header className="flex items-center justify-between gap-4 border-b border-[#F3EFE6]/12 px-4 py-3 md:gap-8 md:px-10 md:py-4">
         <a
           href="#demo-buitenwerk"
           onClick={(e) => {
             e.preventDefault();
             scrollToTool();
           }}
-          className="font-demo-fraunces text-[19px] font-semibold tracking-[-0.02em] text-[#F3EFE6] whitespace-nowrap shrink-0 md:text-[21px]"
+          className="font-demo-fraunces text-[18px] font-semibold tracking-[-0.02em] text-[#F3EFE6] whitespace-nowrap shrink-0 md:text-[21px]"
         >
           Groeneveld
         </a>
@@ -228,7 +228,7 @@ export function DemoBuitenwerkBand({
           <button
             type="button"
             onClick={scrollToTool}
-            className="inline-flex h-9 items-center justify-center rounded-sm border border-[#C86D44] px-4 text-[12.5px] font-medium text-[#F3EFE6] whitespace-nowrap shrink-0 transition-colors hover:bg-[#C86D44]"
+            className="inline-flex h-8 items-center justify-center rounded-sm border border-[#C86D44] px-3 text-[11.5px] font-medium text-[#F3EFE6] whitespace-nowrap shrink-0 transition-colors hover:bg-[#C86D44] md:h-9 md:px-4 md:text-[12.5px]"
           >
             {t.ctaNav}
           </button>
@@ -236,28 +236,28 @@ export function DemoBuitenwerkBand({
       </header>
 
       {/* HERO SECTION */}
-      <div className="px-5 pt-8 pb-8 md:px-10 md:pt-12 md:pb-10">
-        <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-12">
+      <div className="px-4 pt-5 pb-5 md:px-10 md:pt-12 md:pb-10">
+        <div className="grid grid-cols-1 items-center gap-5 lg:grid-cols-12 lg:gap-8">
           <div className="lg:col-span-6">
-            <div className="flex items-center gap-2 text-[12px] font-medium text-[#C86D44]">
+            <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[11.5px] font-medium text-[#C86D44] md:text-[12px]">
               <span>{t.demoTag}</span>
               <span aria-hidden="true">·</span>
               <span>#162921 · #F3EFE6 · #C86D44</span>
             </div>
 
-            <h2 className="font-demo-fraunces mt-3 text-[clamp(2rem,4vw,3.35rem)] leading-[1.06] font-medium tracking-[-0.02em] text-[#F3EFE6] [text-wrap:balance]">
+            <h2 className="font-demo-fraunces mt-2 text-[clamp(1.85rem,4vw,3.35rem)] leading-[1.06] font-medium tracking-[-0.02em] text-[#F3EFE6] [text-wrap:balance] md:mt-3">
               {t.headline}
             </h2>
 
-            <p className="mt-4 max-w-[46ch] text-[14.5px] leading-[1.65] text-[#F3EFE6]/78 md:text-[15.5px]">
+            <p className="mt-2.5 max-w-[46ch] text-[13.5px] leading-[1.55] text-[#F3EFE6]/78 md:mt-4 md:text-[15.5px] md:leading-[1.65]">
               {t.sub}
             </p>
 
-            <div className="mt-6 flex flex-wrap items-center gap-4">
+            <div className="mt-4 flex flex-wrap items-center gap-3 md:mt-6 md:gap-4">
               <button
                 type="button"
                 onClick={scrollToTool}
-                className="inline-flex h-11 items-center gap-2 rounded-sm bg-[#C86D44] px-5 text-[13.5px] font-semibold text-white whitespace-nowrap transition-colors hover:bg-[#B05C36]"
+                className="inline-flex h-10 items-center gap-2 rounded-sm bg-[#C86D44] px-4 text-[13px] font-semibold text-white whitespace-nowrap transition-colors hover:bg-[#B05C36] md:h-11 md:px-5 md:text-[13.5px]"
               >
                 <span>{t.ctaHero}</span>
               </button>
@@ -269,7 +269,7 @@ export function DemoBuitenwerkBand({
                     `Buitenwerk Demo (Deep Pine & Copper Serif) — ${locWeather.city} (${areaSqm}m²)`,
                   )
                 }
-                className="text-[13px] font-medium text-[#F3EFE6]/78 underline-offset-4 transition-colors hover:text-[#F3EFE6] hover:underline"
+                className="text-[12.5px] font-medium text-[#F3EFE6]/78 underline-offset-4 transition-colors hover:text-[#F3EFE6] hover:underline md:text-[13px]"
               >
                 {t.buildThis}
               </button>
@@ -296,7 +296,7 @@ export function DemoBuitenwerkBand({
                     : { scale: [1.01, 1.06, 1.01] }
                 }
                 transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
-                className="aspect-[16/10] w-full object-cover"
+                className="aspect-[16/9] w-full object-cover sm:aspect-[16/10]"
               />
               <div
                 aria-hidden="true"
@@ -309,7 +309,7 @@ export function DemoBuitenwerkBand({
         {/* WORKING PDOK + OPEN-METEO + CALCULATOR MODULE */}
         <div
           id="buitenwerk-pdok-tool"
-          className="mt-8 rounded-2xl border border-[#F3EFE6]/14 bg-[#F3EFE6] p-5 text-[#162921] md:p-6"
+          className="mt-5 rounded-2xl border border-[#F3EFE6]/14 bg-[#F3EFE6] p-3.5 text-[#162921] md:mt-8 md:p-6"
         >
           <div className="flex flex-col justify-between gap-3 border-b border-[#162921]/12 pb-4 md:flex-row md:items-center">
             <div className="flex items-center gap-2 text-[13px] font-semibold text-[#162921]">
@@ -378,7 +378,7 @@ export function DemoBuitenwerkBand({
                 </p>
 
                 <div
-                  className="mt-2.5 grid grid-cols-1 gap-2.5 sm:grid-cols-3"
+                  className="mt-2.5 grid grid-cols-3 gap-2 sm:gap-2.5"
                   style={{ perspective: 700 }}
                 >
                   {locWeather.days.map((day, idx) => {
@@ -404,10 +404,10 @@ export function DemoBuitenwerkBand({
                           delay: prefersReducedMotion ? 0 : idx * 0.09,
                           ease: [0.22, 1, 0.36, 1],
                         }}
-                        className="rounded-lg border border-[#162921]/12 bg-white p-3 shadow-xs"
+                        className="rounded-lg border border-[#162921]/12 bg-white p-2 sm:p-3 shadow-xs"
                       >
-                        <div className="flex items-center justify-between text-[11.5px] font-semibold text-[#162921]/70">
-                          <span className="capitalize">{formattedDate}</span>
+                        <div className="flex items-center justify-between gap-1 text-[10px] font-semibold text-[#162921]/70 sm:text-[11.5px]">
+                          <span className="truncate capitalize">{formattedDate}</span>
                           <motion.span
                             animate={
                               prefersReducedMotion
@@ -420,21 +420,22 @@ export function DemoBuitenwerkBand({
                               repeat: Infinity,
                               ease: 'easeInOut',
                             }}
+                            className="shrink-0"
                           >
                             {isDry ? (
-                              <CloudSun className="h-4 w-4 text-[#C86D44]" />
+                              <CloudSun className="h-3.5 w-3.5 text-[#C86D44] sm:h-4 sm:w-4" />
                             ) : (
-                              <Umbrella className="h-4 w-4 text-[#162921]/55" />
+                              <Umbrella className="h-3.5 w-3.5 text-[#162921]/55 sm:h-4 sm:w-4" />
                             )}
                           </motion.span>
                         </div>
-                        <p className="font-mono-tabular mt-1 text-[18px] font-bold text-[#162921]">
+                        <p className="font-mono-tabular mt-1 text-[15px] font-bold text-[#162921] sm:text-[18px]">
                           {day.maxTemp}°C
                         </p>
-                        <p className="text-[11px] text-[#162921]/65">
-                          {day.rainProb}% {t.rainLabel}
+                        <p className="text-[10px] text-[#162921]/65 sm:text-[11px]">
+                          {day.rainProb}% <span className="hidden sm:inline">{t.rainLabel}</span>
                         </p>
-                        <p className="mt-1 text-[11px] font-semibold text-[#C86D44]">
+                        <p className="mt-0.5 truncate text-[10px] font-semibold text-[#C86D44] sm:mt-1 sm:text-[11px]">
                           {isDry ? t.dryDay : t.wetDay}
                         </p>
                       </motion.div>

@@ -157,28 +157,28 @@ export function ExamplesPage({
         className="pointer-events-none fixed inset-0 z-0 bg-gradient-to-b from-[#F7F5F0]/80 via-[#F7F5F0]/52 to-[#F7F5F0]/68"
       />
 
-      <div className="relative z-10 mx-auto max-w-[1280px] px-4 pt-20 md:px-8 md:pt-24">
+      <div className="relative z-10 mx-auto max-w-[1280px] px-3 pt-16 md:px-8 md:pt-24">
         {/* Top Controls + Editorial Intro */}
-        <section className="pb-4 md:pb-6">
+        <section className="pb-3 md:pb-6">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <button
               type="button"
               onClick={onBackToOverview}
-              className="inline-flex items-center gap-1.5 text-[12.5px] font-medium text-[#1C1B18]/70 transition-colors hover:text-[#1C1B18]"
+              className="inline-flex items-center gap-1.5 text-[12px] font-medium text-[#1C1B18]/70 transition-colors hover:text-[#1C1B18] md:text-[12.5px]"
             >
               <ArrowLeft className="h-3.5 w-3.5" />
               <span>{t.back}</span>
             </button>
           </div>
 
-          <div className="mt-4 max-w-3xl">
-            <p className="font-mono-tabular text-[11px] font-semibold tracking-[0.06em] text-[#C98A3A] uppercase">
+          <div className="mt-3 max-w-3xl md:mt-4">
+            <p className="font-mono-tabular text-[10.5px] font-semibold tracking-[0.06em] text-[#C98A3A] uppercase md:text-[11px]">
               {t.kicker}
             </p>
-            <h1 className="display-tight mt-1.5 text-[clamp(1.85rem,3.8vw,3.15rem)] leading-[1.06] font-semibold text-[#1C1B18]">
+            <h1 className="display-tight mt-1 text-[clamp(1.65rem,3.8vw,3.15rem)] leading-[1.06] font-semibold text-[#1C1B18] md:mt-1.5">
               {t.title}
             </h1>
-            <p className="mt-2.5 max-w-[62ch] text-[14px] leading-[1.55] text-[#1C1B18]/72 md:text-[15.5px]">
+            <p className="mt-2 max-w-[62ch] text-[13.5px] leading-[1.5] text-[#1C1B18]/72 md:mt-2.5 md:text-[15.5px] md:leading-[1.55]">
               {t.subtitle}
             </p>
           </div>
@@ -187,12 +187,12 @@ export function ExamplesPage({
         {/* STICKY 5-DEMO JUMP FILTER + INTEGRATED NL / EN SWITCHER */}
         <div
           ref={stickyBarRef}
-          className="sticky top-[70px] z-30 -mx-2 px-2 pb-4 md:top-[78px]"
+          className="sticky top-[68px] z-30 -mx-1 px-1 pb-3 md:top-[78px] md:-mx-2 md:px-2 md:pb-4"
         >
-          <div className="glass-elevated flex items-center justify-between gap-2 rounded-full p-1.5 shadow-[0_14px_34px_-12px_rgba(28,27,24,0.16)]">
+          <div className="glass-elevated flex items-center justify-between gap-1.5 rounded-full p-1 shadow-[0_14px_34px_-12px_rgba(28,27,24,0.16)] md:gap-2 md:p-1.5">
             <nav
               aria-label="Jump to demo section"
-              className="no-scrollbar flex min-w-0 flex-1 items-center gap-1 overflow-x-auto"
+              className="no-scrollbar flex min-w-0 flex-1 items-center gap-0.5 overflow-x-auto md:gap-1"
             >
               {DEMO_JUMP_ITEMS.map((item) => {
                 const isActive = activeDemoId === item.id;
@@ -201,7 +201,7 @@ export function ExamplesPage({
                     key={item.id}
                     type="button"
                     onClick={() => jumpToBand(item.id)}
-                    className={`relative inline-flex h-8 shrink-0 items-center gap-1.5 rounded-full px-3 text-[11.5px] font-semibold whitespace-nowrap transition-colors md:h-9 md:px-3.5 md:text-[12px] ${
+                    className={`relative inline-flex h-7.5 shrink-0 items-center gap-1 rounded-full px-2 text-[11px] font-semibold whitespace-nowrap transition-colors sm:px-3 md:h-9 md:gap-1.5 md:px-3.5 md:text-[12px] ${
                       isActive
                         ? 'text-[#F7F5F0]'
                         : 'text-[#1C1B18]/78 hover:text-[#1C1B18]'
@@ -214,14 +214,15 @@ export function ExamplesPage({
                         className="absolute inset-0 rounded-full bg-[#1C1B18]"
                       />
                     )}
-                    <span
-                      className={`font-mono-tabular relative z-10 text-[10.5px] ${
-                        isActive ? 'text-[#C98A3A]' : 'text-[#C98A3A]'
-                      }`}
-                    >
+                    <span className="font-mono-tabular relative z-10 text-[10px] text-[#C98A3A] md:text-[10.5px]">
                       {item.num}
                     </span>
-                    <span className="relative z-10">{item.label[lang]}</span>
+                    <span className="relative z-10 sm:hidden">
+                      {item.shortLabel[lang]}
+                    </span>
+                    <span className="relative z-10 hidden sm:inline">
+                      {item.label[lang]}
+                    </span>
                   </button>
                 );
               })}
@@ -239,7 +240,7 @@ export function ExamplesPage({
               <button
                 type="button"
                 onClick={() => setLang('nl')}
-                className={`rounded-full px-2.5 py-1 text-[11px] font-bold transition-colors ${
+                className={`rounded-full px-2 py-0.5 text-[10.5px] font-bold transition-colors sm:px-2.5 sm:py-1 sm:text-[11px] ${
                   lang === 'nl'
                     ? 'bg-[#1C1B18] text-[#F7F5F0]'
                     : 'text-[#1C1B18]/65 hover:text-[#1C1B18]'
@@ -250,7 +251,7 @@ export function ExamplesPage({
               <button
                 type="button"
                 onClick={() => setLang('en')}
-                className={`rounded-full px-2.5 py-1 text-[11px] font-bold transition-colors ${
+                className={`rounded-full px-2 py-0.5 text-[10.5px] font-bold transition-colors sm:px-2.5 sm:py-1 sm:text-[11px] ${
                   lang === 'en'
                     ? 'bg-[#1C1B18] text-[#F7F5F0]'
                     : 'text-[#1C1B18]/65 hover:text-[#1C1B18]'
@@ -263,7 +264,7 @@ export function ExamplesPage({
         </div>
 
         {/* 5 SCROLLABLE FULL-BAND DEMOS WITH 3D WORKBENCH ENTRANCE */}
-        <div className="space-y-12 border-t border-[#1C1B18]/12 pt-6 md:space-y-16 md:pt-8">
+        <div className="space-y-8 border-t border-[#1C1B18]/12 pt-4 md:space-y-16 md:pt-8">
           <DemoWorkbenchFrame id="demo-garage">
             <DemoGarageBand
               lang={lang}

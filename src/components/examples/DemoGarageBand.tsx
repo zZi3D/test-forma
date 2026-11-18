@@ -218,19 +218,64 @@ export function DemoGarageBand({ lang, onBuildInStyle }: DemoGarageBandProps) {
       className="font-demo-outfit relative overflow-hidden rounded-3xl border border-[#1C1C1C]/12 bg-[#F3ECE1] text-[#1C1C1C] shadow-[0_24px_60px_-24px_rgba(28,28,28,0.16)]"
     >
       {/* HEADER VARIANT 1: Floating Crisp White Capsule Header with Sliding Crimson Pill (Skin 3 from screenshot) */}
-      <div className="px-4 pt-4 md:px-8 md:pt-6">
-        <header className="flex items-center justify-between gap-4 rounded-full border border-[#1C1C1C]/8 bg-white px-3 py-1.5 shadow-[0_10px_28px_-12px_rgba(28,28,28,0.14)] md:px-4">
-          <a
-            href="#demo-garage"
-            onClick={(e) => {
-              e.preventDefault();
-              setActiveTabIdx(0);
-              scrollToApi();
-            }}
-            className="pl-2 text-[15px] font-extrabold tracking-[0.06em] text-[#1C1C1C] uppercase whitespace-nowrap shrink-0 md:text-[16px]"
+      <div className="px-3 pt-3 md:px-8 md:pt-6">
+        <header className="flex flex-col gap-1.5 rounded-2xl border border-[#1C1C1C]/8 bg-white px-3 py-2 shadow-[0_10px_28px_-12px_rgba(28,28,28,0.14)] lg:flex-row lg:items-center lg:justify-between lg:gap-4 lg:rounded-full lg:px-4 lg:py-1.5">
+          <div className="flex items-center justify-between gap-3">
+            <a
+              href="#demo-garage"
+              onClick={(e) => {
+                e.preventDefault();
+                setActiveTabIdx(0);
+                scrollToApi();
+              }}
+              className="pl-1 text-[14.5px] font-extrabold tracking-[0.06em] text-[#1C1C1C] uppercase whitespace-nowrap shrink-0 md:pl-2 md:text-[16px]"
+            >
+              KORVER AUTO
+            </a>
+
+            <button
+              type="button"
+              onClick={scrollToApi}
+              className="inline-flex h-8 items-center justify-center rounded-full bg-[#1C1C1C] px-3.5 text-[11.5px] font-semibold text-white whitespace-nowrap shrink-0 transition-colors hover:bg-[#B8291E] lg:hidden"
+            >
+              {t.ctaNav}
+            </button>
+          </div>
+
+          {/* Mobile 4-icon sculpted capsule strip (always visible on phone) */}
+          <nav
+            aria-label="Garage sections"
+            className="grid grid-cols-4 gap-1 border-t border-[#1C1C1C]/6 pt-1.5 lg:hidden"
           >
-            KORVER AUTO
-          </a>
+            {navItems.map((item, idx) => {
+              const Icon = item.icon;
+              const isActive = activeTabIdx === idx;
+              return (
+                <button
+                  key={`m-${item.label}`}
+                  type="button"
+                  onClick={() => {
+                    setActiveTabIdx(idx);
+                    scrollToApi();
+                  }}
+                  className={`relative flex h-8 flex-col items-center justify-center rounded-full text-[10px] font-semibold transition-colors ${
+                    isActive
+                      ? 'text-white'
+                      : 'text-[#1C1C1C]/62 hover:text-[#1C1C1C]'
+                  }`}
+                >
+                  {isActive && (
+                    <motion.span
+                      layoutId="garage-nav-capsule-m"
+                      transition={{ type: 'spring', stiffness: 420, damping: 32 }}
+                      className="absolute inset-0 rounded-full bg-[#B8291E]"
+                    />
+                  )}
+                  <Icon className="relative z-10 h-3.5 w-3.5" />
+                </button>
+              );
+            })}
+          </nav>
 
           <nav className="hidden items-center gap-1 lg:flex">
             {navItems.map((item, idx) => {
@@ -267,7 +312,7 @@ export function DemoGarageBand({ lang, onBuildInStyle }: DemoGarageBandProps) {
           <button
             type="button"
             onClick={scrollToApi}
-            className="inline-flex h-9 items-center justify-center rounded-full bg-[#1C1C1C] px-4 text-[12px] font-semibold text-white whitespace-nowrap shrink-0 transition-colors hover:bg-[#B8291E]"
+            className="hidden h-9 items-center justify-center rounded-full bg-[#1C1C1C] px-4 text-[12px] font-semibold text-white whitespace-nowrap shrink-0 transition-colors hover:bg-[#B8291E] lg:inline-flex"
           >
             {t.ctaNav}
           </button>
@@ -275,28 +320,28 @@ export function DemoGarageBand({ lang, onBuildInStyle }: DemoGarageBandProps) {
       </div>
 
       {/* HERO SECTION */}
-      <div className="relative px-5 pt-7 pb-6 md:px-10 md:pt-10 md:pb-8">
-        <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-12">
+      <div className="relative px-4 pt-5 pb-5 md:px-10 md:pt-10 md:pb-8">
+        <div className="grid grid-cols-1 items-center gap-5 lg:grid-cols-12 lg:gap-8">
           <div className="lg:col-span-6">
-            <div className="flex items-center gap-2 text-[12px] font-medium text-[#1C1C1C]/60">
+            <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[11.5px] font-medium text-[#1C1C1C]/60 md:text-[12px]">
               <span>{t.demoTag}</span>
               <span aria-hidden="true">·</span>
               <span>#F3ECE1 · #1C1C1C · #B8291E</span>
             </div>
 
-            <h2 className="mt-3 max-w-[14ch] text-[clamp(2.2rem,4.4vw,3.85rem)] leading-[1.02] font-bold tracking-[-0.03em] text-[#1C1C1C] [text-wrap:balance]">
+            <h2 className="mt-2 max-w-[14ch] text-[clamp(1.9rem,4.4vw,3.85rem)] leading-[1.02] font-bold tracking-[-0.03em] text-[#1C1C1C] [text-wrap:balance] md:mt-3">
               {t.headline}
             </h2>
 
-            <p className="mt-4 max-w-[44ch] text-[14.5px] leading-[1.6] text-[#1C1C1C]/75 md:text-[16px]">
+            <p className="mt-2.5 max-w-[44ch] text-[13.5px] leading-[1.55] text-[#1C1C1C]/75 md:mt-4 md:text-[16px] md:leading-[1.6]">
               {t.sub}
             </p>
 
-            <div className="mt-6 flex flex-wrap items-center gap-4">
+            <div className="mt-4 flex flex-wrap items-center gap-3 md:mt-6 md:gap-4">
               <button
                 type="button"
                 onClick={scrollToApi}
-                className="inline-flex h-11 items-center gap-2 rounded-md bg-[#B8291E] px-5 text-[13.5px] font-semibold text-white whitespace-nowrap transition-colors hover:bg-[#961F16]"
+                className="inline-flex h-10 items-center gap-2 rounded-md bg-[#B8291E] px-4 text-[13px] font-semibold text-white whitespace-nowrap transition-colors hover:bg-[#961F16] md:h-11 md:px-5 md:text-[13.5px]"
               >
                 <span>{t.ctaHero}</span>
               </button>
@@ -308,16 +353,16 @@ export function DemoGarageBand({ lang, onBuildInStyle }: DemoGarageBandProps) {
                     `Garage Demo (Warm Bone & Workshop Crimson) — ${vehicle.merk} RDW`,
                   )
                 }
-                className="text-[13px] font-semibold text-[#1C1C1C]/75 underline-offset-4 transition-colors hover:text-[#1C1C1C] hover:underline"
+                className="text-[12.5px] font-semibold text-[#1C1C1C]/75 underline-offset-4 transition-colors hover:text-[#1C1C1C] hover:underline md:text-[13px]"
               >
                 {t.buildThis}
               </button>
             </div>
 
             {/* Unboxed Metadata Bar */}
-            <div className="mt-7 inline-flex flex-wrap items-center gap-3 rounded-lg bg-[#1C1C1C] px-4 py-2 text-[11.5px] font-medium text-[#F3ECE1]">
+            <div className="mt-4 inline-flex flex-wrap items-center gap-2.5 rounded-lg bg-[#1C1C1C] px-3 py-1.5 text-[11px] font-medium text-[#F3ECE1] md:mt-7 md:gap-3 md:px-4 md:py-2 md:text-[11.5px]">
               {t.proof.map((item, idx) => (
-                <span key={item} className="inline-flex items-center gap-3">
+                <span key={item} className="inline-flex items-center gap-2.5 md:gap-3">
                   {idx > 0 && (
                     <span aria-hidden="true" className="text-[#F3ECE1]/40">
                       ·
@@ -383,7 +428,7 @@ export function DemoGarageBand({ lang, onBuildInStyle }: DemoGarageBandProps) {
                     : { y: [0, -6, 0], scale: [1.02, 1.045, 1.02] }
                 }
                 transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
-                className="relative z-10 aspect-[4/3] w-full object-cover"
+                className="relative z-10 aspect-[16/10] w-full object-cover sm:aspect-[4/3]"
               />
 
               {/* Subtle sweeping diagnostic gloss reflection */}
@@ -400,15 +445,17 @@ export function DemoGarageBand({ lang, onBuildInStyle }: DemoGarageBandProps) {
         {/* WORKING RDW API MODULE */}
         <div
           id="garage-rdw-tool"
-          className="mt-8 rounded-2xl border border-[#1C1C1C]/12 bg-white/85 p-5 md:p-6"
+          className="mt-5 rounded-2xl border border-[#1C1C1C]/12 bg-white/85 p-3.5 md:mt-8 md:p-6"
         >
-          <div className="flex flex-col justify-between gap-4 border-b border-[#1C1C1C]/10 pb-4 md:flex-row md:items-end">
+          <div className="flex flex-col justify-between gap-2 border-b border-[#1C1C1C]/10 pb-3 md:flex-row md:items-end md:gap-4 md:pb-4">
             <div>
               <div className="flex items-center gap-2 text-[12px] font-semibold text-[#B8291E]">
                 <CarFront className="h-4 w-4" />
                 <span>{t.toolTitle}</span>
               </div>
-              <p className="mt-1 text-[13.5px] text-[#1C1C1C]/70">{t.toolSub}</p>
+              <p className="mt-0.5 text-[12.5px] text-[#1C1C1C]/70 md:mt-1 md:text-[13.5px]">
+                {t.toolSub}
+              </p>
             </div>
 
             <div className="font-mono-tabular flex items-center gap-2 text-[11px] text-[#1C1C1C]/60">
@@ -416,16 +463,16 @@ export function DemoGarageBand({ lang, onBuildInStyle }: DemoGarageBandProps) {
             </div>
           </div>
 
-          <div className="mt-4 flex flex-col gap-3 lg:flex-row lg:items-center">
+          <div className="mt-3 flex flex-col gap-2.5 md:mt-4 lg:flex-row lg:items-center lg:gap-3">
             <form
               onSubmit={(e) => {
                 e.preventDefault();
                 void lookupPlate(plateInput);
               }}
-              className="flex flex-1 flex-wrap items-center gap-2.5"
+              className="flex flex-1 flex-wrap items-center gap-2"
             >
-              <div className="flex h-11 min-w-[210px] overflow-hidden rounded-md border-2 border-[#1C1C1C] bg-[#F5BA18] shadow-xs">
-                <div className="flex w-8 flex-col items-center justify-center bg-[#003399] text-[10px] font-bold text-white">
+              <div className="flex h-10 min-w-[190px] overflow-hidden rounded-md border-2 border-[#1C1C1C] bg-[#F5BA18] shadow-xs md:h-11 md:min-w-[210px]">
+                <div className="flex w-7 flex-col items-center justify-center bg-[#003399] text-[10px] font-bold text-white md:w-8">
                   NL
                 </div>
                 <input
@@ -435,14 +482,14 @@ export function DemoGarageBand({ lang, onBuildInStyle }: DemoGarageBandProps) {
                   onChange={(e) => setPlateInput(e.target.value.toUpperCase())}
                   placeholder="KXT-67-P"
                   aria-label="Kenteken"
-                  className="font-mono-tabular w-36 bg-transparent px-3 text-[15px] font-bold tracking-[0.14em] text-[#1C1C1C] uppercase placeholder:text-[#1C1C1C]/40 focus:outline-none"
+                  className="font-mono-tabular w-32 bg-transparent px-2.5 text-[14px] font-bold tracking-[0.14em] text-[#1C1C1C] uppercase placeholder:text-[#1C1C1C]/40 focus:outline-none md:w-36 md:px-3 md:text-[15px]"
                 />
               </div>
 
               <button
                 type="submit"
                 disabled={loading}
-                className="inline-flex h-11 items-center gap-2 rounded-md bg-[#1C1C1C] px-4 text-[13px] font-semibold text-white transition-colors hover:bg-[#B8291E] disabled:opacity-60"
+                className="inline-flex h-10 items-center gap-1.5 rounded-md bg-[#1C1C1C] px-3.5 text-[12.5px] font-semibold text-white transition-colors hover:bg-[#B8291E] disabled:opacity-60 md:h-11 md:gap-2 md:px-4 md:text-[13px]"
               >
                 {loading ? (
                   <Loader2 className="h-4 w-4 animate-spin" />
@@ -454,7 +501,7 @@ export function DemoGarageBand({ lang, onBuildInStyle }: DemoGarageBandProps) {
             </form>
 
             <div className="flex flex-wrap items-center gap-1.5">
-              <span className="mr-1 text-[11.5px] font-medium text-[#1C1C1C]/60">
+              <span className="mr-1 text-[11px] font-medium text-[#1C1C1C]/60 md:text-[11.5px]">
                 {t.testLabel}
               </span>
               {GARAGE_TEST_PLATES.map((sample) => (
@@ -465,7 +512,7 @@ export function DemoGarageBand({ lang, onBuildInStyle }: DemoGarageBandProps) {
                     setPlateInput(sample.plate);
                     void lookupPlate(sample.raw);
                   }}
-                  className="font-mono-tabular inline-flex h-8 items-center rounded border border-[#1C1C1C]/15 bg-[#F3ECE1] px-2.5 text-[11.5px] font-semibold text-[#1C1C1C] transition-colors hover:border-[#B8291E] hover:text-[#B8291E]"
+                  className="font-mono-tabular inline-flex h-7 items-center rounded border border-[#1C1C1C]/15 bg-[#F3ECE1] px-2 text-[11px] font-semibold text-[#1C1C1C] transition-colors hover:border-[#B8291E] hover:text-[#B8291E] md:h-8 md:px-2.5 md:text-[11.5px]"
                 >
                   {sample.plate}
                 </button>
@@ -486,7 +533,7 @@ export function DemoGarageBand({ lang, onBuildInStyle }: DemoGarageBandProps) {
             initial={prefersReducedMotion ? false : { opacity: 0.72, scale: 0.985 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.34, ease: [0.22, 1, 0.36, 1] }}
-            className="relative mt-4 grid grid-cols-1 gap-4 overflow-hidden rounded-xl border border-[#1C1C1C]/12 bg-[#FAF6EE] p-4 sm:grid-cols-2 lg:grid-cols-5 lg:items-center"
+            className="relative mt-3.5 grid grid-cols-2 gap-3 overflow-hidden rounded-xl border border-[#1C1C1C]/12 bg-[#FAF6EE] p-3.5 sm:gap-4 md:mt-4 md:p-4 lg:grid-cols-5 lg:items-center"
           >
             {!prefersReducedMotion && (loading || scanCycle > 0) && (
               <motion.div
@@ -571,7 +618,7 @@ export function DemoGarageBand({ lang, onBuildInStyle }: DemoGarageBandProps) {
               initial={prefersReducedMotion ? false : { opacity: 0, scale: 0.94 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.3, delay: 0.26 }}
-              className="flex flex-col items-start lg:items-end"
+              className="col-span-2 flex flex-col items-start lg:col-span-1 lg:items-end"
             >
               <button
                 type="button"

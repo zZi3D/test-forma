@@ -87,19 +87,75 @@ export function DemoFashionBand({ lang, onBuildInStyle }: DemoFashionBandProps) 
       className="relative overflow-hidden rounded-3xl border border-[#4A0F24]/15 bg-[#F6CBD4] text-[#4A0F24] shadow-[0_24px_60px_-24px_rgba(74,15,36,0.22)]"
     >
       {/* HEADER VARIANT 5: Bold Deep Wine Capsule Header with Translucent Glass Active Tile + Kelly Green Bag Pop (Skin 1 from screenshot) */}
-      <div className="px-4 pt-4 md:px-8 md:pt-6">
-        <header className="flex items-center justify-between gap-4 rounded-full bg-[#4A0F24] px-3.5 py-2 text-[#F6CBD4] shadow-[0_14px_34px_-12px_rgba(74,15,36,0.45)] md:px-5">
-          <a
-            href="#demo-fashion"
-            onClick={(e) => {
-              e.preventDefault();
-              setActiveNavIdx(0);
-              scrollToDrop();
-            }}
-            className="pl-1 text-[13.5px] font-bold tracking-[0.16em] text-[#F6CBD4] uppercase whitespace-nowrap shrink-0 md:text-[14.5px]"
+      <div className="px-3 pt-3 md:px-8 md:pt-6">
+        <header className="flex flex-col gap-1.5 rounded-2xl bg-[#4A0F24] px-3.5 py-2 text-[#F6CBD4] shadow-[0_14px_34px_-12px_rgba(74,15,36,0.45)] lg:flex-row lg:items-center lg:justify-between lg:gap-4 lg:rounded-full lg:px-5">
+          <div className="flex items-center justify-between gap-3">
+            <a
+              href="#demo-fashion"
+              onClick={(e) => {
+                e.preventDefault();
+                setActiveNavIdx(0);
+                scrollToDrop();
+              }}
+              className="pl-1 text-[13px] font-bold tracking-[0.16em] text-[#F6CBD4] uppercase whitespace-nowrap shrink-0 md:text-[14.5px]"
+            >
+              STUDIO VESPER
+            </a>
+
+            <motion.button
+              key={`bag-m-${bagCount}`}
+              type="button"
+              onClick={scrollToDrop}
+              initial={
+                prefersReducedMotion
+                  ? false
+                  : { scale: 1.24, rotate: -4 }
+              }
+              animate={{ scale: [1.24, 0.94, 1.06, 1], rotate: [-4, 4, 0] }}
+              transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
+              className="inline-flex h-8 items-center gap-1.5 rounded-full bg-[#2DC92A] px-3 text-[11px] font-bold tracking-[0.06em] text-[#142914] uppercase whitespace-nowrap shrink-0 shadow-[0_0_20px_-4px_rgba(45,201,42,0.7)] lg:hidden"
+            >
+              <ShoppingBag className="h-3 w-3" />
+              <span className="font-mono-tabular">
+                {t.bagLabel} ({bagCount})
+              </span>
+            </motion.button>
+          </div>
+
+          {/* Mobile 4-icon Deep Wine Translucent Glass Tile Strip (always visible on phone) */}
+          <nav
+            aria-label="Fashion sections"
+            className="grid grid-cols-4 gap-1 border-t border-white/10 pt-1.5 lg:hidden"
           >
-            STUDIO VESPER
-          </a>
+            {navItems.map((item, idx) => {
+              const Icon = item.icon;
+              const isActive = activeNavIdx === idx;
+              return (
+                <button
+                  key={`m-${item.label}`}
+                  type="button"
+                  onClick={() => {
+                    setActiveNavIdx(idx);
+                    scrollToDrop();
+                  }}
+                  className={`relative flex h-8 items-center justify-center rounded-xl transition-colors ${
+                    isActive
+                      ? 'text-white'
+                      : 'text-[#F6CBD4]/68 hover:text-[#F6CBD4]'
+                  }`}
+                >
+                  {isActive && (
+                    <motion.span
+                      layoutId="fashion-nav-capsule-m"
+                      transition={{ type: 'spring', stiffness: 420, damping: 32 }}
+                      className="absolute inset-0 rounded-xl bg-white/18 backdrop-blur-xs"
+                    />
+                  )}
+                  <Icon className="relative z-10 h-3.5 w-3.5" />
+                </button>
+              );
+            })}
+          </nav>
 
           <nav className="hidden items-center gap-1 lg:flex">
             {navItems.map((item, idx) => {
@@ -144,7 +200,7 @@ export function DemoFashionBand({ lang, onBuildInStyle }: DemoFashionBandProps) 
             }
             animate={{ scale: [1.24, 0.94, 1.06, 1], rotate: [-4, 4, 0] }}
             transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
-            className="inline-flex h-9 items-center gap-2 rounded-full bg-[#2DC92A] px-4 text-[12px] font-bold tracking-[0.06em] text-[#142914] uppercase whitespace-nowrap shrink-0 shadow-[0_0_20px_-4px_rgba(45,201,42,0.7)] transition-colors hover:bg-[#25B122]"
+            className="hidden h-9 items-center gap-2 rounded-full bg-[#2DC92A] px-4 text-[12px] font-bold tracking-[0.06em] text-[#142914] uppercase whitespace-nowrap shrink-0 shadow-[0_0_20px_-4px_rgba(45,201,42,0.7)] transition-colors hover:bg-[#25B122] lg:inline-flex"
           >
             <ShoppingBag className="h-3.5 w-3.5" />
             <span className="font-mono-tabular">
@@ -155,32 +211,32 @@ export function DemoFashionBand({ lang, onBuildInStyle }: DemoFashionBandProps) 
       </div>
 
       {/* HERO SECTION */}
-      <div className="px-5 pt-7 pb-8 md:px-10 md:pt-10 md:pb-10">
-        <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-12">
+      <div className="px-4 pt-5 pb-5 md:px-10 md:pt-10 md:pb-10">
+        <div className="grid grid-cols-1 items-center gap-5 lg:grid-cols-12 lg:gap-8">
           <div className="lg:col-span-6">
-            <div className="flex flex-wrap items-center gap-2 text-[11px] font-semibold tracking-[0.12em] text-[#4A0F24]/70 uppercase">
+            <div className="flex flex-wrap items-center gap-2 text-[10.5px] font-semibold tracking-[0.12em] text-[#4A0F24]/70 uppercase md:text-[11px]">
               <span>{t.demoTag}</span>
               <span aria-hidden="true">·</span>
               <span>#F6CBD4 · #4A0F24 · #2DC92A</span>
             </div>
 
-            <p className="mt-4 text-[12px] font-bold tracking-[0.14em] text-[#4A0F24]/80 uppercase">
+            <p className="mt-2.5 text-[11px] font-bold tracking-[0.14em] text-[#4A0F24]/80 uppercase md:mt-4 md:text-[12px]">
               {t.eyebrow}
             </p>
 
-            <h2 className="font-demo-antonio mt-1 text-[clamp(4rem,10vw,7.25rem)] leading-[0.86] font-bold tracking-[-0.02em] text-[#4A0F24] uppercase">
+            <h2 className="font-demo-antonio mt-1 text-[clamp(3.3rem,10vw,7.25rem)] leading-[0.86] font-bold tracking-[-0.02em] text-[#4A0F24] uppercase">
               {t.headline}
             </h2>
 
-            <p className="mt-4 max-w-[38ch] text-[13.5px] font-medium tracking-[0.04em] text-[#4A0F24]/85 uppercase">
+            <p className="mt-2.5 max-w-[38ch] text-[12.5px] font-medium tracking-[0.04em] text-[#4A0F24]/85 uppercase md:mt-4 md:text-[13.5px]">
               {t.specs}
             </p>
 
-            <div className="mt-6 flex flex-wrap items-center gap-4">
+            <div className="mt-4 flex flex-wrap items-center gap-3 md:mt-6 md:gap-4">
               <button
                 type="button"
                 onClick={scrollToDrop}
-                className="inline-flex h-11 items-center gap-2 rounded-full bg-[#2DC92A] px-6 text-[13px] font-bold tracking-[0.04em] text-[#142914] uppercase whitespace-nowrap shadow-xs transition-colors hover:bg-[#25B122]"
+                className="inline-flex h-10 items-center gap-2 rounded-full bg-[#2DC92A] px-5 text-[12.5px] font-bold tracking-[0.04em] text-[#142914] uppercase whitespace-nowrap shadow-xs transition-colors hover:bg-[#25B122] md:h-11 md:px-6 md:text-[13px]"
               >
                 <span>{t.ctaHero}</span>
               </button>
@@ -192,7 +248,7 @@ export function DemoFashionBand({ lang, onBuildInStyle }: DemoFashionBandProps) 
                     `Fashion Store Demo (Blush, Deep Wine & Kelly Green) — ${activeVariant.label[lang]}`,
                   )
                 }
-                className="text-[12.5px] font-bold text-[#4A0F24]/80 underline-offset-4 hover:text-[#4A0F24] hover:underline"
+                className="text-[12px] font-bold text-[#4A0F24]/80 underline-offset-4 hover:text-[#4A0F24] hover:underline md:text-[12.5px]"
               >
                 {t.buildThis}
               </button>
@@ -237,7 +293,7 @@ export function DemoFashionBand({ lang, onBuildInStyle }: DemoFashionBandProps) 
                   prefersReducedMotion ? undefined : { scale: [1, 1.03, 1] }
                 }
                 transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut' }}
-                className="relative z-10 aspect-[4/3] w-full object-cover"
+                className="relative z-10 aspect-[16/10] w-full object-cover object-[50%_20%] sm:aspect-[4/3]"
               />
             </motion.div>
           </div>
@@ -246,7 +302,7 @@ export function DemoFashionBand({ lang, onBuildInStyle }: DemoFashionBandProps) 
         {/* INTERACTIVE DROP CONFIGURATOR + WHATSAPP BAG */}
         <div
           id="fashion-drop-module"
-          className="mt-8 rounded-2xl border border-[#4A0F24]/15 bg-white/85 p-5 md:p-6"
+          className="mt-5 rounded-2xl border border-[#4A0F24]/15 bg-white/85 p-3.5 md:mt-8 md:p-6"
         >
           <div className="flex flex-col justify-between gap-2 border-b border-[#4A0F24]/10 pb-3.5 sm:flex-row sm:items-center">
             <span className="inline-flex items-center gap-2 text-[12.5px] font-bold tracking-[0.06em] text-[#4A0F24] uppercase">
